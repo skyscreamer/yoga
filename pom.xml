@@ -19,6 +19,11 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.5.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>3.0.5.RELEASE</version>
+        </dependency>
     </dependencies>
 
 </project>
