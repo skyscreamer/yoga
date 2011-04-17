@@ -19,7 +19,8 @@ public abstract class AbstractSelectable implements Selectable
         return _selectorFields;
     }
 
-    public void setSelector( Selector selector ) {
+    public void setSelector( Selector selector )
+    {
         _selectorFields = selector != null ? selector.getFields() : Collections.<SelectorField>emptySet();
     }
 }

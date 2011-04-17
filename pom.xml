@@ -24,6 +24,12 @@
             <artifactId>spring-core</artifactId>
             <version>3.0.5.RELEASE</version>
         </dependency>
+        <dependency>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
+          <version>6.0</version>
+          <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
