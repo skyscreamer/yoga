@@ -5,7 +5,7 @@ import java.util.Set;
 
 public abstract class AbstractSelectable implements Selectable
 {
-    private Set<SelectorField> _selectorFields;
+    private Set<SelectorField> _selectorFields = Collections.<SelectorField>emptySet();
 
     public AbstractSelectable() {}
 
