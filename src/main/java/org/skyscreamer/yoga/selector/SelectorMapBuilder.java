@@ -35,7 +35,9 @@ public class SelectorMapBuilder {
                         List<Object> listField = new ArrayList<Object>();
                         objectTree.put( field, listField );
                         for(Object o : (Collection)getter.invoke(object, new Object[0])) {
-                            listField.add( convertIntoTree( o, selectorFieldMap.get( field ).getSelector() ) );
+                            Object value = isNotBean(o.getClass()) ? o
+                                    : convertIntoTree( o, selectorFieldMap.get( field ).getSelector() );
+                            listField.add( value );
                         }
                     }
                     else {
