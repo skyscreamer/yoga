@@ -28,7 +28,6 @@ public class SelectorTest
         SelectorField countryField = findFieldByName( selector.getFields(), "country" );
         Assert.assertNotNull( countryField );
         Assert.assertEquals( countryField.getSelector().getFields().size(), 0 );
-
     }
 
     @Test
