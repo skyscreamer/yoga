@@ -1,9 +1,9 @@
 package org.skyscreamer.yoga;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorField;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 import java.util.Set;
 
@@ -16,11 +16,11 @@ import java.util.Set;
 public class SelectorTest
 {
     @Test
-    public void testSimpleSelector()
+    public void testSimpleSelector() throws Exception
     {
         Selector selector = new Selector( ":(gender,country)" );
 
-        Assert.assertEquals( selector.getFields().size(), 2 );
+        Assert.assertEquals(selector.getFields().size(), 2);
         SelectorField genderField = findFieldByName( selector.getFields(), "gender" );
         Assert.assertNotNull( genderField );
         Assert.assertEquals( genderField.getSelector().getFields().size(), 0 );
@@ -32,7 +32,7 @@ public class SelectorTest
     }
 
     @Test
-    public void testNestedSelectors()
+    public void testNestedSelectors() throws Exception
     {
         Selector selector = new Selector( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
 

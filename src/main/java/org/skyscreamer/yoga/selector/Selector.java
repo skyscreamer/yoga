@@ -12,8 +12,7 @@ public class Selector
         return _fields;
     }
 
-    public Selector( String selectorExpression )
-    {
+    public Selector( String selectorExpression ) throws ParseSelectorException {
         if ( selectorExpression.equals( ":" ) )
         {
             return;
@@ -21,7 +20,7 @@ public class Selector
 
         if ( !selectorExpression.startsWith( ":(" ) )
         {
-            throw new ParseSelectorException();
+            throw new ParseSelectorException("Selector must start with ':('");
         }
 
         StringBuilder selector = new StringBuilder( selectorExpression );
@@ -37,8 +36,7 @@ public class Selector
         }
     }
 
-    private int getMatchingParenthesesIndex( StringBuilder selector, int index )
-    {
+    private int getMatchingParenthesesIndex( StringBuilder selector, int index ) throws ParseSelectorException {
         int parenthesesCount = 1;
         while ( parenthesesCount > 0 && index < selector.length() - 1 )
         {
@@ -55,13 +53,12 @@ public class Selector
 
         if ( parenthesesCount > 0 )
         {
-            throw new ParseSelectorException();
+            throw new ParseSelectorException("More opening parentheses than closing parentheses");
         }
         return index;
     }
 
-    private SelectorField getNextSelectorField( StringBuilder selector )
-    {
+    private SelectorField getNextSelectorField( StringBuilder selector ) throws ParseSelectorException {
         int index = 0;
         boolean done = false;
         StringBuilder fieldName = new StringBuilder();
@@ -81,7 +78,7 @@ public class Selector
 
                 if ( selector.length() > matchIndex + 1 && selector.charAt( matchIndex + 1 ) != ','  )
                 {
-                    throw new ParseSelectorException();
+                    throw new ParseSelectorException();  // TODO: Add informative message here
                 }
                 index = matchIndex + 1;
             }
