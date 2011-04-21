@@ -8,12 +8,15 @@ public class SelectorConverter implements Converter<String, Selector>
 {
     public Selector convert( String selectorExpression )
     {
-        try {
+        try
+        {
             return new Selector( selectorExpression );
-        } catch (ParseSelectorException e) {
+        }
+        catch ( ParseSelectorException e )
+        {
             // TODO: Add logging here.  Spring spits out "no matching editors or conversion strategy found", which is
             // vague and misleading.  (ie, A URL typo looks like a configuration error)
-            throw new IllegalArgumentException("Could not parse selector", e);
+            throw new IllegalArgumentException( "Could not parse selector", e );
         }
     }
 }

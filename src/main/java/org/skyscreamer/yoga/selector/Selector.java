@@ -12,7 +12,8 @@ public class Selector
         return _fields;
     }
 
-    public Selector( String selectorExpression ) throws ParseSelectorException {
+    public Selector( String selectorExpression ) throws ParseSelectorException
+    {
         if ( selectorExpression.equals( ":" ) )
         {
             return;
@@ -20,7 +21,7 @@ public class Selector
 
         if ( !selectorExpression.startsWith( ":(" ) )
         {
-            throw new ParseSelectorException("Selector must start with ':('");
+            throw new ParseSelectorException( "Selector must start with ':('" );
         }
 
         StringBuilder selector = new StringBuilder( selectorExpression );
@@ -36,7 +37,8 @@ public class Selector
         }
     }
 
-    private int getMatchingParenthesesIndex( StringBuilder selector, int index ) throws ParseSelectorException {
+    private int getMatchingParenthesesIndex( StringBuilder selector, int index ) throws ParseSelectorException
+    {
         int parenthesesCount = 1;
         while ( parenthesesCount > 0 && index < selector.length() - 1 )
         {
@@ -53,12 +55,13 @@ public class Selector
 
         if ( parenthesesCount > 0 )
         {
-            throw new ParseSelectorException("More opening parentheses than closing parentheses");
+            throw new ParseSelectorException( "More opening parentheses than closing parentheses" );
         }
         return index;
     }
 
-    private SelectorField getNextSelectorField( StringBuilder selector ) throws ParseSelectorException {
+    private SelectorField getNextSelectorField( StringBuilder selector ) throws ParseSelectorException
+    {
         int index = 0;
         boolean done = false;
         StringBuilder fieldName = new StringBuilder();
@@ -76,7 +79,7 @@ public class Selector
                 int matchIndex = getMatchingParenthesesIndex( selector, index + 1 );
                 subSelector = new Selector( selector.substring( index, matchIndex + 1 ) );
 
-                if ( selector.length() > matchIndex + 1 && selector.charAt( matchIndex + 1 ) != ','  )
+                if ( selector.length() > matchIndex + 1 && selector.charAt( matchIndex + 1 ) != ',' )
                 {
                     throw new ParseSelectorException();  // TODO: Add informative message here
                 }
