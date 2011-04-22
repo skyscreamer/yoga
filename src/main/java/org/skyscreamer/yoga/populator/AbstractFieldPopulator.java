@@ -22,7 +22,7 @@ public abstract class AbstractFieldPopulator<T, D> implements GenericFieldPopula
         return result;
     }
 
-    public List<Map<String,Object>> populate( Collection<T> instances, Selector fieldSelector )
+    public List<Map<String,Object>> populate( Collection<? extends T> instances, Selector fieldSelector )
     {
         List<Map<String,Object>> result = new ArrayList<Map<String, Object>>();
         for ( T instance : instances )

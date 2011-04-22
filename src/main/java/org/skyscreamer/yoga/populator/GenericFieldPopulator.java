@@ -16,5 +16,5 @@ public interface GenericFieldPopulator<T>
 {
     Map<String,Object> populate( T instance, Selector FieldSelector );
 
-    List<Map<String,Object>> populate( Collection<T> instances, Selector fieldSelector );
+    List<Map<String,Object>> populate( Collection<? extends T> instances, Selector fieldSelector );
 }
