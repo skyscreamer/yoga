@@ -30,13 +30,13 @@ public class ObjectFieldPopulator extends AbstractFieldPopulator<Object,HashMap<
             }
         }
 
-        List<Method> getters = getGetters( instance.getClass() );
+        List<Method> getters = getGetters( getClass(instance) );
         for ( Method getter : getters )
         {
             String field = getterField( getter );
             try
             {
-                if ( selectorFieldMap.containsKey( field ) || isCore( getter ) )
+                if ( selectorFieldMap.containsKey( field ) || isRenderedByDefault( getter ) )
                 {
                     if ( isNotBean( getter.getReturnType() ) )
                     {
@@ -46,9 +46,9 @@ public class ObjectFieldPopulator extends AbstractFieldPopulator<Object,HashMap<
                     {
                         List<Object> listField = new ArrayList<Object>();
                         objectTree.put( field, listField );
-                        for ( Object o : (Collection) getter.invoke( instance, new Object[0] ) )
+                        for ( Object o : (Collection<?>) getter.invoke( instance, new Object[0] ) )
                         {
-                            Object value = isNotBean( o.getClass() ) ? o
+                            Object value = isNotBean( getClass(o) ) ? o
                                     : convertToDto( o, selectorFieldMap.get( field ).getSelector() );
                             listField.add( value );
                         }
@@ -67,7 +67,11 @@ public class ObjectFieldPopulator extends AbstractFieldPopulator<Object,HashMap<
         return objectTree;
     }
 
-    private boolean isNotBean( Class clazz )
+	protected Class<? extends Object> getClass(Object instance) {
+		return instance.getClass();
+	}
+
+    private boolean isNotBean( Class<?> clazz )
     {
         return clazz.isPrimitive()
                 || clazz.isEnum()
@@ -83,7 +87,7 @@ public class ObjectFieldPopulator extends AbstractFieldPopulator<Object,HashMap<
     }
 
 
-    private List<Method> getGetters( Class clazz )
+    private List<Method> getGetters( Class<?> clazz )
     {
         Method[] methods = clazz.getMethods();
         List<Method> methodList = new ArrayList<Method>( methods.length );
@@ -105,7 +109,7 @@ public class ObjectFieldPopulator extends AbstractFieldPopulator<Object,HashMap<
                 && !void.class.equals( method.getReturnType() ));
     }
 
-    private boolean isCore( Method accessorMethod )
+    private boolean isRenderedByDefault( Method accessorMethod )
     {
         boolean result = false;
         for ( Annotation annotation : accessorMethod.getDeclaredAnnotations() )
