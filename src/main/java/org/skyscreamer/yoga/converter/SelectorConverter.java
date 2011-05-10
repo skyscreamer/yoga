@@ -2,6 +2,7 @@ package org.skyscreamer.yoga.converter;
 
 import org.skyscreamer.yoga.selector.ParseSelectorException;
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorParser;
 import org.springframework.core.convert.converter.Converter;
 
 public class SelectorConverter implements Converter<String, Selector>
@@ -10,7 +11,7 @@ public class SelectorConverter implements Converter<String, Selector>
     {
         try
         {
-            return new Selector( selectorExpression );
+            return SelectorParser.parse( selectorExpression );
         }
         catch ( ParseSelectorException e )
         {
