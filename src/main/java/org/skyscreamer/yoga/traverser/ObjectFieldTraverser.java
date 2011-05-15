@@ -12,123 +12,122 @@ import org.apache.commons.lang.StringUtils;
 import org.skyscreamer.yoga.selector.Selector;
 
 /**
- * Created by IntelliJ IDEA.
- * User: corby
- * Date: 4/21/11
- * Time: 3:07 PM
+ * Created by IntelliJ IDEA. User: corby Date: 4/21/11 Time: 3:07 PM
  */
-public class ObjectFieldTraverser 
+public class ObjectFieldTraverser
 {
-    public void traverse( Object instance, Selector fieldSelector, HierarchicalModel model )
-    {
-        for ( Method getter : getGetters( getClass(instance) ) )
-        {
-            String field = getterField( getter );
-            try
-            {
-                if ( fieldSelector.containsField( field, getter ) )
-                {
-                    Object result = getter.invoke( instance, new Object[0] );
-
-                    if ( isNotBean( getter.getReturnType() ) )
-                    {
-                    	model.addSimple( field, getter, result );
-                    }
-                    else if ( Map.class.isAssignableFrom( getter.getReturnType() ) )
-                    {
-                        HierarchicalModel mapModel = model.createChild( field, getter, result );
-                        for ( Map.Entry<?, ?> entry : ((Map<?, ?>) result).entrySet() )
-                        {
-                            if( isNotBean( getClass( entry.getValue() )) )
-                            {
-                                mapModel.addSimple( entry.getKey().toString(), getter, entry.getValue() );
-                            } 
-                            else 
-                            {
-                                //TODO: what should the selector be in this case?
-                                Object value = entry.getValue();
-                                HierarchicalModel child = mapModel.createChild( field, getter, value );
-                                traverse( value, fieldSelector.getField( field ), child );
-                            }
-                        }
-                    }
-                    else if ( Collection.class.isAssignableFrom( getter.getReturnType() ) )
-                    {
-                    	HierarchicalModel listModel = model.createList( field, getter, result );
-                        for ( Object o : (Collection<?>) result )
-                        {
-                        	if( isNotBean( getClass( o )) )
-                        	{
-                        		listModel.addSimple( field, getter, result );
-                        	} 
-                        	else 
-                        	{
-                        		traverseChild(fieldSelector, listModel, getter, field, o);
-                        	}
-                        }
-                    }
-                    else
-                    {
-                		traverseChild(fieldSelector, model, getter, field, result);
-                    }
-                }
-            } catch ( Exception e )
-            {
-                throw new RuntimeException( e );
-            }
-        }
-    }
-
-    // allow this to be overriden
-   protected void traverseChild(Selector parentSelector, HierarchicalModel parent, AccessibleObject getter,
-         String field, Object value)
+   public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model)
    {
-      traverse( value, parentSelector.getField( field ), parent.createChild( field, getter, value ) );
+      for (Method getter : getGetters(getClass(instance)))
+      {
+         String field = getterField(getter);
+         try
+         {
+            if (fieldSelector.containsField(field, getter))
+            {
+               Object result = getter.invoke(instance, new Object[0]);
+
+               if (isNotBean(getter.getReturnType()))
+               {
+                  model.addSimple(field, getter, result);
+               }
+               else if (Map.class.isAssignableFrom(getter.getReturnType()))
+               {
+                  HierarchicalModel mapModel = model.createChild(field, getter, result);
+                  for (Map.Entry<?, ?> entry : ((Map<?, ?>) result).entrySet())
+                  {
+                     if (isNotBean(getClass(entry.getValue())))
+                     {
+                        mapModel.addSimple(entry.getKey().toString(), getter, entry.getValue());
+                     }
+                     else
+                     {
+                        // TODO: what should the selector be in this case?
+                        Object value = entry.getValue();
+                        HierarchicalModel child = mapModel.createChild(field, getter, value);
+                        traverse(value, fieldSelector.getField(field), child);
+                     }
+                  }
+               }
+               else if (Collection.class.isAssignableFrom(getter.getReturnType()))
+               {
+                  traverseList(fieldSelector, model, getter, field, (Collection<?>)result);
+               }
+               else
+               {
+                  traverseChild(fieldSelector, model, getter, field, field, result);
+               }
+            }
+         }
+         catch (Exception e)
+         {
+            throw new RuntimeException(e);
+         }
+      }
    }
 
-   protected Class<? extends Object> getClass(Object instance) {
-		return instance.getClass();
-	}
+   protected void traverseList(Selector fieldSelector, HierarchicalModel model, Method getter,
+         String field, Collection<?> list)
+   {
+      HierarchicalModel listModel = model.createList(field, getter, list);
+      for (Object o : list)
+      {
+         if (isNotBean(getClass(o)))
+         {
+            listModel.addSimple(field, getter, list);
+         }
+         else
+         {
+            traverseChild(fieldSelector, listModel, getter, field, field, o);
+         }
+      }
+   }
 
-    private boolean isNotBean( Class<?> clazz )
-    {
-        return clazz.isPrimitive()
-                || clazz.isEnum()
-                || Number.class.isAssignableFrom( clazz )
-                || String.class.isAssignableFrom( clazz )
-                || Boolean.class.isAssignableFrom( clazz )
-                || Character.class.isAssignableFrom( clazz );
-    }
+   // allow this to be overridden
+   protected void traverseChild(Selector parentSelector, HierarchicalModel parent,
+         AccessibleObject getter, String field, String name, Object value)
+   {
+      traverse(value, parentSelector.getField(field), parent.createChild(field, getter, value));
+   }
 
-    private String getterField( Method getter )
-    {
-        return StringUtils.uncapitalize( getter.getName().substring( 3 ) );
-    }
+   public Class<? extends Object> getClass(Object instance)
+   {
+      return instance.getClass();
+   }
 
+   protected boolean isNotBean(Class<?> clazz)
+   {
+      return clazz.isPrimitive() || clazz.isEnum() || Number.class.isAssignableFrom(clazz)
+            || String.class.isAssignableFrom(clazz) || Boolean.class.isAssignableFrom(clazz)
+            || Character.class.isAssignableFrom(clazz);
+   }
 
-    private List<Method> getGetters( Class<?> clazz )
-    {
-        List<Method> methodList = new ArrayList<Method>();
-        for ( Method method : clazz.getMethods() )
-        {
-            if ( isGetter( method ) )
-            {
-                methodList.add( method );
-            }
-        }
-        return methodList;
-    }
+   private String getterField(Method getter)
+   {
+      return StringUtils.uncapitalize(getter.getName().substring(3));
+   }
 
-    public static boolean isGetter( Method method )
-    {
-        return (method.getName().startsWith( "get" )
-                && method.getName().length() > 3
-                && method.getParameterTypes().length == 0
-                && !void.class.equals( method.getReturnType() ));
-    }
+   private List<Method> getGetters(Class<?> clazz)
+   {
+      List<Method> methodList = new ArrayList<Method>();
+      for (Method method : clazz.getMethods())
+      {
+         if (isGetter(method))
+         {
+            methodList.add(method);
+         }
+      }
+      return methodList;
+   }
 
-    protected Map<String, Object> convertToMap( HashMap<String, Object> dto )
-    {
-        return dto;
-    }
+   public static boolean isGetter(Method method)
+   {
+      return (method.getName().startsWith("get") && method.getName().length() > 3
+            && method.getParameterTypes().length == 0 && !void.class.equals(method.getReturnType()));
+   }
+
+   protected Map<String, Object> convertToMap(HashMap<String, Object> dto)
+   {
+      return dto;
+   }
 }

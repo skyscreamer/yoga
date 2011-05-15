@@ -24,8 +24,7 @@ public class SelectorParser
 
         while ( selectorBuff.length() > 0 )
         {
-            SelectorField selectorField = getNextSelectorField( selectorBuff );
-            selector._fields.put( selectorField.getFieldName(), selectorField );
+            processNextSelectorField( selector, selectorBuff );
         }
         return selector;
     }
@@ -53,7 +52,7 @@ public class SelectorParser
         return index;
     }
 
-    private static SelectorField getNextSelectorField( StringBuilder selectorBuff ) throws ParseSelectorException
+    private static void processNextSelectorField( DefinedSelectorImpl selector, StringBuilder selectorBuff ) throws ParseSelectorException
     {
         int index = 0;
         boolean done = false;
@@ -91,7 +90,7 @@ public class SelectorParser
         }
 
         selectorBuff.delete( 0, index );
-        return new SelectorField( fieldName.toString(), subSelector );
+        selector._fields.put(fieldName.toString(), subSelector);
     }
 }
 

@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class DefinedSelectorImpl implements Selector
 {
-   Map<String, SelectorField> _fields = new HashMap<String, SelectorField>();
+   Map<String, DefinedSelectorImpl> _fields = new HashMap<String, DefinedSelectorImpl>();
 
-   public Map<String, SelectorField> getFields()
+   public Map<String, DefinedSelectorImpl> getFields()
    {
       return _fields;
    }
@@ -16,7 +16,7 @@ public class DefinedSelectorImpl implements Selector
    public DefinedSelectorImpl getField(String field)
    {
       if (_fields.containsKey(field))
-         return _fields.get(field).getSelector();
+         return _fields.get(field);
       else
          return null;
    }
@@ -24,5 +24,11 @@ public class DefinedSelectorImpl implements Selector
    public boolean containsField(String field, AccessibleObject accessibleObject)
    {
       return _fields.containsKey(field);
+   }
+
+   @Override
+   public String toString()
+   {
+      return _fields.toString();
    }
 }
