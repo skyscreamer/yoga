@@ -4,7 +4,6 @@ import java.lang.reflect.AccessibleObject;
 
 public class CoreSelector implements Selector
 {
-
    @Override
    public Selector getField(String field)
    {
@@ -16,5 +15,4 @@ public class CoreSelector implements Selector
    {
       return accessibleObject.isAnnotationPresent(Core.class);
    }
-
 }
