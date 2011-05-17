@@ -32,3 +32,4 @@ After giving client developers complete freedom with the selectors in a test or 
 GET /teams/memberBirthdays/4234.json
 
 The important thing is once defining the initial REST types, there is no server-side programming required to change the client queries, or even to enable/disable the RESTful aliases that are published in production.
+
