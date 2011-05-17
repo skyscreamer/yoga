@@ -37,4 +37,9 @@ public class ObjectFieldPopulator
       objectFieldTraverser.traverse(instance, fieldSelector, model);
       return model.getObjectTree();
    }
+   
+   public ObjectFieldTraverser getObjectFieldTraverser() 
+   {
+	  return objectFieldTraverser;
+   }
 }
