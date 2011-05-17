@@ -12,7 +12,8 @@ import java.util.Map;
  * User: corby
  * Date: 4/21/11
  */
-public abstract class AbstractFieldPopulator<T, D> implements GenericFieldPopulator<T>
+public abstract class AbstractFieldPopulator<T, D>
+    implements GenericFieldPopulator<T>
 {
     public Map<String, Object> populate( T instance, Selector fieldSelector )
     {
