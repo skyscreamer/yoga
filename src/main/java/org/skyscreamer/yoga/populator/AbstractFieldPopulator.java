@@ -11,7 +11,6 @@ import java.util.Map;
  * Created by IntelliJ IDEA.
  * User: corby
  * Date: 4/21/11
- * Time: 2:52 PM
  */
 public abstract class AbstractFieldPopulator<T, D>
     implements GenericFieldPopulator<T>

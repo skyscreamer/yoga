@@ -2,10 +2,8 @@ package org.skyscreamer.yoga;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.SelectorField;
-
-import java.util.Set;
+import org.skyscreamer.yoga.selector.DefinedSelectorImpl;
+import org.skyscreamer.yoga.selector.SelectorParser;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,64 +16,52 @@ public class SelectorTest
     @Test
     public void testSimpleSelector() throws Exception
     {
-        Selector selector = new Selector( ":(gender,country)" );
+        DefinedSelectorImpl selector = SelectorParser.parse( ":(gender,country)" );
 
         Assert.assertEquals(selector.getFields().size(), 2);
-        SelectorField genderField = findFieldByName( selector.getFields(), "gender" );
+        DefinedSelectorImpl genderField = selector.getField( "gender" );
         Assert.assertNotNull( genderField );
-        Assert.assertEquals( genderField.getSelector().getFields().size(), 0 );
+        Assert.assertEquals( genderField.getFields().size(), 0 );
 
-        SelectorField countryField = findFieldByName( selector.getFields(), "country" );
+        DefinedSelectorImpl countryField = selector.getField( "country" );
         Assert.assertNotNull( countryField );
-        Assert.assertEquals( countryField.getSelector().getFields().size(), 0 );
+        Assert.assertEquals( countryField.getFields().size(), 0 );
     }
 
     @Test
     public void testNestedSelectors() throws Exception
     {
-        Selector selector = new Selector( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
+       DefinedSelectorImpl selector = SelectorParser.parse( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
 
         Assert.assertEquals( selector.getFields().size(), 3 );
-        SelectorField genderField = findFieldByName( selector.getFields(), "gender" );
+        DefinedSelectorImpl genderField = selector.getField(  "gender" );
         Assert.assertNotNull( genderField );
-        Assert.assertEquals( genderField.getSelector().getFields().size(), 0 );
+        Assert.assertEquals( genderField.getFields().size(), 0 );
 
-        SelectorField favoriteArtistsField = findFieldByName( selector.getFields(), "favoriteArtists" );
+        DefinedSelectorImpl favoriteArtistsField = selector.getField(  "favoriteArtists" );
         Assert.assertNotNull( favoriteArtistsField );
-        Assert.assertEquals( favoriteArtistsField.getSelector().getFields().size(), 2 );
+        Assert.assertEquals( favoriteArtistsField.getFields().size(), 2 );
 
-        SelectorField birthdayField = findFieldByName( favoriteArtistsField.getSelector().getFields(), "birthday" );
+        DefinedSelectorImpl birthdayField = favoriteArtistsField.getField( "birthday" );
         Assert.assertNotNull( birthdayField );
-        Assert.assertEquals( birthdayField.getSelector().getFields().size(), 0 );
+        Assert.assertEquals( birthdayField.getFields().size(), 0 );
 
-        SelectorField discographyField = findFieldByName( favoriteArtistsField.getSelector().getFields(), "discography" );
+        DefinedSelectorImpl discographyField = favoriteArtistsField.getField( "discography" );
         Assert.assertNotNull( discographyField );
-        Assert.assertEquals( discographyField.getSelector().getFields().size(), 2 );
+        Assert.assertEquals( discographyField.getFields().size(), 2 );
 
-        SelectorField yearField = findFieldByName( discographyField.getSelector().getFields(), "year" );
+        DefinedSelectorImpl yearField = discographyField.getField( "year" );
         Assert.assertNotNull( yearField );
-        Assert.assertEquals( yearField.getSelector().getFields().size(), 0 );
+        Assert.assertEquals( yearField.getFields().size(), 0 );
 
-        SelectorField titleField = findFieldByName( discographyField.getSelector().getFields(), "title" );
+        DefinedSelectorImpl titleField = discographyField.getField( "title" );
         Assert.assertNotNull( titleField );
-        Assert.assertEquals( titleField.getSelector().getFields().size(), 0 );
+        Assert.assertEquals( titleField.getFields().size(), 0 );
 
         Assert.assertEquals( selector.getFields().size(), 3 );
-        SelectorField friendsField = findFieldByName( selector.getFields(), "friends" );
+        DefinedSelectorImpl friendsField = selector.getField(  "friends" );
         Assert.assertNotNull( friendsField );
-        Assert.assertEquals( friendsField.getSelector().getFields().size(), 0 );
+        Assert.assertEquals( friendsField.getFields().size(), 0 );
     }
 
-    private SelectorField findFieldByName( Set<SelectorField> fields, String name )
-    {
-        SelectorField result = null;
-        for( SelectorField field : fields )
-        {
-            if ( field.getFieldName().equals( name ) )
-            {
-                result = field;
-            }
-        }
-        return result;
-    }
 }
