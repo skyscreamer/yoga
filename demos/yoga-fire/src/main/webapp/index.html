@@ -1,0 +1,160 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Carter Page
+  Date: 4/19/11
+  Time: 8:12 PM
+-->
+<html>
+  <head><title>Yoga Demo</title></head>
+  <body>
+    <h1>Yoga Demo</h1>
+    <p>Congratulations, you have successfully deployed the Yoga demo!</p>
+    <p>
+        Yoga extends your existing REST implementation to create nested selectors that provide server-side
+        navigation of the object tree.
+    </p>
+    <p>
+        This project arose out of real-world issues that were not met by standard REST approaches:
+    </p>
+    <ol>
+        <li>
+            Using hypertext navigation to retrieve related resources requires a sequence of HTTP requests. When mobile
+            devices try to perform multiple requests to render a single screen, the user experience is SLOW.
+        </li>
+        <li>
+            Some of a resource's data fields may be dynamic and expensive.  If they are rarely needed, they should not
+            be returned every time the resource is requested.
+        </li>
+        <li>
+            Creating or changing custom server calls creates a not-so-Agile
+            dependency for the client developer and an unnecessary cost for the server-side REST programmer.
+        </li>
+    </ol>
+    <p>
+        The Yoga approach is simple.  On top of your RESTful implementation, you can pass a selector which asks the
+        server to return nested or non-default fields with the response.
+    </p>
+    <p>
+        For instance, here is a traditional REST request that gets the information for a user:
+    </p>
+    <blockquote>
+        <a href="user/2.json">/user/2.json</a>
+    </blockquote>
+    <p>
+        A mobile developer can create a very simple profile page with this data.  Let's say the designers want to
+        display list of the user's favorite artists on the same profile page.  We add the selector
+        as a parameter, like this:
+    </p>
+    <blockquote>
+        <a href="user/2.json?selector=:(favoriteArtists)">/user/2.json?selector=:(favoriteArtists)</a>
+    </blockquote>
+    <p>
+        You could take this yet a step further, and grab the discography for those artists to display some album
+        information on the same screen:
+    </p>
+    <blockquote>
+        <a href="user/2.json?selector=:(favoriteArtists:(albums))">/user/2.json?selector=:(favoriteArtists:(albums))</a>
+    </blockquote>
+    <p>
+        ... OR maybe you are more social-graph focused, and you want to show the other users that like the same artists
+        as this person.  You could do a circular reference back to the fans of that artist, and print out little icons
+        for each one below the artist, filtering out the user from the profile page itself.
+    </p>
+    <blockquote>
+        <a href="user/2.json?selector=:(favoriteArtists:(fans))">/user/2.json?selector=:(favoriteArtists:(fans))</a>
+    </blockquote>
+    <p>
+        Note that the circular reference does not continue to loop, since a selector has not been added to "fans".
+    </p>
+    <p>
+        This approach also works with calls that return collections of resources. Here we retrieve a list of all users
+        in the database, and their favorite artists.
+    </p>
+    <blockquote>
+        <a href="user.json?selector=:(favoriteArtists)">/user.json?selector=:(favoriteArtists:(albums))</a>
+    </blockquote>
+
+    <hr/>
+    <h2>How It Works</h2>
+    <p>
+        We worked to make the code as simple as possible.  First you decide which fields you want to make your defaults,
+        using the @Core annotation on corresponding like so:
+    </p>
+        <pre>
+        <b>@Core</b>
+        public long getId() {
+            return id;
+        }
+        </pre>
+    <p>
+        This means that this field will always be returned regardless of the selector.  Then you create a convertor
+        for the selector.  In spring it works like this:
+    </p>
+    <pre>
+        &lt;bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"&gt;
+            &lt;property name="converters"&gt;
+                &lt;set&gt;
+                    &lt;bean class="org.skyscreamer.yoga.converter.SelectorConverter"/&gt;
+                &lt;/set&gt;
+            &lt;/property&gt;
+        &lt;/bean&gt;
+    </pre>
+    <p>Or add the converter to an existing formatting conversion service.  Tell your controller how to read
+    the selector, then simply pass it with your return object to Yoga's default simple response mapper:</p>
+    <pre>
+        @Autowired protected ObjectFieldPopulator _objectFieldPopulator;
+
+        @RequestMapping("/user/{userId}")
+        public void getUser(@PathVariable long userId, <b>@RequestParam(required = false) Selector selector</b>, ModelMap model) {
+            User user = _userDao.findByPrimaryKey(userId);
+            Map&lt;String, Object&gt; objectTree = <b>_objectFieldPopulator.populate( user, selector );</b>
+            model.put("response", objectTree);
+        }
+    </pre>
+    <p>
+        Remember you'll still need to wire up a serialization mapper like Jackson to convert the model objects into
+        JSON.  You can look in the <a href="http://github.com/skyscreamer/yoga-demo">yoga-demo</a> source code for an
+        example of how to do that.
+    </p>
+    <p>
+        The response will navigate only along the lines identified by the selector.  If you are mapping a JPA entity
+        with lazy collection mappings, those mappings will only be invoked if the selector requests them.  You can
+        wire anything you want to a getXXX() pattern, and it will be a selectable field.  If more complicated DTO
+        marshalling logic is needed, you can create custom data populators by extending <b>AbstractFieldPopulator</b>.
+    </p>
+    <p>
+        Finally, here's an example of a deep-dive query that would take a dozen queries in a traditional RESTful API.
+        It returns a list of all the songs by my friends' favorite artists:
+    </p>
+    <blockquote>
+        <a href="user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))">/user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))</a>
+    </blockquote>
+    <hr/>
+    <h2>Next Steps</h2>
+        <ul>
+            <li>
+                Create an aliasing system to allow dynamic aliasing of selector-based queries into more RESTful
+                calls. (e.g. The last call could become "/users/favoriteArtists/2.json".)  The raw selector framework
+                can be disabled in production to ensure that queries are approved and configured for response caching.
+            </li>
+            <li>
+                Simplify integration with any existing REST framework.  The first demo application is done on Spring
+                MVC, but there is no reason the code would need to depend on a particular implementation.
+            </li>
+            <li>
+                Add security hooks.  Allow field level security to limit the data that is accessible by the framework.
+                A white-list approach to selector fields would prevent inadvertently exposing unwanted fields to 3rd
+                parties.  This would also lend itself to enterprise SOA architectures where data needs to be more
+                tightly controlled.
+            </li>
+        </ul>
+    <hr/>
+    <h2>Want to help?</h2>
+    <p>
+        This is open source so if you want to help out whether by submitting code, design, suggestions, feedback,
+        or feature requests, we appreciate whatever you can contribute.  You can contact us at
+        <a href="mailto:yoga-dev@skyscreamer.org">yoga-dev@skyscreamer.org</a>.  We'll have proper mailing lists and
+        issue tracking available shortly.
+    </p>
+  </body>
+</html>
