@@ -1,21 +1,23 @@
 package org.skyscreamer.yoga.demo.controller;
 
-import java.util.List;
-
+import org.skyscreamer.yoga.controller.ControllerResponse;
 import org.skyscreamer.yoga.demo.model.User;
+import org.skyscreamer.yoga.selector.Selector;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created by IntelliJ IDEA. User: Carter Page Date: 4/11/11 Time: 5:07 PM
+ * Created by IntelliJ IDEA.
+ * User: Carter Page
  */
 @Controller
 @RequestMapping("/user")
-public class UserController extends AbstractController<User> {
-
+public class UserController extends AbstractController<User>
+{
 	@RequestMapping
-	public @ResponseBody List<User> getUsers() {
-		return genericDao.findAll(User.class);
+	public @ResponseBody ControllerResponse getUsers( Selector selector )
+    {
+		return new ControllerResponse( selector, genericDao.findAll(User.class) );
 	}
 }

@@ -1,12 +1,29 @@
 package org.skyscreamer.yoga.controller;
 
+import org.skyscreamer.yoga.selector.Selector;
+
 /**
  * Created by IntelliJ IDEA.
  * User: corby
- * Date: 5/30/11
- * Time: 10:08 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ControllerResponse
 {
+    private Selector _selector;
+    private Object _data;
+
+    public ControllerResponse( Selector selector, Object data )
+    {
+        _selector = selector;
+        _data = data;
+    }
+
+    public Selector getSelector()
+    {
+        return _selector;
+    }
+
+    public Object getData()
+    {
+        return _data;
+    }
 }
