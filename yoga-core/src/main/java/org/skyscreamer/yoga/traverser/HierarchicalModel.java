@@ -1,13 +1,15 @@
 package org.skyscreamer.yoga.traverser;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 
 public interface HierarchicalModel 
 {
-	void addSimple(String field, AccessibleObject getter, Object result);
+	void addSimple(PropertyDescriptor property, Object value);
 
-	HierarchicalModel createChild(String field, AccessibleObject getter, Object result);
+	void addSimple(String name, Object result);
 
-	HierarchicalModel createList(String field, AccessibleObject getter, Object result);
+	HierarchicalModel createChild(PropertyDescriptor property, Object value);
+
+	HierarchicalModel createList(PropertyDescriptor property, Object value);
 
 }

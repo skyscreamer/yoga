@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.traverser;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +11,16 @@ public class ListHierarchicalModel extends AbstractHierarchicalModel
    List<Object> list = new ArrayList<Object>();
    
    @Override
-   public void addSimple(String field, AccessibleObject getter, Object result)
+   public void addSimple(PropertyDescriptor property, Object value)
    {
-      list.add(result);
+      list.add(value);
    }
+   
+   @Override
+	public void addSimple(String name, Object value) 
+   {
+      list.add(value);
+	}
 
    public List<Object> getList()
    {

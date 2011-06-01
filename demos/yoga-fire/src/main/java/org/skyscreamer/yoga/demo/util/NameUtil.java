@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.view;
+package org.skyscreamer.yoga.demo.util;
 
 import javax.persistence.Entity;
 

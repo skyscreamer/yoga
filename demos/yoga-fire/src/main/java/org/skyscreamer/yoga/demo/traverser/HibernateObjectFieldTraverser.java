@@ -1,8 +1,6 @@
 package org.skyscreamer.yoga.demo.traverser;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Method;
-import java.util.Collection;
+import java.beans.PropertyDescriptor;
 
 import javax.persistence.Entity;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +10,7 @@ import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.jboss.resteasy.spi.touri.ObjectToURI;
 import org.skyscreamer.yoga.demo.annotations.Nested;
 import org.skyscreamer.yoga.demo.annotations.Reference;
-import org.skyscreamer.yoga.demo.view.NameUtil;
+import org.skyscreamer.yoga.demo.util.NameUtil;
 import org.skyscreamer.yoga.selector.CombinedSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.DefinedSelectorImpl;
@@ -37,12 +35,12 @@ public class HibernateObjectFieldTraverser extends ObjectFieldTraverser
 
    @Override
    protected void traverseChild(Selector parentSelector, HierarchicalModel model,
-         AccessibleObject getter, String field, String name, Object value)
+         PropertyDescriptor property, String name, Object value)
    {
-      if (getter.isAnnotationPresent(Reference.class))
+      Reference reference = property.getReadMethod().getAnnotation(Reference.class);
+      if (reference != null)
       {
-         Reference reference = getter.getAnnotation(Reference.class);
-         Selector childSelector = parentSelector.getField(field);
+         Selector childSelector = parentSelector.getField(property);
 
          if (!isUserDefinedSelector(childSelector))
          {
@@ -64,49 +62,52 @@ public class HibernateObjectFieldTraverser extends ObjectFieldTraverser
                childSelector = new CoreSelector();
             }
          }
-         HierarchicalModel childModel = addHref(model, getter, field, value);
+         HierarchicalModel childModel = addHref(model, property, value);
          traverse(value, childSelector, childModel);
       }
       else
       {
          // TODO: What should we do by default if this is URIable?
          String uri = getUri(value);
-         HierarchicalModel nextModel = (uri == null) ? model.createChild(name, getter, value) : addHref(model, getter, name, value);
-         traverse(value, parentSelector.getField(field), nextModel);
+         HierarchicalModel nextModel = (uri == null) ? model.createChild(property, value)
+               : addHref(model, property, value);
+         traverse(value, parentSelector.getField(property), nextModel);
       }
    }
-   
+
    @Override
-   protected void traverseList(Selector fieldSelector, HierarchicalModel model, Method getter,
-         String field, Collection<?> list)
+   protected void traverseIterable(Selector fieldSelector, HierarchicalModel model,
+         PropertyDescriptor property, Iterable<?> list)
    {
-      HierarchicalModel listModel = model.createList(field, getter, list);
+      HierarchicalModel listModel = model.createList(property, list);
       for (Object o : list)
       {
-         Nested nested = getter.getAnnotation(Nested.class);
+         Nested nested = property.getReadMethod().getAnnotation(Nested.class);
          String name = (nested != null) ? nested.childName() : NameUtil.getName(o.getClass());
 
          if (isNotBean(getClass(o)))
          {
-            listModel.addSimple(name, getter, list);
+            listModel.addSimple(property, list);
          }
          else
          {
-            traverseChild(fieldSelector, listModel, getter, field, name, o);
+            traverseChild(fieldSelector, listModel, property, name, o);
          }
       }
    }
 
-   protected HierarchicalModel addHref(HierarchicalModel model, AccessibleObject getter,
-         String field, Object value)
+   protected HierarchicalModel addHref(HierarchicalModel model, PropertyDescriptor property,
+         Object value)
    {
-      HierarchicalModel childModel = model.createChild(field, getter, value);
-      childModel.addSimple("href", null, getUri(value));
+      HierarchicalModel childModel = model.createChild(property, value);
+      childModel.addSimple("href", getUri(value));
       return childModel;
    }
 
    protected String getUri(Object value)
    {
+      // this is specific to this use case. There can be other logic to
+      // determine URIable eligibility
       if (!value.getClass().isAnnotationPresent(Entity.class))
       {
          return null;

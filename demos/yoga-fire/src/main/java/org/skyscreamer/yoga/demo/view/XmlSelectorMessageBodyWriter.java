@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
@@ -39,10 +38,16 @@ public class XmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWri
       DOMElement root = new DOMElement("result");
       domDocument.setRootElement(root);
       HierarchicalModel model = new XmlHierarchyModel(root);
-      ObjectFieldTraverser traverser = getTraverser();
-      if (obj instanceof Collection)
+      traverse(obj, selector, model);
+      write(output, domDocument);
+   }
+
+   protected void traverse(Object obj, Selector selector, HierarchicalModel model) 
+   {
+	  ObjectFieldTraverser traverser = getTraverser();
+      if (obj instanceof Iterable)
       {
-         for (Object child : (Collection<?>) obj)
+         for (Object child : (Iterable<?>) obj)
          {
         	 traverser.traverse(child, selector, model);
          }
@@ -51,7 +56,11 @@ public class XmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWri
       {
     	  traverser.traverse(obj, selector, model);
       }
-      OutputStreamWriter out = new OutputStreamWriter(output);
+   }
+
+   protected void write(OutputStream output, DOMDocument domDocument) throws IOException 
+   {
+	  OutputStreamWriter out = new OutputStreamWriter(output);
       domDocument.write(out);
       out.flush();
    }

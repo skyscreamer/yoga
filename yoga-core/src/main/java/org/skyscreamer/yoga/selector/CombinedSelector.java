@@ -1,9 +1,10 @@
 package org.skyscreamer.yoga.selector;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class CombinedSelector implements Selector
 {
@@ -26,22 +27,22 @@ public class CombinedSelector implements Selector
    }
 
    @Override
-   public Selector getField(String field)
+   public Selector getField(PropertyDescriptor propertyDescriptor)
    {
-      ArrayList<Selector> children = new ArrayList<Selector>();
+      List<Selector> children = new ArrayList<Selector>();
       for (Selector s : selectors)
       {
-         children.add(s.getField(field));
+         children.add(s.getField(propertyDescriptor));
       }
       return new CombinedSelector(children);
    }
 
    @Override
-   public boolean containsField(String field, AccessibleObject accessibleObject)
+   public boolean containsField(PropertyDescriptor property)
    {
       for (Selector selector : selectors)
       {
-         if (selector.containsField(field, accessibleObject))
+         if (selector.containsField(property))
          {
             return true;
          }

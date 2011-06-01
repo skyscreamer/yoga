@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
@@ -30,15 +29,14 @@ public class JsonSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWr
          MediaType mediaType, MultivaluedMap<String, Object> headers, OutputStream output)
          throws IOException, WebApplicationException
    {
-      Selector selector = getSelector(request);
-      new ObjectMapper().writeValue(output, getResult(obj, selector));
+      new ObjectMapper().writeValue(output, getResult(obj, getSelector(request)));
    }
 
    private Object getResult(Object obj, Selector selector)
    {
-      if (obj instanceof Collection<?>)
+      if (obj instanceof Iterable<?>)
       {
-         return fieldPopulator.populate((Collection<?>) obj, selector);
+         return fieldPopulator.populate((Iterable<?>) obj, selector);
       }
       else
       {
