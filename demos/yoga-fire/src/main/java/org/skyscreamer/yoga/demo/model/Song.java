@@ -7,10 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.jboss.resteasy.spi.touri.MappedBy;
+import org.jboss.resteasy.spi.touri.URITemplate;
 import org.skyscreamer.yoga.demo.annotations.Attribute;
 import org.skyscreamer.yoga.demo.annotations.Reference;
-import org.skyscreamer.yoga.demo.controller.SongController;
 import org.skyscreamer.yoga.selector.Core;
 
 /**
@@ -20,7 +19,7 @@ import org.skyscreamer.yoga.selector.Core;
  * Time: 4:56 PM
  */
 @Entity
-@MappedBy(resource=SongController.class, method="get")
+@URITemplate("/song/{id}")
 public class Song {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private long id;
     private String title;

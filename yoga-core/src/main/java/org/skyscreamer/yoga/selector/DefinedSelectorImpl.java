@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.selector;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +13,12 @@ public class DefinedSelectorImpl implements Selector
       return _fields;
    }
 
+   @Override
+   public DefinedSelectorImpl getField(PropertyDescriptor property)
+   {
+	   return getField(property.getName());
+   }
+   
    public DefinedSelectorImpl getField(String field)
    {
       if (_fields.containsKey(field))
@@ -21,10 +27,17 @@ public class DefinedSelectorImpl implements Selector
          return null;
    }
 
-   public boolean containsField(String field, AccessibleObject accessibleObject)
+   @Override
+   public boolean containsField(PropertyDescriptor property)
+   {
+      return containsField(property.getName());
+   }
+
+   public boolean containsField(String field)
    {
       return _fields.containsKey(field);
    }
+
 
    @Override
    public String toString()

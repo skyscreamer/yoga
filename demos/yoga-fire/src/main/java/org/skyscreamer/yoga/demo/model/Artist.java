@@ -1,13 +1,17 @@
 package org.skyscreamer.yoga.demo.model;
 
-import org.jboss.resteasy.spi.touri.MappedBy;
-import org.skyscreamer.yoga.demo.annotations.Attribute;
-import org.skyscreamer.yoga.demo.controller.ArtistController;
-import org.skyscreamer.yoga.selector.Core;
-
-import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import org.jboss.resteasy.spi.touri.URITemplate;
+import org.skyscreamer.yoga.demo.annotations.Attribute;
+import org.skyscreamer.yoga.selector.Core;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,10 +20,11 @@ import java.util.Set;
  * Time: 4:49 PM
  */
 @Entity
-@MappedBy(resource=ArtistController.class, method="get")
+@URITemplate("/artist/{id}")
 public class Artist {
     @Id @GeneratedValue private long id;
     private String name;
+    
     @OneToMany(mappedBy = "artist") private List<Album> albums;
     @ManyToMany(mappedBy = "favoriteArtists") private Set<User> fans;
 

@@ -12,12 +12,8 @@
 
     <context:annotation-config/>
 
-	<context:component-scan base-package="org.skyscreamer.yoga.demo">
-		<context:include-filter type="regex"
-			expression="org.skyscreamer.yoga.demo.controller.*" />
-		<context:include-filter type="regex"
-			expression="org.skyscreamer.yoga.demo.view.*" />
-	</context:component-scan>
+	<context:component-scan base-package="org.skyscreamer.yoga.demo.controller" />
+	<context:component-scan base-package="org.skyscreamer.yoga.demo.view" />
 
     <import resource="classpath:springmvc-resteasy.xml"/>
 
@@ -32,4 +28,10 @@
             </map>
         </property>
     </bean>
+    
+    <bean abstract="true" id="subscriber" class="org.skyscreamer.yoga.demo.controller.ControllerSubscriber" />
+    
+    <bean parent="subscriber" p:entityClass="org.skyscreamer.yoga.demo.model.Album"/>
+    <bean parent="subscriber" p:entityClass="org.skyscreamer.yoga.demo.model.Song"/>
+    <bean parent="subscriber" p:entityClass="org.skyscreamer.yoga.demo.model.Artist"/>
 </beans>

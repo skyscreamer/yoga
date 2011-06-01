@@ -11,6 +11,7 @@
     <url>https://github.com/skyscreamer/yoga</url>
 
     <modules>
+        <module>yoga-demo-common</module>
         <module>yoga-springmvc</module>
         <module>yoga-fire</module>
     </modules>

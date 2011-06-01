@@ -1,18 +1,19 @@
 package org.skyscreamer.yoga.selector;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 
 public class CoreSelector implements Selector
 {
    @Override
-   public Selector getField(String field)
+   public Selector getField(PropertyDescriptor property)
    {
       return this;
    }
 
    @Override
-   public boolean containsField(String field, AccessibleObject accessibleObject)
+   public boolean containsField(PropertyDescriptor property)
    {
-      return accessibleObject.isAnnotationPresent(Core.class);
+      System.out.println("~~~" + property.getName());
+	   return property.getReadMethod().isAnnotationPresent(Core.class);
    }
 }

@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.demo.traverser;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 
 import org.dom4j.Element;
 import org.skyscreamer.yoga.demo.annotations.Attribute;
@@ -25,10 +25,21 @@ public class XmlHierarchyModel implements HierarchicalModel
    }
 
    @Override
-   public void addSimple(String field, AccessibleObject getter, Object result)
+   public void addSimple(PropertyDescriptor property, Object result)
    {
-      String elementName = childName == null ? field : childName;
-      if (elementName.equals("href") || getter.isAnnotationPresent(Attribute.class))
+      addSimple(property.getName(), result, property.getReadMethod().isAnnotationPresent(Attribute.class));
+   }
+
+   @Override
+   public void addSimple(String name, Object result)
+   {
+      addSimple(name, result, false);
+   }
+   
+   public void addSimple(String name, Object result, boolean isAttribute)
+   {
+      String elementName = childName == null ? name : childName;
+      if (name.equals("href") || isAttribute)
       {
          element.addAttribute(elementName, result.toString());
       }
@@ -37,19 +48,19 @@ public class XmlHierarchyModel implements HierarchicalModel
          element.addElement(elementName).setText(result.toString());
       }
    }
-
+   
    @Override
-   public HierarchicalModel createChild(String field, AccessibleObject getter, Object result)
+   public HierarchicalModel createChild(PropertyDescriptor property, Object result)
    {
-      return new XmlHierarchyModel(element.addElement(field));
+      return new XmlHierarchyModel(element.addElement(property.getName()));
    }
 
    @Override
-   public HierarchicalModel createList(String field, AccessibleObject getter, Object result)
+   public HierarchicalModel createList(PropertyDescriptor property, Object result)
    {
-      Nested nested = getter.getAnnotation(Nested.class);
+      Nested nested = property.getReadMethod().getAnnotation(Nested.class);
       if (nested != null)
-         return new XmlHierarchyModel(element.addElement(field), nested.childName());
+         return new XmlHierarchyModel(element.addElement(property.getName()), nested.childName());
       else
          return this;
    }
