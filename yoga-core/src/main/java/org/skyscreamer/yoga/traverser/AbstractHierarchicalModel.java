@@ -1,23 +1,23 @@
 package org.skyscreamer.yoga.traverser;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 
 
 public abstract class AbstractHierarchicalModel implements HierarchicalModel
 {
    @Override
-   public HierarchicalModel createChild(String field, AccessibleObject getter, Object result)
+   public HierarchicalModel createChild(PropertyDescriptor property, Object result)
    {
       MapHierarchicalModel child = new MapHierarchicalModel();
-      addSimple(field, getter, child.getObjectTree());
+      addSimple(property, child.getObjectTree());
       return child;
    }
 
    @Override
-   public HierarchicalModel createList(String field, AccessibleObject getter, Object result)
+   public HierarchicalModel createList(PropertyDescriptor property, Object result)
    {
       ListHierarchicalModel child = new ListHierarchicalModel();
-      addSimple(field, getter, child.getList());
+      addSimple(property, child.getList());
       return child;
    }
 }

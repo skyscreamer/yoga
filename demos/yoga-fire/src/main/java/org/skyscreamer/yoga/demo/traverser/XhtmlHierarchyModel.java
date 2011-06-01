@@ -1,10 +1,10 @@
 package org.skyscreamer.yoga.demo.traverser;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 
 import org.dom4j.Element;
 import org.skyscreamer.yoga.demo.annotations.Nested;
-import org.skyscreamer.yoga.demo.view.NameUtil;
+import org.skyscreamer.yoga.demo.util.NameUtil;
 import org.skyscreamer.yoga.traverser.HierarchicalModel;
 
 public class XhtmlHierarchyModel implements HierarchicalModel
@@ -26,9 +26,15 @@ public class XhtmlHierarchyModel implements HierarchicalModel
    }
 
    @Override
-   public void addSimple(String field, AccessibleObject getter, Object result)
+   public void addSimple(PropertyDescriptor property, Object result)
    {
-      String elementName = childName == null ? field : childName;
+      addSimple(property.getName(), result);
+   }
+
+   @Override
+   public void addSimple(String name, Object result)
+   {
+      String elementName = childName == null ? name : childName;
       if (elementName.equals("href"))
       {
          a = element.addElement("a");
@@ -41,20 +47,22 @@ public class XhtmlHierarchyModel implements HierarchicalModel
       else
       {
          element.addElement("span").addAttribute("class", elementName).setText(result.toString());
-      }
+      }   
+   }
+
+
+   
+   @Override
+   public HierarchicalModel createChild(PropertyDescriptor property, Object result)
+   {
+      return new XhtmlHierarchyModel(element.addElement("div").addAttribute("class", property.getName()));
    }
 
    @Override
-   public HierarchicalModel createChild(String field, AccessibleObject getter, Object result)
+   public HierarchicalModel createList(PropertyDescriptor property, Object result)
    {
-      return new XhtmlHierarchyModel(element.addElement("div").addAttribute("class", field));
-   }
-
-   @Override
-   public HierarchicalModel createList(String field, AccessibleObject getter, Object result)
-   {
-      Element div = element.addElement("div").addAttribute("class", field);
-      Nested nested = getter.getAnnotation(Nested.class);
+      Element div = element.addElement("div").addAttribute("class", property.getName());
+      Nested nested = property.getReadMethod().getAnnotation(Nested.class);
       if (nested != null)
       {
          return new XhtmlHierarchyModel(div, nested.childName());

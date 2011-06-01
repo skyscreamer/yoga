@@ -1,14 +1,8 @@
 package org.skyscreamer.yoga.traverser;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.beans.PropertyDescriptor;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.selector.Selector;
 
 /**
@@ -18,44 +12,29 @@ public class ObjectFieldTraverser
 {
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model)
    {
-      for (Method getter : getGetters(getClass(instance)))
+      PropertyDescriptor[] properties = PropertyUtils.getPropertyDescriptors(getClass(instance));
+
+      for (PropertyDescriptor property : properties)
       {
-         String field = getterField(getter);
+         String field = property.getName();
          try
          {
-            if (fieldSelector.containsField(field, getter))
+            if (fieldSelector.containsField(property))
             {
-               Object result = getter.invoke(instance, new Object[0]);
+               Object value = PropertyUtils.getNestedProperty(instance, property.getName());
 
-               if (isNotBean(getter.getReturnType()))
+               Class<?> propertyType = property.getPropertyType();
+               if (isNotBean(propertyType))
                {
-                  model.addSimple(field, getter, result);
+                  model.addSimple(property, value);
                }
-               else if (Map.class.isAssignableFrom(getter.getReturnType()))
+               else if (Iterable.class.isAssignableFrom(propertyType))
                {
-                  HierarchicalModel mapModel = model.createChild(field, getter, result);
-                  for (Map.Entry<?, ?> entry : ((Map<?, ?>) result).entrySet())
-                  {
-                     if (isNotBean(getClass(entry.getValue())))
-                     {
-                        mapModel.addSimple(entry.getKey().toString(), getter, entry.getValue());
-                     }
-                     else
-                     {
-                        // TODO: what should the selector be in this case?
-                        Object value = entry.getValue();
-                        HierarchicalModel child = mapModel.createChild(field, getter, value);
-                        traverse(value, fieldSelector.getField(field), child);
-                     }
-                  }
-               }
-               else if (Collection.class.isAssignableFrom(getter.getReturnType()))
-               {
-                  traverseList(fieldSelector, model, getter, field, (Collection<?>)result);
+                  traverseIterable(fieldSelector, model, property, (Iterable<?>) value);
                }
                else
                {
-                  traverseChild(fieldSelector, model, getter, field, field, result);
+                  traverseChild(fieldSelector, model, property, field, value);
                }
             }
          }
@@ -66,28 +45,28 @@ public class ObjectFieldTraverser
       }
    }
 
-   protected void traverseList(Selector fieldSelector, HierarchicalModel model, Method getter,
-         String field, Collection<?> list)
+   protected void traverseIterable(Selector fieldSelector, HierarchicalModel model,
+         PropertyDescriptor property, Iterable<?> list)
    {
-      HierarchicalModel listModel = model.createList(field, getter, list);
+      HierarchicalModel listModel = model.createList(property, list);
       for (Object o : list)
       {
          if (isNotBean(getClass(o)))
          {
-            listModel.addSimple(field, getter, list);
+            listModel.addSimple(property, list);
          }
          else
          {
-            traverseChild(fieldSelector, listModel, getter, field, field, o);
+            traverseChild(fieldSelector, listModel, property, property.getName(), o);
          }
       }
    }
 
    // allow this to be overridden
    protected void traverseChild(Selector parentSelector, HierarchicalModel parent,
-         AccessibleObject getter, String field, String name, Object value)
+         PropertyDescriptor property, String name, Object value)
    {
-      traverse(value, parentSelector.getField(field), parent.createChild(field, getter, value));
+      traverse(value, parentSelector.getField(property), parent.createChild(property, value));
    }
 
    public Class<? extends Object> getClass(Object instance)
@@ -100,34 +79,5 @@ public class ObjectFieldTraverser
       return clazz.isPrimitive() || clazz.isEnum() || Number.class.isAssignableFrom(clazz)
             || String.class.isAssignableFrom(clazz) || Boolean.class.isAssignableFrom(clazz)
             || Character.class.isAssignableFrom(clazz);
-   }
-
-   private String getterField(Method getter)
-   {
-      return StringUtils.uncapitalize(getter.getName().substring(3));
-   }
-
-   private List<Method> getGetters(Class<?> clazz)
-   {
-      List<Method> methodList = new ArrayList<Method>();
-      for (Method method : clazz.getMethods())
-      {
-         if (isGetter(method))
-         {
-            methodList.add(method);
-         }
-      }
-      return methodList;
-   }
-
-   public static boolean isGetter(Method method)
-   {
-      return (method.getName().startsWith("get") && method.getName().length() > 3
-            && method.getParameterTypes().length == 0 && !void.class.equals(method.getReturnType()));
-   }
-
-   protected Map<String, Object> convertToMap(HashMap<String, Object> dto)
-   {
-      return dto;
    }
 }

@@ -18,6 +18,7 @@ import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.skyscreamer.yoga.demo.traverser.XhtmlHierarchyModel;
+import org.skyscreamer.yoga.demo.util.NameUtil;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.traverser.HierarchicalModel;
 import org.skyscreamer.yoga.traverser.ObjectFieldTraverser;
@@ -38,27 +39,38 @@ public class XhtmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyW
       DOMDocument domDocument = new DOMDocument();
       domDocument.setRootElement( new DOMElement("html"));
       Element body = domDocument.getRootElement().addElement("body");
-      if (obj instanceof Iterable)
+      traverse(obj, selector, body);
+      write(output, domDocument);
+   }
+
+   protected void traverse(Object obj, Selector selector, Element body) {
+      ObjectFieldTraverser traverser = getTraverser();
+	  if (obj instanceof Iterable)
       {
          for (Object child : (Iterable<?>) obj)
          {
-            traverse(selector, body, child);
+			  HierarchicalModel model = createModel(child, body, traverser);
+			  traverser.traverse(child, selector, model);
          }
       }
       else
       {
-         traverse(selector, body, obj);
+		  HierarchicalModel model = createModel(obj, body, traverser);
+		  traverser.traverse(obj, selector, model);
       }
-      OutputStreamWriter out = new OutputStreamWriter(output);
+   }
+
+    protected HierarchicalModel createModel(Object obj, Element body, ObjectFieldTraverser traverser) {
+	   String name = NameUtil.getName(traverser.getClass(obj));
+	   return new XhtmlHierarchyModel(body.addElement("div").addAttribute("class", name));
+   }
+    
+   protected void write(OutputStream output, DOMDocument domDocument) throws IOException 
+   {
+ 	  OutputStreamWriter out = new OutputStreamWriter(output);
       domDocument.write(out);
       out.flush();
    }
 
-   protected void traverse(Selector selector, Element body, Object child)
-   {
-      ObjectFieldTraverser traverser = getTraverser();
-	  String name = NameUtil.getName(traverser.getClass(child));
-      HierarchicalModel model = new XhtmlHierarchyModel(body.addElement("div").addAttribute("class", name));
-      traverser.traverse(child, selector, model);
-   }
+
 }

@@ -1,12 +1,12 @@
 package org.skyscreamer.yoga.selector;
 
-import java.lang.reflect.AccessibleObject;
+import java.beans.PropertyDescriptor;
 
 
 public interface Selector
 {
-    public Selector getField(String field);
+    public Selector getField(PropertyDescriptor descriptor);
 
-	public boolean containsField(String field, AccessibleObject accessibleObject);
+	public boolean containsField(PropertyDescriptor descriptor);
 }
 
