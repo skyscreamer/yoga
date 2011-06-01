@@ -6,7 +6,7 @@
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-core</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.3-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
