@@ -13,7 +13,6 @@ public class CoreSelector implements Selector
    @Override
    public boolean containsField(PropertyDescriptor property)
    {
-      System.out.println("~~~" + property.getName());
-	   return property.getReadMethod().isAnnotationPresent(Core.class);
+      return property.getReadMethod().isAnnotationPresent(Core.class);
    }
 }
