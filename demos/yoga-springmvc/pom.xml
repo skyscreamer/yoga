@@ -5,7 +5,7 @@
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-springmvc</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.3-SNAPSHOT</version>
 
     <build>
         <plugins>

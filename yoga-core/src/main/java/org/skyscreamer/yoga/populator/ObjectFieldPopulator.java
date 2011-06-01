@@ -21,7 +21,7 @@ public class ObjectFieldPopulator
       this.objectFieldTraverser = objectFieldTraverser;
    }
 
-   public List<HashMap<String, Object>> populate(Collection<?> instances, Selector fieldSelector)
+   public List<HashMap<String, Object>> populate(Iterable<?> instances, Selector fieldSelector)
    {
       List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
       for (Object instance : instances)
