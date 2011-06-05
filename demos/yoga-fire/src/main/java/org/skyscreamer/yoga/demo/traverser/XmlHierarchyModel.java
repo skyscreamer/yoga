@@ -5,7 +5,7 @@ import java.beans.PropertyDescriptor;
 import org.dom4j.Element;
 import org.skyscreamer.yoga.demo.annotations.Attribute;
 import org.skyscreamer.yoga.demo.annotations.Nested;
-import org.skyscreamer.yoga.traverser.HierarchicalModel;
+import org.skyscreamer.yoga.mapper.HierarchicalModel;
 
 public class XmlHierarchyModel implements HierarchicalModel
 {

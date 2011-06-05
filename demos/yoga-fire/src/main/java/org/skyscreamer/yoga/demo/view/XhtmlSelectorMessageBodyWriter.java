@@ -20,8 +20,8 @@ import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.skyscreamer.yoga.demo.traverser.XhtmlHierarchyModel;
 import org.skyscreamer.yoga.demo.util.NameUtil;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.traverser.HierarchicalModel;
-import org.skyscreamer.yoga.traverser.ObjectFieldTraverser;
+import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,7 +44,7 @@ public class XhtmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyW
    }
 
    protected void traverse(Object obj, Selector selector, Element body) {
-      ObjectFieldTraverser traverser = getTraverser();
+      ResultTraverser traverser = getTraverser();
 	  if (obj instanceof Iterable)
       {
          for (Object child : (Iterable<?>) obj)
@@ -60,7 +60,7 @@ public class XhtmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyW
       }
    }
 
-    protected HierarchicalModel createModel(Object obj, Element body, ObjectFieldTraverser traverser) {
+    protected HierarchicalModel createModel(Object obj, Element body, ResultTraverser traverser) {
 	   String name = NameUtil.getName(traverser.getClass(obj));
 	   return new XhtmlHierarchyModel(body.addElement("div").addAttribute("class", name));
    }

@@ -17,15 +17,14 @@ import org.skyscreamer.yoga.selector.DefinedSelectorImpl;
 import org.skyscreamer.yoga.selector.ParseSelectorException;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.traverser.HierarchicalModel;
-import org.skyscreamer.yoga.traverser.ObjectFieldTraverser;
+import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-@Service("objectFieldTraverser")
-public class HibernateObjectFieldTraverser extends ObjectFieldTraverser
+@Service("resultTraverser")
+public class HibernateResultTraverser extends ResultTraverser
 {
-
    @SuppressWarnings("unchecked")
    @Override
    public Class<? extends Object> getClass(Object instance)
@@ -139,5 +138,4 @@ public class HibernateObjectFieldTraverser extends ObjectFieldTraverser
       }
       return false;
    }
-
 }

@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.traverser;
+package org.skyscreamer.yoga.mapper;
 
 import java.beans.PropertyDescriptor;
 
