@@ -7,13 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.MessageBodyWriter;
 
-import org.skyscreamer.yoga.populator.ObjectFieldPopulator;
+import org.skyscreamer.yoga.mapper.ResultMapper;
 import org.skyscreamer.yoga.selector.CombinedSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.ParseSelectorException;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.traverser.ObjectFieldTraverser;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -21,7 +21,7 @@ import org.springframework.context.ApplicationContextAware;
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>,
       ApplicationContextAware
 {
-   protected ObjectFieldPopulator fieldPopulator;
+   protected ResultMapper _fieldPopulator;
 
    @Override
    public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4)
@@ -64,12 +64,12 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
    @Override
    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
    {
-      this.fieldPopulator = applicationContext.getBean(ObjectFieldPopulator.class);
+      this._fieldPopulator = applicationContext.getBean(ResultMapper.class);
    }
    
-	protected ObjectFieldTraverser getTraverser() 
+	protected ResultTraverser getTraverser()
 	{
-		return fieldPopulator.getObjectFieldTraverser();
+		return _fieldPopulator.getResultTraverser();
 	}
 
 }
