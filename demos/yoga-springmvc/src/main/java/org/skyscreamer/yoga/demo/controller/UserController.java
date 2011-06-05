@@ -18,6 +18,6 @@ public class UserController extends AbstractController<User>
 	@RequestMapping
 	public @ResponseBody ControllerResponse getUsers( Selector selector )
     {
-		return new ControllerResponse( selector, genericDao.findAll(User.class) );
+		return new ControllerResponse( selector, genericDao.findAll( User.class ) );
 	}
 }

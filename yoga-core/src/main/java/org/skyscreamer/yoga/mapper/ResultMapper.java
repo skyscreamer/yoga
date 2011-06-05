@@ -1,24 +1,21 @@
-package org.skyscreamer.yoga.populator;
+package org.skyscreamer.yoga.mapper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.traverser.MapHierarchicalModel;
-import org.skyscreamer.yoga.traverser.ObjectFieldTraverser;
 
 /**
  * Created by IntelliJ IDEA. User: corby Date: 4/21/11 Time: 3:07 PM
  */
-public class ObjectFieldPopulator 
+public class ResultMapper
 {
-   ObjectFieldTraverser objectFieldTraverser = new ObjectFieldTraverser();
+   ResultTraverser _resultTraverser = new ResultTraverser();
 
-   public void setObjectFieldTraverser(ObjectFieldTraverser objectFieldTraverser)
+   public void setResultTraverser(ResultTraverser resultTraverser )
    {
-      this.objectFieldTraverser = objectFieldTraverser;
+      this._resultTraverser = resultTraverser;
    }
 
    public List<HashMap<String, Object>> populate(Iterable<?> instances, Selector fieldSelector)
@@ -34,12 +31,12 @@ public class ObjectFieldPopulator
    public HashMap<String, Object> populate(Object instance, Selector fieldSelector)
    {
       MapHierarchicalModel model = new MapHierarchicalModel();
-      objectFieldTraverser.traverse(instance, fieldSelector, model);
+      _resultTraverser.traverse(instance, fieldSelector, model);
       return model.getObjectTree();
    }
    
-   public ObjectFieldTraverser getObjectFieldTraverser() 
+   public ResultTraverser getResultTraverser()
    {
-	  return objectFieldTraverser;
+	  return _resultTraverser;
    }
 }

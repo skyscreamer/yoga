@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.traverser;
+package org.skyscreamer.yoga.mapper;
 
 import java.beans.PropertyDescriptor;
 
@@ -8,7 +8,7 @@ import org.skyscreamer.yoga.selector.Selector;
 /**
  * Created by IntelliJ IDEA. User: corby Date: 4/21/11 Time: 3:07 PM
  */
-public class ObjectFieldTraverser
+public class ResultTraverser
 {
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model)
    {
