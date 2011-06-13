@@ -7,6 +7,38 @@
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-core</artifactId>
     <version>0.0.3-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Yoga Core</name>
+    <description>A library to develop RESTful but flexible APIs</description>
+    <url>http://github.com/skyscreamer/yoga</url>
+    <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>http://github.com/skyscreamer/yoga/</url>
+        <connection>git://github.com/skyscreamer/yoga</connection>
+    </scm>
+    <developers>
+        <developer>
+            <id>carterpage</id>
+            <name>Carter Page</name>
+            <email>carter@skyscreamer.org</email>
+        </developer>
+        <developer>
+            <id>cepage</id>
+            <name>Corby Page</name>
+            <email>corby@skyscreamer.org</email>
+        </developer>
+        <developer>
+            <id>sduskis</id>
+            <name>Solomon Duskis</name>
+            <email>sduskis@gmail.com</email>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
