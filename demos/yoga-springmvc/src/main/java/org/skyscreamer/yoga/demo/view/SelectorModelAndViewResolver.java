@@ -1,7 +1,7 @@
 package org.skyscreamer.yoga.demo.view;
 
 import org.skyscreamer.yoga.controller.ControllerResponse;
-import org.skyscreamer.yoga.populator.ObjectFieldPopulator;
+import org.skyscreamer.yoga.mapper.ResultMapper;
 import org.skyscreamer.yoga.selector.Selector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class SelectorModelAndViewResolver implements ModelAndViewResolver
 {
     @Autowired
-    ObjectFieldPopulator _objectFieldPopulator;
+    ResultMapper _resultMapper;
 
     MappingJacksonHttpMessageConverter mappingJacksonHttpMessageConverter = new MappingJacksonHttpMessageConverter();
 
@@ -75,11 +75,11 @@ public class SelectorModelAndViewResolver implements ModelAndViewResolver
     {
         if ( returnValue instanceof Collection<?> )
         {
-            return _objectFieldPopulator.populate( (Collection<?>) returnValue, selector );
+            return _resultMapper.populate( (Collection<?>) returnValue, selector );
         }
         else
         {
-            return _objectFieldPopulator.populate( returnValue, selector );
+            return _resultMapper.populate( returnValue, selector );
         }
     }
 

@@ -18,8 +18,8 @@ import org.dom4j.dom.DOMElement;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.skyscreamer.yoga.demo.traverser.XmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.traverser.HierarchicalModel;
-import org.skyscreamer.yoga.traverser.ObjectFieldTraverser;
+import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,7 +44,7 @@ public class XmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWri
 
    protected void traverse(Object obj, Selector selector, HierarchicalModel model) 
    {
-	  ObjectFieldTraverser traverser = getTraverser();
+	  ResultTraverser traverser = getTraverser();
       if (obj instanceof Iterable)
       {
          for (Object child : (Iterable<?>) obj)
