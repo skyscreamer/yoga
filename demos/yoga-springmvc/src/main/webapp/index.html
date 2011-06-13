@@ -34,7 +34,7 @@
       </style>
       <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
       <script type="text/javascript">
-          var simulatedRequestLatency = 3000;
+          var simulatedRequestLatency = 1500;
 
           var traditionalRest = function() {
               var startTime = (new Date()).getTime();
@@ -213,7 +213,7 @@
     <p>The client on the
         left uses the yoga selector to grab the entire necessary dataset in one query.  The client on the right
         uses traditional object model navigation through multiple requests.  To simulate mobile device latency, each response
-        is delayed by 3 seconds.  Other than that, queries are optimized as much as possible, by running them
+        is delayed by 1.5 seconds.  Other than that, queries are optimized as much as possible, by running them
         in parallel.
     </p>
     <div style="float: left; margin-right: 50px;">
