@@ -32,5 +32,7 @@ public class UserFieldPopulator extends AbstractFieldPopulator<User, UserDto>
         {
             return _genericDao.findAll( Album.class );
         }
+
+        return null;
     }
 }
