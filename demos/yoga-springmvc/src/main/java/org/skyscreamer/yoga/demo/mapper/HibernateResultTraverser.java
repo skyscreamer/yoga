@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.populator;
+package org.skyscreamer.yoga.demo.mapper;
 
 import org.hibernate.Hibernate;
 import org.skyscreamer.yoga.mapper.ResultTraverser;

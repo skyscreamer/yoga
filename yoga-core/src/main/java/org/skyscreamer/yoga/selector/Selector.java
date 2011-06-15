@@ -5,8 +5,8 @@ import java.beans.PropertyDescriptor;
 
 public interface Selector
 {
-    public Selector getField(PropertyDescriptor descriptor);
+    Selector getField( PropertyDescriptor descriptor );
 
-	public boolean containsField(PropertyDescriptor descriptor);
+	boolean containsField( PropertyDescriptor descriptor );
 }
 
