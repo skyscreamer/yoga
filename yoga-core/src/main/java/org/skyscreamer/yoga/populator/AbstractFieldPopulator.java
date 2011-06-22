@@ -1,63 +1,69 @@
 package org.skyscreamer.yoga.populator;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.selector.Selector;
 
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
  * User: corby
  */
-public abstract class AbstractFieldPopulator<M, D> implements FieldPopulator<M, D>
+public abstract class AbstractFieldPopulator<M> implements FieldPopulator<M>
 {
-    protected Class<D> _dtoClass = (Class<D>)((ParameterizedType)getClass().getGenericSuperclass())
-            .getActualTypeArguments()[1];
-
-    public D populateObjectFields( M model, Selector selector )
+    public Map<String,Object> populateObjectFields( M model, Selector selector )
     {
-        D result;
-        try
+        Map<String,Object> result = new HashMap<String, Object>();
+
+        for ( String fieldName : getCoreFieldNames() )
         {
-            Constructor<D> constructor = _dtoClass.getConstructor();
-            result = constructor.newInstance();
-        }
-        catch ( Exception e )
-        {
-            throw new RuntimeException( "Default constructor required for " + _dtoClass );
+            addFieldToResult( fieldName, selector, model, result );
         }
 
-        PropertyDescriptor[] properties = PropertyUtils.getPropertyDescriptors( result.getClass() );
-        for ( PropertyDescriptor property : properties )
+        for ( String fieldName : selector.getFieldNames() )
         {
-            Method writeMethod = property.getWriteMethod();
-            if ( writeMethod != null )
-            {
-                try
-                {
-                    writeMethod.invoke( result, constructFieldValue( property, model ) );
-                }
-                catch ( Exception e )
-                {
-                    throw new RuntimeException( "Could not invoke method " + writeMethod.getName() + " on " +
-                            _dtoClass );
-                }
-            }
+            addFieldToResult( fieldName, selector, model, result );
         }
 
         return result;
     }
 
-    protected abstract Object constructFieldValue( PropertyDescriptor property, M model );
-
-    public List<D> populateListFields( List<M> models, Selector selector )
+    private void addFieldToResult( String fieldName, Selector selector, M model, Map<String, Object> result )
     {
-        List<D> result = new ArrayList<D>();
+        if ( getModelFieldNames().contains( fieldName ) )
+        {
+            try
+            {
+                PropertyDescriptor propertyDescriptor = new PropertyDescriptor( fieldName, model.getClass() );
+                Method readMethod = propertyDescriptor.getReadMethod();
+                result.put( fieldName, readMethod.invoke( model ) );
+            }
+            catch ( Exception e )
+            {
+                System.out.println( "Could not invoke getter for property " + fieldName + " on class " +
+                    model.getClass().getName() );
+            }
+        }
+        else
+        {
+            Object value = constructFieldValue( fieldName, model, selector );
+            if ( value != null )
+            {
+                result.put( fieldName, value );
+            }
+        }
+    }
+
+    protected abstract Object constructFieldValue( String fieldName, M model, Selector selector );
+
+    protected abstract Collection<String> getCoreFieldNames();
+
+    protected abstract Collection<String> getModelFieldNames();
+
+    public List<Map<String,Object>> populateListFields( Collection<M> models, Selector selector )
+    {
+        List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
         for ( M model : models )
         {
             result.add( populateObjectFields( model, selector ) );
