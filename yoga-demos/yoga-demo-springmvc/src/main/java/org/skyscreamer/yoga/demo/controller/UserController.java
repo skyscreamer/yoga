@@ -1,5 +1,8 @@
 package org.skyscreamer.yoga.demo.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.skyscreamer.yoga.controller.ControllerResponse;
 import org.skyscreamer.yoga.demo.model.User;
 import org.skyscreamer.yoga.populator.FieldPopulator;
@@ -9,9 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.

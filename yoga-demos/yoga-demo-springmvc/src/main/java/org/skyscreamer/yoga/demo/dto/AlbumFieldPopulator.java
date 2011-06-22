@@ -1,18 +1,17 @@
 package org.skyscreamer.yoga.demo.dto;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.skyscreamer.yoga.demo.model.Album;
 import org.skyscreamer.yoga.demo.model.Artist;
 import org.skyscreamer.yoga.demo.model.Song;
-import org.skyscreamer.yoga.demo.model.User;
 import org.skyscreamer.yoga.populator.AbstractFieldPopulator;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.Selector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.

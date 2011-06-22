@@ -1,5 +1,8 @@
 package org.skyscreamer.yoga.demo.controller;
 
+import java.lang.reflect.ParameterizedType;
+import java.util.Map;
+
 import org.skyscreamer.yoga.controller.ControllerResponse;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.populator.FieldPopulator;
@@ -8,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.lang.reflect.ParameterizedType;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.

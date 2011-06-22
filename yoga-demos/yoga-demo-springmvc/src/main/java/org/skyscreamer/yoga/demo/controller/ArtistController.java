@@ -1,7 +1,6 @@
 package org.skyscreamer.yoga.demo.controller;
 
 import org.skyscreamer.yoga.demo.model.Artist;
-import org.skyscreamer.yoga.demo.model.User;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
