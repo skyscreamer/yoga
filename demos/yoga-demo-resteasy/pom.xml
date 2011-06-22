@@ -4,10 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.skyscreamer</groupId>
-    <artifactId>yoga-springmvc</artifactId>
+    <artifactId>yoga-demo-resteasy</artifactId>
     <version>0.0.3-SNAPSHOT</version>
 
     <build>
+        <finalName>yoga-fire</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -22,6 +23,7 @@
                             <maxIdleTime>60000</maxIdleTime>
                         </connector>
                     </connectors>
+
                 </configuration>
             </plugin>
             <plugin>
@@ -35,11 +37,22 @@
            </plugin>
         </plugins>
     </build>
+        
     <dependencies>
         <dependency>
             <groupId>org.skyscreamer</groupId>
             <artifactId>yoga-core</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-spring</artifactId>
+            <version>2.1.0.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson-provider</artifactId>
+            <version>2.1.0.GA</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -91,11 +104,7 @@
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
         </dependency>
-        <dependency>
-            <groupId>dbunit</groupId>
-            <artifactId>dbunit</artifactId>
-            <version>2.1</version>
-        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
