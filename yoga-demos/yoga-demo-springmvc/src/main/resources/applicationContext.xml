@@ -31,7 +31,10 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
 
-	<bean id="objectFieldPopulator"
+	<bean id="resultTraverser"
+		class="org.skyscreamer.yoga.springmvc.mapper.HibernateResultTraverser" />
+
+	<bean id="resultMapper"
 		class="org.skyscreamer.yoga.mapper.ResultMapper" p:resultTraverser-ref="resultTraverser" />
 
 </beans>

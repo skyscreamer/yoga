@@ -1,10 +1,17 @@
-package org.skyscreamer.yoga.demo.view;
+package org.skyscreamer.yoga.springmvc.view;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.skyscreamer.yoga.controller.ControllerResponse;
 import org.skyscreamer.yoga.mapper.ResultMapper;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
@@ -17,19 +24,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.annotation.ModelAndViewResolver;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 public class SelectorModelAndViewResolver implements ModelAndViewResolver
 {
-    @Autowired ResultMapper _resultMapper;
+    private ResultMapper _resultMapper;
 
     MappingJacksonHttpMessageConverter mappingJacksonHttpMessageConverter = new MappingJacksonHttpMessageConverter();
 
+    public void setResultMapper(ResultMapper resultMapper) 
+    {
+		this._resultMapper = resultMapper;
+	}
+    
     @SuppressWarnings("rawtypes")
     public ModelAndView resolveModelAndView( Method handlerMethod, Class handlerType, Object returnValue,
         ExtendedModelMap implicitModel, NativeWebRequest webRequest )

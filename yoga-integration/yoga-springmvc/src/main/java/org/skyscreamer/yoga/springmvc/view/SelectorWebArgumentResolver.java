@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.view;
+package org.skyscreamer.yoga.springmvc.view;
 
 import org.skyscreamer.yoga.selector.*;
 import org.springframework.core.MethodParameter;

@@ -13,10 +13,12 @@
 	<bean name="handlerAdapter"
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="customModelAndViewResolver">
-			<bean class="org.skyscreamer.yoga.demo.view.SelectorModelAndViewResolver" />
+			<bean class="org.skyscreamer.yoga.springmvc.view.SelectorModelAndViewResolver">
+				<property name="resultMapper" ref="resultMapper" />
+			</bean>
 		</property>
         <property name="customArgumentResolver">
-            <bean class="org.skyscreamer.yoga.demo.view.SelectorWebArgumentResolver"/>
+            <bean class="org.skyscreamer.yoga.springmvc.view.SelectorWebArgumentResolver"/>
         </property>
 	</bean>
 	
