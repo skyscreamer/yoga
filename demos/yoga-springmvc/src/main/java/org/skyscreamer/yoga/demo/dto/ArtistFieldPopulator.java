@@ -1,6 +1,5 @@
 package org.skyscreamer.yoga.demo.dto;
 
-import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.demo.model.Album;
 import org.skyscreamer.yoga.demo.model.Artist;
 import org.skyscreamer.yoga.demo.model.User;
@@ -18,12 +17,11 @@ import java.util.Collection;
  * Created by IntelliJ IDEA.
  * User: corby
  */
-@Component( "userFieldPopulator" )
-public class UserFieldPopulator extends AbstractFieldPopulator<User>
+@Component( "artistFieldPopulator" )
+public class ArtistFieldPopulator extends AbstractFieldPopulator<Artist>
 {
-    @Autowired GenericDao _genericDao;
     @Autowired @Qualifier("albumFieldPopulator") FieldPopulator<Album> _albumFieldPopulator;
-    @Autowired @Qualifier("artistFieldPopulator") FieldPopulator<Artist> _artistFieldPopulator;
+    @Autowired @Qualifier("userFieldPopulator") FieldPopulator<User> _userFieldPopulator;
 
     protected Collection<String> getCoreFieldNames()
     {
@@ -35,23 +33,16 @@ public class UserFieldPopulator extends AbstractFieldPopulator<User>
         return Arrays.asList( "id", "name" );
     }
 
-    protected Object constructFieldValue( String fieldName, User user, Selector selector )
+    protected Object constructFieldValue( String fieldName, Artist artist, Selector selector )
     {
-        if ( fieldName.equals( "friends" ) )
+        if ( fieldName.equals( "fans" ) )
         {
-            return this.populateListFields( user.getFriends(), selector.getField( fieldName ) );
+            return _userFieldPopulator.populateListFields( artist.getFans(), selector.getField( fieldName ) );
         }
-        else if ( fieldName.equals( "favoriteArtists" ) )
+        else if ( fieldName.equals( "albums" ) )
         {
-            return _artistFieldPopulator.populateListFields( user.getFavoriteArtists(),
-                    selector.getField( fieldName ) );
+            return _albumFieldPopulator.populateListFields( artist.getAlbums(), selector.getField( fieldName ) );
         }
-        else if ( fieldName.equals( "recommendedAlbums" ) )
-        {
-            return _albumFieldPopulator.populateListFields( _genericDao.findAll( Album.class ),
-                    selector.getField( fieldName ) );
-        }
-
         return null;
     }
 }
