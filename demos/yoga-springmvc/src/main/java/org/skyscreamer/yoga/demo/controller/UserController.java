@@ -2,7 +2,6 @@ package org.skyscreamer.yoga.demo.controller;
 
 import org.skyscreamer.yoga.controller.ControllerResponse;
 import org.skyscreamer.yoga.demo.model.User;
-import org.skyscreamer.yoga.populator.AbstractFieldPopulator;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.Selector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class UserController extends AbstractController<User>
         List<User> users = _genericDao.findAll( User.class );
         List<Map<String,Object>> userDtos = _userFieldPopulator.populateListFields( users, selector );
 
-        return new ControllerResponse( selector, userDtos );
+        return new ControllerResponse( userDtos );
 	}
 
     protected FieldPopulator<User> getAbstractFieldPopulator()

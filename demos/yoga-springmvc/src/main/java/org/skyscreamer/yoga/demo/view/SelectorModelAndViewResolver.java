@@ -3,6 +3,7 @@ package org.skyscreamer.yoga.demo.view;
 import org.skyscreamer.yoga.controller.ControllerResponse;
 import org.skyscreamer.yoga.mapper.ResultMapper;
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
@@ -59,7 +60,9 @@ public class SelectorModelAndViewResolver implements ModelAndViewResolver
             public void render( Map<String, ?> input, HttpServletRequest request, HttpServletResponse response )
                     throws Exception
             {
-                Object toRender = getModel( input.values().iterator().next(), controllerResponse.getSelector() );
+                String selectorString = request.getParameter( "selector" );
+                Object toRender = getModel( input.values().iterator().next(),
+                        SelectorParser.parseSelector( selectorString ) );
                 mappingJacksonHttpMessageConverter.write( toRender, accept, new ServletServerHttpResponse( response ) );
             }
 
