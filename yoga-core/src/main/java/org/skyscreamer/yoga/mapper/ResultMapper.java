@@ -1,7 +1,6 @@
 package org.skyscreamer.yoga.mapper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,12 +28,13 @@ public class ResultMapper
         return result;
     }
 
-    public Map<String, Object> populate( Object instance, Selector fieldSelector )
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> populate( Object instance, Selector fieldSelector )
     {
         MapHierarchicalModel model;
         if ( instance instanceof Map )
         {
-            model = new MapHierarchicalModel( (Map<String,Object>)instance );
+            model = new MapHierarchicalModel( (Map<String, Object>)instance );
         }
         else
         {

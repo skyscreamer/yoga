@@ -4,16 +4,15 @@
 
     <name>yoga</name>
     <groupId>org.skyscreamer</groupId>
-    <artifactId>yoga</artifactId>
+    <artifactId>yoga-integration</artifactId>
     <version>0.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/skyscreamer/yoga</url>
 
     <modules>
-        <module>yoga-core</module>
-        <module>yoga-integration</module>
-        <module>yoga-demos</module>
+        <module>yoga-springmvc</module>
+        <module>yoga-resteasy</module>
     </modules>
 
 </project>
