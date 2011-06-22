@@ -25,8 +25,7 @@ import java.util.Map;
 
 public class SelectorModelAndViewResolver implements ModelAndViewResolver
 {
-    @Autowired
-    ResultMapper _resultMapper;
+    @Autowired ResultMapper _resultMapper;
 
     MappingJacksonHttpMessageConverter mappingJacksonHttpMessageConverter = new MappingJacksonHttpMessageConverter();
 
