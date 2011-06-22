@@ -1,8 +1,25 @@
 package org.skyscreamer.yoga.selector;
 
-
 public class SelectorParser
 {
+    public static Selector parseSelector( String selectorStr )
+    {
+        CoreSelector coreSelector = new CoreSelector();
+        if ( selectorStr != null )
+        {
+            try
+            {
+                return new CombinedSelector( coreSelector, parse( selectorStr ) );
+            }
+            catch ( ParseSelectorException e )
+            {
+                // TODO: Add logging here.
+                throw new IllegalArgumentException( "Could not parse selector", e );
+            }
+        }
+        return coreSelector;
+    }
+
     public static DefinedSelectorImpl parse( String selectorExpression ) throws ParseSelectorException
     {
        DefinedSelectorImpl selector = new DefinedSelectorImpl();

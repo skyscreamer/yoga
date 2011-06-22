@@ -15,22 +15,8 @@ public class SelectorWebArgumentResolver implements WebArgumentResolver
     {
         if ( Selector.class == methodParameter.getParameterType() )
         {
-            CoreSelector coreSelector = new CoreSelector();
             String selectorStr = webRequest.getParameter( "selector" );
-            if ( selectorStr != null )
-            {
-                try
-                {
-                    return new CombinedSelector( coreSelector, SelectorParser.parse( selectorStr ) );
-                }
-                catch ( ParseSelectorException e )
-                {
-                    // TODO: Add logging here. Spring spits out "no matching editors or conversion strategy found",
-                    // which is vague and misleading. (ie, A URL typo looks like a configuration error)
-                    throw new IllegalArgumentException( "Could not parse selector", e );
-                }
-            }
-            return coreSelector;
+            return SelectorParser.parseSelector( selectorStr );
         }
 
         return UNRESOLVED;

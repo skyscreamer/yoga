@@ -27,7 +27,7 @@ public abstract class AbstractController<T>
     {
         T obj = _genericDao.find( _entityClass, id);
         Map<String,Object> dto = getAbstractFieldPopulator().populateObjectFields( obj, selector );
-		return new ControllerResponse( selector, dto );
+		return new ControllerResponse( dto );
     }
 
     // http://blog.xebia.com/2009/02/acessing-generic-types-at-runtime-in-java/
