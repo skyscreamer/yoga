@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.annotations;
+package org.skyscreamer.yoga.resteasy.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface Reference
+public @interface Attribute
 {
-	String selector() default "";
 }
 

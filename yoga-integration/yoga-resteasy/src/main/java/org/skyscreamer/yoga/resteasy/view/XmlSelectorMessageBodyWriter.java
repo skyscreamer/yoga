@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.view;
+package org.skyscreamer.yoga.resteasy.view;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,13 +16,11 @@ import javax.ws.rs.ext.Provider;
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
-import org.skyscreamer.yoga.demo.mapper.XmlHierarchyModel;
-import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.springframework.stereotype.Service;
+import org.skyscreamer.yoga.resteasy.mapper.XmlHierarchyModel;
+import org.skyscreamer.yoga.selector.Selector;
 
-@Service
 @Provider
 @Produces(MediaType.APPLICATION_XML)
 public class XmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter

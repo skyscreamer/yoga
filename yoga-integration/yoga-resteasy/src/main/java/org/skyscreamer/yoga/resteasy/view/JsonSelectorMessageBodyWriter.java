@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.view;
+package org.skyscreamer.yoga.resteasy.view;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,9 +15,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.skyscreamer.yoga.selector.Selector;
-import org.springframework.stereotype.Service;
 
-@Service
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
 public class JsonSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter

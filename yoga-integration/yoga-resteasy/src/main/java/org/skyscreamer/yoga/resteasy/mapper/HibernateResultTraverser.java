@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.mapper;
+package org.skyscreamer.yoga.resteasy.mapper;
 
 import java.beans.PropertyDescriptor;
 
@@ -8,17 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.hibernate.Hibernate;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.jboss.resteasy.spi.touri.ObjectToURI;
-import org.skyscreamer.yoga.demo.annotations.Nested;
-import org.skyscreamer.yoga.demo.annotations.Reference;
-import org.skyscreamer.yoga.demo.util.NameUtil;
+import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.resteasy.annotations.Nested;
+import org.skyscreamer.yoga.resteasy.annotations.Reference;
+import org.skyscreamer.yoga.resteasy.util.NameUtil;
 import org.skyscreamer.yoga.selector.CombinedSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.DefinedSelectorImpl;
 import org.skyscreamer.yoga.selector.ParseSelectorException;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
-import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

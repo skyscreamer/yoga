@@ -1,13 +1,19 @@
 package org.skyscreamer.yoga.demo.model;
 
-import org.jboss.resteasy.spi.touri.MappedBy;
-import org.skyscreamer.yoga.demo.annotations.Attribute;
-import org.skyscreamer.yoga.demo.controller.UserController;
-import org.skyscreamer.yoga.selector.Core;
-
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import org.jboss.resteasy.spi.touri.MappedBy;
+import org.skyscreamer.yoga.demo.controller.UserController;
+import org.skyscreamer.yoga.resteasy.annotations.Attribute;
+import org.skyscreamer.yoga.selector.Core;
 
 /**
  * Created by IntelliJ IDEA.

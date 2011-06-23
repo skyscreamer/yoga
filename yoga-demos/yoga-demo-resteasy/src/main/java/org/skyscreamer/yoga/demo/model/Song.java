@@ -8,8 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.jboss.resteasy.spi.touri.URITemplate;
-import org.skyscreamer.yoga.demo.annotations.Attribute;
-import org.skyscreamer.yoga.demo.annotations.Reference;
+import org.skyscreamer.yoga.resteasy.annotations.Attribute;
+import org.skyscreamer.yoga.resteasy.annotations.Reference;
 import org.skyscreamer.yoga.selector.Core;
 
 /**

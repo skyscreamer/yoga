@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
 import org.jboss.resteasy.spi.touri.URITemplate;
-import org.skyscreamer.yoga.demo.annotations.Attribute;
+import org.skyscreamer.yoga.resteasy.annotations.Attribute;
 import org.skyscreamer.yoga.selector.Core;
 
 /**

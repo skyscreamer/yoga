@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.annotations;
+package org.skyscreamer.yoga.resteasy.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -10,8 +10,6 @@
 	<context:component-scan base-package="org.skyscreamer.yoga.demo">
 		<context:exclude-filter type="regex"
 			expression="org.skyscreamer.yoga.demo.controller.*" />
-		<context:exclude-filter type="regex"
-			expression="org.skyscreamer.yoga.demo.view.*" />
 	</context:component-scan>
 
 	<jdbc:embedded-database id="dataSource" type="HSQL" />
@@ -41,6 +39,9 @@
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
+
+	<bean id="resultTraverser"
+		class="org.skyscreamer.yoga.resteasy.mapper.HibernateResultTraverser" />
 
 	<bean id="objectFieldPopulator" class="org.skyscreamer.yoga.mapper.ResultMapper"
 		p:resultTraverser-ref="resultTraverser" />

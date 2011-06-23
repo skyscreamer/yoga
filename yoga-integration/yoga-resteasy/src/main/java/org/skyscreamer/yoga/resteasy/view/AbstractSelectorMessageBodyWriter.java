@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.view;
+package org.skyscreamer.yoga.resteasy.view;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -67,9 +67,9 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
       this._fieldPopulator = applicationContext.getBean(ResultMapper.class);
    }
    
-	protected ResultTraverser getTraverser()
-	{
-		return _fieldPopulator.getResultTraverser();
-	}
+   protected ResultTraverser getTraverser()
+   {
+      return _fieldPopulator.getResultTraverser();
+   }
 
 }

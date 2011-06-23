@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.util;
+package org.skyscreamer.yoga.resteasy.util;
 
 import javax.persistence.Entity;
 

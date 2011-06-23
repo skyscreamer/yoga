@@ -9,7 +9,9 @@
     <context:annotation-config/>
 
 	<context:component-scan base-package="org.skyscreamer.yoga.demo.controller" />
-	<context:component-scan base-package="org.skyscreamer.yoga.demo.view" />
+	<context:component-scan base-package="org.skyscreamer.yoga.resteasy.view" use-default-filters="false">
+		<context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider"/>
+	</context:component-scan>
 
     <import resource="classpath:springmvc-resteasy.xml"/>
 
