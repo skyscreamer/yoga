@@ -35,6 +35,7 @@ public abstract class AbstractFieldPopulator<M> implements FieldPopulator<M>
         {
             try
             {
+                // TODO: Support read-only fields
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor( fieldName, model.getClass() );
                 Method readMethod = propertyDescriptor.getReadMethod();
                 result.put( fieldName, readMethod.invoke( model ) );
