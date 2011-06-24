@@ -3,7 +3,6 @@ package org.skyscreamer.yoga.demo.controller;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
-import org.skyscreamer.yoga.controller.ControllerResponse;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.Selector;
@@ -23,11 +22,11 @@ public abstract class AbstractController<T>
 	Class<T> _entityClass = returnedClass();
 
 	@RequestMapping("/{id}")
-    public @ResponseBody ControllerResponse get( @PathVariable long id, Selector selector )
+    public @ResponseBody Map<String,Object> get( @PathVariable long id, Selector selector )
     {
         T obj = _genericDao.find( _entityClass, id);
         Map<String,Object> dto = getAbstractFieldPopulator().populateObjectFields( obj, selector );
-		return new ControllerResponse( dto );
+		return dto;
     }
 
     // http://blog.xebia.com/2009/02/acessing-generic-types-at-runtime-in-java/

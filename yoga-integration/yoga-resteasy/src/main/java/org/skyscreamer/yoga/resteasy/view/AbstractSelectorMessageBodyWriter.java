@@ -1,22 +1,18 @@
 package org.skyscreamer.yoga.resteasy.view;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+import org.skyscreamer.yoga.mapper.ResultMapper;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorParser;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.MessageBodyWriter;
-
-import org.skyscreamer.yoga.mapper.ResultMapper;
-import org.skyscreamer.yoga.selector.CombinedSelector;
-import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.ParseSelectorException;
-import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>,
       ApplicationContextAware
@@ -37,29 +33,9 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
 
    protected Selector getSelector(HttpServletRequest req)
    {
-      CoreSelector coreSelector = new CoreSelector();
-      String selectorStr = req.getParameter("selector");
-      if (selectorStr != null)
-      {
-         try
-         {
-            return new CombinedSelector(SelectorParser.parse(selectorStr), coreSelector);
-         }
-         catch (ParseSelectorException e)
-         {
-            // TODO: Add logging here. Spring spits out
-            // "no matching editors or conversion strategy found", which
-            // is vague and misleading. (ie, A URL typo looks like a
-            // configuration error)
-            throw new IllegalArgumentException("Could not parse selector", e);
-         }
-      }
-      else
-      {
-         return coreSelector;
-      }
+      String selectorString = req.getParameter("selector");
+      return SelectorParser.parseSelector( selectorString );
    }
-   
 
    @Override
    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
@@ -71,5 +47,4 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
    {
       return _fieldPopulator.getResultTraverser();
    }
-
 }
