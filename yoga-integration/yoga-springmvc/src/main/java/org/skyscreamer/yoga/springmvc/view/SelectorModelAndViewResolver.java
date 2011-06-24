@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.skyscreamer.yoga.controller.ControllerResponse;
 import org.skyscreamer.yoga.mapper.ResultMapper;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
@@ -39,21 +38,16 @@ public class SelectorModelAndViewResolver implements ModelAndViewResolver
     public ModelAndView resolveModelAndView( Method handlerMethod, Class handlerType, Object returnValue,
         ExtendedModelMap implicitModel, NativeWebRequest webRequest )
     {
-        if ( returnValue instanceof ControllerResponse )
+        if ( AnnotationUtils.findAnnotation( handlerMethod, ResponseBody.class ) != null )
         {
-            ControllerResponse controllerResponse = (ControllerResponse)returnValue;
-            if ( controllerResponse.getData() != null &&
-                AnnotationUtils.findAnnotation( handlerMethod, ResponseBody.class ) != null )
-            {
-                return render( controllerResponse, webRequest );
-            }
+            return render( returnValue, webRequest );
         }
         return UNRESOLVED;
     }
 
-    protected ModelAndView render( final ControllerResponse controllerResponse, NativeWebRequest webRequest )
+    protected ModelAndView render( Object returnValue, NativeWebRequest webRequest )
     {
-        final MediaType accept = getAcceptableAcccept( controllerResponse.getData().getClass(), webRequest );
+        final MediaType accept = getAcceptableAcccept( returnValue.getClass(), webRequest );
 
         if ( accept == null )
         {
@@ -75,7 +69,7 @@ public class SelectorModelAndViewResolver implements ModelAndViewResolver
             {
                 return accept.toString();
             }
-        } ).addObject( controllerResponse.getData() );
+        } ).addObject( returnValue );
     }
 
     protected Object getModel( Object returnValue, Selector selector )

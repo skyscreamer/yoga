@@ -32,7 +32,7 @@ public class UserFieldPopulator extends AbstractFieldPopulator<User>
 
     protected Collection<String> getModelFieldNames()
     {
-        return Arrays.asList( "id", "name" );
+        return Arrays.asList( "id", "name", "isFriend" );
     }
 
     protected Object constructFieldValue( String fieldName, User user, Selector selector )

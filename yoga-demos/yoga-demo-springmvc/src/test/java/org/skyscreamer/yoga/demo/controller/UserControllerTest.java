@@ -41,12 +41,10 @@ public class UserControllerTest extends AbstractTest {
     public void testGetUserWithSelector() throws Exception {
         Map<String, String> params = Collections.singletonMap("selector", ":(isFriend)");
         JSONObject data = getJSONObject( "/user/1", params );
-        // TODO: make isFriend work
-//        Assert.assertEquals(3, data.length());
-        Assert.assertEquals(2, data.length());
+        Assert.assertEquals(3, data.length());
         Assert.assertEquals("Carter Page", data.getString("name"));
         Assert.assertEquals(1, data.getLong("id"));
-//        Assert.assertFalse(data.getBoolean("isFriend"));
+        Assert.assertFalse(data.getBoolean("isFriend"));
     }
 
     @Test
@@ -73,12 +71,10 @@ public class UserControllerTest extends AbstractTest {
         JSONArray friends = data.getJSONArray("friends");
         Assert.assertEquals(1, friends.length());
         JSONObject friend = friends.getJSONObject(0);
-        // TODO: make isFriend work
-//        Assert.assertEquals(3, friend.length());
-        Assert.assertEquals(2, friend.length());
+        Assert.assertEquals(3, friend.length());
         Assert.assertEquals("Corby Page", friend.getString("name"));
         Assert.assertEquals(2, friend.getLong("id"));
-//        Assert.assertFalse(friend.getBoolean("isFriend"));
+        Assert.assertFalse(friend.getBoolean("isFriend"));
     }
 
     @Test
