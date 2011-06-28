@@ -2,13 +2,76 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <name>yoga</name>
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/skyscreamer/yoga</url>
+
+    <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:git@github.com:skyscreamer/yoga.git</connection>
+        <developerConnection>scm:git:git@github.com:skyscreamer/yoga.git</developerConnection>
+        <url>git@github.com:skyscreamer/yoga.git</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>carterpage</id>
+            <name>Carter Page</name>
+            <email>carter@skyscreamer.org</email>
+        </developer>
+        <developer>
+            <id>cepage</id>
+            <name>Corby Page</name>
+            <email>corby@skyscreamer.org</email>
+        </developer>
+        <developer>
+            <id>sduskis</id>
+            <name>Solomon Duskis</name>
+            <email>solomon@skyscreamer.org</email>
+        </developer>
+    </developers>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <modules>
         <module>yoga-core</module>
