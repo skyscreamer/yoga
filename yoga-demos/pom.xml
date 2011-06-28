@@ -2,10 +2,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.skyscreamer</groupId>
+        <artifactId>yoga</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
     <name>yoga</name>
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-demos</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/skyscreamer/yoga</url>
