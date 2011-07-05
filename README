@@ -1,5 +1,7 @@
 Yoga makes your existing MVC-based REST framework on Java (for now) faster and more flexible.
 
+Check out our homepage here: https://github.com/skyscreamer/yoga/wiki
+
 Inspired by LinkedIn’s JavaOne presentation on building flexible REST interfaces (http://blog.linkedin.com/2009/07/08/brandon-duncan-java-one-building-consistent-restful-apis-in-a-high-performance-environment/), Yoga is a framework for supporting REST-like URI requests with field selectors. 
 
 Yoga selectors allow you to:
@@ -17,6 +19,8 @@ For example, imagine I run a music social network site, and you want to find out
 This would be a LOT of queries.  In Yoga, you can do the same with a *single* query:
 
     GET /user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))
+
+View a more detailed explanation of our selectors here: https://github.com/skyscreamer/yoga/wiki/REST-Selectors
 
 In short:
 
