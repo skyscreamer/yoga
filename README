@@ -26,7 +26,7 @@ In short:
     Fewer sockets           Lower cost
     Simpler client code     Happier client develoeprs
 
-The Yoga framework automates most of the plumbing for you if you have an existing RESTEasy or RESTful Spring MVC application.  You'll just need to add some annotations and a few lines of configuration and you'll be up and running.  If you find you want to get more sophisticated as you go along and reuse the selector logic in deeper levels of code, we've got patterns that will help you with that too.
+The Yoga framework automates most of the plumbing for you if you have an existing RESTEasy or RESTful Spring MVC application.  You'll just need to add some annotations and a few lines of configuration and you'll be up and running.  If at some point you want to apply the selector logic in deeper levels of code (e.g. generating custom DTO's), we've got patterns that will make that easy for you.
 
 Once the initial REST types have been defined and the basic queries defined, there is no server-side programming required to change the client queries.
 
