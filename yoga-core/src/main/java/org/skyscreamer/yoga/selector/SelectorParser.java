@@ -2,6 +2,8 @@ package org.skyscreamer.yoga.selector;
 
 public class SelectorParser
 {
+    public static final String HREF = "href";
+
     public static Selector parseSelector( String selectorStr )
     {
         CoreSelector coreSelector = new CoreSelector();
@@ -73,7 +75,7 @@ public class SelectorParser
     {
         int index = 0;
         boolean done = false;
-        StringBuilder fieldName = new StringBuilder();
+        StringBuilder fieldNameBuilder = new StringBuilder();
         DefinedSelectorImpl subSelector = new DefinedSelectorImpl();
 
         while ( !done )
@@ -96,7 +98,7 @@ public class SelectorParser
             }
             else
             {
-                fieldName.append( selectorBuff.charAt( index ) );
+                fieldNameBuilder.append( selectorBuff.charAt( index ) );
             }
 
             index++;
@@ -107,7 +109,12 @@ public class SelectorParser
         }
 
         selectorBuff.delete( 0, index );
-        selector._fields.put(fieldName.toString(), subSelector);
+        String fieldName = fieldNameBuilder.toString();
+        if ( fieldName.equals( HREF ) )
+        {
+            throw new IllegalArgumentException( HREF + " is a reserved keyword for selectors" );
+        }
+        selector._fields.put( fieldName, subSelector);
     }
 }
 

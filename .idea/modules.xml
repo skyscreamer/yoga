@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/yoga-core/yoga-core.iml" filepath="$PROJECT_DIR$/yoga-core/yoga-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yoga-demos/yoga-demo-resteasy/yoga-demo-resteasy.iml" filepath="$PROJECT_DIR$/yoga-demos/yoga-demo-resteasy/yoga-demo-resteasy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yoga-demos/yoga-demo-springmvc/yoga-demo-springmvc.iml" filepath="$PROJECT_DIR$/yoga-demos/yoga-demo-springmvc/yoga-demo-springmvc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yoga-integration/yoga-resteasy/yoga-resteasy.iml" filepath="$PROJECT_DIR$/yoga-integration/yoga-resteasy/yoga-resteasy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yoga-integration/yoga-springmvc/yoga-springmvc.iml" filepath="$PROJECT_DIR$/yoga-integration/yoga-springmvc/yoga-springmvc.iml" />
+    </modules>
+  </component>
+</project>
+
