@@ -27,7 +27,7 @@ public class HibernateResultTraverser extends ResultTraverser
 {
    @SuppressWarnings("unchecked")
    @Override
-   public Class<? extends Object> getClass(Object instance)
+   public Class<?> getClass(Object instance)
    {
       return Hibernate.getClass(instance);
    }
@@ -36,7 +36,7 @@ public class HibernateResultTraverser extends ResultTraverser
    protected void traverseChild(Selector parentSelector, HierarchicalModel model,
          PropertyDescriptor property, String name, Object value)
    {
-      Reference reference = property.getReadMethod().getAnnotation(Reference.class);
+      Reference reference = property.getReadMethod().getAnnotation( Reference.class );
       if (reference != null)
       {
          Selector childSelector = parentSelector.getField(property);

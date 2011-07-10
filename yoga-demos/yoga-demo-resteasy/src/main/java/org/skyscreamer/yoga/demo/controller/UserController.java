@@ -1,35 +1,40 @@
 package org.skyscreamer.yoga.demo.controller;
 
-import java.util.List;
+import org.skyscreamer.yoga.demo.model.User;
+import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-
-import org.skyscreamer.yoga.demo.dao.GenericDao;
-import org.skyscreamer.yoga.demo.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import javax.ws.rs.QueryParam;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA. User: Carter Page Date: 4/11/11 Time: 5:07 PM
+ * Created by IntelliJ IDEA.
+ * User: Carter Page
  */
 @Controller
 @Path("/user")
-public class UserController{
+public class UserController extends AbstractController<User>
+{
+	@Autowired @Qualifier("userFieldPopulator") private FieldPopulator<User> _userFieldPopulator;
 
-	@Autowired GenericDao genericDao;
-	
-	@GET
-	@Path("/{id}")
-    public User get( @PathParam("id") long id )
+    protected FieldPopulator<User> getAbstractFieldPopulator()
     {
-        return genericDao.find(User.class, id);
+        return _userFieldPopulator;
     }
 
-	@GET
-	public List<User> getUsers() 
-	{
-		return genericDao.findAll(User.class);
+    @GET
+    public List<Map<String,Object>> getUsers( @QueryParam( "selector" ) String selectorString )
+    {
+        List<User> users = _genericDao.findAll( User.class );
+        Selector selector = SelectorParser.parseSelector( selectorString );
+        List<Map<String,Object>> userDtos = _userFieldPopulator.populateListFields( users, selector );
+        return userDtos;
 	}
 }

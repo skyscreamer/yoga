@@ -1,10 +1,13 @@
 package org.skyscreamer.yoga.populator;
 
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorParser;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,6 +15,8 @@ import java.util.*;
  */
 public abstract class AbstractFieldPopulator<M> implements FieldPopulator<M>
 {
+    private Pattern _uriTemplatePattern = Pattern.compile( "\\{[a-zA-Z0-9_]+\\}" );
+
     public Map<String,Object> populateObjectFields( M model, Selector selector )
     {
         Map<String,Object> result = new HashMap<String, Object>();
@@ -26,6 +31,10 @@ public abstract class AbstractFieldPopulator<M> implements FieldPopulator<M>
             addFieldToResult( fieldName, selector, model, result );
         }
 
+        if ( getUriTemplate() != null )
+        {
+            addHypertextFieldToResult( getUriTemplate(), model, result );
+        }
         return result;
     }
 
@@ -56,11 +65,63 @@ public abstract class AbstractFieldPopulator<M> implements FieldPopulator<M>
         }
     }
 
+    private void addHypertextFieldToResult( String uriTemplate, M model, Map<String,Object> result )
+    {
+        String href = uriTemplate;
+        String resourceIdField = parseResourceIdField( uriTemplate );
+        try
+        {
+            if ( !resourceIdField.equals( "" ) )
+            {
+                // TODO: Support read-only fields
+                PropertyDescriptor propertyDescriptor = new PropertyDescriptor( resourceIdField, model.getClass() );
+                Method readMethod = propertyDescriptor.getReadMethod();
+                href = populateResourceIdField( uriTemplate, readMethod.invoke( model ) );
+            }
+        }
+        catch ( Exception e )
+        {
+            System.out.println( "Could not invoke getter for property " + uriTemplate + " on class " +
+                model.getClass().getName() );
+        }
+        result.put( SelectorParser.HREF, href );
+    }
+
+    private String parseResourceIdField( String uriTemplate )
+    {
+        Matcher matcher = _uriTemplatePattern.matcher( uriTemplate );
+
+        String result = "";
+        if ( matcher.find() )
+        {
+            result = uriTemplate.substring( matcher.start() + 1, matcher.end() -1 );
+        }
+        return result;
+    }
+
+    private String populateResourceIdField( String uriTemplate, Object property )
+    {
+        Matcher matcher = _uriTemplatePattern.matcher( uriTemplate );
+
+        String result = uriTemplate;
+        if ( matcher.find() )
+        {
+            result = uriTemplate.substring( 0, matcher.start() ) + property.toString() +
+                uriTemplate.substring( matcher.end(), uriTemplate.length() );
+        }
+        return result;
+    }
+
     protected abstract Object constructFieldValue( String fieldName, M model, Selector selector );
 
     protected abstract Collection<String> getCoreFieldNames();
 
     protected abstract Collection<String> getModelFieldNames();
+
+    protected String getUriTemplate()
+    {
+        return null;
+    }
 
     public List<Map<String,Object>> populateListFields( Collection<M> models, Selector selector )
     {
