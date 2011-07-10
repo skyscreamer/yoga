@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,8 @@ public class UserControllerTest extends AbstractTest
       JSONObject data = getJSONObject("/user/2", null);
       Assert.assertEquals("Corby Page", data.getString("name"));
       Assert.assertEquals(2, data.getLong("id"));
-      Assert.assertEquals(2, data.length());
+      Assert.assertEquals(3, data.length());
+      Assert.assertEquals( "/user/2", data.getString( "href" ) );
    }
 
    @Test
@@ -28,13 +30,15 @@ public class UserControllerTest extends AbstractTest
       JSONArray data = getJSONArray("/user", null);
       Assert.assertEquals(2, data.length());
       JSONObject carter = data.getJSONObject(0);
-      Assert.assertEquals(2, carter.length());
+      Assert.assertEquals(3, carter.length());
       Assert.assertEquals("Carter Page", carter.getString("name"));
       Assert.assertEquals(1, carter.getLong("id"));
+      Assert.assertEquals( "/user/1", carter.getString( "href" ) );
       JSONObject corby = data.getJSONObject(1);
       Assert.assertEquals("Corby Page", corby.getString("name"));
       Assert.assertEquals(2, corby.getLong("id"));
-      Assert.assertEquals(2, corby.length());
+      Assert.assertEquals(3, corby.length());
+      Assert.assertEquals( "/user/2", corby.getString( "href" ) );
    }
 
    @Test
@@ -42,9 +46,7 @@ public class UserControllerTest extends AbstractTest
    {
       Map<String, String> params = Collections.singletonMap("selector", ":(isFriend)");
       JSONObject data = getJSONObject("/user/1", params);
-      Assert.assertEquals(3, data.length());
-      Assert.assertEquals("Carter Page", data.getString("name"));
-      Assert.assertEquals(1, data.getLong("id"));
+      checkCarter( data );
       Assert.assertFalse(data.getBoolean("isFriend"));
    }
 
@@ -53,9 +55,7 @@ public class UserControllerTest extends AbstractTest
    {
       Map<String, String> params = Collections.singletonMap("selector", ":(friends)");
       JSONObject data = getJSONObject("/user/1", params);
-      Assert.assertEquals(3, data.length());
-      Assert.assertEquals("Carter Page", data.getString("name"));
-      Assert.assertEquals(1, data.getLong("id"));
+      checkCarter( data );
       JSONArray friends = data.getJSONArray("friends");
       Assert.assertEquals(1, friends.length());
       JSONObject friend = friends.getJSONObject(0);
@@ -68,15 +68,14 @@ public class UserControllerTest extends AbstractTest
    {
       Map<String, String> params = Collections.singletonMap("selector", ":(friends:(isFriend))");
       JSONObject data = getJSONObject("/user/1", params);
-      Assert.assertEquals(3, data.length());
-      Assert.assertEquals("Carter Page", data.getString("name"));
-      Assert.assertEquals(1, data.getLong("id"));
+      checkCarter( data );
       JSONArray friends = data.getJSONArray("friends");
       Assert.assertEquals(1, friends.length());
       JSONObject friend = friends.getJSONObject(0);
       Assert.assertEquals(4, friend.length());
       Assert.assertEquals("Corby Page", friend.getString("name"));
       Assert.assertEquals(2, friend.getLong("id"));
+      Assert.assertEquals( "/user/2", friend.getString( "href" ) );
       Assert.assertFalse(friend.getBoolean("isFriend"));
    }
 
@@ -86,9 +85,7 @@ public class UserControllerTest extends AbstractTest
       Map<String, String> params = Collections.singletonMap("selector",
             ":(friends:(favoriteArtists:(albums:(songs))))");
       JSONObject data = getJSONObject("/user/1", params);
-      Assert.assertEquals(3, data.length());
-      Assert.assertEquals("Carter Page", data.getString("name"));
-      Assert.assertEquals(1, data.getLong("id"));
+      checkCarter( data );
       JSONArray friends = data.getJSONArray("friends");
       Assert.assertEquals(1, friends.length());
       JSONObject friend = friends.getJSONObject(0);
@@ -104,4 +101,12 @@ public class UserControllerTest extends AbstractTest
       JSONObject corvette = prince1999.getJSONArray("songs").getJSONObject(1);
       Assert.assertEquals("Little Red Corvette", corvette.getString("title"));
    }
+
+    private void checkCarter( JSONObject data ) throws JSONException
+    {
+        Assert.assertEquals( 4, data.length() );
+        Assert.assertEquals( "Carter Page", data.getString( "name" ) );
+        Assert.assertEquals( 1, data.getLong( "id" ) );
+        Assert.assertEquals( "/user/1", data.getString( "href" ) );
+    }
 }
