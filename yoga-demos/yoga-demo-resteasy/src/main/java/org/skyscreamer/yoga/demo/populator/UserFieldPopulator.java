@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.dto;
+package org.skyscreamer.yoga.demo.populator;
 
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.demo.model.Album;
