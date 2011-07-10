@@ -41,6 +41,10 @@ public class User
         return false;
     }
 
+    public void setIsFriend( boolean isFriend ) {
+        // to be implemented
+    }
+
     @Core
     @Attribute
     public long getId() {
