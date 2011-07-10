@@ -35,6 +35,11 @@ public class UserFieldPopulator extends AbstractFieldPopulator<User>
         return Arrays.asList( "id", "name", "isFriend" );
     }
 
+    protected String getUriTemplate()
+    {
+        return "/user/{id}";
+    }
+
     protected Object constructFieldValue( String fieldName, User user, Selector selector )
     {
         if ( fieldName.equals( "friends" ) )
