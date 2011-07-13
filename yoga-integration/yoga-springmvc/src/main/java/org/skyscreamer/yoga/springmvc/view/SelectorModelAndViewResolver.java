@@ -74,13 +74,13 @@ public class SelectorModelAndViewResolver implements ModelAndViewResolver
 
     protected Object getModel( Object returnValue, Selector selector )
     {
-        if ( returnValue instanceof Collection<?> )
+        if ( returnValue instanceof Collection )
         {
-            return _resultMapper.populate( (Collection<?>) returnValue, selector );
+            return _resultMapper.mapOutput( (Collection)returnValue, selector );
         }
         else
         {
-            return _resultMapper.populate( returnValue, selector );
+            return _resultMapper.mapOutput( returnValue, selector );
         }
     }
 

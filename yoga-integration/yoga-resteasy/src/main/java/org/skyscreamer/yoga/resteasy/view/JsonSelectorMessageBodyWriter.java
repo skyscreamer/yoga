@@ -33,11 +33,11 @@ public class JsonSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWr
    {
       if (obj instanceof Iterable<?>)
       {
-         return _fieldPopulator.populate((Iterable<?>) obj, selector);
+         return _resultMapper.mapOutput( (Iterable<?>) obj, selector );
       }
       else
       {
-         return _fieldPopulator.populate(obj, selector);
+         return _resultMapper.mapOutput( obj, selector );
       }
    }
 }
