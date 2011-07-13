@@ -43,7 +43,7 @@
 	<bean id="resultTraverser"
 		class="org.skyscreamer.yoga.resteasy.mapper.HibernateResultTraverser" />
 
-	<bean id="objectFieldPopulator" class="org.skyscreamer.yoga.mapper.ResultMapper"
+	<bean id="resultMapper" class="org.skyscreamer.yoga.mapper.ResultMapper"
 		p:resultTraverser-ref="resultTraverser" />
 
 </beans>
