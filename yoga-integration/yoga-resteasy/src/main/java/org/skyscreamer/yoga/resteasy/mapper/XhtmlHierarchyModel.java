@@ -50,8 +50,6 @@ public class XhtmlHierarchyModel implements HierarchicalModel
       }   
    }
 
-
-   
    @Override
    public HierarchicalModel createChild(PropertyDescriptor property, Object result)
    {
