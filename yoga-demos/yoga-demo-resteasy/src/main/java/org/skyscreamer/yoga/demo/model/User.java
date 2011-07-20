@@ -11,8 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import org.jboss.resteasy.spi.touri.MappedBy;
+import org.skyscreamer.yoga.annotations.Attribute;
 import org.skyscreamer.yoga.demo.controller.UserController;
-import org.skyscreamer.yoga.resteasy.annotations.Attribute;
 import org.skyscreamer.yoga.selector.Core;
 
 /**
