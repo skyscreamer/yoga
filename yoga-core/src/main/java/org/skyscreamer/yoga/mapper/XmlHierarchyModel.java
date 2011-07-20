@@ -1,11 +1,10 @@
-package org.skyscreamer.yoga.resteasy.mapper;
+package org.skyscreamer.yoga.mapper;
 
 import java.beans.PropertyDescriptor;
 
 import org.dom4j.Element;
-import org.skyscreamer.yoga.resteasy.annotations.Attribute;
-import org.skyscreamer.yoga.resteasy.annotations.Nested;
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.annotations.Nested;
+import org.skyscreamer.yoga.annotations.Attribute;
 
 public class XmlHierarchyModel implements HierarchicalModel
 {

@@ -18,7 +18,7 @@ import org.dom4j.dom.DOMElement;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.resteasy.mapper.XmlHierarchyModel;
+import org.skyscreamer.yoga.mapper.XmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
 
 @Provider

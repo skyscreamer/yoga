@@ -1,11 +1,10 @@
-package org.skyscreamer.yoga.resteasy.mapper;
+package org.skyscreamer.yoga.mapper;
 
 import java.beans.PropertyDescriptor;
 
 import org.dom4j.Element;
-import org.skyscreamer.yoga.resteasy.annotations.Nested;
-import org.skyscreamer.yoga.resteasy.util.NameUtil;
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.annotations.Nested;
+import org.skyscreamer.yoga.util.NameUtil;
 
 public class XhtmlHierarchyModel implements HierarchicalModel
 {
@@ -67,7 +66,7 @@ public class XhtmlHierarchyModel implements HierarchicalModel
       }
       else
       {
-         String name = NameUtil.getName(result.getClass());
+         String name = NameUtil.getName( result.getClass() );
          return new XhtmlHierarchyModel(div, name);
       }
    }
