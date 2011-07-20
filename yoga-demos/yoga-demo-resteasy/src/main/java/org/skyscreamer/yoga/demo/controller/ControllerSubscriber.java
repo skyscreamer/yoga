@@ -7,7 +7,7 @@ import javax.ws.rs.PathParam;
 
 import org.jboss.resteasy.core.ResourceMethodRegistry;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
-import org.skyscreamer.yoga.resteasy.util.NameUtil;
+import org.skyscreamer.yoga.util.NameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ControllerSubscriber<T> 
