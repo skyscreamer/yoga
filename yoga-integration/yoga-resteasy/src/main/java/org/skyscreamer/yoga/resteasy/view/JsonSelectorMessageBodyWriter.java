@@ -26,7 +26,7 @@ public class JsonSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWr
          MediaType mediaType, MultivaluedMap<String, Object> headers, OutputStream output)
          throws IOException, WebApplicationException
    {
-      new ObjectMapper().writeValue(output, getResult(obj, getSelector(request)));
+      new ObjectMapper().writeValue(output, getResult(obj, getSelector()));
    }
 
    private Object getResult(Object obj, Selector selector)

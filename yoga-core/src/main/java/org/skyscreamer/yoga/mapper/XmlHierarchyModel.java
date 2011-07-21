@@ -1,11 +1,8 @@
-package org.skyscreamer.yoga.resteasy.mapper;
+package org.skyscreamer.yoga.mapper;
 
 import java.beans.PropertyDescriptor;
 
 import org.dom4j.Element;
-import org.skyscreamer.yoga.resteasy.annotations.Attribute;
-import org.skyscreamer.yoga.resteasy.annotations.Nested;
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
 
 public class XmlHierarchyModel implements HierarchicalModel
 {
@@ -27,19 +24,14 @@ public class XmlHierarchyModel implements HierarchicalModel
    @Override
    public void addSimple(PropertyDescriptor property, Object result)
    {
-      addSimple(property.getName(), result, property.getReadMethod().isAnnotationPresent(Attribute.class));
+      addSimple(property.getName(), result);
    }
 
    @Override
    public void addSimple(String name, Object result)
    {
-      addSimple(name, result, false);
-   }
-   
-   public void addSimple(String name, Object result, boolean isAttribute)
-   {
       String elementName = childName == null ? name : childName;
-      if (name.equals("href") || isAttribute)
+      if (name.equals("href"))
       {
          element.addAttribute(elementName, result.toString());
       }
@@ -58,11 +50,7 @@ public class XmlHierarchyModel implements HierarchicalModel
    @Override
    public HierarchicalModel createList(PropertyDescriptor property, Object result)
    {
-      Nested nested = property.getReadMethod().getAnnotation(Nested.class);
-      if (nested != null)
-         return new XmlHierarchyModel(element.addElement(property.getName()), nested.childName());
-      else
-         return this;
+      return this;
    }
 
 }

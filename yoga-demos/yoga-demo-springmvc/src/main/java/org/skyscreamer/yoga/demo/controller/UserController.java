@@ -1,16 +1,12 @@
 package org.skyscreamer.yoga.demo.controller;
 
+import java.util.List;
+
 import org.skyscreamer.yoga.demo.model.User;
-import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.Selector;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,18 +16,9 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController extends AbstractController<User>
 {
-    @Autowired @Qualifier("userFieldPopulator") private FieldPopulator<User> _userFieldPopulator;
-
 	@RequestMapping
-	public @ResponseBody List<Map<String,Object>> getUsers( Selector selector )
+	public @ResponseBody List<User> getUsers( Selector selector )
     {
-        List<User> users = _genericDao.findAll( User.class );
-        List<Map<String,Object>> userDtos = _userFieldPopulator.populateListFields( users, selector );
-        return userDtos;
+        return _genericDao.findAll( User.class );
 	}
-
-    protected FieldPopulator<User> getAbstractFieldPopulator()
-    {
-        return _userFieldPopulator;
-    }
 }

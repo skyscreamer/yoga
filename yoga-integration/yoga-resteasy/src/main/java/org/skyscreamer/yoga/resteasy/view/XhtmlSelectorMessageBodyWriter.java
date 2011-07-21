@@ -2,11 +2,9 @@ package org.skyscreamer.yoga.resteasy.view;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -16,59 +14,45 @@ import javax.ws.rs.ext.Provider;
 import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.resteasy.mapper.XhtmlHierarchyModel;
-import org.skyscreamer.yoga.resteasy.util.NameUtil;
+import org.skyscreamer.yoga.mapper.XhtmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.util.NameUtil;
 
 @Provider
 @Produces(MediaType.TEXT_HTML)
 public class XhtmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter
 {
    @Override
-   public void writeTo(Object obj, Class<?> type, Type arg2, Annotation[] annotations,
+   public void writeTo(Object value, Class<?> type, Type arg2, Annotation[] annotations,
          MediaType mediaType, MultivaluedMap<String, Object> headers, OutputStream output)
          throws IOException, WebApplicationException
    {
-      HttpServletRequest request = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
-      Selector selector = getSelector(request);
-      DOMDocument domDocument = new DOMDocument();
-      domDocument.setRootElement( new DOMElement("html"));
-      Element body = domDocument.getRootElement().addElement("body");
-      traverse(obj, selector, body);
-      write(output, domDocument);
-   }
-
-   protected void traverse(Object obj, Selector selector, Element body) {
+      Selector selector = getSelector();
       ResultTraverser traverser = getTraverser();
-	  if (obj instanceof Iterable)
+      DOMDocument domDocument = new DOMDocument();
+      domDocument.setRootElement(new DOMElement("html"));
+      Element body = domDocument.getRootElement().addElement("body");
+      if (value instanceof Iterable)
       {
-         for (Object child : (Iterable<?>) obj)
+         for (Object child : (Iterable<?>) value)
          {
-			  HierarchicalModel model = createModel(child, body, traverser);
-			  traverser.traverse(child, selector, model);
+            traverse(child, selector, traverser, body);
          }
       }
       else
       {
-		  HierarchicalModel model = createModel(obj, body, traverser);
-		  traverser.traverse(obj, selector, model);
+         traverse(value, selector, traverser, body);
       }
+      write(output, domDocument);
    }
 
-    protected HierarchicalModel createModel(Object obj, Element body, ResultTraverser traverser) {
-	   String name = NameUtil.getName(traverser.getClass(obj));
-	   return new XhtmlHierarchyModel(body.addElement("div").addAttribute("class", name));
-   }
-    
-   protected void write(OutputStream output, DOMDocument domDocument) throws IOException 
+   public void traverse(Object value, Selector selector, ResultTraverser traverser, Element body)
    {
- 	  OutputStreamWriter out = new OutputStreamWriter(output);
-      domDocument.write(out);
-      out.flush();
+      String name = NameUtil.getName(traverser.getClass(value));
+      HierarchicalModel model = new XhtmlHierarchyModel(body.addElement("div").addAttribute("class", name));
+      traverser.traverse(value, selector, model);
    }
-
-
+   
 }

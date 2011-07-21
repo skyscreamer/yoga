@@ -32,14 +32,30 @@
 
 	<filter-mapping>
 		<filter-name>OpenSessionInViewFilter</filter-name>
+		<url-pattern>*.xml</url-pattern>
+	</filter-mapping>
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>*.xml</url-pattern>
+	</servlet-mapping>
+
+	<filter-mapping>
+		<filter-name>OpenSessionInViewFilter</filter-name>
 		<url-pattern>*.json</url-pattern>
 	</filter-mapping>
-	
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>*.json</url-pattern>
 	</servlet-mapping>
-
+	
+	<filter-mapping>
+		<filter-name>OpenSessionInViewFilter</filter-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</filter-mapping>
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list id="/">
 		<welcome-file>index.html</welcome-file>

@@ -1,11 +1,9 @@
-package org.skyscreamer.yoga.resteasy.mapper;
+package org.skyscreamer.yoga.mapper;
 
 import java.beans.PropertyDescriptor;
 
 import org.dom4j.Element;
-import org.skyscreamer.yoga.resteasy.annotations.Nested;
-import org.skyscreamer.yoga.resteasy.util.NameUtil;
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.util.NameUtil;
 
 public class XhtmlHierarchyModel implements HierarchicalModel
 {
@@ -47,31 +45,22 @@ public class XhtmlHierarchyModel implements HierarchicalModel
       else
       {
          element.addElement("span").addAttribute("class", elementName).setText(result.toString());
-      }   
+      }
    }
 
-
-   
    @Override
    public HierarchicalModel createChild(PropertyDescriptor property, Object result)
    {
-      return new XhtmlHierarchyModel(element.addElement("div").addAttribute("class", property.getName()));
+      return new XhtmlHierarchyModel(element.addElement("div").addAttribute("class",
+            property.getName()));
    }
 
    @Override
    public HierarchicalModel createList(PropertyDescriptor property, Object result)
    {
       Element div = element.addElement("div").addAttribute("class", property.getName());
-      Nested nested = property.getReadMethod().getAnnotation(Nested.class);
-      if (nested != null)
-      {
-         return new XhtmlHierarchyModel(div, nested.childName());
-      }
-      else
-      {
-         String name = NameUtil.getName(result.getClass());
-         return new XhtmlHierarchyModel(div, name);
-      }
+      String name = NameUtil.getName(result.getClass());
+      return new XhtmlHierarchyModel(div, name);
    }
 
 }

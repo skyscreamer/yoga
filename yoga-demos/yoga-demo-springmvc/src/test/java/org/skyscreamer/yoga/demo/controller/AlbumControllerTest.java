@@ -21,7 +21,7 @@ public class AlbumControllerTest extends AbstractTest {
         Assert.assertEquals("Funeral", data.getString("title"));
         Assert.assertEquals(1, data.getLong("id"));
         Assert.assertEquals(2004, data.getInt("year"));
-        Assert.assertEquals(3, data.length());
+        Assert.assertEquals(4, data.length());
     }
 
     @Test

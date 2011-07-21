@@ -1,10 +1,8 @@
 package org.skyscreamer.yoga.demo.controller;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.Map;
 
 import org.skyscreamer.yoga.demo.dao.GenericDao;
-import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.Selector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +20,9 @@ public abstract class AbstractController<T>
 	Class<T> _entityClass = returnedClass();
 
 	@RequestMapping("/{id}")
-    public @ResponseBody Map<String,Object> get( @PathVariable long id, Selector selector )
+    public @ResponseBody T get( @PathVariable long id, Selector selector )
     {
-        T obj = _genericDao.find( _entityClass, id);
-        Map<String,Object> dto = getAbstractFieldPopulator().populateObjectFields( obj, selector );
-		return dto;
+        return _genericDao.find( _entityClass, id);
     }
 
     // http://blog.xebia.com/2009/02/acessing-generic-types-at-runtime-in-java/
@@ -36,6 +32,4 @@ public abstract class AbstractController<T>
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         return (Class<T>) parameterizedType.getActualTypeArguments()[0];
     }
-
-    protected abstract FieldPopulator<T> getAbstractFieldPopulator();
 }

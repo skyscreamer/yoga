@@ -14,8 +14,16 @@
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="customModelAndViewResolver">
 			<bean class="org.skyscreamer.yoga.springmvc.view.SelectorModelAndViewResolver">
-				<property name="resultMapper" ref="resultMapper" />
-			</bean>
+				<property name="resultMapper" ref="mapResultMapper" />
+				<property name="resultTraverser" ref="resultTraverser" />
+		        <property name="extensionMap">
+		        	<map>
+		        		<entry key="json" value="application/json"/>
+		        		<entry key="xml" value="application/xml"/>
+		        		<entry key="xhtml" value="text/html"/>
+		        	</map>
+		        </property>
+	       	</bean>
 		</property>
         <property name="customArgumentResolver">
             <bean class="org.skyscreamer.yoga.springmvc.view.SelectorWebArgumentResolver"/>

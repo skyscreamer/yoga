@@ -1,6 +1,8 @@
 package org.skyscreamer.yoga.resteasy.view;
 
-import org.skyscreamer.yoga.mapper.ResultMapper;
+import org.dom4j.dom.DOMDocument;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
+import org.skyscreamer.yoga.mapper.MapResultMapper;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
@@ -11,13 +13,17 @@ import org.springframework.context.ApplicationContextAware;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.MessageBodyWriter;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>,
       ApplicationContextAware
 {
-   protected ResultMapper _fieldPopulator;
+   protected MapResultMapper _fieldPopulator;
 
    @Override
    public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4)
@@ -31,20 +37,31 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
       return true;
    }
 
-   protected Selector getSelector(HttpServletRequest req)
+   protected Selector getSelector()
    {
-      String selectorString = req.getParameter("selector");
+      HttpServletRequest request = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
+      String selectorString = request.getParameter("selector");
       return SelectorParser.parseSelector( selectorString );
    }
-
+   
    @Override
    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
    {
-      this._fieldPopulator = applicationContext.getBean(ResultMapper.class);
+      this._fieldPopulator = applicationContext.getBean(MapResultMapper.class);
    }
    
    protected ResultTraverser getTraverser()
    {
       return _fieldPopulator.getResultTraverser();
    }
+   
+
+   protected static void write(OutputStream output, DOMDocument domDocument) throws IOException
+   {
+      OutputStreamWriter out = new OutputStreamWriter(output);
+      domDocument.write(out);
+      out.flush();
+   }
+
+
 }

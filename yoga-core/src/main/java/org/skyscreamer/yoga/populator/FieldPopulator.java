@@ -1,10 +1,8 @@
 package org.skyscreamer.yoga.populator;
 
+import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.Selector;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +10,5 @@ import java.util.Map;
  */
 public interface FieldPopulator<M>
 {
-    Map<String,Object> populateObjectFields( M model, Selector selector );
-
-    List<Map<String,Object>> populateListFields( Collection<M> model, Selector selector );
+   void addExtraFields(Selector selector, M model, ResultTraverser traverser, HierarchicalModel output);
 }
