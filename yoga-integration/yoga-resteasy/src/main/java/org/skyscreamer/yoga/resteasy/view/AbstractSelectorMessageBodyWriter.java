@@ -1,8 +1,18 @@
 package org.skyscreamer.yoga.resteasy.view;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ext.MessageBodyWriter;
+
 import org.dom4j.dom.DOMDocument;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
-import org.skyscreamer.yoga.mapper.MapResultMapper;
+import org.skyscreamer.yoga.mapper.ResultMapper;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
@@ -10,20 +20,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.ext.MessageBodyWriter;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>,
       ApplicationContextAware
 {
-   protected MapResultMapper _fieldPopulator;
+   protected ResultMapper _resultMapper;
 
    @Override
    public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4)
@@ -47,12 +47,12 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
    @Override
    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
    {
-      this._fieldPopulator = applicationContext.getBean(MapResultMapper.class);
+      this._resultMapper = applicationContext.getBean(ResultMapper.class);
    }
    
    protected ResultTraverser getTraverser()
    {
-      return _fieldPopulator.getResultTraverser();
+      return _resultMapper.getResultTraverser();
    }
    
 

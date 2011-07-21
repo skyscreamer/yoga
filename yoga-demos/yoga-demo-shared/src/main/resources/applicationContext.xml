@@ -40,7 +40,14 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
 
+<<<<<<< HEAD:yoga-demos/yoga-demo-shared/src/main/resources/applicationContext.xml
 	<bean id="mapResultMapper" class="org.skyscreamer.yoga.mapper.MapResultMapper"
+=======
+	<bean id="resultTraverser"
+		class="org.skyscreamer.yoga.resteasy.mapper.HibernateResultTraverser" />
+
+	<bean id="resultMapper" class="org.skyscreamer.yoga.mapper.ResultMapper"
+>>>>>>> upstream/master:yoga-demos/yoga-demo-resteasy/src/main/resources/applicationContext.xml
 		p:resultTraverser-ref="resultTraverser" />
 
 </beans>

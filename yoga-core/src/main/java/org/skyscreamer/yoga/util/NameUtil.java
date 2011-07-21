@@ -1,6 +1,5 @@
 package org.skyscreamer.yoga.util;
 
-
 public class NameUtil
 {
    public static String getName(Class<?> type)
