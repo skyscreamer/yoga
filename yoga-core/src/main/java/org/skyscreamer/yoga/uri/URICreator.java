@@ -28,14 +28,14 @@ public class URICreator
       return decorate(href.toString());
    }
 
-   private String decorate(String uri)
+   protected String decorate(String uri)
    {
       if (decorators == null)
       {
          return uri;
       }
-      List<URIDecorator> d1 = decorators;
-      for (URIDecorator uriDecorator : d1)
+
+      for (URIDecorator uriDecorator : decorators)
       {
          uri = uriDecorator.decorate(uri);
       }

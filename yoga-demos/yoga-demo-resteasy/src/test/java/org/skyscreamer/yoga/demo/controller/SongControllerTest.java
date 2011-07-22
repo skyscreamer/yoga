@@ -20,10 +20,6 @@ public class SongControllerTest extends AbstractTest {
         JSONObject data = getJSONObject( "/song/2", null );
         Assert.assertEquals("Wake Up", data.getString("title"));
         Assert.assertEquals(2, data.getLong("id"));
-        JSONObject artist = data.getJSONObject("artist");
-        Assert.assertNotNull(artist);
-        Assert.assertEquals(3, data.length());
-        Assert.assertEquals("/artist/1.json", artist.get("href"));
     }
 
     @Test
