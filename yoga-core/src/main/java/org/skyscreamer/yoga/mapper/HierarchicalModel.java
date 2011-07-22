@@ -10,6 +10,9 @@ public interface HierarchicalModel
 
 	HierarchicalModel createChild(PropertyDescriptor property, Object value);
 
+   HierarchicalModel createChild(String property, Object value);
+	
 	HierarchicalModel createList(PropertyDescriptor property, Object value);
 
+   HierarchicalModel createList(String property, Object value);
 }

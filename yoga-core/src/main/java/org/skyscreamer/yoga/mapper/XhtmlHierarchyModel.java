@@ -51,16 +51,27 @@ public class XhtmlHierarchyModel implements HierarchicalModel
    @Override
    public HierarchicalModel createChild(PropertyDescriptor property, Object result)
    {
-      return new XhtmlHierarchyModel(element.addElement("div").addAttribute("class",
-            property.getName()));
+      return createChild(property.getName(), result);
    }
 
    @Override
+   public HierarchicalModel createChild(String property, Object value)
+   {
+      return new XhtmlHierarchyModel(element.addElement("div").addAttribute("class",
+            property));
+   }
+   
+   @Override
    public HierarchicalModel createList(PropertyDescriptor property, Object result)
    {
-      Element div = element.addElement("div").addAttribute("class", property.getName());
+      return createList( property.getName(), result );
+   }
+
+   @Override
+   public HierarchicalModel createList(String property, Object result)
+   {
+      Element div = element.addElement("div").addAttribute("class", property);
       String name = NameUtil.getName(result.getClass());
       return new XhtmlHierarchyModel(div, name);
    }
-
 }

@@ -107,4 +107,14 @@ public class UserControllerTest extends AbstractTest {
         Assert.assertEquals( 1, data.getLong( "id" ) );
         Assert.assertEquals( "/user/1", data.getString( "href" ) );
     }
+    
+    @Test
+    public void testRecommendedAlbums() throws Exception
+    {
+        Map<String, String> params = Collections.singletonMap("selector", ":(recommendedAlbums)");
+        JSONObject data = getJSONObject("/user/1", params);
+        JSONArray recommended = data.getJSONArray("recommendedAlbums");
+		Assert.assertNotNull(recommended);
+    }
+
 }

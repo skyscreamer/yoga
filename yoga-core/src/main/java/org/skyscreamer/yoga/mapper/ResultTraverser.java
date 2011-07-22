@@ -96,8 +96,26 @@ public class ResultTraverser
       });
    }
 
-   protected void traverseIterable(Selector fieldSelector, HierarchicalModel model,
+   public void traverseIterable(Selector fieldSelector, HierarchicalModel model,
          PropertyDescriptor property, Iterable<?> list)
+   {
+      HierarchicalModel listModel = model.createList(property, list);
+      for (Object o : list)
+      {
+         Class<? extends Object> type = getClass(o);
+         if (isNotBean(type))
+         {
+            listModel.addSimple(property, list);
+         }
+         else
+         {
+            traverseChild(fieldSelector, listModel, property, NameUtil.getName(type), o);
+         }
+      }
+   }
+   
+   public void traverseIterable(Selector fieldSelector, HierarchicalModel model,
+         String property, Iterable<?> list)
    {
       HierarchicalModel listModel = model.createList(property, list);
       for (Object o : list)
@@ -115,8 +133,15 @@ public class ResultTraverser
    }
 
    // allow this to be overridden.  
-   protected void traverseChild(Selector parentSelector, HierarchicalModel parent,
+   public void traverseChild(Selector parentSelector, HierarchicalModel parent,
          PropertyDescriptor property, String name, Object value)
+   {
+      traverse(value, parentSelector.getField(property), parent.createChild(property, value));
+   }
+
+   // allow this to be overridden.  
+   public void traverseChild(Selector parentSelector, HierarchicalModel parent,
+         String property, String name, Object value)
    {
       traverse(value, parentSelector.getField(property), parent.createChild(property, value));
    }

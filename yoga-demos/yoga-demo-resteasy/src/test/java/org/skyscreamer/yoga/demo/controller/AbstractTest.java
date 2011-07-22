@@ -30,7 +30,8 @@ public abstract class AbstractTest
 
    protected JSONObject getJSONObject(String url, Map<String, String> params) throws Exception
    {
-      return new JSONObject(getContent(url, params));
+      String content = getContent(url, params);
+	  return new JSONObject(content);
    }
 
    protected JSONArray getJSONArray(String url, Map<String, String> params) throws Exception
