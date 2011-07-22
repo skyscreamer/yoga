@@ -203,11 +203,11 @@ public class SelectorModelAndViewResolver implements ModelAndViewResolver
    {
       if (returnValue instanceof Iterable<?>)
       {
-         return _resultMapper.populate((Iterable<?>) returnValue, selector);
+         return _resultMapper.mapOutput((Iterable<?>) returnValue, selector);
       }
       else
       {
-         return _resultMapper.populate(returnValue, selector);
+         return _resultMapper.mapOutput(returnValue, selector);
       }
    }
 

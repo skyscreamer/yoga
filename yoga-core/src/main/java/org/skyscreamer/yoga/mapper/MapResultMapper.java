@@ -18,18 +18,18 @@ public class MapResultMapper
       this._resultTraverser = resultTraverser;
    }
 
-   public List<Map<String, Object>> populate(Iterable<?> instances, Selector fieldSelector)
+   public List<Map<String, Object>> mapOutput(Iterable<?> instances, Selector fieldSelector)
    {
       List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
       for (Object instance : instances)
       {
-         result.add(populate(instance, fieldSelector));
+         result.add(mapOutput(instance, fieldSelector));
       }
       return result;
    }
 
    @SuppressWarnings("unchecked")
-   public Map<String, Object> populate(Object instance, Selector fieldSelector)
+   public Map<String, Object> mapOutput(Object instance, Selector fieldSelector)
    {
       MapHierarchicalModel model;
       if (instance instanceof Map)

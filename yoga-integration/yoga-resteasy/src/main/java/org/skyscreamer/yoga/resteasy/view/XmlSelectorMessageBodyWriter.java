@@ -14,7 +14,6 @@ import javax.ws.rs.ext.Provider;
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
-import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.XmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.NameUtil;
@@ -29,25 +28,29 @@ public class XmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWri
          throws IOException, WebApplicationException
    {
       Selector selector = getSelector();
-      ResultTraverser traverser = getTraverser();
       DOMDocument domDocument = new DOMDocument();
       if (value instanceof Iterable)
       {
-         DOMElement root = new DOMElement("result");
-         domDocument.setRootElement(root);
+         DOMElement root = createDocument(domDocument, "result");
          HierarchicalModel model = new XmlHierarchyModel(root);
          for (Object child : (Iterable<?>) value)
          {
-            traverser.traverse(child, selector, model);
+            resultTraverser.traverse(child, selector, model);
          }
       }
       else
       {
-         DOMElement root = new DOMElement(NameUtil.getName(traverser.getClass(value)));
-         domDocument.setRootElement(root);
-         HierarchicalModel model = new XmlHierarchyModel(root);
-         traverser.traverse(value, selector, model);
+         String name = NameUtil.getName(resultTraverser.getClass(value));
+         DOMElement root = createDocument(domDocument, name);
+         resultTraverser.traverse(value, selector, new XmlHierarchyModel(root));
       }
       write(output, domDocument);
+   }
+
+   public DOMElement createDocument(DOMDocument domDocument, String name)
+   {
+      DOMElement root = new DOMElement(name);
+      domDocument.setRootElement(root);
+      return root;
    }
 }

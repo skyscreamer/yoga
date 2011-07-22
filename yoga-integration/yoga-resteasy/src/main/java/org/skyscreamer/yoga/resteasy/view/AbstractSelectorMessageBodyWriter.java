@@ -12,19 +12,20 @@ import javax.ws.rs.ext.MessageBodyWriter;
 
 import org.dom4j.dom.DOMDocument;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
-import org.skyscreamer.yoga.mapper.ResultMapper;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>,
-      ApplicationContextAware
+public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
 {
-   protected ResultMapper _resultMapper;
+   @Autowired
+   protected ResultTraverser resultTraverser;
 
+   public AbstractSelectorMessageBodyWriter()
+   {
+      // TODO Auto-generated constructor stub
+   }
    @Override
    public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4)
    {
@@ -41,20 +42,8 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
    {
       HttpServletRequest request = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
       String selectorString = request.getParameter("selector");
-      return SelectorParser.parseSelector( selectorString );
+      return SelectorParser.parseSelector(selectorString);
    }
-   
-   @Override
-   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
-   {
-      this._resultMapper = applicationContext.getBean(ResultMapper.class);
-   }
-   
-   protected ResultTraverser getTraverser()
-   {
-      return _resultMapper.getResultTraverser();
-   }
-   
 
    protected static void write(OutputStream output, DOMDocument domDocument) throws IOException
    {
@@ -62,6 +51,5 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
       domDocument.write(out);
       out.flush();
    }
-
 
 }

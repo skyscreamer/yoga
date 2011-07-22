@@ -30,7 +30,6 @@ public class XhtmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyW
          throws IOException, WebApplicationException
    {
       Selector selector = getSelector();
-      ResultTraverser traverser = getTraverser();
       DOMDocument domDocument = new DOMDocument();
       domDocument.setRootElement(new DOMElement("html"));
       Element body = domDocument.getRootElement().addElement("body");
@@ -38,12 +37,12 @@ public class XhtmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyW
       {
          for (Object child : (Iterable<?>) value)
          {
-            traverse(child, selector, traverser, body);
+            traverse(child, selector, resultTraverser, body);
          }
       }
       else
       {
-         traverse(value, selector, traverser, body);
+         traverse(value, selector, resultTraverser, body);
       }
       write(output, domDocument);
    }

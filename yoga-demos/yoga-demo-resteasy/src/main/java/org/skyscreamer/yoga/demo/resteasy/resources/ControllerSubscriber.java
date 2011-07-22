@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.controller;
+package org.skyscreamer.yoga.demo.resteasy.resources;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.GET;
@@ -24,8 +24,13 @@ public class ControllerSubscriber<T>
 	
 	Class<T> entityClass;
 	
-	@Autowired ResourceMethodRegistry registry;
+	ResourceMethodRegistry registry;
 	@Autowired GenericDao genericDao;
+	
+	@Autowired 
+	public void setRegistry(ResourceMethodRegistry registry) {
+		this.registry = registry;
+	}
 	
 	public void setEntityClass(Class<T> entityClass) 
 	{

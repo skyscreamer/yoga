@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.controller;
+package org.skyscreamer.yoga.demo.resteasy.resources;
 
 import java.lang.reflect.ParameterizedType;
 
