@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.ws.rs.ext.Provider;
 
 import org.jboss.resteasy.core.Dispatcher;
-import org.jboss.resteasy.plugins.server.resourcefactory.SingletonResource;
 import org.jboss.resteasy.plugins.spring.ResteasyRegistration;
 import org.jboss.resteasy.plugins.spring.SpringResourceFactory;
 import org.jboss.resteasy.spi.Registry;
@@ -24,7 +23,7 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.SmartApplicationListener;
 
-public class MySpringBeanProcessor implements SmartApplicationListener
+public class RESTEasySpringListener implements SmartApplicationListener
 {
    @Autowired
    ConfigurableListableBeanFactory beanFactory;
@@ -77,7 +76,7 @@ public class MySpringBeanProcessor implements SmartApplicationListener
 
          if (GetRestful.isRootResource(beanClass))
          {
-            springResourceFactories.add(new SingletonResource(getBean(name, beanClass)));
+            springResourceFactories.add(new SpringResourceFactory(name, beanFactory, beanClass));
          }
       }
 
