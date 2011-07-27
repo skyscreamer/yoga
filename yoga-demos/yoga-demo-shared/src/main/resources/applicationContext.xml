@@ -43,4 +43,11 @@
 	<bean id="mapResultMapper" class="org.skyscreamer.yoga.mapper.MapResultMapper"
 		p:resultTraverser-ref="resultTraverser" />
 
+	<bean id="resultTraverser" class="org.skyscreamer.yoga.demo.mapper.HibernateResultTraverser">
+		<property name="fieldPopulators">
+			<map>
+				<entry key="org.skyscreamer.yoga.demo.model.User" value-ref="userFieldPopulator" />
+			</map>
+		</property>
+	</bean>
 </beans>
