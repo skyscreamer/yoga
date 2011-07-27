@@ -23,130 +23,132 @@ public class ResultTraverser
    private Map<Class<?>, FieldPopulator<?>> fieldPopulators = new HashMap<Class<?>, FieldPopulator<?>>();
    private URICreator uriCreator = new URICreator();
    private URITemplateGenerator uriTemplateGenerator = new AnnotationURITemplateGenerator();
-   
-   public <T> void registerPopulator(Class<T> type, FieldPopulator<T> populator){
-      fieldPopulators.put(type, populator);
+
+   public <T> void registerPopulator(Class<T> type, FieldPopulator<T> populator)
+   {
+      fieldPopulators.put( type, populator );
    }
-   
+
    @SuppressWarnings({ "rawtypes", "unchecked" })
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model)
    {
-      Class<?> instanceType = getClass(instance);
-      PropertyDescriptor[] properties = PropertyUtils.getPropertyDescriptors(instanceType);
+      Class<?> instanceType = getClass( instance );
+      PropertyDescriptor[] properties = PropertyUtils.getPropertyDescriptors( instanceType );
 
-      if(instanceType.isAnnotationPresent(URITemplate.class))
+      if (instanceType.isAnnotationPresent( URITemplate.class ))
       {
-         model.addSimple(SelectorParser.HREF, getHref(instanceType.getAnnotation(URITemplate.class).value(), instance, model));
+         model.addSimple( SelectorParser.HREF,
+               getHref( instanceType.getAnnotation( URITemplate.class ).value(), instance, model ) );
       }
-      
-      FieldPopulator populator = fieldPopulators.get(instanceType);
-      if(populator != null)
+
+      FieldPopulator populator = fieldPopulators.get( instanceType );
+      if (populator != null)
       {
-         populator.addExtraFields(fieldSelector, instance, this, model);
+         populator.addExtraFields( fieldSelector, instance, this, model );
       }
-      
+
       for (PropertyDescriptor property : properties)
       {
          String field = property.getName();
          try
          {
-            if (fieldSelector.containsField(property))
+            if (fieldSelector.containsField( property ))
             {
-               Object value = PropertyUtils.getNestedProperty(instance, property.getName());
+               Object value = PropertyUtils.getNestedProperty( instance, property.getName() );
 
                Class<?> propertyType = property.getPropertyType();
-               if (isNotBean(propertyType))
+               if (isNotBean( propertyType ))
                {
-                  model.addSimple(property, value);
+                  model.addSimple( property, value );
                }
-               else if (Iterable.class.isAssignableFrom(propertyType))
+               else if (Iterable.class.isAssignableFrom( propertyType ))
                {
-                  traverseIterable(fieldSelector, model, property, (Iterable<?>) value);
+                  traverseIterable( fieldSelector, model, property, (Iterable<?>) value );
                }
                else
                {
-                  traverseChild(fieldSelector, model, property, field, value);
+                  traverseChild( fieldSelector, model, property, field, value );
                }
             }
          }
          catch (Exception e)
          {
-            throw new RuntimeException(e);
+            throw new RuntimeException( e );
          }
       }
    }
 
-  protected Object getHref(String uriTemplate, final Object instance, HierarchicalModel model)
+   protected Object getHref(String uriTemplate, final Object instance, HierarchicalModel model)
    {
-      return uriCreator.getHref(uriTemplate, new ValueReader()
+      return uriCreator.getHref( uriTemplate, new ValueReader()
       {
          @Override
          public Object getValue(String property)
          {
             try
             {
-               return PropertyUtils.getNestedProperty(instance, property);
+               return PropertyUtils.getNestedProperty( instance, property );
             }
             catch (Exception e)
             {
-               throw new RuntimeException("Could not invoke getter for property " + property + " on class "
-                     + instance.getClass().getName(), e);
+               throw new RuntimeException( "Could not invoke getter for property " + property
+                     + " on class " + instance.getClass().getName(), e );
             }
          }
-      });
+      } );
    }
 
    public void traverseIterable(Selector fieldSelector, HierarchicalModel model,
          PropertyDescriptor property, Iterable<?> list)
    {
-      HierarchicalModel listModel = model.createList(property, list);
+      HierarchicalModel listModel = model.createList( property, list );
       for (Object o : list)
       {
-         Class<? extends Object> type = getClass(o);
-         if (isNotBean(type))
+         Class<? extends Object> type = getClass( o );
+         if (isNotBean( type ))
          {
-            listModel.addSimple(property, list);
+            listModel.addSimple( property, list );
          }
          else
          {
-            traverseChild(fieldSelector, listModel, property, NameUtil.getName(type), o);
-         }
-      }
-   }
-   
-   public void traverseIterable(Selector fieldSelector, HierarchicalModel model,
-         String property, Iterable<?> list)
-   {
-      HierarchicalModel listModel = model.createList(property, list);
-      for (Object o : list)
-      {
-         Class<? extends Object> type = getClass(o);
-         if (isNotBean(type))
-         {
-            listModel.addSimple(property, list);
-         }
-         else
-         {
-            traverseChild(fieldSelector, listModel, property, NameUtil.getName(type), o);
+            traverseChild( fieldSelector, listModel, property, NameUtil.getName( type ), o );
          }
       }
    }
 
-   // allow this to be overridden.  
+   public void traverseIterable(Selector fieldSelector, HierarchicalModel model, String property,
+         Iterable<?> list)
+   {
+      HierarchicalModel listModel = model.createList( property, list );
+      for (Object o : list)
+      {
+         Class<? extends Object> type = getClass( o );
+         if (isNotBean( type ))
+         {
+            listModel.addSimple( property, list );
+         }
+         else
+         {
+            traverseChild( fieldSelector, listModel, property, NameUtil.getName( type ), o );
+         }
+      }
+   }
+
+   // allow this to be overridden.
    public void traverseChild(Selector parentSelector, HierarchicalModel parent,
          PropertyDescriptor property, String name, Object value)
    {
-      traverse(value, parentSelector.getField(property), parent.createChild(property, value));
+      traverse( value, parentSelector.getField( property ), parent.createChild( property, value ) );
    }
 
-   // allow this to be overridden.  
-   public void traverseChild(Selector parentSelector, HierarchicalModel parent,
-         String property, String name, Object value)
+   // allow this to be overridden.
+   public void traverseChild(Selector parentSelector, HierarchicalModel parent, String property,
+         String name, Object value)
    {
-      traverse(value, parentSelector.getField(property), parent.createChild(property, value));
+      traverse( value, parentSelector.getField( property ), parent.createChild( property, value ) );
    }
 
-   // TODO: make this into an interface.  This should be a strategy
+   // TODO: make this into an interface. This should be a strategy
    public Class<? extends Object> getClass(Object instance)
    {
       return instance.getClass();
@@ -154,12 +156,12 @@ public class ResultTraverser
 
    protected boolean isNotBean(Class<?> clazz)
    {
-      return clazz.isPrimitive() || clazz.isEnum() || Number.class.isAssignableFrom(clazz)
-            || String.class.isAssignableFrom(clazz) || Boolean.class.isAssignableFrom(clazz)
-            || Character.class.isAssignableFrom(clazz);
+      return clazz.isPrimitive() || clazz.isEnum() || Number.class.isAssignableFrom( clazz )
+            || String.class.isAssignableFrom( clazz ) || Boolean.class.isAssignableFrom( clazz )
+            || Character.class.isAssignableFrom( clazz );
    }
 
-   //setters
+   // setters
    public Map<Class<?>, FieldPopulator<?>> getFieldPopulators()
    {
       return fieldPopulators;
