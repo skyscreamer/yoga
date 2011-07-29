@@ -51,6 +51,10 @@ address, caption, cite, code, dfn, em, strong, th, var {
 textarea {overflow: auto;}
 
 
+a{
+    color: #f2444d;
+}
+
 /*		Default Layout: 992px.
         Gutters: 24px.
         Outer margins: 48px.
@@ -162,10 +166,6 @@ section {
                     font-weight: bold;
                     margin-top: 20px;
                 }
-                    section .wrapper article h4+p,
-                    section .wrapper article h4+div>p{
-                        margin: 0;
-                    }
                 section .demo .wrapper h4 {
                     font-size: 15px;
                 }
@@ -174,11 +174,8 @@ section {
                     margin-top: 30px;
                     width: 100%;
                 }
-    section .demo1 {
-        padding-right: 30px;
-    }
         section .demo2 {
-            margin-left: 30px;
+            float: right;
         }
     section div.example {
         margin: 30px 20px;
@@ -212,6 +209,9 @@ px      68    160    252    344    436    528    620    712    */
         width: 712px;
         padding: 48px 28px 60px;
     }
+    section .demo {
+        width: 285px;
+    }
 }
 
 
@@ -230,6 +230,14 @@ px      68    160    252    */
         width: 252px;
         padding: 48px 34px 60px;
     }
+        nav li a {
+            float: none;
+            display: block;
+        }
+        section .demo {
+            float: left;
+            width: 200px;
+        }
 
 }
 
@@ -248,6 +256,9 @@ px      68    160    252    344    436    */
     body {
         width: 436px;
         padding: 48px 22px 48px;
+    }
+    section .demo {
+        float: left;
     }
 
 }
