@@ -28,12 +28,17 @@ public abstract class AbstractYogaView implements View
    @Autowired
    protected ResultTraverser resultTraverser;
 
+   public void setResultTraverser(ResultTraverser resultTraverser)
+   {
+      this.resultTraverser = resultTraverser;
+   }
+   
    @Override
    public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response)
          throws Exception
    {
       response.setContentType( getContentType() );
-      render( request, response, getSelector( request ), model.values().iterator().next() );
+      render( response.getOutputStream(), getSelector( request ), model.values().iterator().next() );
    }
 
 
@@ -50,6 +55,6 @@ public abstract class AbstractYogaView implements View
       out.flush();
    }
 
-   protected abstract void render(HttpServletRequest request, HttpServletResponse response,
+   public abstract void render(OutputStream outputStream,
          Selector selector, Object value) throws IOException;
 }

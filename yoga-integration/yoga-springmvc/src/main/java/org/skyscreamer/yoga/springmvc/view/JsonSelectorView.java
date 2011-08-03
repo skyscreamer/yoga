@@ -1,12 +1,10 @@
 package org.skyscreamer.yoga.springmvc.view;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.skyscreamer.yoga.mapper.MapHierarchicalModel;
@@ -14,8 +12,10 @@ import org.skyscreamer.yoga.selector.Selector;
 
 public class JsonSelectorView extends AbstractYogaView
 {
-   protected void render(HttpServletRequest request, HttpServletResponse response,
-         Selector selector, Object value) throws IOException
+   
+   @Override
+   public void render(OutputStream outputStream, Selector selector, Object value)
+         throws IOException
    {
       Object viewData = null;
       if (value instanceof Iterable<?>)
@@ -31,7 +31,7 @@ public class JsonSelectorView extends AbstractYogaView
       {
          viewData = getSingleResult(value, selector);
       }
-      getObjectMapper().writeValue(response.getOutputStream(), viewData);
+      getObjectMapper().writeValue(outputStream, viewData);
    }
 
    protected ObjectMapper getObjectMapper()

@@ -1,9 +1,7 @@
 package org.skyscreamer.yoga.springmvc.view;
 
 import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 
 import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;
@@ -18,36 +16,37 @@ public class XhtmlSelectorView extends AbstractYogaView
 {
 
    @Override
-   protected void render(HttpServletRequest request, HttpServletResponse response,
-         Selector selector, Object value) throws IOException
+   public void render(OutputStream outputStream, Selector selector, Object value)
+         throws IOException
    {
       DOMDocument domDocument = new DOMDocument();
-      Element rootElement = new DOMElement("html");
-      domDocument.setRootElement(rootElement);
+      Element rootElement = new DOMElement( "html" );
+      domDocument.setRootElement( rootElement );
       Element cssLink = rootElement.addElement( "head" ).addElement( "link" );
-      cssLink.addAttribute( "href", "/css/style.css");
-      cssLink.addAttribute( "rel", "stylesheet");
-      Element body = rootElement.addElement("body");
-      
+      cssLink.addAttribute( "href", "/css/style.css" );
+      cssLink.addAttribute( "rel", "stylesheet" );
+      Element body = rootElement.addElement( "body" );
+
       if (value instanceof Iterable)
       {
          for (Object child : (Iterable<?>) value)
          {
-            traverse(child, selector, resultTraverser, body);
+            traverse( child, selector, resultTraverser, body );
          }
       }
       else
       {
-         traverse(value, selector, resultTraverser, body);
+         traverse( value, selector, resultTraverser, body );
       }
-      write(response.getOutputStream(), domDocument);
+      write( outputStream, domDocument );
    }
-   
+
    public void traverse(Object value, Selector selector, ResultTraverser traverser, Element body)
    {
-      String name = NameUtil.getName(traverser.getClass(value));
-      HierarchicalModel model = new XhtmlHierarchyModel(body.addElement("div").addAttribute("class", name));
-      traverser.traverse(value, selector, model);
+      String name = NameUtil.getName( traverser.getClass( value ) );
+      HierarchicalModel model = new XhtmlHierarchyModel( body.addElement( "div" ).addAttribute(
+            "class", name ) );
+      traverser.traverse( value, selector, model );
    }
 
    @Override
@@ -55,5 +54,5 @@ public class XhtmlSelectorView extends AbstractYogaView
    {
       return "text/html";
    }
-   
+
 }
