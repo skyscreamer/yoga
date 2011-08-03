@@ -12,22 +12,36 @@
 
 	<bean name="handlerAdapter"
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="customModelAndViewResolver">
-			<bean class="org.skyscreamer.yoga.springmvc.view.SelectorModelAndViewResolver">
-				<property name="resultMapper" ref="mapResultMapper" />
-				<property name="resultTraverser" ref="resultTraverser" />
-		        <property name="extensionMap">
-		        	<map>
-		        		<entry key="json" value="application/json"/>
-		        		<entry key="xml" value="application/xml"/>
-		        		<entry key="xhtml" value="text/html"/>
-		        	</map>
-		        </property>
-	       	</bean>
+		<property name="customModelAndViewResolvers">
+			<list>
+				<bean class="org.skyscreamer.yoga.springmvc.view.YogaModelAndViewResolver">
+					<property name="viewResolver" ref="viewResolver" />
+				</bean>
+			</list>
 		</property>
         <property name="customArgumentResolver">
             <bean class="org.skyscreamer.yoga.springmvc.view.SelectorWebArgumentResolver"/>
         </property>
+	</bean>
+
+	<bean name="viewResolver"
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+        <property name="ignoreAcceptHeader" value="true" />
+        <property name="mediaTypes">
+            <map>
+                <entry key="xml"   value="application/xml"/>
+                <entry key="xhtml" value="text/html"/>
+                <entry key="json"  value="application/json"/>
+            </map>
+        </property>
+		<property name="defaultViews">
+			<list>
+				<bean class="org.skyscreamer.yoga.springmvc.view.XmlSelectorView"/>
+				<bean class="org.skyscreamer.yoga.springmvc.view.XhtmlSelectorView"/>
+				<bean class="org.skyscreamer.yoga.springmvc.view.JsonSelectorView"/>
+			</list>
+		</property>
 	</bean>
 	
 </beans>

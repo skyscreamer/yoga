@@ -46,7 +46,7 @@ public class RESTEasySpringListener implements SmartApplicationListener
       {
          beanFactory.registerResolvableDependency(Dispatcher.class, dispatcher);
       }
-      Collection<String> ignoreList = createIgnoreList(beanFactory);
+      Collection<String> ignoreList = createRestEasyRegistrations(beanFactory);
 
       List<ResourceFactory> springResourceFactories = new ArrayList<ResourceFactory>();
       for (String name : beanFactory.getBeanDefinitionNames())
@@ -58,24 +58,18 @@ public class RESTEasySpringListener implements SmartApplicationListener
          if (beanDef.getBeanClassName() == null || beanDef.isAbstract())
             continue;
 
-         Class<?> beanClass = null;
-         try
-         {
-            beanClass = Thread.currentThread().getContextClassLoader()
-                  .loadClass(beanDef.getBeanClassName());
-         }
-         catch (ClassNotFoundException e)
-         {
-            throw new RuntimeException(e);
-         }
+         Class<?> beanClass = getBeanClass( beanDef );
          
          if (beanClass.isAnnotationPresent(Provider.class))
          {
-            providerFactory.registerProviderInstance(getBean(name, beanClass));
+            Object bean = beanFactory.getBean(name);
+            providerFactory.getInjectorFactory().createPropertyInjector(beanClass).inject(bean);
+            providerFactory.registerProviderInstance(bean);
          }
 
          if (GetRestful.isRootResource(beanClass))
          {
+            // defer registrations of resource factories until after all of the @Providers are registered
             springResourceFactories.add(new SpringResourceFactory(name, beanFactory, beanClass));
          }
       }
@@ -86,11 +80,17 @@ public class RESTEasySpringListener implements SmartApplicationListener
       }
    }
 
-   public Object getBean(String name, Class<?> beanClass)
+   protected Class<?> getBeanClass(BeanDefinition beanDef)
    {
-      Object bean = beanFactory.getBean(name);
-      providerFactory.getInjectorFactory().createPropertyInjector(beanClass).inject(bean);
-      return bean;
+      try
+      {
+         return Thread.currentThread().getContextClassLoader()
+               .loadClass(beanDef.getBeanClassName());
+      }
+      catch (ClassNotFoundException e)
+      {
+         throw new RuntimeException(e);
+      }
    }
 
    @Override
@@ -111,21 +111,21 @@ public class RESTEasySpringListener implements SmartApplicationListener
       return ApplicationContext.class.isAssignableFrom(sourceType);
    }
 
-   private Collection<String> createIgnoreList(final ConfigurableListableBeanFactory beanFactory)
+   private Collection<String> createRestEasyRegistrations(final ConfigurableListableBeanFactory beanFactory)
    {
       Map<String, ResteasyRegistration> registries = beanFactory
             .getBeansOfType(ResteasyRegistration.class);
 
-      final Collection<String> ignoreBeansList = new HashSet<String>();
+      final Collection<String> resteasyRegistrations = new HashSet<String>();
+      ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
       for (ResteasyRegistration registration : registries.values())
       {
          String beanName = registration.getBeanName();
-         ignoreBeansList.add(beanName);
+         resteasyRegistrations.add(beanName);
          BeanDefinition beanDef = beanFactory.getBeanDefinition(beanName);
-         Class<?> beanClass = null;
          try
          {
-            beanClass = Thread.currentThread().getContextClassLoader()
+            Class<?> beanClass = contextClassLoader
                   .loadClass(beanDef.getBeanClassName());
             SpringResourceFactory reg = new SpringResourceFactory(beanName, beanFactory, beanClass);
             registry.addResourceFactory(reg, registration.getContext());
@@ -135,6 +135,6 @@ public class RESTEasySpringListener implements SmartApplicationListener
             throw new RuntimeException(e);
          }
       }
-      return ignoreBeansList;
+      return resteasyRegistrations;
    }
 }
