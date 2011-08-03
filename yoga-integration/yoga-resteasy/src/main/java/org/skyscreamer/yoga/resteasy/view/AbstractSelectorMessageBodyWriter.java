@@ -2,19 +2,20 @@ package org.skyscreamer.yoga.resteasy.view;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
 
-import org.dom4j.dom.DOMDocument;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
+import org.skyscreamer.yoga.springmvc.view.AbstractYogaView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
@@ -22,10 +23,14 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
    @Autowired
    protected ResultTraverser resultTraverser;
 
+   @Context
+   HttpServletRequest request;
+
    public AbstractSelectorMessageBodyWriter()
    {
       // TODO Auto-generated constructor stub
    }
+
    @Override
    public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4)
    {
@@ -38,18 +43,21 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
       return true;
    }
 
-   protected Selector getSelector()
+   @Override
+   public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations,
+         MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
+         throws IOException, WebApplicationException
    {
-      HttpServletRequest request = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
-      String selectorString = request.getParameter("selector");
-      return SelectorParser.parseSelector(selectorString);
+      getView().render( entityStream, getSelector(), t );
+      ;
    }
 
-   protected static void write(OutputStream output, DOMDocument domDocument) throws IOException
+   protected abstract AbstractYogaView getView();
+
+   protected Selector getSelector()
    {
-      OutputStreamWriter out = new OutputStreamWriter(output);
-      domDocument.write(out);
-      out.flush();
+      String selectorString = request.getParameter( "selector" );
+      return SelectorParser.parseSelector( selectorString );
    }
 
 }
