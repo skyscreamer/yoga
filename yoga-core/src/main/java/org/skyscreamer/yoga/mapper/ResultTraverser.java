@@ -29,12 +29,17 @@ public class ResultTraverser
       fieldPopulators.put( type, populator );
    }
 
-   @SuppressWarnings({ "rawtypes", "unchecked" })
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model)
    {
       Class<?> instanceType = getClass( instance );
-      PropertyDescriptor[] properties = PropertyUtils.getPropertyDescriptors( instanceType );
+      addExtraInfo( instance, fieldSelector, model, instanceType );
+      addProperties( instance, fieldSelector, model, instanceType );
+   }
 
+   @SuppressWarnings({ "rawtypes", "unchecked" })
+   protected void addExtraInfo(Object instance, Selector fieldSelector, HierarchicalModel model,
+         Class<?> instanceType)
+   {
       if (instanceType.isAnnotationPresent( URITemplate.class ))
       {
          model.addSimple( SelectorParser.HREF,
@@ -46,8 +51,12 @@ public class ResultTraverser
       {
          populator.addExtraFields( fieldSelector, instance, this, model );
       }
+   }
 
-      for (PropertyDescriptor property : properties)
+   protected void addProperties(Object instance, Selector fieldSelector, HierarchicalModel model,
+         Class<?> instanceType)
+   {
+      for (PropertyDescriptor property : PropertyUtils.getPropertyDescriptors( instanceType ))
       {
          String field = property.getName();
          try
