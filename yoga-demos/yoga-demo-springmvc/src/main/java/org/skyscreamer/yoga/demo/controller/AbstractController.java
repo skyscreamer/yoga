@@ -38,7 +38,7 @@ public abstract class AbstractController<T>
         return (Class<T>) parameterizedType.getActualTypeArguments()[0];
     }
     
-    @ExceptionHandler(Throwable.class)
+    @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(value=HttpStatus.NOT_FOUND,reason="No such resource")
     public void notFound() { }
 }
