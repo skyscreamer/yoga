@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,6 +23,17 @@ public class UserControllerTest extends AbstractTest {
         Assert.assertEquals(3, data.length());
         Assert.assertEquals(2, data.getLong( "id" ));
         Assert.assertEquals( "/user/2", data.getString( "href" ) );
+    }
+
+    @Test
+    public void testGetNonExistantUser() throws Exception {
+    	try {
+    		JSONObject data = getJSONObject( "/user/8675309", null );
+    		Assert.fail("HttpServerErrorException expected.");
+    	}
+    	catch (HttpClientErrorException e) {
+    		Assert.assertEquals(HttpStatus.NOT_FOUND, e.getStatusCode());
+    	}
     }
 
     @Test
