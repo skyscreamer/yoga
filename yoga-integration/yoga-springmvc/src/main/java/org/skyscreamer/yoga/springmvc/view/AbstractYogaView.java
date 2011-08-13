@@ -57,4 +57,6 @@ public abstract class AbstractYogaView implements View
 
    public abstract void render(OutputStream outputStream,
          Selector selector, Object value) throws IOException;
+   
+   public abstract String getHrefSuffix();
 }

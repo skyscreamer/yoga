@@ -23,7 +23,7 @@ public class UserControllerTest extends AbstractTest
       Assert.assertEquals("Corby Page", data.getString("name"));
       Assert.assertEquals(2, data.getLong("id"));
       Assert.assertEquals(3, data.length());
-      Assert.assertEquals( "/user/2", data.getString( "href" ) );
+      Assert.assertEquals( "/user/2.json", data.getString( "href" ) );
    }
 
    @Test
@@ -46,12 +46,12 @@ public class UserControllerTest extends AbstractTest
       Assert.assertEquals(3, carter.length());
       Assert.assertEquals("Carter Page", carter.getString("name"));
       Assert.assertEquals(1, carter.getLong("id"));
-      Assert.assertEquals( "/user/1", carter.getString( "href" ) );
+      Assert.assertEquals( "/user/1.json", carter.getString( "href" ) );
       JSONObject corby = data.getJSONObject(1);
       Assert.assertEquals("Corby Page", corby.getString("name"));
       Assert.assertEquals(2, corby.getLong("id"));
       Assert.assertEquals(3, corby.length());
-      Assert.assertEquals( "/user/2", corby.getString( "href" ) );
+      Assert.assertEquals( "/user/2.json", corby.getString( "href" ) );
    }
 
    @Test
@@ -88,7 +88,7 @@ public class UserControllerTest extends AbstractTest
       Assert.assertEquals(4, friend.length());
       Assert.assertEquals("Corby Page", friend.getString("name"));
       Assert.assertEquals(2, friend.getLong("id"));
-      Assert.assertEquals( "/user/2", friend.getString( "href" ) );
+      Assert.assertEquals( "/user/2.json", friend.getString( "href" ) );
       Assert.assertFalse(friend.getBoolean("isFriend"));
    }
 
@@ -120,7 +120,7 @@ public class UserControllerTest extends AbstractTest
         Assert.assertEquals( 4, data.length() );
         Assert.assertEquals( "Carter Page", data.getString( "name" ) );
         Assert.assertEquals( 1, data.getLong( "id" ) );
-        Assert.assertEquals( "/user/1", data.getString( "href" ) );
+        Assert.assertEquals( "/user/1.json", data.getString( "href" ) );
     }
     
     @Test

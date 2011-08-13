@@ -23,14 +23,14 @@ public class XmlSelectorView extends AbstractYogaView
          HierarchicalModel model = new XmlHierarchyModel( root );
          for (Object child : (Iterable<?>) value)
          {
-            resultTraverser.traverse( child, selector, model );
+            resultTraverser.traverse( child, selector, model, getHrefSuffix() );
          }
       }
       else
       {
          String name = NameUtil.getName( resultTraverser.getClass( value ) );
          DOMElement root = createDocument( domDocument, name );
-         resultTraverser.traverse( value, selector, new XmlHierarchyModel( root ) );
+         resultTraverser.traverse( value, selector, new XmlHierarchyModel( root ), getHrefSuffix() );
       }
       write( outputStream, domDocument );
    }
@@ -46,5 +46,11 @@ public class XmlSelectorView extends AbstractYogaView
    public String getContentType()
    {
       return "application/xml";
+   }
+   
+   @Override
+   public String getHrefSuffix()
+   {
+      return "xml";
    }
 }

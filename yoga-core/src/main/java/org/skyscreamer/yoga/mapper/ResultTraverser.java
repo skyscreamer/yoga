@@ -29,32 +29,32 @@ public class ResultTraverser
       fieldPopulators.put( type, populator );
    }
 
-   public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model)
+   public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model, String hrefSuffix)
    {
       Class<?> instanceType = getClass( instance );
-      addExtraInfo( instance, fieldSelector, model, instanceType );
-      addProperties( instance, fieldSelector, model, instanceType );
+      addExtraInfo( instance, fieldSelector, model, instanceType, hrefSuffix );
+      addProperties( instance, fieldSelector, model, instanceType, hrefSuffix );
    }
 
-   @SuppressWarnings({ "rawtypes", "unchecked" })
-   protected void addExtraInfo(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType)
-   {
-      if (instanceType.isAnnotationPresent( URITemplate.class ))
-      {
-         model.addSimple( SelectorParser.HREF,
-               getHref( instanceType.getAnnotation( URITemplate.class ).value(), instance, model ) );
-      }
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected void addExtraInfo(Object instance, Selector fieldSelector,
+            HierarchicalModel model, Class<?> instanceType, String hrefSuffix)
+    {
+        if (instanceType.isAnnotationPresent(URITemplate.class)) {
+            String href = instanceType.getAnnotation(URITemplate.class).value();
+            if (hrefSuffix != null)
+                href += "." + hrefSuffix;
+            model.addSimple(SelectorParser.HREF, getHref(href, instance, model));
+        }
 
-      FieldPopulator populator = fieldPopulators.get( instanceType );
-      if (populator != null)
-      {
-         populator.addExtraFields( fieldSelector, instance, this, model );
-      }
-   }
+        FieldPopulator populator = fieldPopulators.get(instanceType);
+        if (populator != null) {
+            populator.addExtraFields(fieldSelector, instance, this, model);
+        }
+    }
 
    protected void addProperties(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType)
+         Class<?> instanceType, String hrefSuffix)
    {
       for (PropertyDescriptor property : PropertyUtils.getPropertyDescriptors( instanceType ))
       {
@@ -72,11 +72,11 @@ public class ResultTraverser
                }
                else if (Iterable.class.isAssignableFrom( propertyType ))
                {
-                  traverseIterable( fieldSelector, model, property, (Iterable<?>) value );
+                  traverseIterable( fieldSelector, model, property, (Iterable<?>) value, hrefSuffix );
                }
                else
                {
-                  traverseChild( fieldSelector, model, property, field, value );
+                  traverseChild( fieldSelector, model, property, field, value, hrefSuffix );
                }
             }
          }
@@ -108,7 +108,7 @@ public class ResultTraverser
    }
 
    public void traverseIterable(Selector fieldSelector, HierarchicalModel model,
-         PropertyDescriptor property, Iterable<?> list)
+         PropertyDescriptor property, Iterable<?> list, String hrefSuffix)
    {
       HierarchicalModel listModel = model.createList( property, list );
       for (Object o : list)
@@ -120,13 +120,13 @@ public class ResultTraverser
          }
          else
          {
-            traverseChild( fieldSelector, listModel, property, NameUtil.getName( type ), o );
+            traverseChild( fieldSelector, listModel, property, NameUtil.getName( type ), o, hrefSuffix );
          }
       }
    }
 
    public void traverseIterable(Selector fieldSelector, HierarchicalModel model, String property,
-         Iterable<?> list)
+         Iterable<?> list, String hrefSuffix)
    {
       HierarchicalModel listModel = model.createList( property, list );
       for (Object o : list)
@@ -138,23 +138,23 @@ public class ResultTraverser
          }
          else
          {
-            traverseChild( fieldSelector, listModel, property, NameUtil.getName( type ), o );
+            traverseChild( fieldSelector, listModel, property, NameUtil.getName( type ), o, hrefSuffix );
          }
       }
    }
 
    // allow this to be overridden.
    public void traverseChild(Selector parentSelector, HierarchicalModel parent,
-         PropertyDescriptor property, String name, Object value)
+         PropertyDescriptor property, String name, Object value, String hrefSuffix)
    {
-      traverse( value, parentSelector.getField( property ), parent.createChild( property, value ) );
+      traverse( value, parentSelector.getField( property ), parent.createChild( property, value ), hrefSuffix );
    }
 
    // allow this to be overridden.
    public void traverseChild(Selector parentSelector, HierarchicalModel parent, String property,
-         String name, Object value)
+         String name, Object value, String hrefSuffix)
    {
-      traverse( value, parentSelector.getField( property ), parent.createChild( property, value ) );
+      traverse( value, parentSelector.getField( property ), parent.createChild( property, value ), hrefSuffix );
    }
 
    // TODO: make this into an interface. This should be a strategy
