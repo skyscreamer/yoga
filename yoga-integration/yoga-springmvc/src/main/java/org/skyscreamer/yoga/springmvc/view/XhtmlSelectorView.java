@@ -23,7 +23,7 @@ public class XhtmlSelectorView extends AbstractYogaView
       Element rootElement = new DOMElement( "html" );
       domDocument.setRootElement( rootElement );
       Element cssLink = rootElement.addElement( "head" ).addElement( "link" );
-      cssLink.addAttribute( "href", "/css/style.css" );
+      cssLink.addAttribute( "href", "/css/xhtml.css" );
       cssLink.addAttribute( "rel", "stylesheet" );
       Element body = rootElement.addElement( "body" );
 
