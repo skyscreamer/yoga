@@ -29,7 +29,7 @@ public class UserFieldPopulator implements FieldPopulator<User>
       {
          List<Album> allAlbums = _genericDao.findAll( Album.class );
          Selector childSelector = selector.getField( "recommendedAlbums" );
-         traverser.traverseIterable( childSelector, output, "recommendedAlbums", allAlbums );
+         traverser.traverseIterable( childSelector, output, "recommendedAlbums", allAlbums, null );
       }
    }
 }

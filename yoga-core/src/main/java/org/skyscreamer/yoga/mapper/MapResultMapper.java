@@ -39,7 +39,7 @@ public class MapResultMapper
       else
       {
          model = new MapHierarchicalModel();
-         _resultTraverser.traverse(instance, fieldSelector, model);
+         _resultTraverser.traverse(instance, fieldSelector, model, null);
       }
       return model.getObjectTree();
    }
