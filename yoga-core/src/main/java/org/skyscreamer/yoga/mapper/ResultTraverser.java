@@ -1,12 +1,9 @@
 package org.skyscreamer.yoga.mapper;
 
-import java.beans.PropertyDescriptor;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.populator.ValueReader;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
@@ -15,19 +12,16 @@ import org.skyscreamer.yoga.uri.URICreator;
 import org.skyscreamer.yoga.uri.URITemplateGenerator;
 import org.skyscreamer.yoga.util.NameUtil;
 
+import java.beans.PropertyDescriptor;
+
 /**
  * Created by IntelliJ IDEA. User: corby Date: 4/21/11 Time: 3:07 PM
  */
 public class ResultTraverser
 {
-   private Map<Class<?>, FieldPopulator<?>> fieldPopulators = new HashMap<Class<?>, FieldPopulator<?>>();
+   private FieldPopulatorRegistry _fieldPopulatorRegistry;
    private URICreator uriCreator = new URICreator();
    private URITemplateGenerator uriTemplateGenerator = new AnnotationURITemplateGenerator();
-
-   public <T> void registerPopulator(Class<T> type, FieldPopulator<T> populator)
-   {
-      fieldPopulators.put( type, populator );
-   }
 
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model)
    {
@@ -43,13 +37,16 @@ public class ResultTraverser
       if (instanceType.isAnnotationPresent( URITemplate.class ))
       {
          model.addSimple( SelectorParser.HREF,
-               getHref( instanceType.getAnnotation( URITemplate.class ).value(), instance, model ) );
+               getHref( instanceType.getAnnotation( URITemplate.class ).value(), instance ) );
       }
 
-      FieldPopulator populator = fieldPopulators.get( instanceType );
-      if (populator != null)
+      if ( _fieldPopulatorRegistry != null )
       {
-         populator.addExtraFields( fieldSelector, instance, this, model );
+          FieldPopulator populator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
+          if (populator != null)
+          {
+             populator.addExtraFields( fieldSelector, instance, this, model );
+          }
       }
    }
 
@@ -87,7 +84,7 @@ public class ResultTraverser
       }
    }
 
-   protected Object getHref(String uriTemplate, final Object instance, HierarchicalModel model)
+   protected Object getHref(String uriTemplate, final Object instance)
    {
       return uriCreator.getHref( uriTemplate, new ValueReader()
       {
@@ -113,7 +110,7 @@ public class ResultTraverser
       HierarchicalModel listModel = model.createList( property, list );
       for (Object o : list)
       {
-         Class<? extends Object> type = getClass( o );
+         Class<?> type = getClass( o );
          if (isNotBean( type ))
          {
             listModel.addSimple( property, list );
@@ -131,7 +128,7 @@ public class ResultTraverser
       HierarchicalModel listModel = model.createList( property, list );
       for (Object o : list)
       {
-         Class<? extends Object> type = getClass( o );
+         Class<?> type = getClass( o );
          if (isNotBean( type ))
          {
             listModel.addSimple( property, list );
@@ -158,7 +155,7 @@ public class ResultTraverser
    }
 
    // TODO: make this into an interface. This should be a strategy
-   public Class<? extends Object> getClass(Object instance)
+   public Class<?> getClass(Object instance)
    {
       return instance.getClass();
    }
@@ -170,18 +167,12 @@ public class ResultTraverser
             || Character.class.isAssignableFrom( clazz );
    }
 
-   // setters
-   public Map<Class<?>, FieldPopulator<?>> getFieldPopulators()
-   {
-      return fieldPopulators;
-   }
+    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
+    {
+        _fieldPopulatorRegistry = fieldPopulatorRegistry;
+    }
 
-   public void setFieldPopulators(Map<Class<?>, FieldPopulator<?>> fieldPopulators)
-   {
-      this.fieldPopulators = fieldPopulators;
-   }
-
-   public URICreator getUriCreator()
+    public URICreator getUriCreator()
    {
       return uriCreator;
    }

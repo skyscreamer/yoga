@@ -17,7 +17,7 @@ public class JsonSelectorView extends AbstractYogaView
    public void render(OutputStream outputStream, Selector selector, Object value)
          throws IOException
    {
-      Object viewData = null;
+      Object viewData;
       if (value instanceof Iterable<?>)
       {
          List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

@@ -25,7 +25,7 @@ public class UserFieldPopulator implements FieldPopulator<User>
    public void addExtraFields(Selector selector, User model, ResultTraverser traverser,
          HierarchicalModel output)
    {
-      if (selector.containsField( "recommendedAlbums" ))
+      if ( selector.containsField( "recommendedAlbums" ) )
       {
          List<Album> allAlbums = _genericDao.findAll( Album.class );
          Selector childSelector = selector.getField( "recommendedAlbums" );

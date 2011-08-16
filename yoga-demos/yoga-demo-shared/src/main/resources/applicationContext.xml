@@ -40,14 +40,13 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
 
-	<bean id="mapResultMapper" class="org.skyscreamer.yoga.mapper.MapResultMapper"
-		p:resultTraverser-ref="resultTraverser" />
+    <bean id="resultTraverser" class="org.skyscreamer.yoga.demo.mapper.HibernateResultTraverser"
+          p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
 
-	<bean id="resultTraverser" class="org.skyscreamer.yoga.demo.mapper.HibernateResultTraverser">
-		<property name="fieldPopulators">
-			<map>
-				<entry key="org.skyscreamer.yoga.demo.model.User" value-ref="userFieldPopulator" />
-			</map>
-		</property>
-	</bean>
+    <bean id="fieldPopulatorRegistry" class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">
+        <constructor-arg>
+            <list><bean class="org.skyscreamer.yoga.demo.dto.UserFieldPopulator"/></list>
+        </constructor-arg>
+    </bean>
+
 </beans>

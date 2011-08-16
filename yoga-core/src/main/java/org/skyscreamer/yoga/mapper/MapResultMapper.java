@@ -43,9 +43,4 @@ public class MapResultMapper
       }
       return model.getObjectTree();
    }
-
-   public ResultTraverser getResultTraverser()
-   {
-      return _resultTraverser;
-   }
 }

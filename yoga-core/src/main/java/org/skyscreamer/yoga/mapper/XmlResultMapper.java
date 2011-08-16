@@ -38,9 +38,4 @@ public class XmlResultMapper
       _resultTraverser.traverse(instance, fieldSelector, new XmlHierarchyModel(root));
       return domDocument;
    }
-
-   public ResultTraverser getResultTraverser()
-   {
-      return _resultTraverser;
-   }
 }
