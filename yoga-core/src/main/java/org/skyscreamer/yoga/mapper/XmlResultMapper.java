@@ -25,7 +25,7 @@ public class XmlResultMapper
       HierarchicalModel model = new XmlHierarchyModel(root);
       for (Object instance : instances)
       {
-         _resultTraverser.traverse(instance, fieldSelector, model);
+         _resultTraverser.traverse(instance, fieldSelector, model, null);
       }
       return domDocument;
    }
@@ -35,7 +35,7 @@ public class XmlResultMapper
       DOMDocument domDocument = new DOMDocument();
       DOMElement root = new DOMElement(NameUtil.getName(_resultTraverser.getClass(instance)));
       domDocument.setRootElement(root);
-      _resultTraverser.traverse(instance, fieldSelector, new XmlHierarchyModel(root));
+      _resultTraverser.traverse(instance, fieldSelector, new XmlHierarchyModel(root), null);
       return domDocument;
    }
 

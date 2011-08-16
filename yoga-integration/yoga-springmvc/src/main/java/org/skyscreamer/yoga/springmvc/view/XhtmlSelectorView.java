@@ -46,7 +46,7 @@ public class XhtmlSelectorView extends AbstractYogaView
       String name = NameUtil.getName( traverser.getClass( value ) );
       HierarchicalModel model = new XhtmlHierarchyModel( body.addElement( "div" ).addAttribute(
             "class", name ) );
-      traverser.traverse( value, selector, model );
+      traverser.traverse( value, selector, model, getHrefSuffix() );
    }
 
    @Override
@@ -55,4 +55,9 @@ public class XhtmlSelectorView extends AbstractYogaView
       return "text/html";
    }
 
+   @Override
+   public String getHrefSuffix()
+   {
+      return "xhtml";
+   }
 }
