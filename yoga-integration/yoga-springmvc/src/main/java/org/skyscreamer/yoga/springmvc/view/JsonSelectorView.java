@@ -42,7 +42,7 @@ public class JsonSelectorView extends AbstractYogaView
    protected Map<String, Object> getSingleResult(Object value, Selector selector)
    {
       MapHierarchicalModel model = new MapHierarchicalModel();
-      resultTraverser.traverse(value, selector, model);
+      resultTraverser.traverse(value, selector, model, getHrefSuffix());
       return model.getObjectTree();
    }
 
@@ -50,5 +50,11 @@ public class JsonSelectorView extends AbstractYogaView
    public String getContentType()
    {
       return "application/json";
+   }
+
+   @Override
+   public String getHrefSuffix()
+   {
+      return "json";
    }
 }
