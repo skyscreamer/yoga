@@ -47,17 +47,19 @@
           };
 
           var traditionalRest = function() {
-              var startTime = (new Date()).getTime();
+              var startTime = (new Date()).getTime(),
+                queryInput = 'user/1.json\n';
               $('#demo_status1').html('Running...');
               $('#demo_status1').css('color', '#ee0000');
-              $('#demo_query1').val('user/1.json');
+              $('#demo_query1').val(queryInput);
               setTimeout(function() {
                   $.get('user/1.json?selector=:(friends)', function(data1) {
                       $('#demo_name1').html(data1.name);
                       $(data1.friends).each(function(index1) {
                           var friendId = this.id;
                           var friendName = this.name;
-                          $('#demo_query1').val('user/' + friendId + '.json');
+                          queryInput += ' |- user/' + friendId + '.json\n';
+                          $('#demo_query1').val(queryInput);
                           setTimeout(function() {
                               $.get('user/' + friendId + '.json?selector=:(favoriteArtists)', function(data2) {
                                   var friendHtml = '<div id="demo_friend1_' + friendId + '">'
@@ -70,14 +72,16 @@
                                       var artistHtml = '<p>' + this.name + '</p>'
                                           + '<ul id="demo_artist_' + friendId + '_' + artistId + '"></ul>';
                                       $('#demo_friend1_' + friendId).append(artistHtml);
-                                      $('#demo_query1').val('artist/' + artistId + '.json');
+                                      queryInput += '\t |- artist/' + artistId + '.json\n';
+                                      $('#demo_query1').val(queryInput);
                                       setTimeout(function() {
                                           $.get('artist/' + artistId + '.json?selector=:(albums)', function(data3) {
                                               $(data3.albums).each(function(index3) {
                                                   var albumId = this.id;
                                                   var albumHtml = '<li id="demo_album_' + friendId + '_' + artistId + '_' + albumId + '"><b>' + this.title + '</b></li>';
                                                   $('#demo_artist_' + friendId + '_' + artistId).append(albumHtml);
-                                                  $('#demo_query1').val('album/' + albumId + '.json');
+                                                  queryInput += '\t\t |- album/' + albumId + '.json\n';
+                                                  $('#demo_query1').val(queryInput);
                                                   setTimeout(function() {
                                                       $.get('album/' + albumId + '.json?selector=:(songs)', function(data4) {
                                                           var songHtml = ': (';
@@ -238,7 +242,7 @@
                     <article id="demo_friends1">
                         <h4 class="demo_friends_header">Friends</h4>
                     </article>
-                    <input id="demo_query1" type="text" disabled="true"/>
+                    <textarea id="demo_query1" type="text" disabled="true"></textarea>
                 </section>
             </div>
 
