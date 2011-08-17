@@ -6,6 +6,7 @@ import org.skyscreamer.yoga.demo.model.User;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.populator.FieldPopulatorSupport;
 import org.skyscreamer.yoga.selector.Selector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.List;
  * User: corby
  */
 @Service
-public class UserFieldPopulator implements FieldPopulator<User>
+public class UserFieldPopulator extends FieldPopulatorSupport<User>
 {
     @Autowired
     GenericDao _genericDao;
@@ -31,20 +32,5 @@ public class UserFieldPopulator implements FieldPopulator<User>
             Selector childSelector = selector.getField( "recommendedAlbums" );
             traverser.traverseIterable( childSelector, output, "recommendedAlbums", allAlbums, null );
         }
-    }
-
-    public List<String> getCoreFields()
-    {
-        return new ArrayList<String>();
-    }
-
-    public List<String> getSupportedFields()
-    {
-        return null;
-    }
-
-    public String getUriTemplate()
-    {
-        return null;
     }
 }
