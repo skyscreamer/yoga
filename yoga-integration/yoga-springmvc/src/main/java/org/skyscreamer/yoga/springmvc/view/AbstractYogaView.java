@@ -21,7 +21,6 @@ import org.springframework.web.servlet.View;
  * org.skyscreamer.yoga.springmvc.view.RequestHolder in your web.xml file
  * 
  * @author Solomon Duskis
- * @see RequestHolder
  */
 public abstract class AbstractYogaView implements View
 {
@@ -41,7 +40,6 @@ public abstract class AbstractYogaView implements View
       render( response.getOutputStream(), getSelector( request ), model.values().iterator().next() );
    }
 
-
    protected Selector getSelector(HttpServletRequest request)
    {
       String selectorString = request.getParameter( "selector" );
@@ -55,8 +53,7 @@ public abstract class AbstractYogaView implements View
       out.flush();
    }
 
-   public abstract void render(OutputStream outputStream,
-         Selector selector, Object value) throws IOException;
+   public abstract void render(OutputStream outputStream, Selector selector, Object value) throws IOException;
    
    public abstract String getHrefSuffix();
 }

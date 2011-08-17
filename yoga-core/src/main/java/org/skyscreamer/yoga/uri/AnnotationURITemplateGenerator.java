@@ -4,7 +4,6 @@ import org.skyscreamer.yoga.annotations.URITemplate;
 
 public class AnnotationURITemplateGenerator implements URITemplateGenerator
 {
-
    @Override
    public String getTemplate(Object instance, Class<?> type)
    {
@@ -13,5 +12,4 @@ public class AnnotationURITemplateGenerator implements URITemplateGenerator
       else 
          return null;
    }
-
 }
