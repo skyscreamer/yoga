@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.populator.FieldPopulator;
+
 import java.beans.PropertyDescriptor;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,9 +21,17 @@ public class CoreSelector implements Selector
    }
 
    @Override
-   public boolean containsField(PropertyDescriptor property)
+   public boolean containsField( PropertyDescriptor property, FieldPopulator<?> fieldPopulator )
    {
-      return property.getReadMethod().isAnnotationPresent(Core.class);
+       boolean result = property.getReadMethod().isAnnotationPresent( Core.class );
+       if ( result == false )
+       {
+           if ( fieldPopulator != null )
+           {
+               result = fieldPopulator.getCoreFields().contains( property.getName() );
+           }
+       }
+       return result;
    }
 
    @Override

@@ -12,7 +12,6 @@ import org.skyscreamer.yoga.selector.Selector;
 
 public class JsonSelectorView extends AbstractYogaView
 {
-   
    @Override
    public void render(OutputStream outputStream, Selector selector, Object value)
          throws IOException

@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.populator.FieldPopulator;
+
 import java.beans.PropertyDescriptor;
 import java.util.*;
 
@@ -45,11 +47,11 @@ public class CombinedSelector implements Selector
    }
 
    @Override
-   public boolean containsField(PropertyDescriptor property)
+   public boolean containsField( PropertyDescriptor property, FieldPopulator<?> fieldPopulator )
    {
       for (Selector selector : _selectors)
       {
-         if (selector.containsField(property))
+         if (selector.containsField(property, fieldPopulator ))
          {
             return true;
          }
@@ -68,11 +70,6 @@ public class CombinedSelector implements Selector
          }
       }
       return false;   
-   }
-
-   public Collection<Selector> getChildren()
-   {
-      return _selectors;
    }
 
    public Set<String> getFieldNames()
