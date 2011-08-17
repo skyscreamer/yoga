@@ -5,7 +5,6 @@ import org.skyscreamer.yoga.mapper.ResultTraverser;
 
 public class HibernateResultTraverser extends ResultTraverser
 {
-   @SuppressWarnings("unchecked")
    @Override
    public Class<?> getClass(Object instance)
    {

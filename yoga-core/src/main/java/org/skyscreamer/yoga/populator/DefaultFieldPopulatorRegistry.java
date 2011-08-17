@@ -14,7 +14,8 @@ public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
 {
     private Map<Class<?>,FieldPopulator<?>> _registry = new HashMap<Class<?>, FieldPopulator<?>>();
 
-    public DefaultFieldPopulatorRegistry( List<FieldPopulator<?>> fieldPopulators )
+    @SuppressWarnings("rawtypes")
+	public DefaultFieldPopulatorRegistry( List<FieldPopulator<?>> fieldPopulators )
     {
         for ( FieldPopulator<?> fieldPopulator : fieldPopulators )
         {

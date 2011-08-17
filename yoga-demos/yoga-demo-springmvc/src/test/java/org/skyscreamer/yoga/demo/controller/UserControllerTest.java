@@ -28,7 +28,7 @@ public class UserControllerTest extends AbstractTest {
     @Test
     public void testGetNonExistantUser() throws Exception {
     	try {
-    		JSONObject data = getJSONObject( "/user/8675309", null );
+    		getJSONObject( "/user/8675309", null );
     		Assert.fail("HttpServerErrorException expected.");
     	}
     	catch (HttpClientErrorException e) {
