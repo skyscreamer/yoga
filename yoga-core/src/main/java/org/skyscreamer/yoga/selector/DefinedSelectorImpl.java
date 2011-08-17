@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.populator.FieldPopulator;
+
 import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +31,15 @@ public class DefinedSelectorImpl implements Selector
     }
 
     @Override
-    public boolean containsField( PropertyDescriptor property )
+    public boolean containsField( PropertyDescriptor property, FieldPopulator<?> fieldPopulator )
     {
+        if ( fieldPopulator != null && fieldPopulator.getSupportedFields() != null )
+        {
+            if ( !fieldPopulator.getSupportedFields().contains( property.getName() ) )
+            {
+                return false;
+            }
+        }
         return containsField( property.getName() );
     }
 

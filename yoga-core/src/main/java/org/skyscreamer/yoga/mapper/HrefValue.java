@@ -5,6 +5,7 @@ public class HrefValue
    String link;
    String type;
    Object underlying;
+
    public HrefValue(String link, String type, Object underlying)
    {
       super();

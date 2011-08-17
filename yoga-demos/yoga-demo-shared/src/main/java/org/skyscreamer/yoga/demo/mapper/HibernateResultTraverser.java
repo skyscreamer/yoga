@@ -7,9 +7,8 @@ public class HibernateResultTraverser extends ResultTraverser
 {
    @SuppressWarnings("unchecked")
    @Override
-   public Class<? extends Object> getClass(Object instance)
+   public Class<?> getClass(Object instance)
    {
       return Hibernate.getClass( instance );
    }
-
 }

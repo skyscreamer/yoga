@@ -1,18 +1,15 @@
 package org.skyscreamer.yoga.demo.controller;
 
-import java.lang.reflect.ParameterizedType;
-
 import org.hibernate.ObjectNotFoundException;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
-import org.skyscreamer.yoga.selector.Selector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.lang.reflect.ParameterizedType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,7 +22,7 @@ public abstract class AbstractController<T>
 	Class<T> _entityClass = returnedClass();
 
 	@RequestMapping("/{id}")
-    public @ResponseBody T get( @PathVariable long id, Selector selector )
+    public T get( @PathVariable long id )
     {
 		return _genericDao.find( _entityClass, id);
     }

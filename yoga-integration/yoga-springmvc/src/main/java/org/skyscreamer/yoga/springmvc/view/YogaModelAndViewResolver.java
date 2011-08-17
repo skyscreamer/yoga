@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 public class YogaModelAndViewResolver implements ModelAndViewResolver
 {
-
    ViewResolver viewResolver;
    
    public void setViewResolver(ViewResolver viewResolver)
