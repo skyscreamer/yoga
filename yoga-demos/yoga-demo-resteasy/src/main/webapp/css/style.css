@@ -169,10 +169,14 @@ section {
                 section .demo .wrapper h4 {
                     font-size: 15px;
                 }
-                section .demo input {
+                section .demo input,
+                section .demo textarea {
                     border: 1px solid #888;
                     margin-top: 30px;
                     width: 100%;
+                }
+                section .demo textarea {
+                    height: 150px;
                 }
         section .demo2 {
             float: right;
