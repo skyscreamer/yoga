@@ -29,6 +29,14 @@ public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
                     break;
                 }
             }
+            Type genericSuperclass = fieldPopulatorClass.getGenericSuperclass();
+            if ( genericSuperclass.toString().contains( FieldPopulatorSupport.class.getName() ) )
+            {
+                ParameterizedType parameterizedType = (ParameterizedType)genericSuperclass;
+                Class<?> clazz = (Class<?>)parameterizedType.getActualTypeArguments()[0];
+                _registry.put( clazz, fieldPopulator );
+                break;
+            }
         }
     }
 

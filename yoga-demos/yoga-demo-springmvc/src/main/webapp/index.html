@@ -47,19 +47,17 @@
           };
 
           var traditionalRest = function() {
-              var startTime = (new Date()).getTime(),
-                queryInput = 'user/1.json\n';
+              var startTime = (new Date()).getTime();
               $('#demo_status1').html('Running...');
               $('#demo_status1').css('color', '#ee0000');
-              $('#demo_query1').val(queryInput);
+              $('#demo_query1').val('user/1.json');
               setTimeout(function() {
                   $.get('user/1.json?selector=:(friends)', function(data1) {
                       $('#demo_name1').html(data1.name);
                       $(data1.friends).each(function(index1) {
                           var friendId = this.id;
                           var friendName = this.name;
-                          queryInput += ' |- user/' + friendId + '.json\n';
-                          $('#demo_query1').val(queryInput);
+                          $('#demo_query1').val('user/' + friendId + '.json');
                           setTimeout(function() {
                               $.get('user/' + friendId + '.json?selector=:(favoriteArtists)', function(data2) {
                                   var friendHtml = '<div id="demo_friend1_' + friendId + '">'
@@ -72,16 +70,14 @@
                                       var artistHtml = '<p>' + this.name + '</p>'
                                           + '<ul id="demo_artist_' + friendId + '_' + artistId + '"></ul>';
                                       $('#demo_friend1_' + friendId).append(artistHtml);
-                                      queryInput += '\t |- artist/' + artistId + '.json\n';
-                                      $('#demo_query1').val(queryInput);
+                                      $('#demo_query1').val('artist/' + artistId + '.json');
                                       setTimeout(function() {
                                           $.get('artist/' + artistId + '.json?selector=:(albums)', function(data3) {
                                               $(data3.albums).each(function(index3) {
                                                   var albumId = this.id;
                                                   var albumHtml = '<li id="demo_album_' + friendId + '_' + artistId + '_' + albumId + '"><b>' + this.title + '</b></li>';
                                                   $('#demo_artist_' + friendId + '_' + artistId).append(albumHtml);
-                                                  queryInput += '\t\t |- album/' + albumId + '.json\n';
-                                                  $('#demo_query1').val(queryInput);
+                                                  $('#demo_query1').val('album/' + albumId + '.json');
                                                   setTimeout(function() {
                                                       $.get('album/' + albumId + '.json?selector=:(songs)', function(data4) {
                                                           var songHtml = ': (';
@@ -126,7 +122,7 @@
             <ul>
                 <li><a href="#intro">Introduction</a></li>
                 <li><a href="#demo">Demo</a></li>
-                <li><a href="#howitworks">How It Works</a></li>
+                <li><a href="#getstarted">Get Started!</a></li>
                 <li><a href="#nextsteps">Next Steps</a></li>
                 <li><a href="#contrib">Contribute</a></li>
             </ul>
@@ -199,6 +195,16 @@
                 <a href="user.json?selector=:(favoriteArtists)">/user.json?selector=:(favoriteArtists:(albums))</a>
                 </blockquote>
             </div>
+
+            <div class="example">
+                <p>
+                    Finally, here's an example of a deep-dive query that would take a dozen queries in a traditional RESTful API.
+                    It returns a list of all the songs by my friends' favorite artists:
+                </p>
+                <blockquote>
+                    <a href="user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))">/user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))</a>
+                </blockquote>
+            </div>
         </section>
         <section>
             <a name="demo"></a>
@@ -232,7 +238,7 @@
                     <article id="demo_friends1">
                         <h4 class="demo_friends_header">Friends</h4>
                     </article>
-                    <textarea id="demo_query1" type="text" disabled="true"></textarea>
+                    <input id="demo_query1" type="text" disabled="true"/>
                 </section>
             </div>
 
@@ -241,68 +247,11 @@
             </div>
         </section>
         <section>
-            <a name="howitworks"></a>
-            <h2>How It Works</h2>
-            <p>We worked to make the code as simple as possible.</p>
-
-            <div class="example">
-                <p>First you decide which fields you want to make your defaults,
-                    using the @Core annotation on corresponding like so:</p>
-                <pre>
-<b>@Core</b>
-public long getId() {
-    return id;
-}
-                </pre>
-            </div>
-
-            <div class="example">
-                <p>This means that this field will always be returned regardless of the selector.  Then you create a convertor
-                    for the selector.  In spring it works like this:</p>
-                <pre>
-&lt;bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"&gt;
-    &lt;property name="converters"&gt;
-        &lt;set&gt;
-            &lt;bean class="org.skyscreamer.yoga.converter.SelectorConverter"/&gt;
-        &lt;/set&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-                </pre>
-            </div>
-
-            <div class="example">
-                <p>Or add the converter to an existing formatting conversion service.  Tell your controller how to read
-                the selector, then simply pass it with your return object to Yoga's default simple response mapper:</p>
-                <pre>
-@Autowired protected ObjectFieldPopulator _objectFieldPopulator;
-
-@RequestMapping("/user/{userId}")
-public void getUser(@PathVariable long userId, <b>@RequestParam(required = false) Selector selector</b>, ModelMap model) {
-    User user = _userDao.findByPrimaryKey(userId);
-    Map&lt;String, Object&gt; objectTree = <b>_objectFieldPopulator.populate( user, selector );</b>
-    model.put("response", objectTree);}
-                </pre>
-            </div>
-            <p>
-                Remember you'll still need to wire up a serialization mapper like Jackson to convert the model objects into
-                JSON.  You can look in the <a href="http://github.com/skyscreamer/yoga-demo">yoga-demo</a> source code for an
-                example of how to do that.
+            <a name="getstarted"></a>
+            <h2>Get Started!</h2>
+            <p>Ready to look at some code? Head over to the documentation section of our
+                <a href="https://github.com/skyscreamer/yoga/wiki">Wiki Page</a>.
             </p>
-            <p>
-                The response will navigate only along the lines identified by the selector.  If you are mapping a JPA entity
-                with lazy collection mappings, those mappings will only be invoked if the selector requests them.  You can
-                wire anything you want to a getXXX() pattern, and it will be a selectable field.  If more complicated DTO
-                marshalling logic is needed, you can create custom data populators by extending <b>AbstractFieldPopulator</b>.
-            </p>
-            <div class="example">
-                <p>
-                    Finally, here's an example of a deep-dive query that would take a dozen queries in a traditional RESTful API.
-                    It returns a list of all the songs by my friends' favorite artists:
-                </p>
-                <blockquote>
-                    <a href="user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))">/user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))</a>
-                </blockquote>
-            </div>
         </section>
 
         <section>
@@ -315,13 +264,8 @@ public void getUser(@PathVariable long userId, <b>@RequestParam(required = false
                     can be disabled in production to ensure that queries are approved and configured for response caching.
                 </li>
                 <li>
-                    Simplify integration with any existing REST framework.  The first demo application is done on Spring
-                    MVC, but there is no reason the code would need to depend on a particular implementation.
-                </li>
-                <li>
                     Add security hooks.  Allow field level security to limit the data that is accessible by the framework.
-                    A white-list approach to selector fields would prevent inadvertently exposing unwanted fields to 3rd
-                    parties.  This would also lend itself to enterprise SOA architectures where data needs to be more
+                    This would also lend itself to enterprise SOA architectures where data needs to be more
                     tightly controlled.
                 </li>
             </ul>
