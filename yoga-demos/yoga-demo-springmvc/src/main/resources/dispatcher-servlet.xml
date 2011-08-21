@@ -7,34 +7,35 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <context:annotation-config/>
-	<context:component-scan base-package="org.skyscreamer.yoga.demo.controller" />
+    <context:component-scan base-package="org.skyscreamer.yoga.demo.controller"/>
 
-	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
 
-	<bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="customModelAndViewResolvers">
-			<list>
-				<bean class="org.skyscreamer.yoga.springmvc.view.YogaModelAndViewResolver" p:viewResolver-ref="viewResolver"/>
-			</list>
-		</property>
-	</bean>
+    <bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="customModelAndViewResolvers">
+            <list>
+                <bean class="org.skyscreamer.yoga.springmvc.view.YogaModelAndViewResolver"
+                      p:viewResolver-ref="viewResolver"/>
+            </list>
+        </property>
+    </bean>
 
-	<bean name="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
+    <bean name="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
           p:order="1" p:ignoreAcceptHeader="true">
         <property name="mediaTypes">
             <map>
-                <entry key="xml"   value="application/xml"/>
+                <entry key="xml" value="application/xml"/>
                 <entry key="xhtml" value="text/html"/>
-                <entry key="json"  value="application/json"/>
+                <entry key="json" value="application/json"/>
             </map>
         </property>
-		<property name="defaultViews">
-			<list>
-				<bean class="org.skyscreamer.yoga.springmvc.view.XmlSelectorView"/>
-				<bean class="org.skyscreamer.yoga.springmvc.view.XhtmlSelectorView"/>
-				<bean class="org.skyscreamer.yoga.springmvc.view.JsonSelectorView"/>
-			</list>
-		</property>
-	</bean>
-	
+        <property name="defaultViews">
+            <list>
+                <bean class="org.skyscreamer.yoga.springmvc.view.XmlSelectorView"/>
+                <bean class="org.skyscreamer.yoga.springmvc.view.XhtmlSelectorView"/>
+                <bean class="org.skyscreamer.yoga.springmvc.view.JsonSelectorView"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>
