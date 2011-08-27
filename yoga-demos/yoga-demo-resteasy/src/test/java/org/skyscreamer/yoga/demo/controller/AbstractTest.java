@@ -13,51 +13,43 @@ import org.springframework.web.client.RestTemplate;
 /**
  * Created by IntelliJ IDEA. User: Carter Page Date: 4/19/11 Time: 6:18 PM
  */
-public abstract class AbstractTest
-{
+public abstract class AbstractTest {
 
-   static RunServer instance;
+    static RunServer instance;
 
-   @BeforeClass
-   public static void startServer() throws Exception
-   {
-      if (instance == null)
-      {
-         instance = new RunServer(8082);
-         instance.run(false);
-      }
-   }
+    @BeforeClass
+    public static void startServer() throws Exception {
+        if (instance == null) {
+            instance = new RunServer(8082);
+            instance.run(false);
+        }
+    }
 
-   protected JSONObject getJSONObject(String url, Map<String, String> params) throws Exception
-   {
-      String content = getContent(url, params);
-	  return new JSONObject(content);
-   }
+    protected JSONObject getJSONObject(String url, Map<String, String> params) throws Exception {
+        String content = getContent(url, params);
+        return new JSONObject(content);
+    }
 
-   protected JSONArray getJSONArray(String url, Map<String, String> params) throws Exception
-   {
-      String content = getContent(url, params);
-      return new JSONArray(content);
-   }
+    protected JSONArray getJSONArray(String url, Map<String, String> params) throws Exception {
+        String content = getContent(url, params);
+        return new JSONArray(content);
+    }
 
-   private String getContent(String url, Map<String, String> params) throws Exception,
-         UnsupportedEncodingException
-   {
-      RestTemplate restTemplate = new RestTemplate();
-      StringBuilder sb = new StringBuilder("http://localhost:8082").append(url).append(".json");
-      addParams(params, sb);
-      return restTemplate.getForObject(sb.toString(), String.class);
-   }
+    private String getContent(String url, Map<String, String> params) throws Exception,
+            UnsupportedEncodingException {
+        RestTemplate restTemplate = new RestTemplate();
+        StringBuilder sb = new StringBuilder("http://localhost:8082").append(url).append(".json");
+        addParams(params, sb);
+        return restTemplate.getForObject(sb.toString(), String.class);
+    }
 
-   private void addParams(Map<String, String> params, StringBuilder sb)
-   {
-      if (params == null)
-         return;
+    private void addParams(Map<String, String> params, StringBuilder sb) {
+        if (params == null)
+            return;
 
-      String append = "?";
-      for (Entry<String, String> entry : params.entrySet())
-      {
-         sb.append(append).append(entry.getKey()).append("=").append(entry.getValue());
-      }
-   }
+        String append = "?";
+        for (Entry<String, String> entry : params.entrySet()) {
+            sb.append(append).append(entry.getKey()).append("=").append(entry.getValue());
+        }
+    }
 }

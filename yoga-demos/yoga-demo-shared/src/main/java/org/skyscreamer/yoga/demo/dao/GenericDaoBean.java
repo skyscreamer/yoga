@@ -13,21 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GenericDaoBean extends HibernateDaoSupport implements GenericDao {
 
-	@Override
-	public <T> T find(Class<T> type, long id) {
-		T entity = getHibernateTemplate().load(type, id);
-		Hibernate.getClass(entity); // Force exception if not found (Hibernate 3 defaults to lazy load.)
-		return entity;
-	}
+    @Override
+    public <T> T find(Class<T> type, long id) {
+        T entity = getHibernateTemplate().load(type, id);
+        Hibernate.getClass(entity); // Force exception if not found (Hibernate 3 defaults to lazy load.)
+        return entity;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> List<T> findAll(Class<T> type) {
-		return getHibernateTemplate().find("from " + type.getName());
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAll(Class<T> type) {
+        return getHibernateTemplate().find("from " + type.getName());
+    }
 
     @Autowired
     public void setSession(SessionFactory sessionFactory) {
-		super.setSessionFactory(sessionFactory);
-	}
+        super.setSessionFactory(sessionFactory);
+    }
 }
