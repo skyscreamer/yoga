@@ -13,10 +13,6 @@ import java.util.List;
  */
 public abstract class FieldPopulatorSupport<M> implements FieldPopulator<M>
 {
-    public void addExtraFields( Selector selector, M model, ResultTraverser traverser, HierarchicalModel output )
-    {
-    }
-
     public List<String> getCoreFields()
     {
         return new ArrayList<String>();

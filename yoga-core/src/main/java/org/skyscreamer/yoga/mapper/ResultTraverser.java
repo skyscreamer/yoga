@@ -2,19 +2,17 @@ package org.skyscreamer.yoga.mapper;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
-import org.skyscreamer.yoga.populator.FieldPopulator;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
-import org.skyscreamer.yoga.populator.ValueReader;
+import org.skyscreamer.yoga.populator.*;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
 import org.skyscreamer.yoga.uri.AnnotationURITemplateGenerator;
 import org.skyscreamer.yoga.uri.URICreator;
 import org.skyscreamer.yoga.uri.URITemplateGenerator;
-import org.skyscreamer.yoga.util.NameUtil;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,12 +22,16 @@ public class ResultTraverser
 {
     private FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry(
             new ArrayList<FieldPopulator<?>>() );
-    private URICreator uriCreator = new URICreator();
-    private URITemplateGenerator uriTemplateGenerator = new AnnotationURITemplateGenerator();
+    private URICreator _uriCreator = new URICreator();
+    private URITemplateGenerator _uriTemplateGenerator = new AnnotationURITemplateGenerator();
+    private ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
+
+    private boolean _showDefinition = false;
+    private boolean _showHref = true;
 
     public void traverse( Object instance, Selector fieldSelector, HierarchicalModel model, String hrefSuffix )
     {
-        Class<?> instanceType = getClass( instance );
+        Class<?> instanceType = findClass( instance );
         addExtraInfo( instance, fieldSelector, model, instanceType, hrefSuffix );
         addProperties( instance, fieldSelector, model, instanceType, hrefSuffix );
     }
@@ -40,6 +42,96 @@ public class ResultTraverser
     {
         FieldPopulator populator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
 
+        if ( _showHref )
+        {
+            addHref( instance, model, instanceType, hrefSuffix, populator );
+        }
+
+        if ( _showDefinition )
+        {
+            addDefinition( model, instanceType, populator );
+        }
+
+        addAnnotatedExtraFields( fieldSelector, model, hrefSuffix, populator );
+    }
+
+    private void addAnnotatedExtraFields( Selector fieldSelector, HierarchicalModel model, String hrefSuffix,
+            FieldPopulator populator )
+    {
+        for ( Method method : getPopulatorExtraFieldMethods( populator ) )
+        {
+            ExtraField extraField = method.getAnnotation( ExtraField.class );
+            if ( fieldSelector.containsField( extraField.value() ) )
+            {
+                Selector childSelector = fieldSelector.getField( extraField.value() );
+                try
+                {
+                    Object fieldValue = method.invoke( populator );
+                    if ( isNotBean( fieldValue.getClass() ) )
+                    {
+                        model.addSimple( extraField.value(), fieldValue );
+                    }
+                    else if ( Iterable.class.isAssignableFrom( fieldValue.getClass() ) )
+                    {
+                        traverseIterable( childSelector, model, extraField.value(), (Iterable<?>)fieldValue, hrefSuffix );
+                    }
+                    else
+                    {
+                        traverseChild( childSelector, model, extraField.value(), fieldValue, hrefSuffix );
+                    }
+                }
+                catch ( Exception e )
+                {
+                }
+            }
+        }
+    }
+
+    private void addDefinition( HierarchicalModel model, Class<?> instanceType, FieldPopulator populator )
+    {
+        List<String> definition = new ArrayList<String>();
+        if ( populator != null && populator.getSupportedFields() != null )
+        {
+            definition = populator.getSupportedFields();
+        }
+        else
+        {
+            for ( PropertyDescriptor property : getReadableProperties( instanceType ) )
+            {
+                if ( !property.getName().equals( "class" ) )
+                {
+                    definition.add( property.getName() );
+                }
+            }
+
+            for ( Method method : getPopulatorExtraFieldMethods( populator ) )
+            {
+                ExtraField extraField = method.getAnnotation( ExtraField.class );
+                definition.add( extraField.value() );
+            }
+        }
+        model.addSimple( SelectorParser.DEFINITION, definition );
+    }
+
+    private List<Method> getPopulatorExtraFieldMethods( FieldPopulator populator )
+    {
+        List<Method> result = new ArrayList<Method>();
+        if ( populator != null )
+        {
+            for ( Method method : populator.getClass().getDeclaredMethods() )
+            {
+                if ( method.isAnnotationPresent( ExtraField.class ) && method.getGenericParameterTypes().length == 0 )
+                {
+                    result.add( method );
+                }
+            }
+        }
+        return result;
+    }
+
+    private void addHref( Object instance, HierarchicalModel model, Class<?> instanceType, String hrefSuffix,
+            FieldPopulator populator )
+    {
         String href = null;
         if ( instanceType.isAnnotationPresent( URITemplate.class ) )
         {
@@ -56,20 +148,14 @@ public class ResultTraverser
                 href += "." + hrefSuffix;
             model.addSimple( SelectorParser.HREF, getHref( href, instance ) );
         }
-
-        if ( populator != null )
-        {
-            populator.addExtraFields( fieldSelector, instance, this, model );
-        }
     }
 
     protected void addProperties( Object instance, Selector fieldSelector, HierarchicalModel model,
         Class<?> instanceType, String hrefSuffix )
     {
         FieldPopulator<?> fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
-        for ( PropertyDescriptor property : PropertyUtils.getPropertyDescriptors( instanceType ) )
+        for ( PropertyDescriptor property : getReadableProperties( instanceType ) )
         {
-            String field = property.getName();
             try
             {
                 if ( fieldSelector.containsField( property, fieldPopulator ) )
@@ -87,7 +173,7 @@ public class ResultTraverser
                     }
                     else
                     {
-                        traverseChild( fieldSelector, model, property, field, value, hrefSuffix );
+                        traverseChild( fieldSelector, model, property, value, hrefSuffix );
                     }
                 }
             }
@@ -98,9 +184,22 @@ public class ResultTraverser
         }
     }
 
+    private List<PropertyDescriptor> getReadableProperties( Class<?> instanceType )
+    {
+        List<PropertyDescriptor> result = new ArrayList<PropertyDescriptor>();
+        for ( PropertyDescriptor descriptor : PropertyUtils.getPropertyDescriptors( instanceType ) )
+        {
+            if ( descriptor.getReadMethod() != null && !descriptor.getName().equals( "class" ) )
+            {
+                result.add( descriptor );
+            }
+        }
+        return result;
+    }
+
     protected Object getHref( String uriTemplate, final Object instance )
     {
-        return uriCreator.getHref( uriTemplate, new ValueReader()
+        return _uriCreator.getHref( uriTemplate, new ValueReader()
         {
             @Override
             public Object getValue( String property )
@@ -118,60 +217,57 @@ public class ResultTraverser
         } );
     }
 
-    public void traverseIterable( Selector fieldSelector, HierarchicalModel model, PropertyDescriptor property,
+    private void traverseIterable( Selector fieldSelector, HierarchicalModel model, PropertyDescriptor property,
         Iterable<?> list, String hrefSuffix )
     {
         HierarchicalModel listModel = model.createList( property, list );
         for ( Object o : list )
         {
-            Class<?> type = getClass( o );
+            Class<?> type = findClass( o );
             if ( isNotBean( type ) )
             {
                 listModel.addSimple( property, list );
             }
             else
             {
-                traverseChild( fieldSelector, listModel, property, NameUtil.getName( type ), o, hrefSuffix );
+                traverseChild( fieldSelector, listModel, property, o, hrefSuffix );
             }
         }
     }
 
-    public void traverseIterable( Selector fieldSelector, HierarchicalModel model, String property, Iterable<?> list,
+    private void traverseIterable( Selector fieldSelector, HierarchicalModel model, String property, Iterable<?> list,
         String hrefSuffix )
     {
         HierarchicalModel listModel = model.createList( property, list );
         for ( Object o : list )
         {
-            Class<?> type = getClass( o );
+            Class<?> type = findClass( o );
             if ( isNotBean( type ) )
             {
                 listModel.addSimple( property, list );
             }
             else
             {
-                traverseChild( fieldSelector, listModel, property, NameUtil.getName( type ), o, hrefSuffix );
+                traverseChild( fieldSelector, listModel, property, o, hrefSuffix );
             }
         }
     }
 
-    // allow this to be overridden.
-    public void traverseChild( Selector parentSelector, HierarchicalModel parent, PropertyDescriptor property,
-        String name, Object value, String hrefSuffix )
-    {
-        traverse( value, parentSelector.getField( property ), parent.createChild( property, value ), hrefSuffix );
-    }
-
-    // allow this to be overridden.
-    public void traverseChild( Selector parentSelector, HierarchicalModel parent, String property, String name,
+    private void traverseChild( Selector parentSelector, HierarchicalModel parent, PropertyDescriptor property,
         Object value, String hrefSuffix )
     {
         traverse( value, parentSelector.getField( property ), parent.createChild( property, value ), hrefSuffix );
     }
 
-    // TODO: make this into an interface. This should be a strategy
-    public Class<?> getClass( Object instance )
+    private void traverseChild( Selector parentSelector, HierarchicalModel parent, String property, Object value,
+        String hrefSuffix )
     {
-        return instance.getClass();
+        traverse( value, parentSelector.getField( property ), parent.createChild( property, value ), hrefSuffix );
+    }
+
+    public Class<?> findClass( Object instance )
+    {
+        return _classFinderStrategy.findClass( instance );
     }
 
     protected boolean isNotBean( Class<?> clazz )
@@ -181,28 +277,51 @@ public class ResultTraverser
                 || Character.class.isAssignableFrom( clazz );
     }
 
+    public URICreator getUriCreator()
+    {
+        return _uriCreator;
+    }
+
+    public void setUriCreator( URICreator uriCreator )
+    {
+        this._uriCreator = uriCreator;
+    }
+
+    public URITemplateGenerator getUriTemplateGenerator()
+    {
+        return _uriTemplateGenerator;
+    }
+
+    public void setUriTemplateGenerator( URITemplateGenerator uriTemplateGenerator )
+    {
+        this._uriTemplateGenerator = uriTemplateGenerator;
+    }
+
     public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
     {
         _fieldPopulatorRegistry = fieldPopulatorRegistry;
     }
 
-    public URICreator getUriCreator()
+    public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
-        return uriCreator;
+        _classFinderStrategy = classFinderStrategy;
     }
 
-    public void setUriCreator( URICreator uriCreator )
+    private class DefaultClassFinderStrategy implements ClassFinderStrategy
     {
-        this.uriCreator = uriCreator;
+        public Class<?> findClass( Object instance )
+        {
+            return instance.getClass();
+        }
     }
 
-    public URITemplateGenerator getUriTemplateGenerator()
+    public void setShowDefinition( boolean showDefinition )
     {
-        return uriTemplateGenerator;
+        _showDefinition = showDefinition;
     }
 
-    public void setUriTemplateGenerator( URITemplateGenerator uriTemplateGenerator )
+    public void setShowHref( boolean showHref )
     {
-        this.uriTemplateGenerator = uriTemplateGenerator;
+        _showHref = showHref;
     }
 }
