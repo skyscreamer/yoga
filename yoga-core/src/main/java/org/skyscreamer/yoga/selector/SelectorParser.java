@@ -3,6 +3,7 @@ package org.skyscreamer.yoga.selector;
 public class SelectorParser
 {
     public static final String HREF = "href";
+    public static final String DEFINITION = "definition";
 
     public static Selector parseSelector( String selectorStr )
     {
