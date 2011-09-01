@@ -36,12 +36,13 @@
     <bean id="dbPopulator" class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
           p:scripts="classpath:sampledb.sql"/>
 
-    <bean id="transactionManager"
-          class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
           p:dataSource-ref="dataSource"/>
 
-    <bean id="resultTraverser" class="org.skyscreamer.yoga.demo.mapper.HibernateResultTraverser"
-          p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
+    <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser"
+          p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry" p:classFinderStrategy-ref="hibernateClassFinder"/>
+
+    <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy"/>
 
     <bean id="fieldPopulatorRegistry" class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">
         <constructor-arg>
@@ -50,5 +51,4 @@
             </list>
         </constructor-arg>
     </bean>
-
 </beans>
