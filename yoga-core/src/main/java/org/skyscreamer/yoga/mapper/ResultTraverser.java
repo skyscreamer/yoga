@@ -11,6 +11,7 @@ import org.skyscreamer.yoga.uri.URITemplateGenerator;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,37 +53,47 @@ public class ResultTraverser
             addDefinition( model, instanceType, populator );
         }
 
-        addAnnotatedExtraFields( fieldSelector, model, hrefSuffix, populator );
+        addAnnotatedExtraFields( fieldSelector, model, hrefSuffix, populator, instance, instanceType );
     }
 
     private void addAnnotatedExtraFields( Selector fieldSelector, HierarchicalModel model, String hrefSuffix,
-            FieldPopulator populator )
+            FieldPopulator populator, Object instance, Class<?> instanceType )
     {
-        for ( Method method : getPopulatorExtraFieldMethods( populator ) )
+        for ( Method method : getPopulatorExtraFieldMethods( populator, instanceType ) )
         {
             ExtraField extraField = method.getAnnotation( ExtraField.class );
             if ( fieldSelector.containsField( extraField.value() ) )
             {
-                Selector childSelector = fieldSelector.getField( extraField.value() );
-                try
-                {
-                    Object fieldValue = method.invoke( populator );
-                    if ( isNotBean( fieldValue.getClass() ) )
-                    {
-                        model.addSimple( extraField.value(), fieldValue );
-                    }
-                    else if ( Iterable.class.isAssignableFrom( fieldValue.getClass() ) )
-                    {
-                        traverseIterable( childSelector, model, extraField.value(), (Iterable<?>)fieldValue, hrefSuffix );
-                    }
-                    else
-                    {
-                        traverseChild( childSelector, model, extraField.value(), fieldValue, hrefSuffix );
-                    }
-                }
-                catch ( Exception e )
-                {
-                }
+				Object fieldValue;
+				try
+				{
+					if ( method.getParameterTypes().length == 0 )
+					{
+						 fieldValue = method.invoke( populator );
+					}
+					else
+					{
+						fieldValue = method.invoke( populator, instance );
+					}
+				}
+				catch ( Exception e )
+				{
+					continue;
+				}
+
+				Selector childSelector = fieldSelector.getField( extraField.value() );
+				if ( isNotBean( fieldValue.getClass() ) )
+				{
+					model.addSimple( extraField.value(), fieldValue );
+				}
+				else if ( Iterable.class.isAssignableFrom( fieldValue.getClass() ) )
+				{
+					traverseIterable( childSelector, model, extraField.value(), (Iterable<?>)fieldValue, hrefSuffix );
+				}
+				else
+				{
+					traverseChild( childSelector, model, extraField.value(), fieldValue, hrefSuffix );
+				}
             }
         }
     }
@@ -104,7 +115,7 @@ public class ResultTraverser
                 }
             }
 
-            for ( Method method : getPopulatorExtraFieldMethods( populator ) )
+            for ( Method method : getPopulatorExtraFieldMethods( populator, instanceType ) )
             {
                 ExtraField extraField = method.getAnnotation( ExtraField.class );
                 definition.add( extraField.value() );
@@ -113,16 +124,21 @@ public class ResultTraverser
         model.addSimple( SelectorParser.DEFINITION, definition );
     }
 
-    private List<Method> getPopulatorExtraFieldMethods( FieldPopulator populator )
+    private List<Method> getPopulatorExtraFieldMethods( FieldPopulator populator, Class<?> instanceType )
     {
         List<Method> result = new ArrayList<Method>();
         if ( populator != null )
         {
             for ( Method method : populator.getClass().getDeclaredMethods() )
             {
-                if ( method.isAnnotationPresent( ExtraField.class ) && method.getGenericParameterTypes().length == 0 )
+                if ( method.isAnnotationPresent( ExtraField.class ) )
                 {
-                    result.add( method );
+					Class<?>[] parameterTypes = method.getParameterTypes();
+					if ( parameterTypes.length == 0 ||
+						( parameterTypes.length == 1 && parameterTypes[0].equals( instanceType ) ) )
+					{
+						result.add( method );
+					}
                 }
             }
         }
