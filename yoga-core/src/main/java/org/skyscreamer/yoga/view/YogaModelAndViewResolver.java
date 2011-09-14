@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.springmvc.view;
+package org.skyscreamer.yoga.view;
 
 import java.lang.reflect.Method;
 import java.util.Locale;

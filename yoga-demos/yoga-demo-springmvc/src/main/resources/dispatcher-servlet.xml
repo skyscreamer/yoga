@@ -14,7 +14,7 @@
     <bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="customModelAndViewResolvers">
             <list>
-                <bean class="org.skyscreamer.yoga.springmvc.view.YogaModelAndViewResolver"
+                <bean class="org.skyscreamer.yoga.view.YogaModelAndViewResolver"
                       p:viewResolver-ref="viewResolver"/>
             </list>
         </property>
@@ -31,9 +31,9 @@
         </property>
         <property name="defaultViews">
             <list>
-                <bean class="org.skyscreamer.yoga.springmvc.view.XmlSelectorView"/>
-                <bean class="org.skyscreamer.yoga.springmvc.view.XhtmlSelectorView"/>
-                <bean class="org.skyscreamer.yoga.springmvc.view.JsonSelectorView"/>
+                <bean class="org.skyscreamer.yoga.view.XmlSelectorView"/>
+                <bean class="org.skyscreamer.yoga.view.XhtmlSelectorView"/>
+                <bean class="org.skyscreamer.yoga.view.JsonSelectorView"/>
             </list>
         </property>
     </bean>

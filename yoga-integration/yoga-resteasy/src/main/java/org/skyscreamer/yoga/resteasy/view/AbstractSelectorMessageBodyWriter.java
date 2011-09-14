@@ -15,7 +15,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.springmvc.view.AbstractYogaView;
+import org.skyscreamer.yoga.view.AbstractYogaView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>

@@ -16,7 +16,6 @@
     <url>https://github.com/skyscreamer/yoga</url>
 
     <modules>
-        <module>yoga-springmvc</module>
         <module>yoga-resteasy</module>
     </modules>
 
