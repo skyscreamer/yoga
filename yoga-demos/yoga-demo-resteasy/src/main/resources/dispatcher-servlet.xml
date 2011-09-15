@@ -8,7 +8,7 @@
 
     <context:annotation-config/>
 
-    <context:component-scan base-package="org.skyscreamer.yoga.demo.test.resources"/>
+    <context:component-scan base-package="org.skyscreamer.yoga.demo.resteasy.resources"/>
     <context:component-scan base-package="org.skyscreamer.yoga.resteasy" use-default-filters="false">
         <context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider"/>
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
