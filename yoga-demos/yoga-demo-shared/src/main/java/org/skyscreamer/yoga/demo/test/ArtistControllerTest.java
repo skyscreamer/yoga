@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.controller;
+package org.skyscreamer.yoga.demo.test;
 
 import java.util.Collections;
 import java.util.Map;
@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.yoga.demo.test.AbstractTest;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,7 +21,8 @@ public class ArtistControllerTest extends AbstractTest {
         JSONObject data = getJSONObject("/artist/1", null);
         Assert.assertEquals("Arcade Fire", data.getString("name"));
         Assert.assertEquals(1, data.getLong("id"));
-        Assert.assertEquals(3, data.length());
+        Assert.assertEquals(4, data.length());
+        testForNavigationLinks(data, "/artist/1.json", "albums", "fans");
     }
 
     @Test
