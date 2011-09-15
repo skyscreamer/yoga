@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.controller;
+package org.skyscreamer.yoga.demo.test.controller;
 
 import org.hibernate.ObjectNotFoundException;
 import org.skyscreamer.yoga.demo.dao.GenericDao;

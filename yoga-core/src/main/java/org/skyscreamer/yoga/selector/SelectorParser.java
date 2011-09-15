@@ -7,12 +7,12 @@ public class SelectorParser
 
     public static Selector parseSelector( String selectorStr )
     {
-        CoreSelector coreSelector = new CoreSelector();
+        Selector selector = new CoreSelector();
         if ( selectorStr != null )
         {
             try
             {
-                return new CombinedSelector( coreSelector, parse( selectorStr ) );
+                selector = new CombinedSelector( selector, parse( selectorStr ) );
             }
             catch ( ParseSelectorException e )
             {
@@ -20,7 +20,7 @@ public class SelectorParser
                 throw new IllegalArgumentException( "Could not parse selector", e );
             }
         }
-        return coreSelector;
+        return selector;
     }
 
     public static DefinedSelectorImpl parse( String selectorExpression ) throws ParseSelectorException

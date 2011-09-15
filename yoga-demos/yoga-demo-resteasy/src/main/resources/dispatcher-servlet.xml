@@ -8,7 +8,7 @@
 
     <context:annotation-config/>
 
-    <context:component-scan base-package="org.skyscreamer.yoga.demo.resteasy.resources"/>
+    <context:component-scan base-package="org.skyscreamer.yoga.demo.test.resources"/>
     <context:component-scan base-package="org.skyscreamer.yoga.resteasy" use-default-filters="false">
         <context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider"/>
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
@@ -16,7 +16,7 @@
 
     <import resource="classpath:springmvc-resteasy.xml"/>
 
-    <!-- Override the default resteasy behavior, which is broken.  TODO: move this to RESTEasy's codebase -->
+    <!-- Override the default test.test behavior, which is broken.  TODO: move this to RESTEasy's codebase -->
     <bean id="resteasy.spring.bean.processor" class="org.skyscreamer.yoga.resteasy.util.RESTEasySpringListener"/>
 
     <bean id="resteasy.dispatcher" class="org.jboss.resteasy.core.SynchronousDispatcher"
