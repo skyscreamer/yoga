@@ -3,6 +3,7 @@ package org.skyscreamer.yoga.mapper;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.populator.*;
+import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
 import org.skyscreamer.yoga.uri.AnnotationURITemplateGenerator;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 public class ResultTraverser
 {
+    public static final boolean SHOW_NAVIGATION_LINKS = true;
     private FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry(
             new ArrayList<FieldPopulator<?>>() );
     private URICreator _uriCreator = new URICreator();
@@ -170,6 +172,7 @@ public class ResultTraverser
         Class<?> instanceType, String hrefSuffix )
     {
         FieldPopulator<?> fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
+        List<PropertyDescriptor> unshownProperties = new ArrayList<PropertyDescriptor>();
         for ( PropertyDescriptor property : getReadableProperties( instanceType ) )
         {
             try
@@ -192,10 +195,25 @@ public class ResultTraverser
                         traverseChild( fieldSelector, model, property, value, hrefSuffix );
                     }
                 }
+                else {
+                    unshownProperties.add( property );
+                }
             }
             catch ( Exception e )
             {
                 throw new RuntimeException( e );
+            }
+        }
+
+        // Extract this into a new method
+        if ( SHOW_NAVIGATION_LINKS && unshownProperties.size() > 0 && fieldSelector instanceof CoreSelector ) {
+            HierarchicalModel navigationLinks = model.createChild( "navigationLinks", "useless parameter" );
+            for( PropertyDescriptor property : unshownProperties )
+            {
+                HierarchicalModel propertyLink = navigationLinks.createChild( property, "another useless parameter" );
+                propertyLink.addSimple( "name", property.getName() );
+                String hrefSuffixAndSelector = hrefSuffix + "?selector=:(" + property.getName() + ")";
+                addHref( instance, propertyLink, instanceType, hrefSuffixAndSelector, fieldPopulator );
             }
         }
     }

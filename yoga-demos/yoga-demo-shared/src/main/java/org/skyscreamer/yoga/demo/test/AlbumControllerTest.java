@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.controller;
+package org.skyscreamer.yoga.demo.test;
 
 import java.util.Collections;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.yoga.demo.test.AbstractTest;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +22,8 @@ public class AlbumControllerTest extends AbstractTest {
         Assert.assertEquals("Funeral", data.getString("title"));
         Assert.assertEquals(1, data.getLong("id"));
         Assert.assertEquals(2004, data.getInt("year"));
-        Assert.assertEquals(4, data.length());
+        Assert.assertEquals(5, data.length());
+        testForNavigationLinks(data, "/album/1.json", "artist", "songs");
     }
 
     @Test
