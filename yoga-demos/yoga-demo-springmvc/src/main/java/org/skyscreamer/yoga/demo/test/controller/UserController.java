@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.controller;
+package org.skyscreamer.yoga.demo.test.controller;
 
 import org.skyscreamer.yoga.demo.model.User;
 import org.springframework.stereotype.Controller;

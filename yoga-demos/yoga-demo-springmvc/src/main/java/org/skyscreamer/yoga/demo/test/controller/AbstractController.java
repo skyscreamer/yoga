@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.controller;
+package org.skyscreamer.yoga.demo.test.controller;
 
 import org.hibernate.ObjectNotFoundException;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
@@ -15,27 +15,26 @@ import java.lang.reflect.ParameterizedType;
  * Created by IntelliJ IDEA.
  * User: Carter Page
  */
-public abstract class AbstractController<T>
-{
-	@Autowired GenericDao _genericDao;
-	
-	Class<T> _entityClass = returnedClass();
+public abstract class AbstractController<T> {
+    @Autowired
+    GenericDao _genericDao;
 
-	@RequestMapping("/{id}")
-    public T get( @PathVariable long id )
-    {
-		return _genericDao.find( _entityClass, id);
+    Class<T> _entityClass = returnedClass();
+
+    @RequestMapping("/{id}")
+    public T get(@PathVariable long id) {
+        return _genericDao.find(_entityClass, id);
     }
 
     // http://blog.xebia.com/2009/02/acessing-generic-types-at-runtime-in-java/
     @SuppressWarnings("unchecked")
-	private Class<T> returnedClass()
-    {
+    private Class<T> returnedClass() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         return (Class<T>) parameterizedType.getActualTypeArguments()[0];
     }
-    
+
     @ExceptionHandler(ObjectNotFoundException.class)
-    @ResponseStatus(value=HttpStatus.NOT_FOUND,reason="No such resource")
-    public void notFound() { }
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such resource")
+    public void notFound() {
+    }
 }

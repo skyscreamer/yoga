@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Provider
 public class ResourceNotFoundException implements ExceptionMapper<ObjectNotFoundException> {
-	@Override
-	public Response toResponse(ObjectNotFoundException exception) {
-	    return Response
-	    		.status(Response.Status.NOT_FOUND)
-	    		.entity("Resource not found")
-	    		.type(MediaType.TEXT_PLAIN)
-	    		.build();
-	}
+    @Override
+    public Response toResponse(ObjectNotFoundException exception) {
+        return Response
+                .status(Response.Status.NOT_FOUND)
+                .entity("Resource not found")
+                .type(MediaType.TEXT_PLAIN)
+                .build();
+    }
 }
