@@ -1,6 +1,6 @@
-package org.skyscreamer.yoga.demo.controller;
+package org.skyscreamer.yoga.demo.test.controller;
 
-import org.skyscreamer.yoga.demo.model.Artist;
+import org.skyscreamer.yoga.demo.model.Song;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * User: Carter Page
  */
 @Controller
-@RequestMapping("/artist")
-public class ArtistController extends AbstractController<Artist>
+@RequestMapping("/song")
+public class SongController extends AbstractController<Song>
 {
 }
