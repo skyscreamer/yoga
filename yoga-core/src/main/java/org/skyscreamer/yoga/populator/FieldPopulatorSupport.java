@@ -1,9 +1,5 @@
 package org.skyscreamer.yoga.populator;
 
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
-import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.selector.Selector;
-
 import java.util.ArrayList;
 import java.util.List;
 
