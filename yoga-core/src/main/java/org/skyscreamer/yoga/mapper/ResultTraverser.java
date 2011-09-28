@@ -41,7 +41,8 @@ public class ResultTraverser
    protected <T> void addExtraInfo(Object instance, Selector fieldSelector,
          HierarchicalModel model, Class<T> instanceType, String hrefSuffix)
    {
-      FieldPopulator<T> populator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
+      @SuppressWarnings("unchecked")
+	  FieldPopulator<T> populator = (FieldPopulator<T>) _fieldPopulatorRegistry.getFieldPopulator( instanceType );
 
       if (_showHref)
       {
