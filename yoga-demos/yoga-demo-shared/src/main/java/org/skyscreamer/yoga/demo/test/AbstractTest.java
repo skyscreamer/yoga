@@ -1,14 +1,13 @@
 package org.skyscreamer.yoga.demo.test;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.springframework.web.client.RestTemplate;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.junit.Assert;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by IntelliJ IDEA.
