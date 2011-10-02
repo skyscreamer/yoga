@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class ResultTraverser
 {
-   public static final boolean SHOW_NAVIGATION_LINKS = true;
    private FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry(
          new ArrayList<FieldPopulator<?>>() );
    private URICreator _uriCreator = new URICreator();
@@ -28,7 +27,7 @@ public class ResultTraverser
    private ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
 
    private boolean _showDefinition = false;
-   private boolean _showHref = true;
+   private boolean _showNavigationLinks = true;
 
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model,
          String hrefSuffix)
@@ -44,7 +43,7 @@ public class ResultTraverser
       @SuppressWarnings("unchecked")
 	  FieldPopulator<T> populator = (FieldPopulator<T>) _fieldPopulatorRegistry.getFieldPopulator( instanceType );
 
-      if (_showHref)
+      if (_showNavigationLinks)
       {
          addHref( instance, model, instanceType, hrefSuffix, populator );
       }
@@ -213,7 +212,7 @@ public class ResultTraverser
       }
 
       // Extract this into a new method
-      if (SHOW_NAVIGATION_LINKS && unshownProperties.size() > 0
+      if (_showNavigationLinks && unshownProperties.size() > 0
             && fieldSelector instanceof CoreSelector)
       {
          HierarchicalModel navigationLinks = model.createChild( "navigationLinks",
@@ -374,9 +373,9 @@ public class ResultTraverser
    {
       _showDefinition = showDefinition;
    }
-
-   public void setShowHref(boolean showHref)
+   
+   public void setShowNavigationLinks(boolean showNavigationLinks) 
    {
-      _showHref = showHref;
+	   this._showNavigationLinks = showNavigationLinks;
    }
 }
