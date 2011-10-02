@@ -45,7 +45,9 @@
 
 	<bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser"
 		p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"
-		p:classFinderStrategy-ref="hibernateClassFinder" />
+		p:classFinderStrategy-ref="hibernateClassFinder" 
+		p:showNavigationLinks="true" 
+		p:showDefinition="false" />
 
 	<bean id="hibernateClassFinder"
 		class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
