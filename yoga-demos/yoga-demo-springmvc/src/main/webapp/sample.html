@@ -1,0 +1,157 @@
+<html>
+<head><title>Sample Selector Builder</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="js/selector.js"></script>
+    <script type="text/javascript" src="http://static.jstree.com/v.1.0pre/jquery.jstree.js"></script>
+
+    <!--<link rel="stylesheet" href="http://jquery.bassistance.de/treeview/jquery.treeview.css" type="text/css" />-->
+    <!--<script type="text/javascript" src="http://jquery.bassistance.de/treeview/jquery.treeview.js"></script>-->
+    <!--<script>-->
+        <!--$(document).ready(function(){-->
+            <!--$("#example").treeview();-->
+        <!--});-->
+    <!--</script>-->
+    <script type="text/javascript">
+        var selector = new Selector();
+
+        function toggleOn(id) {
+            selector.toggle_on(id);
+            setSelector(selector.getQuery());
+        }
+
+        function toggleOff(id) {
+            selector.toggle_off(id);
+            setSelector(selector.getQuery());
+        }
+
+        function setSelector(newSelector) {
+            var selector = (newSelector.length > 0) ? '?selector=' + newSelector : '';
+            $('#generated_selector').html(selector);
+            reloadPreview(selector);
+        }
+
+        function reloadPreview(selector) {
+            var start = new Date().getTime();
+            $.ajax({
+                url: '/user/1.json' + selector,
+                success: function(data) {
+                    $('#data_preview').html(JSON.stringify(data, null, '\t'));
+                    var end = new Date().getTime();
+                    $('#load_time').html(end - start);
+                }
+            });
+        }
+
+        function entry_core(title) {
+            return '<input type="checkbox" checked disabled > ' + title;
+        }
+
+        $(function() {
+            $('#selector_builder')
+                .bind("select_node.jstree deselect_node.jstree open_node.jstree close_node.jstree", function(event, data) {
+                        var jstree = data.inst;
+                        var obj = data.rslt.obj;
+                        var id = data.rslt.obj.attr("id");
+                        var isCore = data.rslt.obj.attr("is_core");
+                        if (event.type == 'select_node') {
+                            if (isCore) {
+                                jstree.deselect_node(obj);
+                                return false;
+                            }
+                            if (jstree.is_closed(obj)) { jstree.open_node(obj); }
+                            toggleOn(id);
+                        }
+                        if (event.type == 'deselect_node') {
+                            if (jstree.is_open(obj)) { jstree.close_node(obj); }
+                            toggleOff(id);
+                        }
+                        if (event.type == 'open_node' && !jstree.is_selected(obj)) { jstree.select_node(obj); }
+                        if (event.type == 'close_node' && jstree.is_selected(obj)) { jstree.deselect_node(obj); }
+                    } )
+                .jstree({
+                    "plugins" : [ "themes", "json_data", "ui" ],
+                    "core" : { "html_titles" : true },
+                    "ui" : { "select_multiple_modifier": "on", "selected_parent_close": "deselect" },
+                    "json_data" : {
+                        "data" : [
+                            { "data": 'favoriteArtists (Artist)', "attr": { id: "favoriteArtists"}, children: [
+                                { "data": "albums (Album)", "attr": { id:"favoriteArtists.albums" } },
+                                { "data": "fans (User)", "attr": { id:"favoriteArtists.fans" } },
+                                { "data": entry_core("id"), "attr": { id:"favoriteArtists.id", is_core: "true" } },
+                                { "data": entry_core("name"), "attr": { id:"favoriteArtists.name", is_core: "true" } } ] },
+                            { "data": "friends (User)", "attr": { id:"friends" }, children: [
+                                { "data": 'favoriteArtists (Artist)', "attr": { id: "friends.favoriteArtists"}, children: [
+                                    { "data": "albums (Album)", "attr": { id:"friends.favoriteArtists.albums" } },
+                                    { "data": "fans (User)", "attr": { id:"friends.favoriteArtists.fans" } },
+                                    { "data": entry_core("id"), "attr": { id:"friends.favoriteArtists.id", is_core: "true" } },
+                                    { "data": entry_core("name"), "attr": { id:"friends.favoriteArtists.name", is_core: "true" } } ] },
+                                { "data": "friends (User)", "attr": { id:"friends.friends" } },
+                                { "data": entry_core('id'), "attr": { id:"friends.id", is_core: "true" } },
+                                { "data": "isFriend", "attr": { id:"friends.isFriend" } },
+                                { "data": entry_core('name'), "attr": { id:"friends.name", is_core: "true" } } ] },
+                            { "data": entry_core('id'), "attr": { id:"id", is_core: "true" } },
+                            { "data": "isFriend", "attr": { id:"isFriend" } },
+                            { "data": entry_core('name'), "attr": { id:"name", is_core: "true" } }
+                        ]
+                    }
+            });
+            reloadPreview('');
+        });
+    </script>
+</head>
+<body>
+
+<table border="1">
+    <tr><td colspan="2">
+        <div style="background-color: #eeeeee; border: 1px solid #000000;">/user/1.json<span id="generated_selector"></span></div>
+    </td></tr>
+    <tr><td valign="top">
+        User
+        <div id="selector_builder" class="demo" style="height:100px;"></div>
+    </td>
+    <td>
+        <pre id="data_preview"></pre>
+    </td></tr>
+    <tr><td colspan="2">Load time: <span id="load_time" style="font-weight: bold;"></span> ms</td></tr>
+    <tr><td colspan="2">Note: By default <i>navigationLinks</i> are disabled when a selector is added.
+        They are provided to assist in browser navigation of the API data and should be unnecessary during directed programmatic access.
+    </td></tr>
+</table>
+
+<!--
+{
+propertyMetaData: [
+{
+name: favoriteArtists
+isCore: false
+type: Artist[]
+href: /metadata/artist.json
+}
+{
+name: friends
+isCore: false
+type: User[]
+href: /metadata/user.json
+}
+{
+name: id
+isCore: true
+type: long
+}
+{
+name: isFriend
+isCore: false
+type: boolean
+}
+{
+name: name
+isCore: true
+type: String
+}
+]
+name: User
+}
+-->
+
+</body>
+</html>
