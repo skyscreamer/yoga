@@ -1,6 +1,9 @@
 package org.skyscreamer.yoga.metadata;
 
+import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
+
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -8,6 +11,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.populator.ExtraField;
+import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.Core;
 import org.skyscreamer.yoga.util.NameUtil;
 
@@ -18,6 +24,17 @@ public class MapMetaDataServiceImpl implements MetaDataService
    private Map<Class<?>, String> _typeToStringMap = new HashMap<Class<?>, String>();
 
    private String rootMetaDataUrl;
+   private FieldPopulatorRegistry _fieldPopulatorRegistry;
+
+   public FieldPopulatorRegistry getFieldPopulatorRegistry()
+   {
+      return _fieldPopulatorRegistry;
+   }
+
+   public void setFieldPopulatorRegistry(FieldPopulatorRegistry fieldPopulatorRegistry)
+   {
+      _fieldPopulatorRegistry = fieldPopulatorRegistry;
+   }
 
    public String getRootMetaDataUrl()
    {
@@ -35,7 +52,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
       _typeToStringMap.clear();
       for (Entry<String, Class<?>> entry : map.entrySet())
       {
-         _typeToStringMap.put( entry.getValue(), entry.getKey() );
+         _typeToStringMap.put(entry.getValue(), entry.getKey());
       }
    }
 
@@ -48,7 +65,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
    @Override
    public Class<?> getTypeForName(String name)
    {
-      return _typeMappings.get( name );
+      return _typeMappings.get(name);
    }
 
    /**
@@ -59,14 +76,14 @@ public class MapMetaDataServiceImpl implements MetaDataService
    @Override
    public String getNameForType(Class<?> type)
    {
-      if (_typeToStringMap.containsKey( type ))
+      if (_typeToStringMap.containsKey(type))
       {
-         return _typeToStringMap.get( type );
+         return _typeToStringMap.get(type);
       }
 
       for (Entry<String, Class<?>> entry : _typeMappings.entrySet())
       {
-         if (entry.getValue().isAssignableFrom( type ))
+         if (entry.getValue().isAssignableFrom(type))
          {
             return entry.getKey();
          }
@@ -77,77 +94,112 @@ public class MapMetaDataServiceImpl implements MetaDataService
    @Override
    public TypeMetaData getMetaData(String name, String suffix)
    {
-      return getMetaData( getTypeForName( name ), suffix );
+      return getMetaData(getTypeForName(name), suffix);
    }
 
    @Override
    public TypeMetaData getMetaData(Class<?> type, String suffix)
    {
       TypeMetaData result = new TypeMetaData();
-      result.setName( NameUtil.getFormalName( type ) );
-      for (PropertyDescriptor property : ResultTraverser.getReadableProperties( type ))
+      result.setName(NameUtil.getFormalName(type));
+      addCoreFields(type, suffix, result);
+      addPopulatorFields(type, suffix, result);
+      return result;
+   }
+
+   protected void addCoreFields(Class<?> type, String suffix, TypeMetaData result)
+   {
+      for (PropertyDescriptor property : ResultTraverser.getReadableProperties(type))
       {
-         Class<?> propertyType = property.getPropertyType();
-         PropertyMetaData propertyMetaData = new PropertyMetaData();
-         result.getPropertyMetaData().add( propertyMetaData );
-         if (ResultTraverser.isPrimitive( propertyType ))
+         Method readMethod = property.getReadMethod();
+         String name = property.getName();
+         boolean core = isCore(property);
+
+         addField(suffix, result, readMethod, name, core);
+      }
+   }
+
+   protected void addPopulatorFields(Class<?> type, String suffix, TypeMetaData result)
+   {
+      FieldPopulator<?> fieldPopulator = null;
+      if (_fieldPopulatorRegistry != null)
+      {
+         fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator(type);
+      }
+
+      if (fieldPopulator == null)
+      {
+         return;
+      }
+
+      for (Method method : getPopulatorExtraFieldMethods(fieldPopulator, type))
+      {
+         String name = method.getAnnotation(ExtraField.class).value();
+         addField(suffix, result, method, name, false);
+      }
+   }
+
+   protected PropertyMetaData addField(String suffix, TypeMetaData result, Method readMethod,
+         String name, boolean core)
+   {
+      Class<?> propertyType = readMethod.getReturnType();
+      PropertyMetaData propertyMetaData = new PropertyMetaData();
+      result.getPropertyMetaData().add(propertyMetaData);
+
+      propertyMetaData.setName(name);
+      propertyMetaData.setIsCore(core);
+
+      if (ResultTraverser.isPrimitive(propertyType))
+      {
+         propertyMetaData.setType(propertyType == String.class ? "String" : propertyType.getName());
+      }
+      else if (Iterable.class.isAssignableFrom(propertyType) || propertyType.isArray())
+      {
+         Class<?> collectionValueType = getCollectionType(readMethod, propertyType);
+         String typeName = NameUtil.getFormalName(collectionValueType) + "[]";
+         propertyMetaData.setType(typeName);
+         addHref(propertyMetaData, collectionValueType, suffix);
+      }
+      else
+      {
+         propertyMetaData.setType(NameUtil.getFormalName(propertyType));
+         addHref(propertyMetaData, propertyType, suffix);
+      }
+
+      return propertyMetaData;
+   }
+
+   protected Class<?> getCollectionType(Method readMethod, Class<?> propertyType)
+   {
+      Class<?> collectionValueType = null;
+      if (propertyType.isArray())
+      {
+         collectionValueType = propertyType.getComponentType();
+      }
+      else
+      {
+         Type genericReturnType = readMethod.getGenericReturnType();
+         if (genericReturnType instanceof ParameterizedType)
          {
-            setValues( property, propertyType, propertyMetaData );
-         }
-         else if (Iterable.class.isAssignableFrom( propertyType ))
-         {
-            Class<?> collectionValueType = getIterableType( property.getReadMethod()
-                  .getGenericReturnType() );
-            String typeName = NameUtil.getFormalName( collectionValueType ) + "[]";
-            setValues( property, typeName, propertyMetaData );
-            addHref( propertyMetaData, collectionValueType, suffix );
-         }
-         else
-         {
-            setValues( property, NameUtil.getFormalName( propertyType ), propertyMetaData );
-            addHref( propertyMetaData, propertyType, suffix );
+            ParameterizedType zType = (ParameterizedType) genericReturnType;
+            collectionValueType = (Class<?>) zType.getActualTypeArguments()[0];
          }
       }
-      return result;
+      return collectionValueType;
    }
 
    protected void addHref(PropertyMetaData propertyMetaData, Class<?> propertyType, String suffix)
    {
-      String nameForType = getNameForType( propertyType );
+      String nameForType = getNameForType(propertyType);
       if (nameForType != null)
       {
-         propertyMetaData.setHref( getRootMetaDataUrl() + nameForType + "." + suffix );
+         propertyMetaData.setHref(getRootMetaDataUrl() + nameForType + "." + suffix);
       }
-   }
-
-   protected Class<?> getIterableType(Type type)
-   {
-      if (type instanceof ParameterizedType)
-      {
-         ParameterizedType zType = (ParameterizedType) type;
-         return (Class<?>) zType.getActualTypeArguments()[0];
-      }
-      return null;
-   }
-
-   protected void setValues(PropertyDescriptor property, Class<?> propertyType,
-         PropertyMetaData propertyMetaData)
-   {
-      String type = propertyType == String.class ? "String" : propertyType.getName();
-      setValues( property, type, propertyMetaData );
-   }
-
-   protected void setValues(PropertyDescriptor property, String propertyType,
-         PropertyMetaData propertyMetaData)
-   {
-      propertyMetaData.setName( property.getName() );
-      propertyMetaData.setType( propertyType );
-      propertyMetaData.setIsCore( isCore( property ) );
    }
 
    protected boolean isCore(PropertyDescriptor property)
    {
-      return property.getReadMethod().isAnnotationPresent( Core.class );
+      return property.getReadMethod().isAnnotationPresent(Core.class);
    }
 
 }

@@ -1,5 +1,6 @@
 package org.skyscreamer.yoga.mapper;
 
+import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.populator.*;
@@ -127,28 +128,7 @@ public class ResultTraverser
       model.addSimple( SelectorParser.DEFINITION, definition );
    }
 
-   private List<Method> getPopulatorExtraFieldMethods(FieldPopulator<?> populator,
-         Class<?> instanceType)
-   {
-      List<Method> result = new ArrayList<Method>();
-      if (populator != null)
-      {
-         for (Method method : populator.getClass().getDeclaredMethods())
-         {
-            if (method.isAnnotationPresent( ExtraField.class ))
-            {
-               Class<?>[] parameterTypes = method.getParameterTypes();
-               if (parameterTypes.length == 0
-                     || (parameterTypes.length == 1 && parameterTypes[0].equals( instanceType )))
-               {
-                  result.add( method );
-               }
-            }
-         }
-      }
-      return result;
-   }
-
+ 
    private void addHref(Object instance, HierarchicalModel model, Class<?> instanceType,
          String hrefSuffix, FieldPopulator<?> populator)
    {
