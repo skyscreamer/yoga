@@ -71,5 +71,6 @@
 				<entry key="user" value="org.skyscreamer.yoga.demo.model.User" />
 			</map>
 		</property>
+		<property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry" />
 	</bean>
 </beans>
