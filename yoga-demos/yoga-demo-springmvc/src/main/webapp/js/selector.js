@@ -1,14 +1,20 @@
 function Selector() {
     this._value = {};
     this.toggle = function(locationStr) {
-        _toggle(this._value, locationStr);
+        _toggle(this._value, locationStr, false, false);
+    };
+    this.toggle_on = function(locationStr) {
+        _toggle(this._value, locationStr, true, false);
+    };
+    this.toggle_off = function(locationStr) {
+        _toggle(this._value, locationStr, false, true);
     };
     this.getQuery = function() {
         return _recurseSelectorString(this._value);
     };
 }
 
-_toggle = function(selectorPtr, locationStr) {
+_toggle = function(selectorPtr, locationStr, on_only, off_only) {
     var location = _parseLocationStr(locationStr);
     for(var i = 0 ; i < location.length ; ++i) {
         if (i < (location.length - 1)) { // Navigating down
@@ -16,10 +22,14 @@ _toggle = function(selectorPtr, locationStr) {
             // Can add exception here if selectionPtr is null
         }
         else if (selectorPtr[location[i]]) { // On, turn it off
-            delete selectorPtr[location[i]];
+            if (!on_only) {
+                delete selectorPtr[location[i]];
+            }
         }
         else { // Off, turn it on
-            selectorPtr[location[i]] = {};
+            if (!off_only) {
+                selectorPtr[location[i]] = {};
+            }
         }
     }
 };
