@@ -1,34 +1,41 @@
 package org.skyscreamer.yoga.mapper;
 
 import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.skyscreamer.yoga.annotations.URITemplate;
-import org.skyscreamer.yoga.populator.*;
-import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.uri.AnnotationURITemplateGenerator;
-import org.skyscreamer.yoga.uri.URICreator;
-import org.skyscreamer.yoga.uri.URITemplateGenerator;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.beanutils.PropertyUtils;
+import org.skyscreamer.yoga.mapper.enrich.Enricher;
+import org.skyscreamer.yoga.mapper.enrich.HrefEnricher;
+import org.skyscreamer.yoga.mapper.enrich.ModelDefinitionBuilder;
+import org.skyscreamer.yoga.mapper.enrich.NavigationLinksEnricher;
+import org.skyscreamer.yoga.metadata.PropertyUtil;
+import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
+import org.skyscreamer.yoga.populator.ExtraField;
+import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.selector.Selector;
 
 /**
  * Created by IntelliJ IDEA. User: corby
  */
 public class ResultTraverser
 {
+   
    private FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry(
          new ArrayList<FieldPopulator<?>>() );
-   private URICreator _uriCreator = new URICreator();
-   private URITemplateGenerator _uriTemplateGenerator = new AnnotationURITemplateGenerator();
-   private ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
-
-   private boolean _showDefinition = false;
-   private boolean _showNavigationLinks = true;
+   private List<Enricher> _enrichers = Arrays.asList(new HrefEnricher(), new ModelDefinitionBuilder(), new NavigationLinksEnricher());
+   private ClassFinderStrategy _classFinderStrategy = new ClassFinderStrategy()
+   {
+      public Class<?> findClass(Object instance)
+      {
+         return instance.getClass();
+      }
+   };
 
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model,
          String hrefSuffix)
@@ -38,22 +45,17 @@ public class ResultTraverser
       addProperties( instance, fieldSelector, model, instanceType, hrefSuffix );
    }
 
+   @SuppressWarnings("unchecked")
    protected <T> void addExtraInfo(Object instance, Selector fieldSelector,
          HierarchicalModel model, Class<T> instanceType, String hrefSuffix)
    {
-      @SuppressWarnings("unchecked")
 	  FieldPopulator<T> populator = (FieldPopulator<T>) _fieldPopulatorRegistry.getFieldPopulator( instanceType );
 
-      if (_showNavigationLinks)
+      for (Enricher enricher : _enrichers)
       {
-         addHref( instance, model, instanceType, hrefSuffix, populator );
+         enricher.enrich(instance, fieldSelector, model, instanceType, hrefSuffix, populator);
       }
-
-      if (_showDefinition)
-      {
-         addDefinition( model, instanceType, populator );
-      }
-
+      
       addAnnotatedExtraFields( fieldSelector, model, hrefSuffix, populator, instance, instanceType );
    }
 
@@ -103,63 +105,16 @@ public class ResultTraverser
       }
    }
 
-   private void addDefinition(HierarchicalModel model, Class<?> instanceType,
-         FieldPopulator<?> populator)
-   {
-      List<String> definition = new ArrayList<String>();
-
-      if (populator != null && populator.getSupportedFields() != null)
-      {
-         definition = populator.getSupportedFields();
-      }
-      else
-      {
-         for (PropertyDescriptor property : getReadableProperties( instanceType ))
-         {
-            definition.add( property.getName() );
-         }
-
-         for (Method method : getPopulatorExtraFieldMethods( populator, instanceType ))
-         {
-            ExtraField extraField = method.getAnnotation( ExtraField.class );
-            definition.add( extraField.value() );
-         }
-      }
-      model.addSimple( SelectorParser.DEFINITION, definition );
-   }
-
- 
-   private void addHref(Object instance, HierarchicalModel model, Class<?> instanceType,
-         String hrefSuffix, FieldPopulator<?> populator)
-   {
-      String href = null;
-      if (instanceType.isAnnotationPresent( URITemplate.class ))
-      {
-         href = instanceType.getAnnotation( URITemplate.class ).value();
-      }
-      else if (populator != null && populator.getUriTemplate() != null)
-      {
-         href = populator.getUriTemplate();
-      }
-
-      if (href != null)
-      {
-         if (hrefSuffix != null)
-            href += "." + hrefSuffix;
-         model.addSimple( SelectorParser.HREF, getHref( href, instance ) );
-      }
-   }
-
    protected void addProperties(Object instance, Selector fieldSelector, HierarchicalModel model,
          Class<?> instanceType, String hrefSuffix)
    {
       FieldPopulator<?> fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
-      List<PropertyDescriptor> unshownProperties = new ArrayList<PropertyDescriptor>();
-      for (PropertyDescriptor property : getReadableProperties( instanceType ))
+      for (PropertyDescriptor property : PropertyUtil.getReadableProperties(instanceType))
       {
          try
          {
-            if (fieldSelector.containsField( property, fieldPopulator ))
+            boolean containsField = fieldSelector.containsField( property, fieldPopulator );
+            if (containsField)
             {
                Object value = PropertyUtils.getNestedProperty( instance, property.getName() );
 
@@ -180,65 +135,12 @@ public class ResultTraverser
                   traverseChild( fieldSelector, model, property, value, hrefSuffix );
                }
             }
-            else
-            {
-               unshownProperties.add( property );
-            }
          }
          catch (Exception e)
          {
             throw new RuntimeException( e );
          }
       }
-
-      // Extract this into a new method
-      if (_showNavigationLinks && unshownProperties.size() > 0
-            && fieldSelector instanceof CoreSelector)
-      {
-         HierarchicalModel navigationLinks = model.createChild( "navigationLinks",
-               "useless parameter" );
-         for (PropertyDescriptor property : unshownProperties)
-         {
-            HierarchicalModel propertyLink = navigationLinks.createChild( property,
-                  "another useless parameter" );
-            propertyLink.addSimple( "name", property.getName() );
-            String hrefSuffixAndSelector = hrefSuffix + "?selector=:(" + property.getName() + ")";
-            addHref( instance, propertyLink, instanceType, hrefSuffixAndSelector, fieldPopulator );
-         }
-      }
-   }
-
-   public static List<PropertyDescriptor> getReadableProperties(Class<?> instanceType)
-   {
-      List<PropertyDescriptor> result = new ArrayList<PropertyDescriptor>();
-      for (PropertyDescriptor descriptor : PropertyUtils.getPropertyDescriptors( instanceType ))
-      {
-         if (descriptor.getReadMethod() != null && !descriptor.getName().equals( "class" ))
-         {
-            result.add( descriptor );
-         }
-      }
-      return result;
-   }
-
-   protected Object getHref(String uriTemplate, final Object instance)
-   {
-      return _uriCreator.getHref( uriTemplate, new ValueReader()
-      {
-         @Override
-         public Object getValue(String property)
-         {
-            try
-            {
-               return PropertyUtils.getNestedProperty( instance, property );
-            }
-            catch (Exception e)
-            {
-               throw new RuntimeException( "Could not invoke getter for property " + property
-                     + " on class " + instance.getClass().getName(), e );
-            }
-         }
-      } );
    }
 
    private void traverseIterable(Selector fieldSelector, HierarchicalModel model,
@@ -311,26 +213,6 @@ public class ResultTraverser
             || Character.class.isAssignableFrom( clazz );
    }
 
-   public URICreator getUriCreator()
-   {
-      return _uriCreator;
-   }
-
-   public void setUriCreator(URICreator uriCreator)
-   {
-      this._uriCreator = uriCreator;
-   }
-
-   public URITemplateGenerator getUriTemplateGenerator()
-   {
-      return _uriTemplateGenerator;
-   }
-
-   public void setUriTemplateGenerator(URITemplateGenerator uriTemplateGenerator)
-   {
-      this._uriTemplateGenerator = uriTemplateGenerator;
-   }
-
    public void setFieldPopulatorRegistry(FieldPopulatorRegistry fieldPopulatorRegistry)
    {
       _fieldPopulatorRegistry = fieldPopulatorRegistry;
@@ -340,22 +222,9 @@ public class ResultTraverser
    {
       _classFinderStrategy = classFinderStrategy;
    }
-
-   private class DefaultClassFinderStrategy implements ClassFinderStrategy
-   {
-      public Class<?> findClass(Object instance)
-      {
-         return instance.getClass();
-      }
-   }
-
-   public void setShowDefinition(boolean showDefinition)
-   {
-      _showDefinition = showDefinition;
-   }
    
-   public void setShowNavigationLinks(boolean showNavigationLinks) 
+   public void setEnrichers(List<Enricher> enrichers)
    {
-	   this._showNavigationLinks = showNavigationLinks;
+      this._enrichers = enrichers;
    }
 }

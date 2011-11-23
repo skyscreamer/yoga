@@ -24,23 +24,15 @@ public class DefinedSelectorImpl implements Selector
 
     public DefinedSelectorImpl getField( String field )
     {
-        if ( _fields.containsKey( field ) )
-            return _fields.get( field );
-        else
-            return null;
+        return _fields.get( field );
     }
 
     @Override
     public boolean containsField( PropertyDescriptor property, FieldPopulator<?> fieldPopulator )
     {
-        if ( fieldPopulator != null && fieldPopulator.getSupportedFields() != null )
-        {
-            if ( !fieldPopulator.getSupportedFields().contains( property.getName() ) )
-            {
-                return false;
-            }
-        }
-        return containsField( property.getName() );
+      return (fieldPopulator != null && fieldPopulator.getSupportedFields() != null
+            && fieldPopulator.getSupportedFields().contains(property.getName()))
+            || containsField(property.getName());
     }
 
     public boolean containsField( String field )
