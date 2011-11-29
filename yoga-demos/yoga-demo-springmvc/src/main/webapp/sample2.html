@@ -48,25 +48,20 @@
             return '<input type="checkbox" checked disabled > ' + title;
         }
 
-        function parseMetaDataNodes(metadata) {
+        function parseMetaDataNodes(metadata, parentId) {
             var data = [];
             for(var i = 0 ; i < metadata.propertyMetaData.length ; ++i) {
                 var prop = metadata.propertyMetaData[i];
                 var node = new Object();
                 node.data = prop.name;
                 node.attr = new Object();
-                node.attr.id = prop.name;
+                node.attr.id = parentId ? parentId + "." + prop.name : prop.name;
                 if (prop.isCore) {
                     node.attr.is_core = true;
                 }
                 if (prop.href && prop.href.length > 0) {
                     node.state = "closed";
-                    var ajax = new Object();
-                    ajax.url = prop.href;
-                    ajax.success = function(metadata2) {
-                        return parseMetaDataNodes(metadata2);
-                    }
-                    node.ajax = ajax;
+                    node.attr.metadata_href = prop.href;
                 }
                 data.push(node);
             }
@@ -101,9 +96,21 @@
                     "ui" : { "select_multiple_modifier": "on", "selected_parent_close": "deselect" },
                     "json_data" : {
                         "ajax" : {
-                            "url": "/metadata/user.json",
+                            "url": function(node) {
+                                if (node == -1) {
+                                    return "/metadata/user.json";
+                                }
+                                else {
+                                    return(node.attr("metadata_href"));
+                                }
+                            },
                             "success": function(metadata) {
-                                return parseMetaDataNodes(metadata);
+                                var parent = this._get_node();
+                                var parentId = '';
+                                if (parent && parent != -1) {
+                                    parentId = parent.attr("id");
+                                }
+                                return parseMetaDataNodes(metadata, parentId);
                             }
                         }
                     }
