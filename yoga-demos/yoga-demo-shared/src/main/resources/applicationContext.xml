@@ -45,7 +45,16 @@
 
 	<bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser"
 		p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"
-		p:classFinderStrategy-ref="hibernateClassFinder" />
+		p:classFinderStrategy-ref="hibernateClassFinder">
+		<property name="enrichers">
+			<list>
+				<bean class="org.skyscreamer.yoga.mapper.enrich.HrefEnricher"/>
+				<bean class="org.skyscreamer.yoga.mapper.enrich.NavigationLinksEnricher"/>
+				<bean class="org.skyscreamer.yoga.mapper.enrich.ModelDefinitionBuilder"/>
+				<bean class="org.skyscreamer.yoga.mapper.enrich.MetadataLinkEnricher" p:metaDataService-ref="metaDataService"/>
+			</list>
+		</property>
+	</bean>
 
 	<bean id="hibernateClassFinder"
 		class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
