@@ -222,7 +222,7 @@ public class ResultTraverser
    {
       _classFinderStrategy = classFinderStrategy;
    }
-   
+
    public void setEnrichers(List<Enricher> enrichers)
    {
       this._enrichers = enrichers;
