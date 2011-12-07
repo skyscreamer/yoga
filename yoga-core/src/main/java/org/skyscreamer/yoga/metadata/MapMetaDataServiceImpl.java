@@ -188,12 +188,26 @@ public class MapMetaDataServiceImpl implements MetaDataService
       return collectionValueType;
    }
 
-   protected void addHref(PropertyMetaData propertyMetaData, Class<?> propertyType, String suffix)
+   @Override
+   public String getHref(Class<?> propertyType, String suffix)
    {
       String nameForType = getNameForType(propertyType);
       if (nameForType != null)
       {
-         propertyMetaData.setHref(getRootMetaDataUrl() + nameForType + "." + suffix);
+         return getRootMetaDataUrl() + nameForType + "." + suffix;
+      }
+      else
+      {
+         return null;
+      }
+   }
+   
+   protected void addHref(PropertyMetaData propertyMetaData, Class<?> propertyType, String suffix)
+   {
+      String href = getHref( propertyType, suffix );
+      if (href != null)
+      {
+         propertyMetaData.setHref(href);
       }
    }
 
