@@ -11,6 +11,7 @@ import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
 import org.skyscreamer.yoga.populator.ExtraField;
 import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
 
@@ -21,6 +22,11 @@ public class ModelDefinitionBuilder implements Enricher
    public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
          Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator)
    {
+      if (!(fieldSelector instanceof CoreSelector))
+      {
+         return;
+      }
+      
       List<String> definition = new ArrayList<String>();
 
       if (populator != null && populator.getSupportedFields() != null)
@@ -40,7 +46,7 @@ public class ModelDefinitionBuilder implements Enricher
             definition.add( extraField.value() );
          }
       }
-      model.addSimple( SelectorParser.DEFINITION, definition );      
+      model.addSimple( SelectorParser.DEFINITION, definition );
    }
 
 }
