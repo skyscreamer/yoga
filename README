@@ -10,7 +10,7 @@ LinkedIn’s JavaOne presentation on building flexible REST interfaces (http://b
 
 Can You Explain in English?
 ---------------------------
-Imagine there's a RESTful API to a music-based social network site, and you want to find out your friends' favorite songs.  Depending on the data model, a traditional RESTful approach might take several steps:
+Imagine there's a RESTful API to a music-based social network site, and you want to find out some songs your friends' would like.  Depending on the data model, a traditional RESTful approach might take several steps:
 
 1) Get my friends
 2) Get their favorite artists
