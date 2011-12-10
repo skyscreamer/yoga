@@ -17,7 +17,7 @@ Imagine there's a RESTful API to a simple music-based social network site, and y
 3) Get those artists' albums
 4) Get the songs from the albums
 
-This can end up being a LOT of queries.  Yoga let's you do the same with one query, for example:
+This can end up being a LOT of queries.  Yoga lets you do the same with one query, for example:
 
     GET /user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))
 
@@ -29,7 +29,7 @@ In short:
     ----------              --------
     Fewer requests          Less total latency, ie faster overall response
     Fewer sockets           Better hardware capacity
-    Simpler client code     Happier client develoeprs
+    Simpler client code     Happier client developers
 
 What Frameworks Are Supported
 -----------------------------
