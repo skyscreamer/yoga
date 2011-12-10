@@ -9,53 +9,45 @@ import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
 
-public class HrefEnricher implements Enricher
-{
+public class HrefEnricher implements Enricher {
 
-   private URICreator _uriCreator = new URICreator();
+    private URICreator _uriCreator = new URICreator();
 
-   @Override
-   public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator)
-   {
-      String href = null;
-      if (instanceType.isAnnotationPresent( URITemplate.class ))
-      {
-         href = instanceType.getAnnotation( URITemplate.class ).value();
-      }
-      else if (populator != null && populator.getUriTemplate() != null)
-      {
-         href = populator.getUriTemplate();
-      }
+    @Override
+    public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
+                       Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator) {
+        String href = determineTemplate(instanceType, populator);
 
-      if (href != null)
-      {
-         if (hrefSuffix != null)
-         {
-            href += "." + hrefSuffix;
-         }
-         model.addSimple( SelectorParser.HREF, getHref( href, instance ) );
-      }
-   }
-
-   private Object getHref(String uriTemplate, final Object instance)
-   {
-      return _uriCreator.getHref( uriTemplate, new ValueReader()
-      {
-         @Override
-         public Object getValue(String property)
-         {
-            try
-            {
-               return PropertyUtils.getNestedProperty( instance, property );
+        if (href != null) {
+            if (hrefSuffix != null) {
+                href += "." + hrefSuffix;
             }
-            catch (Exception e)
-            {
-               throw new RuntimeException( "Could not invoke getter for property " + property
-                     + " on class " + instance.getClass().getName(), e );
+            model.addSimple(SelectorParser.HREF, getHref(href, instance));
+        }
+    }
+
+    protected String determineTemplate(Class<?> instanceType, FieldPopulator<?> populator) {
+        String href = null;
+        if (instanceType.isAnnotationPresent(URITemplate.class)) {
+            href = instanceType.getAnnotation(URITemplate.class).value();
+        } else if (populator != null && populator.getUriTemplate() != null) {
+            href = populator.getUriTemplate();
+        }
+        return href;
+    }
+
+    protected Object getHref(String uriTemplate, final Object instance) {
+        return _uriCreator.getHref(uriTemplate, new ValueReader() {
+            @Override
+            public Object getValue(String property) {
+                try {
+                    return PropertyUtils.getNestedProperty(instance, property);
+                } catch (Exception e) {
+                    throw new RuntimeException("Could not invoke getter for property " + property
+                            + " on class " + instance.getClass().getName(), e);
+                }
             }
-         }
-      } );
-   }
+        });
+    }
 
 }

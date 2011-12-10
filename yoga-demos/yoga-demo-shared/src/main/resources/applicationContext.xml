@@ -49,6 +49,7 @@
 		<property name="enrichers">
 			<list>
 				<bean class="org.skyscreamer.yoga.mapper.enrich.HrefEnricher"/>
+                <bean class="org.skyscreamer.yoga.mapper.enrich.SelectorBuilderEnricher"/>
 				<bean class="org.skyscreamer.yoga.mapper.enrich.NavigationLinksEnricher"/>
 				<bean class="org.skyscreamer.yoga.mapper.enrich.ModelDefinitionBuilder"/>
 				<bean class="org.skyscreamer.yoga.mapper.enrich.MetadataLinkEnricher" p:metaDataService-ref="metaDataService"/>
