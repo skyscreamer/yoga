@@ -109,11 +109,11 @@ public class MapMetaDataServiceImpl implements MetaDataService
 
    protected void addCoreFields(Class<?> type, String suffix, TypeMetaData result)
    {
-      for (PropertyDescriptor property : ResultTraverser.getReadableProperties(type))
+      for (PropertyDescriptor property : PropertyUtil.getReadableProperties(type))
       {
          Method readMethod = property.getReadMethod();
          String name = property.getName();
-         boolean core = isCore(property);
+         boolean core = readMethod.isAnnotationPresent(Core.class);
 
          addField(suffix, result, readMethod, name, core);
       }
@@ -188,18 +188,27 @@ public class MapMetaDataServiceImpl implements MetaDataService
       return collectionValueType;
    }
 
-   protected void addHref(PropertyMetaData propertyMetaData, Class<?> propertyType, String suffix)
+   @Override
+   public String getHref(Class<?> propertyType, String suffix)
    {
       String nameForType = getNameForType(propertyType);
       if (nameForType != null)
       {
-         propertyMetaData.setHref(getRootMetaDataUrl() + nameForType + "." + suffix);
+         return getRootMetaDataUrl() + nameForType + "." + suffix;
+      }
+      else
+      {
+         return null;
       }
    }
-
-   protected boolean isCore(PropertyDescriptor property)
+   
+   protected void addHref(PropertyMetaData propertyMetaData, Class<?> propertyType, String suffix)
    {
-      return property.getReadMethod().isAnnotationPresent(Core.class);
+      String href = getHref( propertyType, suffix );
+      if (href != null)
+      {
+         propertyMetaData.setHref(href);
+      }
    }
 
 }

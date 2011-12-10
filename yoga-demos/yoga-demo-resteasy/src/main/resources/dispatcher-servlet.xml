@@ -16,9 +16,6 @@
 
     <import resource="classpath:springmvc-resteasy.xml"/>
 
-    <!-- Override the default test.test behavior, which is broken.  TODO: move this to RESTEasy's codebase -->
-    <bean id="resteasy.spring.bean.processor" class="org.skyscreamer.yoga.resteasy.util.RESTEasySpringListener"/>
-
     <bean id="resteasy.dispatcher" class="org.jboss.resteasy.core.SynchronousDispatcher"
           depends-on="resteasy.intializer">
         <constructor-arg ref="resteasy.providerFactory"/>
