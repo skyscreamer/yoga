@@ -17,11 +17,11 @@ Imagine there's a RESTful API to a simple music-based social network site, and y
 3) Get those artists' albums
 4) Get the songs from the albums
 
-This can end up being a LOT of queries.  Yoga let's you do the same with a *single* query (without rewriting your existing API):
+This can end up being a LOT of queries.  Yoga let's you do the same with one query, for example:
 
     GET /user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))
 
-View a more detailed explanation of our selectors here: https://github.com/skyscreamer/yoga/wiki/REST-Selectors
+( Find a more detailed explanation of our selectors here: https://github.com/skyscreamer/yoga/wiki/REST-Selectors )
 
 In short:
 
@@ -31,17 +31,18 @@ In short:
     Fewer sockets           Better hardware capacity
     Simpler client code     Happier client develoeprs
 
-How Do I Use It?
-----------------
-We currently support:
+What Frameworks Are Supported
+-----------------------------
  + RESTEasy
  + Any RESTful Spring MVC application
 
-Yoga provides the additional plumbing you need.  To wire it up, you'll just need to add some annotations and a few lines of configuration.
+How Do I Use It?
+----------------
+Yoga is a "plumbing" package.  To hook it up, you just add a handful of annotations and a few lines of configuration.  Check out the documentation on our wiki for a more detailed explanation.
 
 If you find the Yoga approach as useful as we do, we provide a lot of handy patterns to simplify adding your own extensions to its capabilities.
 
-Once Yoga has been set up, clients can build and modify their own relational queries without any server-side programming.
+Once Yoga has been set up, clients can build and modify their own relational queries without any server-side programming.  Yay!
 
 Yoga is created by:
 Carter Page (carter@skyscreamer.org)
