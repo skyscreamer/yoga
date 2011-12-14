@@ -11,10 +11,10 @@ LinkedIn’s JavaOne presentation on building flexible REST interfaces (http://b
 ## Can You Explain in English? ##
 Imagine there's a RESTful API to a simple music-based social network site, and you want to discover some songs by artists that your friends like.  A traditional RESTful approach might take several steps:
 
-1) Get my friends
-2) Get their favorite artists
-3) Get those artists' albums
-4) Get the songs from the albums
+1. Get my friends
+2. Get their favorite artists
+3. Get those artists' albums
+4. Get the songs from the albums
 
 This can end up being a LOT of queries.  Yoga lets you do the same with one query, for example:
 
@@ -42,7 +42,8 @@ If you find the Yoga approach as useful as we do, we provide a lot of handy patt
 Once Yoga has been set up, clients can build and modify their own relational queries without any server-side programming.  Yay!
 
 Yoga is created by:
-Carter Page (carter@skyscreamer.org)
-Corby Page (corby@skyscreamer.org)
-Solomon Duskis (solomon@skyscreamer.org)
-... and contributors like you!
+
+ * Carter Page (carter@skyscreamer.org)
+ * Corby Page (corby@skyscreamer.org)
+ * Solomon Duskis (solomon@skyscreamer.org)
+ * ... and contributors like you!
