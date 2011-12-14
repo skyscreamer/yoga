@@ -1,0 +1,171 @@
+<html>
+<head><title>Sample Selector Builder</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="/js/selector.js"></script>
+    <script type="text/javascript" src="http://static.jstree.com/v.1.0pre/jquery.jstree.js"></script>
+
+    <!--<link rel="stylesheet" href="http://jquery.bassistance.de/treeview/jquery.treeview.css" type="text/css" />-->
+    <!--<script type="text/javascript" src="http://jquery.bassistance.de/treeview/jquery.treeview.js"></script>-->
+    <!--<script>-->
+        <!--$(document).ready(function(){-->
+            <!--$("#example").treeview();-->
+        <!--});-->
+    <!--</script>-->
+    <script type="text/javascript">
+        var jsonPath = getJsonPath();
+        var rootMetadataPath = getMetadataPath(jsonPath);
+
+        function getJsonPath() {
+            var path = location.pathname;
+            var suffixIndex = path.lastIndexOf(".");
+            return path.substring(0, suffixIndex) + ".json";
+        }
+
+        // Examine the entity for the location of its (does not work on collections yet)
+        function getMetadataPath(entityPath) {
+            var entityResponse = $.parseJSON(
+                    $.ajax(
+                            {
+                                url:entityPath,
+                                async:false,
+                                dataType:'json'
+                            }
+                    ).responseText
+            );
+            return entityResponse.metadata.href;
+        }
+
+        var selector = new Selector();
+
+        function toggleOn(id) {
+//            alert('on: ' + id);
+            selector.toggle_on(id);
+            setSelector(selector.getQuery());
+        }
+
+        function toggleOff(id) {
+//            alert('off: ' + id);
+            selector.toggle_off(id);
+            setSelector(selector.getQuery());
+        }
+
+        function setSelector(newSelector) {
+            var selector = (newSelector.length > 0) ? '?selector=' + newSelector : '';
+            $('#generated_selector').html(selector);
+            reloadPreview(selector);
+        }
+
+        function reloadPreview(selector) {
+            var start = new Date().getTime();
+            $.ajax({
+                url: jsonPath + selector,
+                success: function(data) {
+                    $('#data_preview').html(JSON.stringify(data, null, '\t'));
+                    var end = new Date().getTime();
+                    $('#load_time').html(end - start);
+                }
+            });
+        }
+
+        function entry_core(title) {
+            return '<input type="checkbox" checked disabled > ' + title;
+        }
+
+        function parseMetaDataNodes(metadata, parentId) {
+            // Set the selector tree's title
+            if (parentId === '') {
+                $('#entity_name').html(metadata.name);
+            }
+
+            var data = [];
+            for(var i = 0 ; i < metadata.propertyMetaData.length ; ++i) {
+                var prop = metadata.propertyMetaData[i];
+                var node = new Object();
+                node.data = prop.name;
+                node.attr = new Object();
+                node.attr.id = parentId ? parentId + "." + prop.name : prop.name;
+                if (prop.isCore) {
+                    node.attr.is_core = true;
+                }
+                if (prop.href && prop.href.length > 0) {
+                    node.state = "closed";
+                    node.attr.metadata_href = prop.href;
+                }
+                data.push(node);
+            }
+            return data;
+        }
+
+        $(function() {
+            $('#json_path').html(jsonPath);
+            $('#selector_builder')
+                .bind("select_node.jstree deselect_node.jstree open_node.jstree close_node.jstree", function(event, data) {
+                        var jstree = data.inst;
+                        var obj = data.rslt.obj;
+                        var id = data.rslt.obj.attr("id");
+                        var isCore = data.rslt.obj.attr("is_core");
+                        if (event.type == 'select_node') {
+                            if (isCore) {
+                                jstree.deselect_node(obj);
+                                return false;
+                            }
+                            if (jstree.is_closed(obj)) { jstree.open_node(obj); }
+                            toggleOn(id);
+                        }
+                        if (event.type == 'deselect_node') {
+                            if (jstree.is_open(obj)) { jstree.close_node(obj); }
+                            toggleOff(id);
+                        }
+                        if (event.type == 'open_node' && !jstree.is_selected(obj)) { jstree.select_node(obj); }
+                        if (event.type == 'close_node' && jstree.is_selected(obj)) { jstree.deselect_node(obj); }
+                    } )
+                .jstree({
+                    "plugins" : [ "themes", "json_data", "ui" ],
+                    "core" : { "html_titles" : true },
+                    "ui" : { "select_multiple_modifier": "on", "selected_parent_close": "deselect" },
+                    "json_data" : {
+                        "ajax" : {
+                            "url": function(node) {
+                                if (node == -1) {
+                                    return rootMetadataPath;
+                                }
+                                else {
+                                    return(node.attr("metadata_href"));
+                                }
+                            },
+                            "success": function(metadata) {
+                                var parent = this._get_node();
+                                var parentId = '';
+                                if (parent && parent != -1) {
+                                    parentId = parent.attr("id");
+                                }
+                                return parseMetaDataNodes(metadata, parentId);
+                            }
+                        }
+                    }
+            });
+            reloadPreview('');
+        });
+    </script>
+</head>
+<body>
+
+<table border="1">
+    <tr><td colspan="2">
+        <div style="background-color: #eeeeee; border: 1px solid #000000;"><span id="json_path"></span><span style="color: #cc0000;" id="generated_selector"></span></div>
+    </td></tr>
+    <tr><td valign="top">
+        <div id="entity_name"></div>
+        <div id="selector_builder" class="demo" style="min-height:100px;"></div>
+    </td>
+    <td>
+        <pre id="data_preview"></pre>
+    </td></tr>
+    <tr><td colspan="2">Load time: <span id="load_time" style="font-weight: bold;"></span> ms</td></tr>
+    <tr><td colspan="2">Note: By default <i>navigationLinks</i> are disabled when a selector is added.
+        They are provided to assist in browser navigation of the API data and should be unnecessary during directed programmatic access.
+    </td></tr>
+</table>
+
+</body>
+</html>
