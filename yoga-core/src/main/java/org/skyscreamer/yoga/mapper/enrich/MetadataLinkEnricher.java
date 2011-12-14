@@ -24,7 +24,7 @@ public class MetadataLinkEnricher implements Enricher
          return;
       }
 
-      HierarchicalModel metaDataLink = model.createChild( "metaData", "useless parameter" );
+      HierarchicalModel metaDataLink = model.createChild( "metadata", "useless parameter" );
       metaDataLink.addSimple( "href", metaDataService.getHref( instanceType, hrefSuffix ) );
    }
 
