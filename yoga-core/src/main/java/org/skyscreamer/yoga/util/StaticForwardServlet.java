@@ -14,6 +14,7 @@ import java.io.IOException;
  * Time: 4:58 PM
  * To change this template use File | Settings | File Templates.
  */
+@SuppressWarnings("serial")
 public class StaticForwardServlet extends HttpServlet {
     String path;
 
