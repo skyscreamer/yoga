@@ -38,6 +38,18 @@
                    <target>1.6</target>
                </configuration>
            </plugin>
+            <plugin>
+                <groupId>org.cloudfoundry</groupId>
+                <artifactId>cf-maven-plugin</artifactId>
+                <version>1.0.0.M1</version>
+                <configuration>
+                    <server>yoga-cloudfoundry-instance</server>
+                    <target>http://api.cloudfoundry.com</target>
+                    <url>yoga-demo-springmvc.cloudfoundry.com</url>
+                    <memory>512</memory>
+                    <instances>1</instances>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -183,6 +195,11 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
+        <repository>
+            <id>springsource-milestones</id>
+            <name>SpringSource Milestones Proxy</name>
+            <url>https://oss.sonatype.org/content/repositories/springsource-milestones</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -195,6 +212,11 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>repository.springframework.maven.milestone</id>
+            <name>Spring Framework Maven Milestone Repository</name>
+            <url>http://maven.springframework.org/milestone</url>
         </pluginRepository>
     </pluginRepositories>
 
