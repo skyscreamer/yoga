@@ -18,8 +18,7 @@
                   $.get('user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))', function(data) {
                       $('#demo_name2').html(data.name);
                       $(data.friends).each(function(index1) {
-                          var friendHtml = '<p>' + this.name + '</p>'
-                              + '<h4>Favorite Artists</h4>';
+                          var friendHtml = '<h4 class="demo_friends_header">' + this.name + '&apos;s Favorite Artists</h4>';
                           $(this.favoriteArtists).each(function(index2) {
                               friendHtml += '<p>' + this.name + '</p>'
                                   + '<ul>';
@@ -63,8 +62,7 @@
                           setTimeout(function() {
                               $.get('user/' + friendId + '.json?selector=:(favoriteArtists)', function(data2) {
                                   var friendHtml = '<div id="demo_friend1_' + friendId + '">'
-                                      + '<p>' + friendName + '</p>'
-                                      + '<h4>Favorite Artists</h4>'
+                                      + '<h4 class="demo_friends_header">' + friendName + '&apos;s Favorite Artists</h4>'
                                       + '</div>';
                                   $('#demo_friends1').append(friendHtml);
                                   $(data2.favoriteArtists).each(function(index2) {
@@ -224,23 +222,21 @@
                 <h5>Yoga - <span id="demo_status2">Standby</span> <span id="demo_time2"></span></h5>
                 <section class="wrapper">
                     <header>
-                      <h2 id="demo_name2">&nbsp;</h2>
+                      <h2>Friends' Favs for <span id="demo_name2">&nbsp;</span></h2>
                     </header>
                     <article id="demo_friends2">
-                      <h4 class="demo_friends_header">Friends</h4>
                     </article>
                     <input id="demo_query2" type="text" disabled="true"/>
                 </section>
             </div>
 
             <div class="demo demo2">
-                <h5>Traditional - <span id="demo_status1">Standby</span> <span id="demo_time1"></span></h5>
+                <h5>Traditional Entity Navigation - <span id="demo_status1">Standby</span> <span id="demo_time1"></span></h5>
                 <section class="wrapper">
                     <header>
-                        <h2 id="demo_name1">&nbsp;</h2>
+                        <h2>Friends' Favs for <span id="demo_name1">&nbsp;</span></h2>
                     </header>
                     <article id="demo_friends1">
-                        <h4 class="demo_friends_header">Friends</h4>
                     </article>
                     <textarea id="demo_query1" type="text" disabled="true"></textarea>
                 </section>
