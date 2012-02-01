@@ -46,7 +46,7 @@ public class JSONAssertTest {
                 "{a:{b:{c:{d:{e:{f:{g:{h:{i:{j:{k:{l:{m:{n:{o:{z:\"blah\"}}}}}}}}}}}}}}}}", true);
     }
 
-    //@Test
+    @Test
     public void testSimpleArray() throws JSONException {
         testPass("{id:1,pets:[\"dog\",\"cat\",\"fish\"]}", // Exact to exact (strict)
                 "{id:1,pets:[\"dog\",\"cat\",\"fish\"]}",
@@ -65,33 +65,40 @@ public class JSONAssertTest {
                 false);
     }
 
-    //@Test
+    @Test
     public void testSimpleMixedArray() throws JSONException {
         testPass("{stuff:[321, \"abc\"]}", "{stuff:[\"abc\", 321]}", false);
         testFail("{stuff:[321, \"abc\"]}", "{stuff:[\"abc\", 789]}", false);
     }
 
-    //@Test
+    @Test
     public void testComplexMixedStrictArray() throws JSONException {
         testPass("{stuff:[{pet:\"cat\"},{car:\"Ford\"}]}", "{stuff:[{pet:\"cat\"},{car:\"Ford\"}]}", true);
     }
 
-    //@Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testComplexMixedArray() throws JSONException {
         testPass("{stuff:[{pet:\"cat\"},{car:\"Ford\"}]}", "{stuff:[{pet:\"cat\"},{car:\"Ford\"}]}", false);
     }
 
-    //@Test
+    @Test(expected = IllegalArgumentException.class)
+    public void testComplexArrayNoUniqueID() throws JSONException {
+        testPass("{stuff:[{address:{addr1:\"123 Main\"}}, {address:{addr1:\"234 Broad\"}}]}",
+                "{stuff:[{address:{addr1:\"123 Main\"}}, {address:{addr1:\"234 Broad\"}}]}",
+                false);
+    }
+
+    @Test
     public void testSimpleAndComplexStrictArray() throws JSONException {
         testPass("{stuff:[123,{a:\"b\"}]}", "{stuff:[123,{a:\"b\"}]}", true);
     }
 
-    //@Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSimpleAndComplexArray() throws JSONException {
         testPass("{stuff:[123,{a:\"b\"}]}", "{stuff:[123,{a:\"b\"}]}", false);
     }
 
-    //@Test
+    @Test
     public void testComplexArray() throws JSONException {
         testPass("{id:1,name:\"Joe\",friends:[{id:2,name:\"Pat\",pets:[\"dog\"]},{id:3,name:\"Sue\",pets:[\"bird\",\"fish\"]}],pets:[]}",
                  "{id:1,name:\"Joe\",friends:[{id:2,name:\"Pat\",pets:[\"dog\"]},{id:3,name:\"Sue\",pets:[\"bird\",\"fish\"]}],pets:[]}",
@@ -108,6 +115,17 @@ public class JSONAssertTest {
         testFail("{id:1,name:\"Joe\",friends:[{id:2,name:\"Pat\",pets:[\"dog\"]},{id:3,name:\"Sue\",pets:[\"bird\",\"fish\"]}],pets:[]}",
                 "{id:1,name:\"Joe\",friends:[{id:2,name:\"Pat\",pets:[\"dog\"]},{id:3,name:\"Sue\",pets:[\"cat\",\"fish\"]}],pets:[]}",
                 false); // Mismatch
+    }
+
+    @Test
+    public void testArrayOfArraysStrict() throws JSONException {
+        testPass("{id:1,stuff:[[1,2],[2,3],[],[3,4]]}", "{id:1,stuff:[[1,2],[2,3],[],[3,4]]}", true);
+        testFail("{id:1,stuff:[[1,2],[2,3],[3,4],[]]}", "{id:1,stuff:[[1,2],[2,3],[],[3,4]]}", true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testArrayOfArrays() throws JSONException {
+        testPass("{id:1,stuff:[[4,3],[3,2],[],[1,2]]}", "{id:1,stuff:[[1,2],[2,3],[],[3,4]]}", false);
     }
 
     private void testPass(String expected, String actual, boolean strict)
