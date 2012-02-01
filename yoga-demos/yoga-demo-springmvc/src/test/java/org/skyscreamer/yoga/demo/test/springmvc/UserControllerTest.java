@@ -42,11 +42,6 @@ public class UserControllerTest extends org.skyscreamer.yoga.demo.test.UserContr
     }
 
     @Test
-    public void testGetUserWithFriendsAndSelector() throws Exception {
-        super.testGetUserWithFriendsAndSelector();
-    }
-
-    @Test
     public void testDeepDiveSelector() throws Exception {
         super.testDeepDiveSelector();
     }

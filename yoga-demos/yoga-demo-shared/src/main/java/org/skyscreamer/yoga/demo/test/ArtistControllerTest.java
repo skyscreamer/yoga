@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.yoga.demo.test.AbstractTest;
 
 /**
@@ -19,46 +20,25 @@ public class ArtistControllerTest extends AbstractTest {
     @Test
     public void testGetUser() throws Exception {
         JSONObject data = getJSONObject("/artist/1", null);
-        Assert.assertEquals("Arcade Fire", data.getString("name"));
-        Assert.assertEquals(1, data.getLong("id"));
-//        Assert.assertEquals(4, data.length());
-        testForNavigationLinks(data, "/artist/1.json", "albums", "fans");
+        String expected = "{id:1,name:\"Arcade Fire\"," +
+                "navigationLinks:{albums:{name:\"albums\",href:\"/artist/1.json?selector=:(albums)\"}," +
+                "fans:{name:\"fans\",href:\"/artist/1.json?selector=:(fans)\"}}}";
+        JSONAssert.assertEquals(expected, data, false);
     }
 
     @Test
     public void testGetFans() throws Exception {
         Map<String, String> params = Collections.singletonMap("selector", ":(fans)");
         JSONObject data = getJSONObject("/artist/1", params);
-        JSONArray fans = data.getJSONArray("fans");
-//        Assert.assertEquals(2, fans.length());
-
-        data = getJSONObject("/artist/2", params);
-        fans = data.getJSONArray("fans");
-//        Assert.assertEquals(1, fans.length());
-        Assert.assertEquals("Corby Page", fans.getJSONObject(0).getString("name"));
-
-        data = getJSONObject("/artist/3", params);
-        fans = data.getJSONArray("fans");
-//        Assert.assertEquals(1, fans.length());
-        Assert.assertEquals("Carter Page", fans.getJSONObject(0).getString("name"));
+        String expected ="{fans:[{name:\"Corby Page\"},{name:\"Carter Page\"}]}";
+        JSONAssert.assertEquals(expected, data, false);
     }
 
     @Test
     public void getAlbums() throws Exception {
         Map<String, String> params = Collections.singletonMap("selector", ":(albums)");
         JSONObject data = getJSONObject("/artist/1", params);
-        JSONArray albums = data.getJSONArray("albums");
-        Assert.assertEquals(3, albums.length());
-        Assert.assertEquals("The Suburbs", albums.getJSONObject(2).getString("title"));
-
-        data = getJSONObject("/artist/2", params);
-        albums = data.getJSONArray("albums");
-//        Assert.assertEquals(3, albums.length()); // I didn't feel like typing in all 4 dozen albums
-        Assert.assertEquals("Purple Rain", albums.getJSONObject(1).getString("title"));
-
-        data = getJSONObject("/artist/3", params);
-        albums = data.getJSONArray("albums");
-//        Assert.assertEquals(2, albums.length());
-        Assert.assertEquals("In the Aeroplane over the Sea", albums.getJSONObject(1).getString("title"));
+        String expected ="{albums:[{title:\"Funeral\"},{title:\"Neon Bible\"},{title:\"The Suburbs\"}]}";
+        JSONAssert.assertEquals(expected, data, false);
     }
 }
