@@ -27,6 +27,9 @@ public abstract class AbstractYogaView implements View
    @Autowired
    protected ResultTraverser resultTraverser;
 
+   @Autowired
+   protected SelectorParser _selectorParser;
+
    public void setResultTraverser(ResultTraverser resultTraverser)
    {
       this.resultTraverser = resultTraverser;
@@ -43,7 +46,7 @@ public abstract class AbstractYogaView implements View
    protected Selector getSelector(HttpServletRequest request)
    {
       String selectorString = request.getParameter( "selector" );
-      return SelectorParser.parseSelector( selectorString );
+      return _selectorParser.parseSelector( selectorString );
    }
 
    protected static void write(OutputStream output, DOMDocument domDocument) throws IOException
