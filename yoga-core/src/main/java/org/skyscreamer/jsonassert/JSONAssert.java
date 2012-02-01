@@ -23,17 +23,39 @@ public class JSONAssert {
     public static void assertEquals(String expectedStr, String actualStr, boolean strict)
             throws JSONException
     {
-        JSONAssertResult result = compareJSON(expectedStr, actualStr, strict);
+        JSONObject expected = new JSONObject(expectedStr);
+        JSONObject actual = new JSONObject(actualStr);
+        assertEquals(expected, actual, strict);
+    }
+
+    public static void assertEquals(String expectedStr, JSONObject actual, boolean strict)
+            throws JSONException
+    {
+        JSONObject expected = new JSONObject(expectedStr);
+        assertEquals(expected, actual, strict);
+    }
+
+    public static void assertEquals(JSONObject expected, JSONObject actual, boolean strict)
+            throws JSONException
+    {
+        JSONAssertResult result = compareJSON(expected, actual, strict);
         if (result.failed()) {
             throw new AssertionError(result.getMessage());
         }
     }
 
+    // Entry for unit tests
     protected static JSONAssertResult compareJSON(String expectedStr, String actualStr, boolean strict)
-             throws JSONException
+            throws JSONException
     {
         JSONObject expected = new JSONObject(expectedStr);
         JSONObject actual = new JSONObject(actualStr);
+        return compareJSON(expected, actual, strict);
+    }
+    
+    protected static JSONAssertResult compareJSON(JSONObject expected, JSONObject actual, boolean strict)
+             throws JSONException
+    {
         JSONAssertResult result = new JSONAssertResult();
         boolean extensible = !strict;
         boolean strictOrder = strict;
