@@ -30,9 +30,12 @@ public class JSONAssertTest {
         testPass("{name:\"Joe\"},id:1}", "{id:1,name:\"Joe\"}", false);
     }
 
-    //@Test - Currently JSONAssert assumes JSONObject.  Consider migrating to net.sf.json to cleanly add arrays.
+    @Test // Currently JSONAssert assumes JSONObject.  Consider migrating to net.sf.json to cleanly add arrays.
     public void testArray() throws JSONException {
         testPass("[1,2,3]","[1,2,3]", true);
+        testPass("[1,2,3]","[1,3,2]", false);
+        testFail("[1,2,3]","[1,3,2]", true);
+        testFail("[1,2,3]","[4,5,6]", false);
     }
 
     @Test
@@ -140,7 +143,7 @@ public class JSONAssertTest {
         if (strict) {
             message += "(strict)";
         }
-        JSONAssertResult result = JSONAssert.compareJSON(expected, actual, strict);
+        JSONCompareResult result = JSONCompare.compareJSON(expected, actual, strict);
         Assert.assertTrue(message + "\n  " + result.getMessage(), result.passed());
     }
 
@@ -151,7 +154,7 @@ public class JSONAssertTest {
         if (strict) {
             message += "(strict)";
         }
-        JSONAssertResult result = JSONAssert.compareJSON(expected, actual, strict);
+        JSONCompareResult result = JSONCompare.compareJSON(expected, actual, strict);
         Assert.assertTrue(message, result.failed());
     }
 }

@@ -36,20 +36,9 @@ public class UserControllerTest extends AbstractTest {
 
     public void testGetUsers() throws Exception {
         JSONArray data = getJSONArray("/user", null);
-//        Assert.assertEquals(3, data.length());
-        JSONObject carter = data.getJSONObject(0);
-//        Assert.assertEquals(4, carter.length());
-        Assert.assertEquals("Carter Page", carter.getString("name"));
-        Assert.assertEquals(1, carter.getLong("id"));
-        Assert.assertEquals("/user/1.json", carter.getString("href"));
-        testForNavigationLinks(carter, "/user/1.json", "friends", "favoriteArtists", "isFriend");
-
-        JSONObject corby = data.getJSONObject(1);
-        Assert.assertEquals("Corby Page", corby.getString("name"));
-//        Assert.assertEquals(4, corby.length());
-        Assert.assertEquals(2, corby.getLong("id"));
-        Assert.assertEquals("/user/2.json", corby.getString("href"));
-        testForNavigationLinks(corby, "/user/2.json", "friends", "favoriteArtists", "isFriend");
+        JSONAssert.assertEquals("[{name:\"Carter Page\",id:1,href:\"/user/1.json\"}," +
+                "{name:\"Corby Page\",id:2,href:\"/user/2.json\"}," +
+                "{name:\"Solomon Duskis\",id:3,href:\"/user/3.json\"}]", data, false);
     }
 
     public void testGetUserWithSelector() throws Exception {
