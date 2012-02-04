@@ -5,7 +5,12 @@ public class SelectorParser
     public static final String HREF = "href";
     public static final String DEFINITION = "definition";
 
-    public static Selector parseSelector( String selectorStr )
+    private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
+    private static final String PREDEFINED_SELECTOR_PREFIX = "$";
+
+    private PredefinedSelectorResolver _predefinedSelectorResolver;
+
+    public Selector parseSelector( String selectorStr )
     {
         Selector selector = new CoreSelector();
         if ( selectorStr != null )
@@ -23,33 +28,39 @@ public class SelectorParser
         return selector;
     }
 
-    public static DefinedSelectorImpl parse( String selectorExpression ) throws ParseSelectorException
+    public DefinedSelectorImpl parse( String selectorExpression ) throws ParseSelectorException
     {
-       DefinedSelectorImpl selector = new DefinedSelectorImpl();
+        DefinedSelectorImpl selector = new DefinedSelectorImpl();
         if ( selectorExpression.equals( ":" ) )
         {
             return selector;
         }
 
-        if ( !selectorExpression.startsWith( ":(" ) )
+        if ( selectorExpression.startsWith( PREDEFINED_SELECTOR_PREFIX ) )
         {
-            throw new ParseSelectorException( "Selector must start with ':('" );
+            selectorExpression = _predefinedSelectorResolver.resolveSelector( selectorExpression );
         }
 
-        StringBuilder selectorBuff = new StringBuilder( selectorExpression );
-        int matchIndex = getMatchingParenthesesIndex( selectorBuff, 1 );
-
-        selectorBuff.delete( matchIndex, selectorBuff.length() );
-        selectorBuff.delete( 0, 2 );
-
-        while ( selectorBuff.length() > 0 )
+        if ( !selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) )
         {
-            processNextSelectorField( selector, selectorBuff );
+            throw new ParseSelectorException( "Selector must start with " + EXPLICIT_SELECTOR_PREFIX + " or " +
+                PREDEFINED_SELECTOR_PREFIX );
+        }
+
+        StringBuilder stringBuilder = new StringBuilder( selectorExpression );
+        int matchIndex = getMatchingParenthesesIndex( stringBuilder, 1 );
+
+        stringBuilder.delete( matchIndex, stringBuilder.length() );
+        stringBuilder.delete( 0, 2 );
+
+        while ( stringBuilder.length() > 0 )
+        {
+            processNextSelectorField( selector, stringBuilder );
         }
         return selector;
     }
 
-    private static int getMatchingParenthesesIndex( StringBuilder selector, int index ) throws ParseSelectorException
+    private int getMatchingParenthesesIndex( StringBuilder selector, int index ) throws ParseSelectorException
     {
         int parenthesesCount = 1;
         while ( parenthesesCount > 0 && index < selector.length() - 1 )
@@ -72,7 +83,8 @@ public class SelectorParser
         return index;
     }
 
-    private static void processNextSelectorField( DefinedSelectorImpl selector, StringBuilder selectorBuff ) throws ParseSelectorException
+    private void processNextSelectorField( DefinedSelectorImpl selector, StringBuilder selectorBuff )
+            throws ParseSelectorException
     {
         int index = 0;
         boolean done = false;
@@ -116,6 +128,11 @@ public class SelectorParser
             throw new IllegalArgumentException( HREF + " is a reserved keyword for selectors" );
         }
         selector._fields.put( fieldName, subSelector);
+    }
+
+    public void setPredefinedSelectorResolver( PredefinedSelectorResolver predefinedSelectorResolver )
+    {
+        _predefinedSelectorResolver = predefinedSelectorResolver;
     }
 }
 

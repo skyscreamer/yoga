@@ -1,9 +1,10 @@
 package org.skyscreamer.yoga.resteasy.view;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorParser;
+import org.skyscreamer.yoga.springmvc.view.AbstractYogaView;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
@@ -11,17 +12,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
-
-import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.springmvc.view.AbstractYogaView;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
 {
    @Autowired
    protected ResultTraverser resultTraverser;
+
+   @Autowired
+   protected SelectorParser _selectorParser;
 
    @Context
    HttpServletRequest request;
@@ -57,7 +59,7 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
    protected Selector getSelector()
    {
       String selectorString = request.getParameter( "selector" );
-      return SelectorParser.parseSelector( selectorString );
+      return _selectorParser.parseSelector( selectorString );
    }
 
 }

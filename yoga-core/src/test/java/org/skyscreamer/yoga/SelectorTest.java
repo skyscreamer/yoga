@@ -13,10 +13,12 @@ import org.skyscreamer.yoga.selector.SelectorParser;
  */
 public class SelectorTest
 {
+    private SelectorParser _selectorParser = new SelectorParser();
+
     @Test
     public void testSimpleSelector() throws Exception
     {
-        DefinedSelectorImpl selector = SelectorParser.parse( ":(gender,country)" );
+        DefinedSelectorImpl selector = _selectorParser.parse( ":(gender,country)" );
 
         Assert.assertEquals(selector.getFields().size(), 2);
         DefinedSelectorImpl genderField = selector.getField( "gender" );
@@ -31,7 +33,7 @@ public class SelectorTest
     @Test
     public void testNestedSelectors() throws Exception
     {
-       DefinedSelectorImpl selector = SelectorParser.parse( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
+       DefinedSelectorImpl selector = _selectorParser.parse( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
 
         Assert.assertEquals( selector.getFields().size(), 3 );
         DefinedSelectorImpl genderField = selector.getField(  "gender" );
