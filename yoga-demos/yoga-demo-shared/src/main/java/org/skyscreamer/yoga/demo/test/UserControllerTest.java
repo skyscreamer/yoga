@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -17,11 +18,11 @@ import org.springframework.web.client.HttpClientErrorException;
 public class UserControllerTest extends AbstractTest {
     public void testGetUser() throws Exception {
         JSONObject data = getJSONObject("/user/2", null);
-        Assert.assertEquals("Corby Page", data.getString("name"));
-//        Assert.assertEquals(4, data.length());
-        Assert.assertEquals(2, data.getLong("id"));
-        Assert.assertEquals("/user/2.json", data.getString("href"));
-        testForNavigationLinks(data, "/user/2.json", "friends", "favoriteArtists", "isFriend");
+        String expected = "{id:2,name:\"Corby Page\"," +
+                "navigationLinks:{friends:{name:\"friends\",href:\"/user/2.json?selector=:(friends)\"}," +
+                "favoriteArtists:{name:\"favoriteArtists\",href:\"/user/2.json?selector=:(favoriteArtists)\"}," +
+                "isFriend:{name:\"isFriend\",href:\"/user/2.json?selector=:(isFriend)\"}}}";
+        JSONAssert.assertEquals(expected, data, false);
     }
 
     public void testGetNonExistentUser() throws Exception {
@@ -54,66 +55,28 @@ public class UserControllerTest extends AbstractTest {
     public void testGetUserWithSelector() throws Exception {
         Map<String, String> params = Collections.singletonMap("selector", ":(isFriend)");
         JSONObject data = getJSONObject("/user/1", params);
-        checkCarter(data);
-        Assert.assertFalse(data.getBoolean("isFriend"));
+        String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:false}";
+        JSONAssert.assertEquals(expected, data, false);
     }
 
     public void testGetUserWithFriends() throws Exception {
         Map<String, String> params = Collections.singletonMap("selector", ":(friends)");
         JSONObject data = getJSONObject("/user/1", params);
-        checkCarter(data);
-        JSONArray friends = data.getJSONArray("friends");
-//        Assert.assertEquals(2, friends.length());
-        JSONObject friend = (friends.getJSONObject(0).getString("name").equals("Corby Page"))
-                ? friends.getJSONObject(0) : friends.getJSONObject(1);
-//        Assert.assertEquals(3, friend.length());
-        Assert.assertEquals("Corby Page", friend.getString("name"));
-        Assert.assertEquals("/user/2.json", friend.getString("href"));
-    }
-
-    public void testGetUserWithFriendsAndSelector() throws Exception {
-        Map<String, String> params = Collections.singletonMap("selector", ":(friends:(isFriend))");
-        JSONObject data = getJSONObject("/user/1", params);
-        checkCarter(data);
-        JSONArray friends = data.getJSONArray("friends");
-//        Assert.assertEquals(2, friends.length());
-        JSONObject friend = (friends.getJSONObject(0).getString("name").equals("Corby Page"))
-                ? friends.getJSONObject(0) : friends.getJSONObject(1);
-        checkCorby(friend);
-        Assert.assertFalse(friend.getBoolean("isFriend"));
+        String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\"," +
+                "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\"}," +
+                "{id:3,name:\"Solomon Duskis\",href:\"/user/3.json\"}]}";
+        JSONAssert.assertEquals(expected, data, false);
     }
 
     public void testDeepDiveSelector() throws Exception {
-        Map<String, String> params = Collections.singletonMap("selector", ":(friends:(favoriteArtists:(albums:(songs))))");
+        Map<String, String> params = Collections.singletonMap("selector", ":(isFriend,friends:(favoriteArtists:(albums:(songs))))");
         JSONObject data = getJSONObject("/user/1", params);
-        checkCarter(data);
-        JSONArray friends = data.getJSONArray("friends");
-//        Assert.assertEquals(2, friends.length());
-        JSONObject friend = (friends.getJSONObject(0).getString("name").equals("Corby Page"))
-                ? friends.getJSONObject(0) : friends.getJSONObject(1);
-        checkCorby(friend);
-        JSONArray favoriteArtists = friend.getJSONArray("favoriteArtists");
-//        Assert.assertEquals(2, favoriteArtists.length());
-        JSONObject prince = "Prince".equals(favoriteArtists.getJSONObject(0).getString("name"))
-                ? favoriteArtists.getJSONObject(0) : favoriteArtists.getJSONObject(1);
-        JSONArray albums = prince.getJSONArray("albums");
-        JSONObject prince1999 = albums.getJSONObject(0);
-        JSONObject corvette = prince1999.getJSONArray("songs").getJSONObject(1);
-        Assert.assertEquals("Little Red Corvette", corvette.getString("title"));
-    }
-
-    private void checkCorby(JSONObject data) throws JSONException {
-//        Assert.assertEquals(4, data.length());
-        Assert.assertEquals("Corby Page", data.getString("name"));
-//        Assert.assertEquals(2, data.getLong("id"));
-        Assert.assertEquals("/user/2.json", data.getString("href"));
-    }
-
-    private void checkCarter(JSONObject data) throws JSONException {
-//        Assert.assertEquals(4, data.length());
-        Assert.assertEquals("Carter Page", data.getString("name"));
-//        Assert.assertEquals(1, data.getLong("id"));
-        Assert.assertEquals("/user/1.json", data.getString("href"));
+        String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:false," +
+                "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\"," +
+                "favoriteArtists:[{id:2,name:\"Prince\",albums:[{id:4,title:\"1999\"," +
+                "songs:[{id:10},{id:11,title:\"Little Red Corvette\"},{id:12}]},{id:5},{id:6}]},{id:1}]}," +
+                "{id:3}]}";
+        JSONAssert.assertEquals(expected, data, false);
     }
 
     public void testRecommendedAlbums() throws Exception {
