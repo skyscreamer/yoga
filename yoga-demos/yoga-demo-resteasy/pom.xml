@@ -22,6 +22,12 @@
                 <configuration>
                     <contextPath>/</contextPath>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>org.mortbay.util.FileResource.checkAliases</name>
+                            <value>false</value>
+                        </systemProperty>
+                    </systemProperties>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
                             <port>8080</port>
@@ -58,12 +64,6 @@
             <groupId>org.skyscreamer</groupId>
             <artifactId>yoga-demo-shared</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.skyscreamer</groupId>
-            <artifactId>yoga-demo-shared-web</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
