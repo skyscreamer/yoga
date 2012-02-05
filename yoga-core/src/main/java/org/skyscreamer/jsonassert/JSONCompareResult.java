@@ -1,22 +1,20 @@
 package org.skyscreamer.jsonassert;
 
-import org.json.JSONObject;
-
 /**
  * Created by IntelliJ IDEA.
  * User: Carter Page
  * Date: 1/29/12
  * Time: 3:05 PM
  */
-public class JSONAssertResult {
+public class JSONCompareResult {
     private boolean _success;
     private String _message;
 
-    public JSONAssertResult() {
+    public JSONCompareResult() {
         this(true, null);
     }
 
-    private JSONAssertResult(boolean success, String message) {
+    private JSONCompareResult(boolean success, String message) {
         _success = success;
         _message = message == null ? "" : message;
     }
