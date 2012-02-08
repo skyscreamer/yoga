@@ -19,7 +19,6 @@
         <module>yoga-demo-springmvc</module>
         <module>yoga-demo-resteasy</module>
         <module>yoga-demo-shared</module>
-        <module>yoga-demo-shared-web</module>
     </modules>
 </project>
 
