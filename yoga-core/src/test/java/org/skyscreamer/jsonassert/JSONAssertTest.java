@@ -4,11 +4,10 @@ import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.skyscreamer.jsonassert.JSONCompareMode.*;
+
 /**
- * Created by IntelliJ IDEA.
- * User: Carter Page
- * Date: 1/29/12
- * Time: 2:56 PM
+ * Unit tests for {@link JSONAssert}
  */
 public class JSONAssertTest {
     @Test
@@ -143,7 +142,7 @@ public class JSONAssertTest {
         if (strict) {
             message += "(strict)";
         }
-        JSONCompareResult result = JSONCompare.compareJSON(expected, actual, strict);
+        JSONCompareResult result = JSONCompare.compareJSON(expected, actual, strict ? STRICT : LENIENT);
         Assert.assertTrue(message + "\n  " + result.getMessage(), result.passed());
     }
 
@@ -154,7 +153,7 @@ public class JSONAssertTest {
         if (strict) {
             message += "(strict)";
         }
-        JSONCompareResult result = JSONCompare.compareJSON(expected, actual, strict);
+        JSONCompareResult result = JSONCompare.compareJSON(expected, actual, strict ? STRICT : LENIENT);
         Assert.assertTrue(message, result.failed());
     }
 }
