@@ -27,6 +27,17 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*;
  *
  * <p><i>This library uses org.json.  It has fewer dependencies than other JSON libraries (like net.sf.json),
  * making JSONassert more portable.</i></p>
+ *
+ * <p>There are two known issues when dealing with non-strict comparisons:</p>
+ * <ul>
+ *     <li>Unless the order is strict, checking does not handle mixed types in the JSONArray
+ *         (e.g. <code>[1,2,{a:"b"}]</code> or <code>[{pet:"cat"},{car:"Ford"}]</code>)</li>
+ *     <li>Unless the order is strict, checking cannot handle arrays of arrays (e.g. <code>[[1,2],[3,4]]</code>)</li>
+ * </ul>
+ * <p>You do not have to worry about encountering a false positive or false negative in these two edge cases.
+ * <i>JSONassert</i> will identify the conditions and throw a descriptive {@link IllegalArgumentException}.  These
+ * cases will be fixed in future versions.</p>
+ *
  */
 public class JSONAssert {
     /**
