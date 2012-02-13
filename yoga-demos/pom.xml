@@ -4,13 +4,13 @@
     <parent>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>0.4.0</version>
     </parent>
 
     <name>yoga</name>
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-demos</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.4.0</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/skyscreamer/yoga</url>
