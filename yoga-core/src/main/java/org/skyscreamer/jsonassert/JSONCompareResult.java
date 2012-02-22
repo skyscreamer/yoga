@@ -1,15 +1,15 @@
 package org.skyscreamer.jsonassert;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Carter Page
- * Date: 1/29/12
- * Time: 3:05 PM
+ * Bean for holding results from JSONCompare.
  */
 public class JSONCompareResult {
     private boolean _success;
     private String _message;
 
+    /**
+     * Default constructor.
+     */
     public JSONCompareResult() {
         this(true, null);
     }
@@ -19,14 +19,26 @@ public class JSONCompareResult {
         _message = message == null ? "" : message;
     }
 
+    /**
+     * Did the comparison pass?
+     * @return True if it passed
+     */
     public boolean passed() {
         return _success;
     }
-    
+
+    /**
+     * Did the comparison fail?
+     * @return True if it failed
+     */
     public boolean failed() {
         return !_success;
     }
-    
+
+    /**
+     * Result message
+     * @return String explaining why if the comparison failed
+     */
     public String getMessage() {
         return _message;
     }
