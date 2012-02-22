@@ -8,23 +8,29 @@ import org.json.JSONObject;
 import java.util.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Carter Page
- * Date: 2/4/12
- * Time: 12:14 PM
+ * Provides the logic to compare two JSON entities.  This is the backend to {@link JSONAssert}, but it can
+ * be programmed against directly to access the functionality.  (eg, to make something that works with a
+ * non-JUnit test framework)
  */
 public class JSONCompare {
-    // Entry for JSONassert's unit tests
-    public static JSONCompareResult compareJSON(String expectedStr, String actualStr, boolean strict)
+    /**
+     * Compares JSON string provided to the expected JSON string, and returns the results of the comparison.
+     *
+     * @param expectedStr Expected JSON string
+     * @param actualStr JSON string to compare
+     * @param mode Defines comparison behavior
+     * @throws JSONException
+     */
+    public static JSONCompareResult compareJSON(String expectedStr, String actualStr, JSONCompareMode mode)
             throws JSONException
     {
         Object expected = JSONParser.parseJSON(expectedStr);
         Object actual = JSONParser.parseJSON(actualStr);
         if ((expected instanceof JSONObject) && (actual instanceof JSONObject)) {
-            return compareJSON((JSONObject) expected, (JSONObject) actual, strict);
+            return compareJSON((JSONObject) expected, (JSONObject) actual, mode);
         }
         else if ((expected instanceof JSONArray) && (actual instanceof JSONArray)) {
-            return compareJSON((JSONArray)expected, (JSONArray)actual, strict);
+            return compareJSON((JSONArray)expected, (JSONArray)actual, mode);
         }
         else if (expected instanceof JSONObject) {
             throw new IllegalArgumentException("Expected a JSON object, but passed in a JSON array.");
@@ -34,27 +40,39 @@ public class JSONCompare {
         }
     }
 
-    public static JSONCompareResult compareJSON(JSONObject expected, JSONObject actual, boolean strict)
+    /**
+     * Compares JSONObject provided to the expected JSONObject, and returns the results of the comparison.
+     *
+     * @param expected Expected JSONObject
+     * @param actual JSONObject to compare
+     * @param mode Defines comparison behavior
+     * @throws JSONException
+     */
+    public static JSONCompareResult compareJSON(JSONObject expected, JSONObject actual, JSONCompareMode mode)
             throws JSONException
     {
         JSONCompareResult result = new JSONCompareResult();
-        boolean extensible = !strict;
-        boolean strictOrder = strict;
-        compareJSON("", expected, actual, extensible, strictOrder, result);
+        compareJSON("", expected, actual, mode, result);
         return result;
     }
 
-    public static JSONCompareResult compareJSON(JSONArray expected, JSONArray actual, boolean strict)
+    /**
+     * Compares JSONArray provided to the expected JSONArray, and returns the results of the comparison.
+     *
+     * @param expected Expected JSONArray
+     * @param actual JSONArray to compare
+     * @param mode Defines comparison behavior
+     * @throws JSONException
+     */
+    public static JSONCompareResult compareJSON(JSONArray expected, JSONArray actual, JSONCompareMode mode)
             throws JSONException
     {
         JSONCompareResult result = new JSONCompareResult();
-        boolean extensible = !strict;
-        boolean strictOrder = strict;
-        compareJSONArray("", expected, actual, extensible, strictOrder, result);
+        compareJSONArray("", expected, actual, mode, result);
         return result;
     }
 
-    private static void compareJSON(String prefix, JSONObject expected, JSONObject actual, boolean extensible, boolean strictOrder, JSONCompareResult result)
+    private static void compareJSON(String prefix, JSONObject expected, JSONObject actual, JSONCompareMode mode, JSONCompareResult result)
             throws JSONException
     {
         // Check that actual contains all the expected values
@@ -64,7 +82,7 @@ public class JSONCompare {
             if (actual.has(key)) {
                 Object actualValue = actual.get(key);
                 String fullKey = prefix + key;
-                compareValues(fullKey, expectedValue, actualValue, extensible, strictOrder, result);
+                compareValues(fullKey, expectedValue, actualValue, mode, result);
             }
             else {
                 result.fail("Does not contain expected key: " + prefix + key);
@@ -72,7 +90,7 @@ public class JSONCompare {
         }
 
         // If strict, check for vice-versa
-        if (!extensible) {
+        if (!mode.isExtensible()) {
             Set<String> actualKeys = getKeys(actual);
             for(String key : actualKeys) {
                 if (!expected.has(key)) {
@@ -82,13 +100,13 @@ public class JSONCompare {
         }
     }
 
-    private static void compareValues(String fullKey, Object expectedValue, Object actualValue, boolean extensible, boolean strictOrder, JSONCompareResult result) throws JSONException {
+    private static void compareValues(String fullKey, Object expectedValue, Object actualValue, JSONCompareMode mode, JSONCompareResult result) throws JSONException {
         if (expectedValue.getClass().isAssignableFrom(actualValue.getClass())) {
             if (expectedValue instanceof JSONArray) {
-                compareJSONArray(fullKey , (JSONArray)expectedValue, (JSONArray)actualValue, extensible, strictOrder, result);
+                compareJSONArray(fullKey , (JSONArray)expectedValue, (JSONArray)actualValue, mode, result);
             }
             else if (expectedValue instanceof JSONObject) {
-                compareJSON(fullKey + ".", (JSONObject) expectedValue, (JSONObject) actualValue, extensible, strictOrder, result);
+                compareJSON(fullKey + ".", (JSONObject) expectedValue, (JSONObject) actualValue, mode, result);
             }
             else if (!expectedValue.equals(actualValue)) {
                 result.fail(fullKey, expectedValue, actualValue);
@@ -96,8 +114,8 @@ public class JSONCompare {
         }
     }
 
-    private static void compareJSONArray(String key, JSONArray expected, JSONArray actual, boolean extensible,
-                                         boolean strictOrder, JSONCompareResult result) throws JSONException
+    private static void compareJSONArray(String key, JSONArray expected, JSONArray actual, JSONCompareMode mode,
+                                         JSONCompareResult result) throws JSONException
     {
         if (expected.length() != actual.length()) {
             result.fail(key + "[]: Expected " + expected.length() + " values and got " + actual.length());
@@ -107,11 +125,11 @@ public class JSONCompare {
             return; // Nothing to compare
         }
 
-        if (strictOrder) {
+        if (mode.hasStrictOrder()) {
             for(int i = 0 ; i < expected.length() ; ++i) {
                 Object expectedValue = expected.get(i);
                 Object actualValue = actual.get(i);
-                compareValues(key + "[" + i + "]", expectedValue, actualValue, extensible, strictOrder, result);
+                compareValues(key + "[" + i + "]", expectedValue, actualValue, mode, result);
             }
         }
         else if (allSimpleValues(expected)) {
@@ -147,7 +165,7 @@ public class JSONCompare {
                 }
                 JSONObject expectedValue = expectedValueMap.get(id);
                 JSONObject actualValue = actualValueMap.get(id);
-                compareValues(key + "[" + uniqueKey + "=" + id + "]", expectedValue, actualValue, extensible, strictOrder, result);
+                compareValues(key + "[" + uniqueKey + "=" + id + "]", expectedValue, actualValue, mode, result);
             }
             for(Object id : actualValueMap.keySet()) {
                 if (!expectedValueMap.containsKey(id)) {

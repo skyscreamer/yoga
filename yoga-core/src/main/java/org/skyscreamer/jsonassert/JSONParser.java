@@ -5,12 +5,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Carter Page
- * Date: 2/4/12
- * Time: 11:48 AM
+ * Simple JSON parsing utility.
  */
 public class JSONParser {
+    /**
+     * Takes a JSON string and returns either a {@link org.json.JSONObject} or {@link org.json.JSONArray},
+     * depending on whether the string represents an object or an array.
+     *
+     * @param s Raw JSON string to be parsed
+     * @return
+     * @throws JSONException
+     */
     public static Object parseJSON(String s) throws JSONException {
         if (s.trim().startsWith("{")) {
             return new JSONObject(s);
@@ -18,6 +23,6 @@ public class JSONParser {
         else if (s.trim().startsWith("[")) {
             return new JSONArray(s);
         }
-        throw new IllegalArgumentException("Unparsable JSON string: " + s);
+        throw new JSONException("Unparsable JSON string: " + s);
     }
 }
