@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.skyscreamer.yoga.populator.ValueReader;
 
 public class URICreator
@@ -12,7 +14,7 @@ public class URICreator
 
    private List<URIDecorator> decorators;
 
-   public String getHref(String uriTemplate, ValueReader model)
+   public String getHref(String uriTemplate, HttpServletResponse response, ValueReader model)
    {
       Matcher matcher = _uriTemplatePattern.matcher(uriTemplate);
       int start = 0;
@@ -25,7 +27,7 @@ public class URICreator
          start = matcher.end();
       }
       href.append(uriTemplate.substring(start));
-      return decorate(href.toString());
+      return response.encodeURL( decorate(href.toString()) );
    }
 
    protected String decorate(String uri)

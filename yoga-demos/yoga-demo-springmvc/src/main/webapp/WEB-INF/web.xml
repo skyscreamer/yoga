@@ -65,6 +65,7 @@
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
 
+<!-- 
 	<filter>
 		<filter-name>UrlRewriteFilter</filter-name>
 		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
@@ -73,7 +74,8 @@
 		<filter-name>UrlRewriteFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
+ -->
+ 
 	<servlet-mapping>
 		<servlet-name>selectorBuilder</servlet-name>
 		<url-pattern>*.yoga</url-pattern>
