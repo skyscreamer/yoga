@@ -62,15 +62,10 @@
 	</bean>
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.SelectorParser"
-          p:predefinedSelectorResolver-ref="predefinedSelectorResolver"/>
+          p:aliasSelectorResolver-ref="aliasSelectorResolver" p:disableExplicitSelectors="false"/>
 
-    <bean id="predefinedSelectorResolver" class="org.skyscreamer.yoga.selector.MapSelectorResolver"
-        p:definedSelectors-ref="definedSelectors"/>
-
-    <util:map id="definedSelectors">
-        <entry key="$user" value=":(id,name,friends)"/>
-        <entry key="$userArtists" value=":(id,name,favoriteArtists:(albums))"/>
-    </util:map>
+    <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.demo.selector.DynamicPropertyResolver"
+          p:propertyFile="classpath:selectorAlias.properties"/>
 
 	<bean id="hibernateClassFinder"
 		class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />

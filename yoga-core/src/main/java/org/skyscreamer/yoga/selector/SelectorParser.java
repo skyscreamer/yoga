@@ -6,9 +6,10 @@ public class SelectorParser
     public static final String DEFINITION = "definition";
 
     private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
-    private static final String PREDEFINED_SELECTOR_PREFIX = "$";
+    private static final String ALIAS_SELECTOR_PREFIX = "$";
 
-    private PredefinedSelectorResolver _predefinedSelectorResolver;
+    private AliasSelectorResolver _aliasSelectorResolver;
+    private boolean _disableExplicitSelectors = false;
 
     public Selector parseSelector( String selectorStr )
     {
@@ -36,15 +37,24 @@ public class SelectorParser
             return selector;
         }
 
-        if ( selectorExpression.startsWith( PREDEFINED_SELECTOR_PREFIX ) )
+        if ( selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) && _disableExplicitSelectors )
         {
-            selectorExpression = _predefinedSelectorResolver.resolveSelector( selectorExpression );
+            throw new ParseSelectorException( "Explicit selectors have been disabled" );
+        }
+
+        if ( selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
+        {
+            selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
         }
 
         if ( !selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) )
         {
-            throw new ParseSelectorException( "Selector must start with " + EXPLICIT_SELECTOR_PREFIX + " or " +
-                PREDEFINED_SELECTOR_PREFIX );
+            String message = "Selector must start with " + ALIAS_SELECTOR_PREFIX;
+            if ( !_disableExplicitSelectors )
+            {
+                message += " or " + EXPLICIT_SELECTOR_PREFIX;
+            }
+            throw new ParseSelectorException( message );
         }
 
         StringBuilder stringBuilder = new StringBuilder( selectorExpression );
@@ -130,9 +140,14 @@ public class SelectorParser
         selector._fields.put( fieldName, subSelector);
     }
 
-    public void setPredefinedSelectorResolver( PredefinedSelectorResolver predefinedSelectorResolver )
+    public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )
     {
-        _predefinedSelectorResolver = predefinedSelectorResolver;
+        _aliasSelectorResolver = aliasSelectorResolver;
+    }
+
+    public void setDisableExplicitSelectors( boolean disableExplicitSelectors )
+    {
+        _disableExplicitSelectors = disableExplicitSelectors;
     }
 }
 
