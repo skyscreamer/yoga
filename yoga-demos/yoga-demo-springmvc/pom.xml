@@ -39,18 +39,6 @@
                    <target>1.6</target>
                </configuration>
            </plugin>
-            <plugin>
-                <groupId>org.cloudfoundry</groupId>
-                <artifactId>cf-maven-plugin</artifactId>
-                <version>1.0.0.M1</version>
-                <configuration>
-                    <server>yoga-cloudfoundry-instance</server>
-                    <target>http://api.cloudfoundry.com</target>
-                    <url>yoga-demo-springmvc.cloudfoundry.com</url>
-                    <memory>512</memory>
-                    <instances>1</instances>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -221,4 +209,39 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <profiles>
+        <profile>
+            <id>cloudfoundry-deploy</id>
+            <activation>
+                <property>
+                    <name>deployDemo</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.cloudfoundry</groupId>
+                        <artifactId>cf-maven-plugin</artifactId>
+                        <version>1.0.0.M1</version>
+                        <configuration>
+                            <server>yoga-cloudfoundry-instance</server>
+                            <target>http://api.cloudfoundry.com</target>
+                            <url>yoga-demo-springmvc.cloudfoundry.com</url>
+                            <memory>512</memory>
+                            <instances>1</instances>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>update</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
