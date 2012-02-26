@@ -3,6 +3,8 @@ package org.skyscreamer.yoga.springmvc.view;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
@@ -13,7 +15,7 @@ import org.skyscreamer.yoga.util.NameUtil;
 public class XmlSelectorView extends AbstractYogaView
 {
    @Override
-   public void render(OutputStream outputStream, Selector selector, Object value)
+   public void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response)
          throws IOException
    {
       DOMDocument domDocument = new DOMDocument();
@@ -23,14 +25,14 @@ public class XmlSelectorView extends AbstractYogaView
          HierarchicalModel model = new XmlHierarchyModel( root );
          for (Object child : (Iterable<?>) value)
          {
-            resultTraverser.traverse( child, selector, model, getHrefSuffix() );
+            resultTraverser.traverse( child, selector, model, getHrefSuffix(), response );
          }
       }
       else
       {
          String name = NameUtil.getName( resultTraverser.findClass( value ) );
          DOMElement root = createDocument( domDocument, name );
-         resultTraverser.traverse( value, selector, new XmlHierarchyModel( root ), getHrefSuffix() );
+         resultTraverser.traverse( value, selector, new XmlHierarchyModel( root ), getHrefSuffix(), response );
       }
       write( outputStream, domDocument );
    }

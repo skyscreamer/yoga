@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.mapper.enrich;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.CoreSelector;
@@ -17,15 +19,15 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher {
     private String suffix = "yoga";
 
     @Override
-    public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-                             Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator) {
+    public void enrich(HttpServletResponse response, Object instance, Selector fieldSelector,
+                             HierarchicalModel model, Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator) {
         if (fieldSelector instanceof CoreSelector)
         {
             String href = determineTemplate(instanceType, populator);
 
             if (href != null) {
                 href += "." + suffix;
-                model.addSimple(FIELD_NAME, getHref(href, instance));
+                model.addSimple(FIELD_NAME, getHref(response, href, instance));
             }
             return;
         }

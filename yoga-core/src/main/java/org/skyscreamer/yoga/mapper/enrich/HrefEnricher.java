@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.mapper.enrich;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
@@ -14,15 +16,15 @@ public class HrefEnricher implements Enricher {
     private URICreator _uriCreator = new URICreator();
 
     @Override
-    public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-                       Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator) {
+    public void enrich(HttpServletResponse response, Object instance, Selector fieldSelector,
+                       HierarchicalModel model, Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator) {
         String href = determineTemplate(instanceType, populator);
 
         if (href != null) {
             if (hrefSuffix != null) {
                 href += "." + hrefSuffix;
             }
-            model.addSimple(SelectorParser.HREF, getHref(href, instance));
+            model.addSimple(SelectorParser.HREF, getHref(response, href, instance));
         }
     }
 
@@ -36,8 +38,8 @@ public class HrefEnricher implements Enricher {
         return href;
     }
 
-    protected Object getHref(String uriTemplate, final Object instance) {
-        return _uriCreator.getHref(uriTemplate, new ValueReader() {
+    protected Object getHref(HttpServletResponse response, String uriTemplate, final Object instance) {
+        return _uriCreator.getHref(uriTemplate, response, new ValueReader() {
             @Override
             public Object getValue(String property) {
                 try {

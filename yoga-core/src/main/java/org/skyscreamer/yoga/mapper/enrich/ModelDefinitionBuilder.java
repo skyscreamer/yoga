@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
 import org.skyscreamer.yoga.populator.ExtraField;
@@ -19,8 +21,8 @@ public class ModelDefinitionBuilder implements Enricher
 {
 
    @Override
-   public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator)
+   public void enrich(HttpServletResponse response, Object instance, Selector fieldSelector,
+         HierarchicalModel model, Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator)
    {
       if (!(fieldSelector instanceof CoreSelector))
       {

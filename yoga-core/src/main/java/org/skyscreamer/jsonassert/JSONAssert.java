@@ -1,13 +1,11 @@
 package org.skyscreamer.jsonassert;
 
-import org.apache.commons.collections.CollectionUtils;
+import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
+import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.*;
-
-import static org.skyscreamer.jsonassert.JSONCompareMode.*;
 
 /**
  * <p>A set of assertion methods useful for writing tests methods that return JSON.</p>
