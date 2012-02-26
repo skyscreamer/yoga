@@ -100,7 +100,8 @@ public class JSONCompare {
         }
     }
 
-    private static void compareValues(String fullKey, Object expectedValue, Object actualValue, JSONCompareMode mode, JSONCompareResult result) throws JSONException {
+    private static void compareValues(String fullKey, Object expectedValue, Object actualValue, JSONCompareMode mode, JSONCompareResult result) throws JSONException 
+    {
         if (expectedValue.getClass().isAssignableFrom(actualValue.getClass())) {
             if (expectedValue instanceof JSONArray) {
                 compareJSONArray(fullKey , (JSONArray)expectedValue, (JSONArray)actualValue, mode, result);
@@ -114,6 +115,7 @@ public class JSONCompare {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static void compareJSONArray(String key, JSONArray expected, JSONArray actual, JSONCompareMode mode,
                                          JSONCompareResult result) throws JSONException
     {

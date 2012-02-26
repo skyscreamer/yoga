@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.mapper.enrich.Enricher;
 import org.skyscreamer.yoga.mapper.enrich.HrefEnricher;
@@ -38,29 +40,29 @@ public class ResultTraverser
    };
 
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model,
-         String hrefSuffix)
+         String hrefSuffix, HttpServletResponse response)
    {
       Class<?> instanceType = findClass( instance );
-      addExtraInfo( instance, fieldSelector, model, instanceType, hrefSuffix );
-      addProperties( instance, fieldSelector, model, instanceType, hrefSuffix );
+      addExtraInfo( response, instance, fieldSelector, model, instanceType, hrefSuffix );
+      addProperties( response, instance, fieldSelector, model, instanceType, hrefSuffix );
    }
 
    @SuppressWarnings("unchecked")
-   protected <T> void addExtraInfo(Object instance, Selector fieldSelector,
-         HierarchicalModel model, Class<T> instanceType, String hrefSuffix)
+   protected <T> void addExtraInfo(HttpServletResponse response, Object instance,
+         Selector fieldSelector, HierarchicalModel model, Class<T> instanceType, String hrefSuffix)
    {
 	  FieldPopulator<T> populator = (FieldPopulator<T>) _fieldPopulatorRegistry.getFieldPopulator( instanceType );
 
       for (Enricher enricher : _enrichers)
       {
-         enricher.enrich(instance, fieldSelector, model, instanceType, hrefSuffix, populator);
+         enricher.enrich(response, instance, fieldSelector, model, instanceType, hrefSuffix, populator);
       }
       
-      addAnnotatedExtraFields( fieldSelector, model, hrefSuffix, populator, instance, instanceType );
+      addAnnotatedExtraFields( response, fieldSelector, model, hrefSuffix, populator, instance, instanceType );
    }
 
-   private void addAnnotatedExtraFields(Selector fieldSelector, HierarchicalModel model,
-         String hrefSuffix, FieldPopulator<?> populator, Object instance, Class<?> instanceType)
+   private void addAnnotatedExtraFields(HttpServletResponse response, Selector fieldSelector,
+         HierarchicalModel model, String hrefSuffix, FieldPopulator<?> populator, Object instance, Class<?> instanceType)
    {
       for (Method method : getPopulatorExtraFieldMethods( populator, instanceType ))
       {
@@ -95,18 +97,18 @@ public class ResultTraverser
             else if (Iterable.class.isAssignableFrom( fieldValue.getClass() ))
             {
                traverseIterable( childSelector, model, extraField.value(),
-                     (Iterable<?>) fieldValue, hrefSuffix );
+                     (Iterable<?>) fieldValue, hrefSuffix, response );
             }
             else
             {
-               traverseChild( childSelector, model, extraField.value(), fieldValue, hrefSuffix );
+               traverseChild( response, childSelector, model, extraField.value(), fieldValue, hrefSuffix );
             }
          }
       }
    }
 
-   protected void addProperties(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType, String hrefSuffix)
+   protected void addProperties(HttpServletResponse response, Object instance, Selector fieldSelector,
+         HierarchicalModel model, Class<?> instanceType, String hrefSuffix)
    {
       FieldPopulator<?> fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
       for (PropertyDescriptor property : PropertyUtil.getReadableProperties(instanceType))
@@ -128,11 +130,11 @@ public class ResultTraverser
                }
                else if (Iterable.class.isAssignableFrom( propertyType ))
                {
-                  traverseIterable( fieldSelector, model, property, (Iterable<?>) value, hrefSuffix );
+                  traverseIterable( response, fieldSelector, model, property, (Iterable<?>) value, hrefSuffix );
                }
                else
                {
-                  traverseChild( fieldSelector, model, property, value, hrefSuffix );
+                  traverseChild( response, fieldSelector, model, property, value, hrefSuffix );
                }
             }
          }
@@ -143,8 +145,8 @@ public class ResultTraverser
       }
    }
 
-   private void traverseIterable(Selector fieldSelector, HierarchicalModel model,
-         PropertyDescriptor property, Iterable<?> list, String hrefSuffix)
+   private void traverseIterable(HttpServletResponse response, Selector fieldSelector,
+         HierarchicalModel model, PropertyDescriptor property, Iterable<?> list, String hrefSuffix)
    {
       if (list == null)
       {
@@ -160,13 +162,13 @@ public class ResultTraverser
          }
          else
          {
-            traverseChild( fieldSelector, listModel, property, o, hrefSuffix );
+            traverseChild( response, fieldSelector, listModel, property, o, hrefSuffix );
          }
       }
    }
 
    private void traverseIterable(Selector fieldSelector, HierarchicalModel model, String property,
-         Iterable<?> list, String hrefSuffix)
+         Iterable<?> list, String hrefSuffix, HttpServletResponse response)
    {
       if (list == null)
       {
@@ -182,23 +184,23 @@ public class ResultTraverser
          }
          else
          {
-            traverseChild( fieldSelector, listModel, property, o, hrefSuffix );
+            traverseChild( response, fieldSelector, listModel, property, o, hrefSuffix );
          }
       }
    }
 
-   private void traverseChild(Selector parentSelector, HierarchicalModel parent,
-         PropertyDescriptor property, Object value, String hrefSuffix)
+   private void traverseChild(HttpServletResponse response, Selector parentSelector,
+         HierarchicalModel parent, PropertyDescriptor property, Object value, String hrefSuffix)
    {
       traverse( value, parentSelector.getField( property ), parent.createChild( property, value ),
-            hrefSuffix );
+            hrefSuffix, response );
    }
 
-   private void traverseChild(Selector parentSelector, HierarchicalModel parent, String property,
-         Object value, String hrefSuffix)
+   private void traverseChild(HttpServletResponse response, Selector parentSelector, HierarchicalModel parent,
+         String property, Object value, String hrefSuffix)
    {
       traverse( value, parentSelector.getField( property ), parent.createChild( property, value ),
-            hrefSuffix );
+            hrefSuffix, response );
    }
 
    public Class<?> findClass(Object instance)

@@ -2,6 +2,8 @@ package org.skyscreamer.yoga.mapper.enrich;
 
 import java.beans.PropertyDescriptor;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
 import org.skyscreamer.yoga.populator.FieldPopulator;
@@ -19,8 +21,8 @@ public class NavigationLinksEnricher implements Enricher
    }
 
    @Override
-   public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator)
+   public void enrich(HttpServletResponse response, Object instance, Selector fieldSelector,
+         HierarchicalModel model, Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator)
    {
       if (!(fieldSelector instanceof CoreSelector))
       {
@@ -37,8 +39,8 @@ public class NavigationLinksEnricher implements Enricher
                   "another useless parameter" );
             propertyLink.addSimple( "name", property.getName() );
             String hrefSuffixAndSelector = hrefSuffix + "?selector=:(" + property.getName() + ")";
-            hrefEnricher.enrich( instance, fieldSelector, propertyLink, instanceType,
-                  hrefSuffixAndSelector, populator );
+            hrefEnricher.enrich( response, instance, fieldSelector, propertyLink,
+                  instanceType, hrefSuffixAndSelector, populator );
          }
       }
    }

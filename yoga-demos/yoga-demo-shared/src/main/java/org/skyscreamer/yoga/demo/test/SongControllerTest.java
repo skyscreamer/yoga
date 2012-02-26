@@ -4,10 +4,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.yoga.demo.test.AbstractTest;
 
 /**
  * Created by IntelliJ IDEA.

@@ -3,6 +3,7 @@ package org.skyscreamer.yoga.populator;
 import org.junit.Assert;
 
 import org.junit.Test;
+import org.skyscreamer.yoga.DummyHttpServletResponse;
 import org.skyscreamer.yoga.uri.URICreator;
 
 public class AbstractFieldPopulatorHrefTest
@@ -11,7 +12,7 @@ public class AbstractFieldPopulatorHrefTest
    @Test
    public void testSimple()
    {
-      String href = new URICreator().getHref("/foo/{id}", new ValueReader()
+      String href = new URICreator().getHref("/foo/{id}", new DummyHttpServletResponse(), new ValueReader()
       {
 
          @Override
@@ -28,7 +29,7 @@ public class AbstractFieldPopulatorHrefTest
    @Test
    public void test3()
    {
-      String href = new URICreator().getHref("/{a}/foo/{b}/{c}", new ValueReader()
+      String href = new URICreator().getHref("/{a}/foo/{b}/{c}", new DummyHttpServletResponse(), new ValueReader()
       {
          @Override
          public Object getValue(String property)
