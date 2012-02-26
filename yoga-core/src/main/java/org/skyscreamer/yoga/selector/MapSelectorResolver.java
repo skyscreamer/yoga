@@ -6,16 +6,16 @@ import java.util.Map;
  * Created by IntelliJ IDEA.
  * User: corby
  */
-public class MapSelectorResolver implements PredefinedSelectorResolver
+public class MapSelectorResolver implements AliasSelectorResolver
 {
     private Map<String,String> _definedSelectors;
 
-    public String resolveSelector( String predefinedSelectorExpression ) throws ParseSelectorException
+    public String resolveSelector( String aliasSelectorExpression ) throws ParseSelectorException
     {
-        String result = _definedSelectors.get( predefinedSelectorExpression );
+        String result = _definedSelectors.get( aliasSelectorExpression );
         if ( result == null )
         {
-            throw new ParseSelectorException( "No selector defined for " + predefinedSelectorExpression );
+            throw new ParseSelectorException( "No selector defined for " + aliasSelectorExpression );
         }
 
         return result;
