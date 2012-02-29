@@ -62,7 +62,7 @@
 	</bean>
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.SelectorParser"
-          p:aliasSelectorResolver-ref="aliasSelectorResolver" p:disableExplicitSelectors="true"/>
+          p:aliasSelectorResolver-ref="aliasSelectorResolver" p:disableExplicitSelectors="false"/>
 
     <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.DynamicPropertyResolver"
           p:propertyFile="classpath:selectorAlias.properties"/>
