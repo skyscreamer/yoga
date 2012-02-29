@@ -1,7 +1,5 @@
-package org.skyscreamer.yoga.demo.selector;
+package org.skyscreamer.yoga.selector;
 
-import org.skyscreamer.yoga.selector.AliasSelectorResolver;
-import org.skyscreamer.yoga.selector.ParseSelectorException;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
