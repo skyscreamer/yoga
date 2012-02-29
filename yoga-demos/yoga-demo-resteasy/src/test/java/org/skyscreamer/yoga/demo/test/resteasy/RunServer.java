@@ -1,7 +1,10 @@
 package org.skyscreamer.yoga.demo.test.resteasy;
 
+import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
+
+import java.util.Collections;
 
 
 public class RunServer {
@@ -15,6 +18,7 @@ public class RunServer {
     }
 
     public RunServer(int port) {
+        System.setProperty("org.mortbay.util.FileResource.checkAliases", "false");
         server = new Server(port);
     }
 
@@ -40,6 +44,7 @@ public class RunServer {
         context.setResourceBase("src/main/webapp");
         context.setContextPath("/");
         context.setParentLoaderPriority(true);
+        context.setInitParams(Collections.singletonMap("org.mortbay.jetty.servlet.Default.aliases","true"));
 
         server.setHandler(context);
 
