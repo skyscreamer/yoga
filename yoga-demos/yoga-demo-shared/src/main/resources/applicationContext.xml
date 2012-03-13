@@ -43,6 +43,21 @@
 		class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
 		p:scripts="classpath:sampledb.sql" />
 
+    <!-- This is for loading large quantities of data for testing data scaling.  Disabled by default. -->
+    <bean id="loadDbInit"
+          class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
+          p:dataSource-ref="dataSource" p:databasePopulator-ref="loadDbPopulator"
+          depends-on="sessionFactory"
+          p:enabled="false" />
+
+    <bean id="loadDbResource" class="org.springframework.core.io.UrlResource">
+        <constructor-arg value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql" />
+    </bean>
+
+    <bean id="loadDbPopulator"
+          class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
+          p:scripts-ref="loadDbResource" />
+
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
