@@ -18,9 +18,9 @@ public class UserControllerTest extends AbstractTest {
     public void testGetUser() throws Exception {
         JSONObject data = getJSONObject("/user/2", null);
         String expected = "{id:2,name:\"Corby Page\"," +
-                "navigationLinks:{friends:{name:\"friends\",href:\"/user/2.json?selector=:(friends)\"}," +
-                "favoriteArtists:{name:\"favoriteArtists\",href:\"/user/2.json?selector=:(favoriteArtists)\"}," +
-                "isFriend:{name:\"isFriend\",href:\"/user/2.json?selector=:(isFriend)\"}}}";
+                "navigationLinks:{friends:{name:\"friends\",href:\"/user/friends/2.json\"}," +
+                "favoriteArtists:{name:\"favoriteArtists\",href:\"/user/favoriteArtists/2.json\"}," +
+                "isFriend:{name:\"isFriend\",href:\"/user/isFriend/2.json\"}}}";
         JSONAssert.assertEquals(expected, data, false);
     }
 
