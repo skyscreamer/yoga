@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.9.0 - 2012-03-18
+--------------------------
+ - Core functionality complete for 1.0 release!  Now we'll add documentation and some polish.
+ - Refactored JSONassert into a separate project (https://github.com/skyscreamer/JSONassert)
+ - Integrated URLRewriter and added some "magic" to allow for REST-y URL's for aliased selectors
+ - Allow disabling of explicit selectors with properties
+ - Added hooks to load large datasets for testing
+
 Version 0.4.0 - 2012-02-13
 --------------------------
 
