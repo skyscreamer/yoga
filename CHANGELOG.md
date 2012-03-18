@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.4.0 - 2012-02-13
+--------------------------
+
+ - Created single copy of static demo files (removed c&p anti-pattern)
+ - Created JSONAssert to streamline unit tests
+ - Implemented support for aliased selectors
+ - Added URLRewriter
+
 Version 0.3.0 - 2011-12-14
 --------------------------
 
