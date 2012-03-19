@@ -6,7 +6,7 @@ Yoga enables client-defined relational queries and out-of-the-box HATEOAS on a J
 * Simplified SOA development (esp. across multiple teams)
 * Browsable APIs
 
-Try it yourself.  You can see how much faster it is to bundle calls in a relational query here: http://yoga-demo-springmvc.cloudfoundry.com/#demo
+This demo shows how much faster it can be to bundle calls in a relational query: http://yoga-demo-springmvc.cloudfoundry.com/#demo
 
 ## Wiki ##
 Most of the documentation is here: https://github.com/skyscreamer/yoga/wiki
