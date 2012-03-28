@@ -1,10 +1,9 @@
 package org.skyscreamer.yoga.demo.test.resteasy;
 
-import org.mortbay.jetty.Handler;
+import java.util.Collections;
+
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
-
-import java.util.Collections;
 
 
 public class RunServer {
