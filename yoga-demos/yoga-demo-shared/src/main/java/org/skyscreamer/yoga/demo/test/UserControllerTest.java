@@ -35,9 +35,7 @@ public class UserControllerTest extends AbstractTest {
 
     public void testGetUsers() throws Exception {
         JSONArray data = getJSONArray("/user", null);
-        JSONAssert.assertEquals("[{name:\"Carter Page\",id:1,href:\"/user/1.json\"}," +
-                "{name:\"Corby Page\",id:2,href:\"/user/2.json\"}," +
-                "{name:\"Solomon Duskis\",id:3,href:\"/user/3.json\"}]", data, false);
+        Assert.assertEquals(1003, data.length());
     }
 
     public void testGetUserWithSelector() throws Exception {
