@@ -67,7 +67,8 @@
 
 	<bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser"
 		p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"
-		p:classFinderStrategy-ref="hibernateClassFinder">
+		p:classFinderStrategy-ref="hibernateClassFinder"
+        p:maxEntities="1000">
 		<property name="enrichers">
 			<list>
 				<bean class="org.skyscreamer.yoga.mapper.enrich.HrefEnricher"/>

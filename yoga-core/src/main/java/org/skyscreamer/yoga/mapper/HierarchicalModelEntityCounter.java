@@ -18,17 +18,17 @@ public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
 
     @Override
     public void addedSimple(String name, Object value) {
+//        countAndCheck();
+    }
+
+    @Override
+    public void createdChild(String name) {
         countAndCheck();
     }
 
     @Override
-    public void createdChild(String name, Object value) {
-        countAndCheck();
-    }
-
-    @Override
-    public void createdList(String name, Object value) {
-        countAndCheck();
+    public void createdList(String name) {
+//        countAndCheck();
     }
 
     private void countAndCheck() {

@@ -27,7 +27,7 @@ import org.skyscreamer.yoga.selector.Selector;
  */
 public class ResultTraverser
 {
-   
+   private int _maxEntities = -1;
    private FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry(
          new ArrayList<FieldPopulator<?>>() );
    private List<Enricher> _enrichers = Arrays.asList(new HrefEnricher(), new ModelDefinitionBuilder(), new NavigationLinksEnricher());
@@ -42,6 +42,9 @@ public class ResultTraverser
    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model,
          String hrefSuffix, HttpServletResponse response)
    {
+      if (_maxEntities > -1) {
+          model = new ObservedHierarchicalModel(model, new HierarchicalModelEntityCounter(_maxEntities));
+      }
       Class<?> instanceType = findClass( instance );
       addExtraInfo( response, instance, fieldSelector, model, instanceType, hrefSuffix );
       addProperties( response, instance, fieldSelector, model, instanceType, hrefSuffix );
@@ -152,7 +155,7 @@ public class ResultTraverser
       {
          return;
       }
-      HierarchicalModel listModel = model.createList( property, list );
+      HierarchicalModel listModel = model.createList( property );
       for (Object o : list)
       {
          Class<?> type = findClass( o );
@@ -174,7 +177,7 @@ public class ResultTraverser
       {
          return;
       }
-      HierarchicalModel listModel = model.createList( property, list );
+      HierarchicalModel listModel = model.createList( property );
       for (Object o : list)
       {
          Class<?> type = findClass( o );
@@ -192,14 +195,14 @@ public class ResultTraverser
    private void traverseChild(HttpServletResponse response, Selector parentSelector,
          HierarchicalModel parent, PropertyDescriptor property, Object value, String hrefSuffix)
    {
-      traverse( value, parentSelector.getField( property ), parent.createChild( property, value ),
+      traverse( value, parentSelector.getField( property ), parent.createChild( property ),
             hrefSuffix, response );
    }
 
    private void traverseChild(HttpServletResponse response, Selector parentSelector, HierarchicalModel parent,
          String property, Object value, String hrefSuffix)
    {
-      traverse( value, parentSelector.getField( property ), parent.createChild( property, value ),
+      traverse( value, parentSelector.getField( property ), parent.createChild( property ),
             hrefSuffix, response );
    }
 
@@ -229,4 +232,12 @@ public class ResultTraverser
    {
       this._enrichers = enrichers;
    }
+
+    public int getMaxEntities() {
+        return _maxEntities;
+    }
+
+    public void setMaxEntities(int _maxEntities) {
+        this._maxEntities = _maxEntities;
+    }
 }

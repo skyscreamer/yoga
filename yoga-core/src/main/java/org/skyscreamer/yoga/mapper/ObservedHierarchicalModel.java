@@ -37,34 +37,34 @@ public class ObservedHierarchicalModel implements HierarchicalModel {
     }
 
     @Override
-    public HierarchicalModel createChild(PropertyDescriptor property, Object value) {
+    public HierarchicalModel createChild(PropertyDescriptor property) {
         for(HierarchicalModelObserver observer : _observers) {
-            observer.createdChild(property.getName(), value);
+            observer.createdChild(property.getName());
         }
-        return new ObservedHierarchicalModel(_hierHierarchicalModel.createChild(property, value), _observers);
+        return new ObservedHierarchicalModel(_hierHierarchicalModel.createChild(property), _observers);
     }
 
     @Override
-    public HierarchicalModel createChild(String name, Object value) {
+    public HierarchicalModel createChild(String name) {
         for(HierarchicalModelObserver observer : _observers) {
-            observer.createdChild(name, value);
+            observer.createdChild(name);
         }
-        return new ObservedHierarchicalModel(_hierHierarchicalModel.createChild(name, value), _observers);
+        return new ObservedHierarchicalModel(_hierHierarchicalModel.createChild(name), _observers);
     }
 
     @Override
-    public HierarchicalModel createList(PropertyDescriptor property, Object value) {
+    public HierarchicalModel createList(PropertyDescriptor property) {
         for(HierarchicalModelObserver observer : _observers) {
-            observer.createdList(property.getName(), value);
+            observer.createdList(property.getName());
         }
-        return new ObservedHierarchicalModel(_hierHierarchicalModel.createList(property, value), _observers);
+        return new ObservedHierarchicalModel(_hierHierarchicalModel.createList(property), _observers);
     }
 
     @Override
-    public HierarchicalModel createList(String name, Object value) {
+    public HierarchicalModel createList(String name) {
         for(HierarchicalModelObserver observer : _observers) {
-            observer.createdList(name, value);
+            observer.createdList(name);
         }
-        return new ObservedHierarchicalModel(_hierHierarchicalModel.createList(name, value), _observers);
+        return new ObservedHierarchicalModel(_hierHierarchicalModel.createList(name), _observers);
     }
 }
