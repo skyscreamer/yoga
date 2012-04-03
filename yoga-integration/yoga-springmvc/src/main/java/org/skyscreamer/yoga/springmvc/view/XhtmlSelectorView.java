@@ -22,6 +22,8 @@ public class XhtmlSelectorView extends AbstractYogaView
    public void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response)
          throws IOException
    {
+      ResultTraverserContext context = new ResultTraverserContext(getHrefSuffix(), response);
+
       DOMDocument domDocument = new DOMDocument();
       Element rootElement = new DOMElement( "html" );
       domDocument.setRootElement( rootElement );
@@ -34,22 +36,22 @@ public class XhtmlSelectorView extends AbstractYogaView
       {
          for (Object child : (Iterable<?>) value)
          {
-            traverse( response, child, selector, resultTraverser, body );
+            traverse( child, selector, resultTraverser, body, context );
          }
       }
       else
       {
-         traverse( response, value, selector, resultTraverser, body );
+         traverse( value, selector, resultTraverser, body, context );
       }
       write( outputStream, domDocument );
    }
 
-   public void traverse(HttpServletResponse response, Object value, Selector selector, ResultTraverser traverser, Element body)
+   public void traverse(Object value, Selector selector, ResultTraverser traverser, Element body, ResultTraverserContext context)
    {
       String name = NameUtil.getName( traverser.findClass( value ) );
       HierarchicalModel model = new XhtmlHierarchyModel( body.addElement( "div" ).addAttribute(
             "class", name ) );
-      traverser.traverse( value, selector, model, new ResultTraverserContext(getHrefSuffix(), response) );
+      traverser.traverse( value, selector, model, context );
    }
 
    @Override
