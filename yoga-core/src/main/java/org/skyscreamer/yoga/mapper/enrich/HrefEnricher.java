@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.mapper.ResultTraverserContext;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.populator.ValueReader;
 import org.skyscreamer.yoga.selector.Selector;
@@ -16,15 +17,16 @@ public class HrefEnricher implements Enricher {
     private URICreator _uriCreator = new URICreator();
 
     @Override
-    public void enrich(HttpServletResponse response, Object instance, Selector fieldSelector,
-                       HierarchicalModel model, Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator) {
+   public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
+         Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
+   {
         String href = determineTemplate(instanceType, populator);
 
         if (href != null) {
-            if (hrefSuffix != null) {
-                href += "." + hrefSuffix;
+            if (context.getHrefSuffix() != null) {
+                href += "." + context.getHrefSuffix();
             }
-            model.addSimple(SelectorParser.HREF, getHref(response, href, instance));
+            model.addSimple(SelectorParser.HREF, getHref(context.getResponse(), href, instance));
         }
     }
 

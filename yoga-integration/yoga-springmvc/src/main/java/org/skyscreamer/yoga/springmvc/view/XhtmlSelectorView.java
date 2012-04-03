@@ -10,6 +10,7 @@ import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.mapper.ResultTraverserContext;
 import org.skyscreamer.yoga.mapper.XhtmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.NameUtil;
@@ -48,7 +49,7 @@ public class XhtmlSelectorView extends AbstractYogaView
       String name = NameUtil.getName( traverser.findClass( value ) );
       HierarchicalModel model = new XhtmlHierarchyModel( body.addElement( "div" ).addAttribute(
             "class", name ) );
-      traverser.traverse( value, selector, model, getHrefSuffix(), response );
+      traverser.traverse( value, selector, model, new ResultTraverserContext(getHrefSuffix(), response) );
    }
 
    @Override

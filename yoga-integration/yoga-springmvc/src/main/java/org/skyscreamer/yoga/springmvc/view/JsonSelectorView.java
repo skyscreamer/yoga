@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.skyscreamer.yoga.mapper.MapHierarchicalModel;
+import org.skyscreamer.yoga.mapper.ResultTraverserContext;
 import org.skyscreamer.yoga.selector.Selector;
 
 public class JsonSelectorView extends AbstractYogaView
@@ -43,7 +44,7 @@ public class JsonSelectorView extends AbstractYogaView
    protected Map<String, Object> getSingleResult(HttpServletResponse response, Object value, Selector selector)
    {
       MapHierarchicalModel model = new MapHierarchicalModel();
-      resultTraverser.traverse(value, selector, model, getHrefSuffix(), response);
+      resultTraverser.traverse(value, selector, model, new ResultTraverserContext(getHrefSuffix(), response));
       return model.getObjectTree();
    }
 

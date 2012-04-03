@@ -2,9 +2,8 @@ package org.skyscreamer.yoga.mapper.enrich;
 
 import java.beans.PropertyDescriptor;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.skyscreamer.yoga.mapper.HierarchicalModel;
+import org.skyscreamer.yoga.mapper.ResultTraverserContext;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.CoreSelector;
@@ -21,8 +20,8 @@ public class NavigationLinksEnricher implements Enricher
    }
 
    @Override
-   public void enrich(HttpServletResponse response, Object instance, Selector fieldSelector,
-         HierarchicalModel model, Class<?> instanceType, String hrefSuffix, FieldPopulator<?> populator)
+   public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
+         Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
    {
       if (!(fieldSelector instanceof CoreSelector))
       {
@@ -37,9 +36,9 @@ public class NavigationLinksEnricher implements Enricher
          {
             HierarchicalModel propertyLink = navigationLinks.createChild( property );
             propertyLink.addSimple( "name", property.getName() );
-            String hrefSuffixAndSelector = hrefSuffix + "?selector=:(" + property.getName() + ")";
-            hrefEnricher.enrich( response, instance, fieldSelector, propertyLink,
-                  instanceType, hrefSuffixAndSelector, populator );
+            String hrefSuffixAndSelector = context.getHrefSuffix() + "?selector=:(" + property.getName() + ")";
+            hrefEnricher.enrich( instance, fieldSelector, propertyLink,
+                  instanceType, populator, new ResultTraverserContext(hrefSuffixAndSelector, context.getResponse()) );
          }
       }
    }
