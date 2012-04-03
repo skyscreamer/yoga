@@ -1,9 +1,15 @@
 # Yoga #
 
-Yoga is a Java library that enables relational queries on existing REST implementations to accelerate query performance and development time.
+Yoga enables client-defined relational queries and out-of-the-box HATEOAS on a Java-based REST server.
+
+* **3-4x faster speeds** in high-latency (e.g. mobile) apps
+* Simplified SOA development (esp. across multiple teams)
+* Browsable APIs
+
+This demo shows how much faster it can be to bundle calls in a relational query: http://yoga-demo-springmvc.cloudfoundry.com/#demo
 
 ## Wiki ##
-https://github.com/skyscreamer/yoga/wiki
+Most of the documentation is here: https://github.com/skyscreamer/yoga/wiki
 
 ## Inspiration ##
 LinkedIn’s JavaOne presentation on building flexible REST interfaces (http://blog.linkedin.com/2009/07/08/brandon-duncan-java-one-building-consistent-restful-apis-in-a-high-performance-environment/)
@@ -41,9 +47,6 @@ If you find the Yoga approach as useful as we do, we provide a lot of handy patt
 
 Once Yoga has been set up, clients can build and modify their own relational queries without any server-side programming.  Yay!
 
-Yoga is created by:
+Yoga creators: Carter Page (carter@skyscreamer.org), Corby Page (corby@skyscreamer.org), Solomon Duskis (solomon@skyscreamer.org)
 
- * Carter Page (carter@skyscreamer.org)
- * Corby Page (corby@skyscreamer.org)
- * Solomon Duskis (solomon@skyscreamer.org)
- * ... and contributors like you!
+Yoga contributors: Sudarshan Polapali (spolapali), Ulyana Auhustsonivich (ulyana)
