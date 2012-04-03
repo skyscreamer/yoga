@@ -41,7 +41,7 @@ public class ResultTraverser
          ResultTraverserContext context)
    {
       if (_maxEntities > -1) {
-          model = new ObservedHierarchicalModel(model, new HierarchicalModelEntityCounter(_maxEntities));
+          model = new ObservedHierarchicalModel(model, new HierarchicalModelEntityCounter(context, _maxEntities));
       }
       Class<?> instanceType = findClass( instance );
       addExtraInfo( instance, fieldSelector, model, instanceType, context );

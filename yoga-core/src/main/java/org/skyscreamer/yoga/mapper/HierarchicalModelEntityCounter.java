@@ -9,10 +9,11 @@ import org.skyscreamer.yoga.util.EntityCountExceededException;
  * Time: 5:21 PM
  */
 public class HierarchicalModelEntityCounter implements HierarchicalModelObserver {
-    private int _count = 0;
+    private final ResultTraverserContext _context;
     private final int _maxEntities;
 
-    public HierarchicalModelEntityCounter(int maxEntities) {
+    public HierarchicalModelEntityCounter(ResultTraverserContext context, int maxEntities) {
+        _context = context;
         _maxEntities = maxEntities;
     }
 
@@ -32,15 +33,15 @@ public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
     }
 
     private void countAndCheck() {
-        ++_count;
-        if (_maxEntities > -1 && _count > _maxEntities) {
+        _context.incrementCounter();
+        if (_maxEntities > -1 && _context.readCounter() > _maxEntities) {
             throw new EntityCountExceededException("Exceeded maximum limit of " + _maxEntities + " entities " +
                     "in a single model");
         }
     }
 
     public int getCount() {
-        return _count;
+        return _context.readCounter();
     }
 
     public int getMaxEntities() {
