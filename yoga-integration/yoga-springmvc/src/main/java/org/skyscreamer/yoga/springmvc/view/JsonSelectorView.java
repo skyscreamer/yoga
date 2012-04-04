@@ -20,18 +20,19 @@ public class JsonSelectorView extends AbstractYogaView
          throws IOException
    {
       Object viewData;
+      ResultTraverserContext context = new ResultTraverserContext(getHrefSuffix(), response);
       if (value instanceof Iterable<?>)
       {
          List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
          for (Object instance : (Iterable<?>) value)
          {
-            list.add(getSingleResult(response, instance, selector));
+            list.add(getSingleResult(instance, selector, context));
          }
          viewData = list;
       }
       else
       {
-         viewData = getSingleResult(response, value, selector);
+         viewData = getSingleResult(value, selector, context);
       }
       getObjectMapper().writeValue(outputStream, viewData);
    }
@@ -41,10 +42,10 @@ public class JsonSelectorView extends AbstractYogaView
       return new ObjectMapper();
    }
 
-   protected Map<String, Object> getSingleResult(HttpServletResponse response, Object value, Selector selector)
+   protected Map<String, Object> getSingleResult(Object value, Selector selector, ResultTraverserContext context)
    {
       MapHierarchicalModel model = new MapHierarchicalModel();
-      resultTraverser.traverse(value, selector, model, new ResultTraverserContext(getHrefSuffix(), response));
+      resultTraverser.traverse(value, selector, model, context);
       return model.getObjectTree();
    }
 

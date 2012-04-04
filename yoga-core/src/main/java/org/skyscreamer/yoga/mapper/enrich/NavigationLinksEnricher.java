@@ -29,13 +29,12 @@ public class NavigationLinksEnricher implements Enricher
       }
 
       HierarchicalModel navigationLinks = model
-            .createChild( "navigationLinks", "useless parameter" );
+            .createChild( "navigationLinks");
       for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
       {
          if (!fieldSelector.containsField( property, populator ))
          {
-            HierarchicalModel propertyLink = navigationLinks.createChild( property,
-                  "another useless parameter" );
+            HierarchicalModel propertyLink = navigationLinks.createChild( property );
             propertyLink.addSimple( "name", property.getName() );
             String hrefSuffixAndSelector = context.getHrefSuffix() + "?selector=:(" + property.getName() + ")";
             hrefEnricher.enrich( instance, fieldSelector, propertyLink,

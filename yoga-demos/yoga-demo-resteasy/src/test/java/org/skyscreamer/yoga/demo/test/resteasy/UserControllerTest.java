@@ -2,6 +2,7 @@ package org.skyscreamer.yoga.demo.test.resteasy;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.skyscreamer.yoga.util.EntityCountExceededException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,6 +30,11 @@ public class UserControllerTest extends org.skyscreamer.yoga.demo.test.UserContr
     @Test
     public void testGetUsers() throws Exception {
         super.testGetUsers();
+    }
+
+    @Test
+    public void testGetTooMuchData() throws Exception {
+        super.testGetTooMuchData();
     }
 
     @Test

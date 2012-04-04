@@ -1,12 +1,15 @@
 package org.skyscreamer.yoga.mapper;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ResultTraverserContext
 {
-   private String hrefSuffix;
-   private HttpServletResponse response;
-
+   private final String hrefSuffix;
+   private final HttpServletResponse response;
+   private final Map<String, Object> properties = new HashMap<String, Object>();
+   private int counter = 0;
 
    public ResultTraverserContext(String hrefSuffix, HttpServletResponse response)
    {
@@ -19,19 +22,24 @@ public class ResultTraverserContext
       return hrefSuffix;
    }
 
-   public void setHrefSuffix(String hrefSuffix)
-   {
-      this.hrefSuffix = hrefSuffix;
-   }
-
    public HttpServletResponse getResponse()
    {
       return response;
    }
-
-   public void setResponse(HttpServletResponse response)
-   {
-      this.response = response;
+    
+   public void setProperty(String key, Object value) {
+       properties.put(key, value);
    }
-
+    
+   public Object getProperty(String key) {
+       return properties.get(key);
+   }
+   
+   public void incrementCounter() {
+       ++counter;
+   }
+    
+   public int readCounter() {
+       return counter;
+   }
 }

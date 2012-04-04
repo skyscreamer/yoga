@@ -42,24 +42,24 @@ public class XmlHierarchyModel implements HierarchicalModel
    }
    
    @Override
-   public HierarchicalModel createChild(PropertyDescriptor property, Object result)
+   public HierarchicalModel createChild(PropertyDescriptor property)
    {
-      return createChild( property.getName(), result );
+      return createChild( property.getName());
    }
 
-   public HierarchicalModel createChild(String name, Object result)
+   public HierarchicalModel createChild(String name)
    {
       return new XmlHierarchyModel(element.addElement(name));
    }
 
    @Override
-   public HierarchicalModel createList(PropertyDescriptor property, Object result)
+   public HierarchicalModel createList(PropertyDescriptor property)
    {
-      return createList( property.getName(), result );
+      return createList( property.getName());
    }
    
    @Override
-   public HierarchicalModel createList(String property, Object result)
+   public HierarchicalModel createList(String property)
    {
       return this;
    }
