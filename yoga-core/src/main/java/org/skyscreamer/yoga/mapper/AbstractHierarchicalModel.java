@@ -6,7 +6,7 @@ import java.beans.PropertyDescriptor;
 public abstract class AbstractHierarchicalModel implements HierarchicalModel
 {
    @Override
-   public HierarchicalModel createChild(PropertyDescriptor property, Object result)
+   public HierarchicalModel createChild(PropertyDescriptor property)
    {
       MapHierarchicalModel child = new MapHierarchicalModel();
       addSimple(property, child.getObjectTree());
@@ -14,7 +14,7 @@ public abstract class AbstractHierarchicalModel implements HierarchicalModel
    }
 
    @Override
-   public HierarchicalModel createChild(String property, Object value)
+   public HierarchicalModel createChild(String property)
    {
       MapHierarchicalModel child = new MapHierarchicalModel();
       addSimple(property, child.getObjectTree());
@@ -22,7 +22,7 @@ public abstract class AbstractHierarchicalModel implements HierarchicalModel
    }
 
    @Override
-   public HierarchicalModel createList(PropertyDescriptor property, Object result)
+   public HierarchicalModel createList(PropertyDescriptor property)
    {
       ListHierarchicalModel child = new ListHierarchicalModel();
       addSimple(property, child.getList());
@@ -30,7 +30,7 @@ public abstract class AbstractHierarchicalModel implements HierarchicalModel
    }
    
    @Override
-   public HierarchicalModel createList(String property, Object value)
+   public HierarchicalModel createList(String property)
    {
       ListHierarchicalModel child = new ListHierarchicalModel();
       addSimple(property, child.getList());

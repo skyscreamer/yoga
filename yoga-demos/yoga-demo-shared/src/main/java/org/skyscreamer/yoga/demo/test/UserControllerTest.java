@@ -4,11 +4,14 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.yoga.util.EntityCountExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,9 +38,7 @@ public class UserControllerTest extends AbstractTest {
 
     public void testGetUsers() throws Exception {
         JSONArray data = getJSONArray("/user", null);
-        JSONAssert.assertEquals("[{name:\"Carter Page\",id:1,href:\"/user/1.json\"}," +
-                "{name:\"Corby Page\",id:2,href:\"/user/2.json\"}," +
-                "{name:\"Solomon Duskis\",id:3,href:\"/user/3.json\"}]", data, false);
+        Assert.assertEquals(1003, data.length());
     }
 
     public void testGetUserWithSelector() throws Exception {
@@ -74,4 +75,17 @@ public class UserControllerTest extends AbstractTest {
         Assert.assertNotNull(recommended);
     }
 
+    // This should retrieve a LOT of data and throw EntityCountExceededException
+    public void testGetTooMuchData() throws Exception {
+        Map<String, String> params = Collections.singletonMap("selector", ":(friends:(favoriteArtists))");
+        try {
+            getJSONObject("/user", params);
+        }
+        catch (HttpServerErrorException e) {
+            Assert.assertNotNull(e.getMessage());
+            Assert.assertTrue(e.getMessage().contains("EntityCountExceededException"));
+            return;
+        }
+        Assert.fail("Expected this query to fail with a 500 error caused by an EntityCountExceededException");
+    }
 }
