@@ -2,7 +2,8 @@ package org.skyscreamer.yoga.mapper;
 
 import java.beans.PropertyDescriptor;
 
-public interface HierarchicalModel {
+public interface HierarchicalModel
+{
     void addSimple(PropertyDescriptor property, Object value);
 
     void addSimple(String name, Object result);

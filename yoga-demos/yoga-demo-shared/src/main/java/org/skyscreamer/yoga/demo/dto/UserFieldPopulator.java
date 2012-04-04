@@ -11,17 +11,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: corby
+ * Created by IntelliJ IDEA. User: corby
  */
 @Service
-public class UserFieldPopulator extends FieldPopulatorSupport<User>
-{
-    @Autowired GenericDao _genericDao;
+public class UserFieldPopulator extends FieldPopulatorSupport<User> {
+	@Autowired
+	GenericDao _genericDao;
 
-    @ExtraField( "recommendedAlbums" )
-    public List<Album> getRecommendedAlbums()
-    {
-        return _genericDao.findAll( Album.class );
-    }
+	@ExtraField("recommendedAlbums")
+	public List<Album> getRecommendedAlbums() {
+		return _genericDao.findAll(Album.class);
+	}
 }

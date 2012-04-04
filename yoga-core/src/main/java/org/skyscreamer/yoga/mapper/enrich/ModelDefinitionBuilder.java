@@ -19,35 +19,35 @@ import org.skyscreamer.yoga.selector.SelectorParser;
 public class ModelDefinitionBuilder implements Enricher
 {
 
-   @Override
-   public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
-   {
-      if (!(fieldSelector instanceof CoreSelector))
-      {
-         return;
-      }
-      
-      List<String> definition = new ArrayList<String>();
+    @Override
+    public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
+            Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
+    {
+        if (!(fieldSelector instanceof CoreSelector))
+        {
+            return;
+        }
 
-      if (populator != null && populator.getSupportedFields() != null)
-      {
-         definition = populator.getSupportedFields();
-      }
-      else
-      {
-         for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
-         {
-            definition.add( property.getName() );
-         }
+        List<String> definition = new ArrayList<String>();
 
-         for (Method method : getPopulatorExtraFieldMethods( populator, instanceType ))
-         {
-            ExtraField extraField = method.getAnnotation( ExtraField.class );
-            definition.add( extraField.value() );
-         }
-      }
-      model.addSimple( SelectorParser.DEFINITION, definition );
-   }
+        if (populator != null && populator.getSupportedFields() != null)
+        {
+            definition = populator.getSupportedFields();
+        }
+        else
+        {
+            for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
+            {
+                definition.add( property.getName() );
+            }
+
+            for (Method method : getPopulatorExtraFieldMethods( populator, instanceType ))
+            {
+                ExtraField extraField = method.getAnnotation( ExtraField.class );
+                definition.add( extraField.value() );
+            }
+        }
+        model.addSimple( SelectorParser.DEFINITION, definition );
+    }
 
 }

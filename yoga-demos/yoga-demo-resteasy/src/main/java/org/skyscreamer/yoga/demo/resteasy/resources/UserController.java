@@ -10,14 +10,13 @@ import org.skyscreamer.yoga.demo.model.User;
 import org.springframework.stereotype.Controller;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Carter Page
+ * Created by IntelliJ IDEA. User: Carter Page
  */
 @Controller
 @Path("/user")
 public class UserController extends AbstractController<User> {
-    @GET
-    public List<User> getUsers(@QueryParam("selector") String selectorString) {
-        return _genericDao.findAll(User.class);
-    }
+	@GET
+	public List<User> getUsers(@QueryParam("selector") String selectorString) {
+		return _genericDao.findAll(User.class);
+	}
 }

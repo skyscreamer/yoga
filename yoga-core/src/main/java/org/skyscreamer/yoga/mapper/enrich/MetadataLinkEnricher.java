@@ -9,24 +9,25 @@ import org.skyscreamer.yoga.selector.Selector;
 
 public class MetadataLinkEnricher implements Enricher
 {
-   private MetaDataService metaDataService;
+    private MetaDataService metaDataService;
 
-   public void setMetaDataService(MetaDataService metaDataService)
-   {
-      this.metaDataService = metaDataService;
-   }
+    public void setMetaDataService(MetaDataService metaDataService)
+    {
+        this.metaDataService = metaDataService;
+    }
 
-   @Override
-   public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
-   {
-      if (!(fieldSelector instanceof CoreSelector))
-      {
-         return;
-      }
+    @Override
+    public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
+            Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
+    {
+        if (!(fieldSelector instanceof CoreSelector))
+        {
+            return;
+        }
 
-      HierarchicalModel metaDataLink = model.createChild( "metadata"  );
-      metaDataLink.addSimple( "href", metaDataService.getHref( instanceType, context.getHrefSuffix() ) );
-   }
+        HierarchicalModel metaDataLink = model.createChild( "metadata" );
+        metaDataLink.addSimple( "href",
+                metaDataService.getHref( instanceType, context.getHrefSuffix() ) );
+    }
 
 }

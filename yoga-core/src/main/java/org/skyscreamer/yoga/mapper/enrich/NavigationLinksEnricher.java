@@ -12,35 +12,36 @@ import org.skyscreamer.yoga.selector.Selector;
 public class NavigationLinksEnricher implements Enricher
 {
 
-   private HrefEnricher hrefEnricher = new HrefEnricher();
+    private HrefEnricher hrefEnricher = new HrefEnricher();
 
-   public void setHrefEnricher(HrefEnricher hrefEnricher)
-   {
-      this.hrefEnricher = hrefEnricher;
-   }
+    public void setHrefEnricher(HrefEnricher hrefEnricher)
+    {
+        this.hrefEnricher = hrefEnricher;
+    }
 
-   @Override
-   public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-         Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
-   {
-      if (!(fieldSelector instanceof CoreSelector))
-      {
-         return;
-      }
+    @Override
+    public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
+            Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
+    {
+        if (!(fieldSelector instanceof CoreSelector))
+        {
+            return;
+        }
 
-      HierarchicalModel navigationLinks = model
-            .createChild( "navigationLinks");
-      for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
-      {
-         if (!fieldSelector.containsField( property, populator ))
-         {
-            HierarchicalModel propertyLink = navigationLinks.createChild( property );
-            propertyLink.addSimple( "name", property.getName() );
-            String hrefSuffixAndSelector = context.getHrefSuffix() + "?selector=:(" + property.getName() + ")";
-            hrefEnricher.enrich( instance, fieldSelector, propertyLink,
-                  instanceType, populator, new ResultTraverserContext(hrefSuffixAndSelector, context.getResponse()) );
-         }
-      }
-   }
+        HierarchicalModel navigationLinks = model.createChild( "navigationLinks" );
+        for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
+        {
+            if (!fieldSelector.containsField( property, populator ))
+            {
+                HierarchicalModel propertyLink = navigationLinks.createChild( property );
+                propertyLink.addSimple( "name", property.getName() );
+                String hrefSuffixAndSelector = context.getHrefSuffix() + "?selector=:("
+                        + property.getName() + ")";
+                hrefEnricher.enrich( instance, fieldSelector, propertyLink, instanceType,
+                        populator,
+                        new ResultTraverserContext( hrefSuffixAndSelector, context.getResponse() ) );
+            }
+        }
+    }
 
 }

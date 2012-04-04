@@ -11,16 +11,16 @@ public class SelectorParser
     private AliasSelectorResolver _aliasSelectorResolver;
     private boolean _disableExplicitSelectors = false;
 
-    public Selector parseSelector( String selectorStr )
+    public Selector parseSelector(String selectorStr)
     {
         Selector selector = new CoreSelector();
-        if ( selectorStr != null )
+        if (selectorStr != null)
         {
             try
             {
                 selector = new CombinedSelector( selector, parse( selectorStr ) );
             }
-            catch ( ParseSelectorException e )
+            catch (ParseSelectorException e)
             {
                 // TODO: Add logging here.
                 throw new IllegalArgumentException( "Could not parse selector", e );
@@ -29,28 +29,28 @@ public class SelectorParser
         return selector;
     }
 
-    public DefinedSelectorImpl parse( String selectorExpression ) throws ParseSelectorException
+    public DefinedSelectorImpl parse(String selectorExpression) throws ParseSelectorException
     {
         DefinedSelectorImpl selector = new DefinedSelectorImpl();
-        if ( selectorExpression.equals( ":" ) )
+        if (selectorExpression.equals( ":" ))
         {
             return selector;
         }
 
-        if ( selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) && _disableExplicitSelectors )
+        if (selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) && _disableExplicitSelectors)
         {
             throw new ParseSelectorException( "Explicit selectors have been disabled" );
         }
 
-        if ( selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
+        if (selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ))
         {
             selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
         }
 
-        if ( !selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) )
+        if (!selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ))
         {
             String message = "Selector must start with " + ALIAS_SELECTOR_PREFIX;
-            if ( !_disableExplicitSelectors )
+            if (!_disableExplicitSelectors)
             {
                 message += " or " + EXPLICIT_SELECTOR_PREFIX;
             }
@@ -63,37 +63,38 @@ public class SelectorParser
         stringBuilder.delete( matchIndex, stringBuilder.length() );
         stringBuilder.delete( 0, 2 );
 
-        while ( stringBuilder.length() > 0 )
+        while (stringBuilder.length() > 0)
         {
             processNextSelectorField( selector, stringBuilder );
         }
         return selector;
     }
 
-    private int getMatchingParenthesesIndex( StringBuilder selector, int index ) throws ParseSelectorException
+    private int getMatchingParenthesesIndex(StringBuilder selector, int index)
+            throws ParseSelectorException
     {
         int parenthesesCount = 1;
-        while ( parenthesesCount > 0 && index < selector.length() - 1 )
+        while (parenthesesCount > 0 && index < selector.length() - 1)
         {
             index++;
-            if ( selector.charAt( index ) == '(' )
+            if (selector.charAt( index ) == '(')
             {
                 parenthesesCount++;
             }
-            if ( selector.charAt( index ) == ')' )
+            if (selector.charAt( index ) == ')')
             {
                 parenthesesCount--;
             }
         }
 
-        if ( parenthesesCount > 0 )
+        if (parenthesesCount > 0)
         {
             throw new ParseSelectorException( "More opening parentheses than closing parentheses" );
         }
         return index;
     }
 
-    private void processNextSelectorField( DefinedSelectorImpl selector, StringBuilder selectorBuff )
+    private void processNextSelectorField(DefinedSelectorImpl selector, StringBuilder selectorBuff)
             throws ParseSelectorException
     {
         int index = 0;
@@ -101,21 +102,23 @@ public class SelectorParser
         StringBuilder fieldNameBuilder = new StringBuilder();
         DefinedSelectorImpl subSelector = new DefinedSelectorImpl();
 
-        while ( !done )
+        while (!done)
         {
-            if ( selectorBuff.charAt( index ) == ',' )
+            if (selectorBuff.charAt( index ) == ',')
             {
                 done = true;
             }
-            else if ( selectorBuff.charAt( index ) == ':' )
+            else if (selectorBuff.charAt( index ) == ':')
             {
                 done = true;
                 int matchIndex = getMatchingParenthesesIndex( selectorBuff, index + 1 );
                 subSelector = parse( selectorBuff.substring( index, matchIndex + 1 ) );
 
-                if ( selectorBuff.length() > matchIndex + 1 && selectorBuff.charAt( matchIndex + 1 ) != ',' )
+                if (selectorBuff.length() > matchIndex + 1
+                        && selectorBuff.charAt( matchIndex + 1 ) != ',')
                 {
-                    throw new ParseSelectorException();  // TODO: Add informative message here
+                    throw new ParseSelectorException(); // TODO: Add informative
+                                                        // message here
                 }
                 index = matchIndex + 1;
             }
@@ -125,7 +128,7 @@ public class SelectorParser
             }
 
             index++;
-            if ( index == selectorBuff.length() )
+            if (index == selectorBuff.length())
             {
                 done = true;
             }
@@ -133,21 +136,20 @@ public class SelectorParser
 
         selectorBuff.delete( 0, index );
         String fieldName = fieldNameBuilder.toString();
-        if ( fieldName.equals( HREF ) )
+        if (fieldName.equals( HREF ))
         {
             throw new IllegalArgumentException( HREF + " is a reserved keyword for selectors" );
         }
-        selector._fields.put( fieldName, subSelector);
+        selector._fields.put( fieldName, subSelector );
     }
 
-    public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )
+    public void setAliasSelectorResolver(AliasSelectorResolver aliasSelectorResolver)
     {
         _aliasSelectorResolver = aliasSelectorResolver;
     }
 
-    public void setDisableExplicitSelectors( boolean disableExplicitSelectors )
+    public void setDisableExplicitSelectors(boolean disableExplicitSelectors)
     {
         _disableExplicitSelectors = disableExplicitSelectors;
     }
 }
-

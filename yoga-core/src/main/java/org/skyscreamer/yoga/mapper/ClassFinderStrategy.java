@@ -1,10 +1,9 @@
 package org.skyscreamer.yoga.mapper;
 
 /**
- * Created by IntelliJ IDEA.
- * User: corby
+ * Created by IntelliJ IDEA. User: corby
  */
 public interface ClassFinderStrategy
 {
-    Class<?> findClass( Object instance );
+    Class<?> findClass(Object instance);
 }

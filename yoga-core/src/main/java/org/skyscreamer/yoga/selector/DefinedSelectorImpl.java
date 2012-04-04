@@ -17,25 +17,25 @@ public class DefinedSelectorImpl implements Selector
     }
 
     @Override
-    public DefinedSelectorImpl getField( PropertyDescriptor property )
+    public DefinedSelectorImpl getField(PropertyDescriptor property)
     {
         return getField( property.getName() );
     }
 
-    public DefinedSelectorImpl getField( String field )
+    public DefinedSelectorImpl getField(String field)
     {
         return _fields.get( field );
     }
 
     @Override
-    public boolean containsField( PropertyDescriptor property, FieldPopulator<?> fieldPopulator )
+    public boolean containsField(PropertyDescriptor property, FieldPopulator<?> fieldPopulator)
     {
-      return (fieldPopulator != null && fieldPopulator.getSupportedFields() != null
-            && fieldPopulator.getSupportedFields().contains(property.getName()))
-            || containsField(property.getName());
+        return (fieldPopulator != null && fieldPopulator.getSupportedFields() != null && fieldPopulator
+                .getSupportedFields().contains( property.getName() ))
+                || containsField( property.getName() );
     }
 
-    public boolean containsField( String field )
+    public boolean containsField(String field)
     {
         return _fields.containsKey( field );
     }

@@ -11,74 +11,88 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * Wraps a gzipped Resource so that it decompresses on the fly.
- *
+ * 
  * @author Carter Page
  */
-public class GzippedResource implements Resource {
+public class GzippedResource implements Resource
+{
     private final Resource _resource;
-    
-    public GzippedResource(Resource resource) {
+
+    public GzippedResource(Resource resource)
+    {
         _resource = resource;
     }
 
     @Override
-    public InputStream getInputStream() throws IOException {
-        return new GZIPInputStream(_resource.getInputStream());
+    public InputStream getInputStream() throws IOException
+    {
+        return new GZIPInputStream( _resource.getInputStream() );
     }
 
     // Delegate Methods
     @Override
-    public boolean exists() {
+    public boolean exists()
+    {
         return _resource.exists();
     }
 
     @Override
-    public boolean isReadable() {
+    public boolean isReadable()
+    {
         return _resource.isReadable();
     }
 
     @Override
-    public boolean isOpen() {
+    public boolean isOpen()
+    {
         return _resource.isOpen();
     }
 
     @Override
-    public URL getURL() throws IOException {
+    public URL getURL() throws IOException
+    {
         return _resource.getURL();
     }
 
     @Override
-    public URI getURI() throws IOException {
+    public URI getURI() throws IOException
+    {
         return _resource.getURI();
     }
 
     @Override
-    public File getFile() throws IOException {
+    public File getFile() throws IOException
+    {
         return _resource.getFile();
     }
 
     @Override
-    public long contentLength() throws IOException {
+    public long contentLength() throws IOException
+    {
         return _resource.contentLength();
     }
 
     @Override
-    public long lastModified() throws IOException {
+    public long lastModified() throws IOException
+    {
         return _resource.lastModified();
     }
 
     @Override
-    public Resource createRelative(String relativePath) throws IOException {
-        return _resource.createRelative(relativePath);
+    public Resource createRelative(String relativePath) throws IOException
+    {
+        return _resource.createRelative( relativePath );
     }
 
     @Override
-    public String getFilename() {
+    public String getFilename()
+    {
         return _resource.getFilename();
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription()
+    {
         return _resource.getDescription();
     }
 }

@@ -8,41 +8,41 @@ import java.util.Set;
 
 public class CoreSelector implements Selector
 {
-   @Override
-   public Selector getField(PropertyDescriptor property)
-   {
-      return this;
-   }
+    @Override
+    public Selector getField(PropertyDescriptor property)
+    {
+        return this;
+    }
 
-   @Override
-   public Selector getField(String fieldName)
-   {
-      return this;
-   }
+    @Override
+    public Selector getField(String fieldName)
+    {
+        return this;
+    }
 
-   @Override
-   public boolean containsField( PropertyDescriptor property, FieldPopulator<?> fieldPopulator )
-   {
-       boolean result = property.getReadMethod().isAnnotationPresent( Core.class );
-       if ( result == false )
-       {
-           if ( fieldPopulator != null )
-           {
-               result = fieldPopulator.getCoreFields().contains( property.getName() );
-           }
-       }
-       return result;
-   }
+    @Override
+    public boolean containsField(PropertyDescriptor property, FieldPopulator<?> fieldPopulator)
+    {
+        boolean result = property.getReadMethod().isAnnotationPresent( Core.class );
+        if (result == false)
+        {
+            if (fieldPopulator != null)
+            {
+                result = fieldPopulator.getCoreFields().contains( property.getName() );
+            }
+        }
+        return result;
+    }
 
-   @Override
-   public boolean containsField(String property)
-   {
-      return false;
-   }
+    @Override
+    public boolean containsField(String property)
+    {
+        return false;
+    }
 
-   @Override
-   public Set<String> getFieldNames()
-   {
-      return new HashSet<String>();
-   }
+    @Override
+    public Set<String> getFieldNames()
+    {
+        return new HashSet<String>();
+    }
 }

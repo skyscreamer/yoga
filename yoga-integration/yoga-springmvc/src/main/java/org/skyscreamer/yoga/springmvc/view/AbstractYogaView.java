@@ -22,41 +22,35 @@ import org.springframework.web.servlet.View;
  * 
  * @author Solomon Duskis
  */
-public abstract class AbstractYogaView implements View
-{
-   @Autowired
-   protected ResultTraverser resultTraverser;
+public abstract class AbstractYogaView implements View {
+	@Autowired
+	protected ResultTraverser resultTraverser;
 
-   @Autowired
-   protected SelectorParser _selectorParser;
+	@Autowired
+	protected SelectorParser _selectorParser;
 
-   public void setResultTraverser(ResultTraverser resultTraverser)
-   {
-      this.resultTraverser = resultTraverser;
-   }
-   
-   @Override
-   public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response)
-         throws Exception
-   {
-      response.setContentType( getContentType() );
-      render( response.getOutputStream(), getSelector( request ), model.values().iterator().next(), response );
-   }
+	public void setResultTraverser(ResultTraverser resultTraverser) {
+		this.resultTraverser = resultTraverser;
+	}
 
-   protected Selector getSelector(HttpServletRequest request)
-   {
-      String selectorString = request.getParameter( "selector" );
-      return _selectorParser.parseSelector( selectorString );
-   }
+	@Override
+	public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType(getContentType());
+		render(response.getOutputStream(), getSelector(request), model.values().iterator().next(), response);
+	}
 
-   protected static void write(OutputStream output, DOMDocument domDocument) throws IOException
-   {
-      OutputStreamWriter out = new OutputStreamWriter( output );
-      domDocument.write( out );
-      out.flush();
-   }
+	protected Selector getSelector(HttpServletRequest request) {
+		String selectorString = request.getParameter("selector");
+		return _selectorParser.parseSelector(selectorString);
+	}
 
-   public abstract void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response) throws IOException;
-   
-   public abstract String getHrefSuffix();
+	protected static void write(OutputStream output, DOMDocument domDocument) throws IOException {
+		OutputStreamWriter out = new OutputStreamWriter(output);
+		domDocument.write(out);
+		out.flush();
+	}
+
+	public abstract void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response) throws IOException;
+
+	public abstract String getHrefSuffix();
 }
