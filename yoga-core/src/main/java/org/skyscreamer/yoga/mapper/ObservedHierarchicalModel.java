@@ -1,7 +1,6 @@
 package org.skyscreamer.yoga.mapper;
 
 import java.beans.PropertyDescriptor;
-import java.util.List;
 
 /**
  * Wrapper class that allows a model to be observed as it is constructed.

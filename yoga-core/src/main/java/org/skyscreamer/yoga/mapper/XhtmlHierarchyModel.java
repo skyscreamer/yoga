@@ -3,7 +3,6 @@ package org.skyscreamer.yoga.mapper;
 import java.beans.PropertyDescriptor;
 
 import org.dom4j.Element;
-import org.skyscreamer.yoga.util.NameUtil;
 
 public class XhtmlHierarchyModel implements HierarchicalModel
 {

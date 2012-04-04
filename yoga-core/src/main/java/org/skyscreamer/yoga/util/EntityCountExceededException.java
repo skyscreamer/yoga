@@ -6,6 +6,7 @@ package org.skyscreamer.yoga.util;
  * Date: 3/31/12
  * Time: 5:26 PM
  */
+@SuppressWarnings("serial")
 public class EntityCountExceededException extends RuntimeException {
     public EntityCountExceededException() {
         super();
