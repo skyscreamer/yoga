@@ -2,7 +2,6 @@ package org.skyscreamer.yoga.demo.test.springmvc;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.skyscreamer.yoga.util.EntityCountExceededException;
 
 /**
  * Created by IntelliJ IDEA.
