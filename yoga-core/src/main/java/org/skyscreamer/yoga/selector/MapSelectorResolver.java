@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class MapSelectorResolver implements AliasSelectorResolver
 {
-    private Map<String,String> _definedSelectors;
+    private Map<String, String> _definedSelectors;
 
     public String resolveSelector( String aliasSelectorExpression ) throws ParseSelectorException
     {

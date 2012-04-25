@@ -2,7 +2,6 @@ package org.skyscreamer.yoga.demo.test.springmvc;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.skyscreamer.yoga.util.EntityCountExceededException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,49 +10,59 @@ import org.skyscreamer.yoga.util.EntityCountExceededException;
  * Time: 6:37 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UserControllerTest extends org.skyscreamer.yoga.demo.test.UserControllerTest {
+public class UserControllerTest extends org.skyscreamer.yoga.demo.test.UserControllerTest
+{
     @BeforeClass
-    public static void startServer() throws Exception {
+    public static void startServer() throws Exception
+    {
         RunServer.startServer();
     }
 
     @Test
-    public void testGetUser() throws Exception {
+    public void testGetUser() throws Exception
+    {
         super.testGetUser();
     }
 
     @Test
-    public void testGetNonExistentUser() throws Exception {
+    public void testGetNonExistentUser() throws Exception
+    {
         super.testGetNonExistentUser();
     }
 
     @Test
-    public void testGetUsers() throws Exception {
+    public void testGetUsers() throws Exception
+    {
         super.testGetUsers();
     }
 
     @Test
-    public void testGetTooMuchData() throws Exception {
+    public void testGetTooMuchData() throws Exception
+    {
         super.testGetTooMuchData();
     }
 
     @Test
-    public void testGetUserWithSelector() throws Exception {
+    public void testGetUserWithSelector() throws Exception
+    {
         super.testGetUserWithSelector();
     }
 
     @Test
-    public void testGetUserWithFriends() throws Exception {
+    public void testGetUserWithFriends() throws Exception
+    {
         super.testGetUserWithFriends();
     }
 
     @Test
-    public void testDeepDiveSelector() throws Exception {
+    public void testDeepDiveSelector() throws Exception
+    {
         super.testDeepDiveSelector();
     }
 
     @Test
-    public void testRecommendedAlbums() throws Exception {
+    public void testRecommendedAlbums() throws Exception
+    {
         super.testRecommendedAlbums();
     }
 }

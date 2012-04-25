@@ -137,7 +137,7 @@ public class SelectorParser
         {
             throw new IllegalArgumentException( HREF + " is a reserved keyword for selectors" );
         }
-        selector._fields.put( fieldName, subSelector);
+        selector._fields.put( fieldName, subSelector );
     }
 
     public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )

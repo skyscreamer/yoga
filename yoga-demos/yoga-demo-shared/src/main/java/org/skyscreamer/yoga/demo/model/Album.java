@@ -14,53 +14,70 @@ import java.util.List;
  */
 @Entity
 @URITemplate("/album/{id}")
-public class Album {
-    @Id @GeneratedValue private long id;
+public class Album
+{
+    @Id
+    @GeneratedValue
+    private long id;
     private String title;
-    @ManyToOne @JoinColumn(name = "artistId") private Artist artist;
+    @ManyToOne
+    @JoinColumn(name = "artistId")
+    private Artist artist;
     private int year;
-    @OneToMany(mappedBy = "album") @OrderBy("id") private List<Song> songs;
+    @OneToMany(mappedBy = "album")
+    @OrderBy("id")
+    private List<Song> songs;
 
     @Core
-    public long getId() {
+    public long getId()
+    {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId( long id )
+    {
         this.id = id;
     }
 
     @Core
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle( String title )
+    {
         this.title = title;
     }
 
-    public Artist getArtist() {
+    public Artist getArtist()
+    {
         return artist;
     }
 
-    public void setArtist(Artist artist) {
+    public void setArtist( Artist artist )
+    {
         this.artist = artist;
     }
 
     @Core
-    public int getYear() {
+    public int getYear()
+    {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear( int year )
+    {
         this.year = year;
     }
 
-    public List<Song> getSongs() {
+    public List<Song> getSongs()
+    {
         return songs;
     }
 
-    public void setSongs(List<Song> songs) {
+    public void setSongs( List<Song> songs )
+    {
         this.songs = songs;
     }
 }

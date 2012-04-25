@@ -12,10 +12,10 @@ import java.util.Map;
  */
 public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
 {
-    private Map<Class<?>,FieldPopulator<?>> _registry = new HashMap<Class<?>, FieldPopulator<?>>();
+    private Map<Class<?>, FieldPopulator<?>> _registry = new HashMap<Class<?>, FieldPopulator<?>>();
 
     @SuppressWarnings("rawtypes")
-	public DefaultFieldPopulatorRegistry( List<FieldPopulator<?>> fieldPopulators )
+    public DefaultFieldPopulatorRegistry( List<FieldPopulator<?>> fieldPopulators )
     {
         for ( FieldPopulator<?> fieldPopulator : fieldPopulators )
         {
@@ -24,8 +24,8 @@ public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
             {
                 if ( genericInterface.toString().contains( FieldPopulator.class.getName() ) )
                 {
-                    ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
-                    Class<?> clazz = (Class<?>)parameterizedType.getActualTypeArguments()[0];
+                    ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
+                    Class<?> clazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
                     _registry.put( clazz, fieldPopulator );
                     break;
                 }
@@ -33,8 +33,8 @@ public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
             Type genericSuperclass = fieldPopulatorClass.getGenericSuperclass();
             if ( genericSuperclass.toString().contains( FieldPopulatorSupport.class.getName() ) )
             {
-                ParameterizedType parameterizedType = (ParameterizedType)genericSuperclass;
-                Class<?> clazz = (Class<?>)parameterizedType.getActualTypeArguments()[0];
+                ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
+                Class<?> clazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
                 _registry.put( clazz, fieldPopulator );
                 break;
             }
