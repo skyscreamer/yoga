@@ -10,24 +10,29 @@ import org.junit.Test;
  * Time: 6:48 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ArtistControllerTest extends org.skyscreamer.yoga.demo.test.ArtistControllerTest {
+public class ArtistControllerTest extends org.skyscreamer.yoga.demo.test.ArtistControllerTest
+{
     @BeforeClass
-    public static void startServer() throws Exception {
+    public static void startServer() throws Exception
+    {
         RunServer.startServer();
     }
 
     @Test
-    public void testGetUser() throws Exception {
+    public void testGetUser() throws Exception
+    {
         super.testGetUser();
     }
 
     @Test
-    public void testGetFans() throws Exception {
+    public void testGetFans() throws Exception
+    {
         super.testGetFans();
     }
 
     @Test
-    public void getAlbums() throws Exception {
+    public void getAlbums() throws Exception
+    {
         super.getAlbums();
     }
 }

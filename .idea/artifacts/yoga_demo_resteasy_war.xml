@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="yoga-demo-resteasy:war">
+    <output-path>$PROJECT_DIR$/yoga-demos/yoga-demo-resteasy/target</output-path>
+    <root id="archive" name="yoga-demo-resteasy-0.9.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="yoga-demo-resteasy:war exploded" />
+    </root>
+  </artifact>
+</component>

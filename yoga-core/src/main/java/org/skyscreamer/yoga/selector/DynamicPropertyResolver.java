@@ -26,7 +26,7 @@ public class DynamicPropertyResolver implements AliasSelectorResolver
                 try
                 {
                     _properties.load( _propertyFile.getInputStream() );
-                    _nextReloadTime = milliseconds + ( _reloadIntervalSeconds * 1000 );
+                    _nextReloadTime = milliseconds + (_reloadIntervalSeconds * 1000);
                 }
                 catch ( IOException e )
                 {

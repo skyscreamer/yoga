@@ -1,0 +1,83 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="yoga-demo-resteasy:war exploded">
+    <output-path>$PROJECT_DIR$/yoga-demos/yoga-demo-resteasy/target/yoga-demo-resteasy-0.9.1-SNAPSHOT</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="yoga-demo-resteasy/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="yoga-demo-resteasy" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="archive" name="yoga-core-0.9.1-SNAPSHOT.jar">
+            <element id="module-output" name="yoga-core" />
+          </element>
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.5.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.5.5" />
+          <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils:1.8.3" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.1.1" />
+          <element id="library" level="project" name="Maven: dom4j:dom4j:1.6.1" />
+          <element id="library" level="project" name="Maven: xml-apis:xml-apis:1.0.b2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-asm:3.1.0.RELEASE" />
+          <element id="archive" name="yoga-resteasy-0.9.1-SNAPSHOT.jar">
+            <element id="module-output" name="yoga-resteasy" />
+          </element>
+          <element id="archive" name="yoga-springmvc-0.9.1-SNAPSHOT.jar">
+            <element id="module-output" name="yoga-springmvc" />
+          </element>
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: aopalliance:aopalliance:1.0" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context-support:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:1.5.8" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.5.8" />
+          <element id="library" level="project" name="Maven: javassist:javassist:3.8.0.GA" />
+          <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-spring:2.3-RC1" />
+          <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-jaxrs:2.3-RC1" />
+          <element id="library" level="project" name="Maven: org.jboss.resteasy:jaxrs-api:2.3-RC1" />
+          <element id="library" level="project" name="Maven: org.scannotation:scannotation:1.0.3" />
+          <element id="library" level="project" name="Maven: javax.annotation:jsr250-api:1.0" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
+          <element id="library" level="project" name="Maven: commons-httpclient:commons-httpclient:3.1" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.2" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.1.2" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.1.2" />
+          <element id="library" level="project" name="Maven: net.jcip:jcip-annotations:1.0" />
+          <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-jettison-provider:2.3-RC1" />
+          <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-jaxb-provider:2.3-RC1" />
+          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-impl:2.2.4" />
+          <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.2.3" />
+          <element id="library" level="project" name="Maven: javax.xml.stream:stax-api:1.0" />
+          <element id="library" level="project" name="Maven: com.sun.xml.stream:sjsxp:1.0.1" />
+          <element id="library" level="project" name="Maven: org.codehaus.jettison:jettison:1.2" />
+          <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-jackson-provider:2.3-RC1" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-jaxrs:1.8.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-xc:1.8.5" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-orm:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-tx:3.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-core:3.5.1-Final" />
+          <element id="library" level="project" name="Maven: antlr:antlr:2.7.6" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.1" />
+          <element id="library" level="project" name="Maven: javax.transaction:jta:1.1" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-annotations:3.5.1-Final" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-commons-annotations:3.2.0.Final" />
+          <element id="library" level="project" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.0.Final" />
+          <element id="library" level="project" name="Maven: org.hsqldb:hsqldb:2.0.0" />
+          <element id="archive" name="yoga-demo-shared-0.9.1-SNAPSHOT.jar">
+            <element id="module-output" name="yoga-demo-shared" />
+          </element>
+          <element id="library" level="project" name="Maven: org.json:json:20090211" />
+          <element id="library" level="project" name="Maven: commons-dbcp:commons-dbcp:1.4" />
+          <element id="library" level="project" name="Maven: commons-pool:commons-pool:1.5.4" />
+          <element id="library" level="project" name="Maven: org.skyscreamer:jsonassert:0.9.0" />
+          <element id="library" level="project" name="Maven: org.tuckey:urlrewritefilter:3.2.0" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

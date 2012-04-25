@@ -20,7 +20,7 @@ public class SelectorTest
     {
         DefinedSelectorImpl selector = _selectorParser.parse( ":(gender,country)" );
 
-        Assert.assertEquals(selector.getFields().size(), 2);
+        Assert.assertEquals( selector.getFields().size(), 2 );
         DefinedSelectorImpl genderField = selector.getField( "gender" );
         Assert.assertNotNull( genderField );
         Assert.assertEquals( genderField.getFields().size(), 0 );
@@ -33,14 +33,14 @@ public class SelectorTest
     @Test
     public void testNestedSelectors() throws Exception
     {
-       DefinedSelectorImpl selector = _selectorParser.parse( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
+        DefinedSelectorImpl selector = _selectorParser.parse( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
 
         Assert.assertEquals( selector.getFields().size(), 3 );
-        DefinedSelectorImpl genderField = selector.getField(  "gender" );
+        DefinedSelectorImpl genderField = selector.getField( "gender" );
         Assert.assertNotNull( genderField );
         Assert.assertEquals( genderField.getFields().size(), 0 );
 
-        DefinedSelectorImpl favoriteArtistsField = selector.getField(  "favoriteArtists" );
+        DefinedSelectorImpl favoriteArtistsField = selector.getField( "favoriteArtists" );
         Assert.assertNotNull( favoriteArtistsField );
         Assert.assertEquals( favoriteArtistsField.getFields().size(), 2 );
 
@@ -61,7 +61,7 @@ public class SelectorTest
         Assert.assertEquals( titleField.getFields().size(), 0 );
 
         Assert.assertEquals( selector.getFields().size(), 3 );
-        DefinedSelectorImpl friendsField = selector.getField(  "friends" );
+        DefinedSelectorImpl friendsField = selector.getField( "friends" );
         Assert.assertNotNull( friendsField );
         Assert.assertEquals( friendsField.getFields().size(), 0 );
     }

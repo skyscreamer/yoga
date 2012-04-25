@@ -7,12 +7,13 @@ import java.util.Set;
 
 public interface Selector
 {
-   Selector getField(PropertyDescriptor descriptor);
+    Selector getField( PropertyDescriptor descriptor );
 
-   boolean containsField( PropertyDescriptor descriptor, FieldPopulator<?> fieldPopulator );
-   boolean containsField( String property );
+    boolean containsField( PropertyDescriptor descriptor, FieldPopulator<?> fieldPopulator );
 
-   Selector getField(String fieldName);
+    boolean containsField( String property );
 
-   Set<String> getFieldNames();
+    Selector getField( String fieldName );
+
+    Set<String> getFieldNames();
 }

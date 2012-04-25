@@ -17,9 +17,10 @@ import java.util.List;
 @Service
 public class UserFieldPopulator extends FieldPopulatorSupport<User>
 {
-    @Autowired GenericDao _genericDao;
+    @Autowired
+    GenericDao _genericDao;
 
-    @ExtraField( "recommendedAlbums" )
+    @ExtraField("recommendedAlbums")
     public List<Album> getRecommendedAlbums()
     {
         return _genericDao.findAll( Album.class );
