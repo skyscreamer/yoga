@@ -1,12 +1,17 @@
 # Yoga #
 
-Yoga enables client-defined relational queries and out-of-the-box HATEOAS on a Java-based REST server.
+Yoga enables client-defined relational queries and out-of-the-box HATEOAS on **your existing** Java-based REST server.
 
-* **3-4x faster speeds** in high-latency (e.g. mobile) apps
+* 3-4x faster speeds in high-latency (e.g. mobile) apps
 * Simplified SOA development (esp. across multiple teams)
 * Browsable APIs
 
-This demo shows how much faster it can be to bundle calls in a relational query: http://yoga-demo-springmvc.cloudfoundry.com/#demo
+This demo shows how call aggregation can accelerate your service: http://yoga-demo-springmvc.cloudfoundry.com/#demo
+
+Supported frameworks:
+
+* Spring MVC
+* RESTEasy
 
 ## Wiki ##
 Most of the documentation is here: https://github.com/skyscreamer/yoga/wiki
