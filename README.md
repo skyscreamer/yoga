@@ -24,17 +24,17 @@ Take for example a music-based social network site.  If I'm a user of that site,
 1. Get my friends
 2. Get their favorite artists
 
-Even if I only have two dozen friends on this site, I'm already making 25 queries to get this data.  On mobile applications, where the latency for individual calls typically runs in the 100s of milliseconds, this would take a minimum of a couple of seconds.  On slower networks and for people who have a lot more friends than I do, this quickly becomes untenable.
+If I only have two dozen friends on this site, I'm already making 25 queries to get this data.  On mobile applications, where the latency for individual calls run 100-200ms, this could take several seconds.  But imagine I've got a more typical average of 120 friends.  This is now taking nearly 20 seconds.  (And this is one of the simplest use cases.)
 
-With a REST aggregator, you can easily tie the calls together:
+With a REST aggregator, you can do it in one call:
 
     GET /user/1.json?selector=:(friends:(favoriteArtists))
 
-As you go deeper into the tree, the effect is more pronounced.  Imagine I'm using your social site on my mobile phone, and I'd like to build a play list of songs from my friend's favorite artists.  This can still be aggregated as a single query:
+As you go deeper into the data tree, the effect multiplies geometrically.  In a more complicated example, let's say I want to compile a play list of songs from my friend's favorite artists.  This would require thousands of queries in typical RESTful navigation, but it can still be aggregated as a single query:
 
     GET /user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))
 
-This would be impossible in normal RESTful navigation, since it could require thousands of queries.  Of course, you can write a custom query each time you need something bigger than a single entity or a 1-deep list, but if you can have a framework do it for you it reduces development time, testing time, and code complexity.
+Of course, you can write a custom query each time you need something bigger than a single entity or a 1-deep list, but if you can have a framework do it for you it reduces development time, testing time, and code complexity.
 
 Find a more detailed explanation of our selectors here: https://github.com/skyscreamer/yoga/wiki/REST-Selectors
 
