@@ -24,7 +24,7 @@ Take for example a music-based social network site.  If I'm a user of that site,
 1. Get my friends
 2. Get their favorite artists
 
-The problem is, even if I only have two dozen friends on this site, I'm already making 25 queries to get this data.  On mobile applications, where the latency for individual calls typically runs in the 100s of milliseconds, this would take a minimum of a couple of seconds.  On slower networks and for people who have a lot more friends than I do, this quickly becomes untenable.
+Even if I only have two dozen friends on this site, I'm already making 25 queries to get this data.  On mobile applications, where the latency for individual calls typically runs in the 100s of milliseconds, this would take a minimum of a couple of seconds.  On slower networks and for people who have a lot more friends than I do, this quickly becomes untenable.
 
 With a REST aggregator, you can easily tie the calls together:
 
