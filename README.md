@@ -30,7 +30,7 @@ With a REST aggregator, you can do it in one call:
 
     GET /user/1.json?selector=:(friends:(favoriteArtists))
 
-As you go deeper into the data tree, the effect multiplies geometrically.  In a more complicated example, let's say I want to compile a play list of songs from my friend's favorite artists.  This would require thousands of queries in typical RESTful navigation, but it can still be aggregated as a single query:
+As you go deeper into the data tree, the effect multiplies geometrically.  In a more complicated example, let's say I want to compile a play list of songs from my friend's favorite artists.  This would require thousands of queries in strict RESTful navigation, but it can still be aggregated as a single query:
 
     GET /user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))
 
