@@ -8,10 +8,9 @@ Yoga enables client-defined relational queries and out-of-the-box HATEOAS on **y
 
 This demo shows how aggregation can accelerate a service with multiple nested calls: http://yoga-demo-springmvc.cloudfoundry.com/#demo
 
-Supported frameworks:
-
-* Spring MVC
-* RESTEasy
+## Supported Frameworks ##
+ + RESTEasy
+ + Any RESTful Spring MVC application
 
 ## Wiki ##
 Most of the documentation is here: https://github.com/skyscreamer/yoga/wiki
@@ -19,7 +18,7 @@ Most of the documentation is here: https://github.com/skyscreamer/yoga/wiki
 ## Inspiration ##
 LinkedIn’s JavaOne presentation on building flexible REST interfaces (http://blog.linkedin.com/2009/07/08/brandon-duncan-java-one-building-consistent-restful-apis-in-a-high-performance-environment/)
 
-## How doe this work? ##
+## How does this work? ##
 Take for example a music-based social network site.  If I'm a user of that site, one of the first things I'd like to do is see my friends' favorite bands.  A standard RESTful navigation approach involves two steps:
 
 1. Get my friends
