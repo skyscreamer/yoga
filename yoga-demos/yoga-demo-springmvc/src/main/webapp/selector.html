@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+    <title>Welcome to Yoga</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="css/style.css" rel="stylesheet"/>
+</head>
+<body>
+<header>
+    <h1>Yoga</h1>
+</header>
+<nav>
+    <ul>
+        <li><a class="intro" href="./">Introduction</a></li>
+        <li><a class="demo" href="demo.html">Demo</a></li>
+        <li><a class="selector" href="selector.html">Selectors</a></li>
+        <li><a class="nextsteps" href="./#nextsteps">Next Steps</a></li>
+        <li><a class="contrib" href="./#contrib">Contribute</a></li>
+    </ul>
+</nav>
+<section>
+    <a name="selector"></a>
+    <h2>Selectors</h2>
+    <p>The Yoga approach is simple.  On top of your RESTful implementation, you can pass a selector which asks the
+        server to return nested or non-default fields with the response.</p>
+
+    <div class="example">
+        <p>For instance, here is a traditional REST request that gets the information for a user:</p>
+        <blockquote>
+            <a href="user/2.json">/user/2.json</a>
+        </blockquote>
+    </div>
+
+    <div class="example">
+        <p>A mobile developer can create a very simple profile page with this data.  Let's say the designers want to
+            display list of the user's favorite artists on the same profile page.  We add the selector
+            as a parameter, like this:</p>
+        <blockquote>
+            <a href="user/2.json?selector=:(favoriteArtists)">/user/2.json?selector=:(favoriteArtists)</a>
+        </blockquote>
+    </div>
+
+    <div class="example">
+        <p>You could take this yet a step further, and grab the discography for those artists to display some album
+            information on the same screen:</p>
+        <blockquote>
+            <a href="user/2.json?selector=:(favoriteArtists:(albums))">/user/2.json?selector=:(favoriteArtists:(albums))</a>
+        </blockquote>
+    </div>
+
+    <div class="example">
+        <p>... OR maybe you are more social-graph focused, and you want to show the other users that like the same artists
+            as this person.  You could do a circular reference back to the fans of that artist, and print out little icons
+            for each one below the artist, filtering out the user from the profile page itself.</p>
+        <blockquote>
+            <a href="user/2.json?selector=:(favoriteArtists:(fans))">/user/2.json?selector=:(favoriteArtists:(fans))</a>
+        </blockquote>
+        <p>Note that the circular reference does not continue to loop, since a selector has not been added to "fans".</p>
+    </div>
+
+    <div class="example">
+        <p>This approach also works with calls that return collections of resources. Here we retrieve a list of all users
+            in the database, and their favorite artists.</p>
+        <blockquote>
+            <a href="user.json?selector=:(favoriteArtists)">/user.json?selector=:(favoriteArtists:(albums))</a>
+        </blockquote>
+    </div>
+
+    <div class="example">
+        <p>
+            Finally, here's an example of a deep-dive query that would take a dozen queries in a traditional RESTful API.
+            It returns a list of all the songs by my friends' favorite artists:
+        </p>
+        <blockquote>
+            <a href="user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))">/user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))</a>
+        </blockquote>
+    </div>
+</section>
+</body>
+</html>
