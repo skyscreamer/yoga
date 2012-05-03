@@ -9,20 +9,21 @@ import java.util.Set;
 
 public class DefinedSelectorImpl implements Selector
 {
-    Map<String, DefinedSelectorImpl> _fields = new HashMap<String, DefinedSelectorImpl>();
+    Map<String, Selector> _fields = new HashMap<String, Selector>();
 
-    public Map<String, DefinedSelectorImpl> getFields()
+    public Map<String, Selector> getFields()
     {
         return _fields;
     }
 
     @Override
-    public DefinedSelectorImpl getField( PropertyDescriptor property )
+    public Selector getField( PropertyDescriptor property )
     {
         return getField( property.getName() );
     }
 
-    public DefinedSelectorImpl getField( String field )
+    @Override
+    public Selector getField( String field )
     {
         return _fields.get( field );
     }
