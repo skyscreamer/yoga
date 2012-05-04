@@ -20,6 +20,11 @@ public abstract class SelectorParser
     public abstract Selector parse( String selectorExpression ) throws ParseSelectorException;
 
     public Selector parseSelector( String selectorExpression ) throws ParseSelectorException {
+        if ( _disableExplicitSelectors && !selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
+        {
+            throw new ParseSelectorException( "Explicit selectors have been disabled" );
+        }
+
         if ( selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
         {
             selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );

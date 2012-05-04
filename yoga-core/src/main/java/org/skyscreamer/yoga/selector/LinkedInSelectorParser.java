@@ -23,18 +23,9 @@ public class LinkedInSelectorParser extends ParentheticalSelectorParser {
             return new FieldSelector();
         }
 
-        if ( selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) && _disableExplicitSelectors )
-        {
-            throw new ParseSelectorException( "Explicit selectors have been disabled" );
-        }
-
         if ( !selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) )
         {
-            String message = "Selector must start with " + ALIAS_SELECTOR_PREFIX;
-            if ( !_disableExplicitSelectors )
-            {
-                message += " or " + EXPLICIT_SELECTOR_PREFIX;
-            }
+            String message = "Selector must start with " + EXPLICIT_SELECTOR_PREFIX;
             throw new ParseSelectorException( message );
         }
 
