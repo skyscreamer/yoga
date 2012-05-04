@@ -74,11 +74,21 @@ public class CombinedSelector implements Selector
 
    public Set<String> getFieldNames()
    {
-      Set<String> result = new HashSet<String>();
+      Set<String> fieldNames = new HashSet<String>();
       for (Selector selector : _selectors)
       {
-         result.addAll(selector.getFieldNames());
+         fieldNames.addAll(selector.getFieldNames());
       }
-      return result;
+      return fieldNames;
    }
+
+    @Override
+    public Map<String, Selector> getFields() {
+        Map<String, Selector> fields = new HashMap<String, Selector>();
+        for(Selector selector : _selectors)
+        {
+            fields.putAll(selector.getFields());
+        }
+        return fields;
+    }
 }
