@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.util.ParenthesisUtil;
+
 /**
  * LinkedIn style selector parser
  *
@@ -12,9 +14,9 @@ public class LinkedInSelectorParser extends SelectorParser {
     private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
     private static final String ALIAS_SELECTOR_PREFIX = "$";
 
-    public DefinedSelectorImpl parse( String selectorExpression ) throws ParseSelectorException
+    public FieldSelector parse( String selectorExpression ) throws ParseSelectorException
     {
-        DefinedSelectorImpl selector = new DefinedSelectorImpl();
+        FieldSelector selector = new FieldSelector();
         if ( selectorExpression.equals( ":" ) )
         {
             return selector;
@@ -41,7 +43,7 @@ public class LinkedInSelectorParser extends SelectorParser {
         }
 
         StringBuilder stringBuilder = new StringBuilder( selectorExpression );
-        int matchIndex = getMatchingParenthesisIndex(stringBuilder, 1);
+        int matchIndex = ParenthesisUtil.getMatchingParenthesisIndex(stringBuilder, 1);
 
         stringBuilder.delete( matchIndex, stringBuilder.length() );
         stringBuilder.delete( 0, 2 );
@@ -53,13 +55,13 @@ public class LinkedInSelectorParser extends SelectorParser {
         return selector;
     }
 
-    private void processNextSelectorField( DefinedSelectorImpl selector, StringBuilder selectorBuff )
+    private void processNextSelectorField( FieldSelector selector, StringBuilder selectorBuff )
             throws ParseSelectorException
     {
         int index = 0;
         boolean done = false;
         StringBuilder fieldNameBuilder = new StringBuilder();
-        DefinedSelectorImpl subSelector = new DefinedSelectorImpl();
+        FieldSelector subSelector = new FieldSelector();
 
         while ( !done )
         {
@@ -70,7 +72,7 @@ public class LinkedInSelectorParser extends SelectorParser {
             else if ( selectorBuff.charAt( index ) == ':' )
             {
                 done = true;
-                int matchIndex = getMatchingParenthesisIndex(selectorBuff, index + 1);
+                int matchIndex = ParenthesisUtil.getMatchingParenthesisIndex(selectorBuff, index + 1);
                 subSelector = parse( selectorBuff.substring( index, matchIndex + 1 ) );
 
                 if ( selectorBuff.length() > matchIndex + 1 && selectorBuff.charAt( matchIndex + 1 ) != ',' )

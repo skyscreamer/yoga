@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.zip.GZIPInputStream;
 
 /**
- * Wraps a gzipped Resource so that it decompresses on the fly.
+ * Wraps a gzipped Resource for inline decompression.
  *
  * @author Carter Page
  */

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class DefinedSelectorImpl implements Selector
+public class FieldSelector implements Selector
 {
     Map<String, Selector> _fields = new HashMap<String, Selector>();
 

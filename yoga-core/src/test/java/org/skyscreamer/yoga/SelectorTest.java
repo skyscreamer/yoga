@@ -19,7 +19,7 @@ public class SelectorTest
     @Test
     public void testSimpleSelector() throws Exception
     {
-        Selector selector = _selectorParser.parse( ":(gender,country)" );
+        Selector selector = _selectorParser.parseSelector( ":(gender,country)" );
 
         Assert.assertEquals(selector.getFields().size(), 2);
         Selector genderField = selector.getField( "gender" );
@@ -34,7 +34,7 @@ public class SelectorTest
     @Test
     public void testNestedSelectors() throws Exception
     {
-        Selector selector = _selectorParser.parse( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
+        Selector selector = _selectorParser.parseSelector( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
 
         Assert.assertEquals( selector.getFields().size(), 3 );
         Selector genderField = selector.getField(  "gender" );
