@@ -10,6 +10,7 @@ package org.skyscreamer.yoga.selector;
  */
 public abstract class SelectorParser
 {
+    public static final String ALIAS_SELECTOR_PREFIX = "$";
     public static final String HREF = "href";
     public static final String DEFINITION = "definition";
 
@@ -18,11 +19,16 @@ public abstract class SelectorParser
 
     public abstract Selector parse( String selectorExpression ) throws ParseSelectorException;
 
-    public Selector parseSelector( String selectorStr ) throws ParseSelectorException {
-        Selector selector = new CoreSelector();
-        if ( selectorStr != null )
+    public Selector parseSelector( String selectorExpression ) throws ParseSelectorException {
+        if ( selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
         {
-            selector = new CombinedSelector( selector, parse( selectorStr ) );
+            selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
+        }
+
+        Selector selector = new CoreSelector();
+        if ( selectorExpression != null )
+        {
+            selector = new CombinedSelector( selector, parse( selectorExpression ) );
         }
         return selector;
     }

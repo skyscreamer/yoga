@@ -10,26 +10,19 @@ import org.skyscreamer.yoga.util.ParenthesisUtil;
  * @author Corby Page <corby@skyscreamer.org>
  * @author Carter Page <carter@skyscreamer.org>
  */
-public class LinkedInSelectorParser extends SelectorParser {
+public class LinkedInSelectorParser extends ParentheticalSelectorParser {
     private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
-    private static final String ALIAS_SELECTOR_PREFIX = "$";
 
     public FieldSelector parse( String selectorExpression ) throws ParseSelectorException
     {
-        FieldSelector selector = new FieldSelector();
         if ( selectorExpression.equals( ":" ) )
         {
-            return selector;
+            return new FieldSelector();
         }
 
         if ( selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) && _disableExplicitSelectors )
         {
             throw new ParseSelectorException( "Explicit selectors have been disabled" );
-        }
-
-        if ( selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
-        {
-            selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
         }
 
         if ( !selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) )
@@ -42,63 +35,14 @@ public class LinkedInSelectorParser extends SelectorParser {
             throw new ParseSelectorException( message );
         }
 
-        StringBuilder stringBuilder = new StringBuilder( selectorExpression );
-        int matchIndex = ParenthesisUtil.getMatchingParenthesisIndex(stringBuilder, 1);
-
-        stringBuilder.delete( matchIndex, stringBuilder.length() );
-        stringBuilder.delete( 0, 2 );
-
-        while ( stringBuilder.length() > 0 )
+        if (ParenthesisUtil.getMatchingParenthesisIndex(selectorExpression, 1) != (selectorExpression.length() - 1))
         {
-            processNextSelectorField( selector, stringBuilder );
-        }
-        return selector;
-    }
-
-    private void processNextSelectorField( FieldSelector selector, StringBuilder selectorBuff )
-            throws ParseSelectorException
-    {
-        int index = 0;
-        boolean done = false;
-        StringBuilder fieldNameBuilder = new StringBuilder();
-        FieldSelector subSelector = new FieldSelector();
-
-        while ( !done )
-        {
-            if ( selectorBuff.charAt( index ) == ',' )
-            {
-                done = true;
-            }
-            else if ( selectorBuff.charAt( index ) == ':' )
-            {
-                done = true;
-                int matchIndex = ParenthesisUtil.getMatchingParenthesisIndex(selectorBuff, index + 1);
-                subSelector = parse( selectorBuff.substring( index, matchIndex + 1 ) );
-
-                if ( selectorBuff.length() > matchIndex + 1 && selectorBuff.charAt( matchIndex + 1 ) != ',' )
-                {
-                    throw new ParseSelectorException();  // TODO: Add informative message here
-                }
-                index = matchIndex + 1;
-            }
-            else
-            {
-                fieldNameBuilder.append( selectorBuff.charAt( index ) );
-            }
-
-            index++;
-            if ( index == selectorBuff.length() )
-            {
-                done = true;
-            }
+            throw new ParseSelectorException("Selector must end with a parenthesis");
         }
 
-        selectorBuff.delete( 0, index );
-        String fieldName = fieldNameBuilder.toString();
-        if ( fieldName.equals( HREF ) )
-        {
-            throw new IllegalArgumentException( HREF + " is a reserved keyword for selectors" );
-        }
-        selector._fields.put( fieldName, subSelector);
+        String rawSelectorExpression = selectorExpression.substring(2, selectorExpression.length() - 1);
+        String openParenthesis = ":(";
+
+        return parseParentheticalSelector(rawSelectorExpression, openParenthesis);
     }
 }
