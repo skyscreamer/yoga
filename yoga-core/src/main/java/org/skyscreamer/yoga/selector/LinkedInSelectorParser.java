@@ -3,7 +3,10 @@ package org.skyscreamer.yoga.selector;
 import org.skyscreamer.yoga.util.ParenthesisUtil;
 
 /**
- * LinkedIn style selector parser
+ * <p>LinkedIn style selector parser.  Parses selectors like the following:</p>
+ * <code>
+ *     :(favoriteArtists,friends:(favoriteArtists:(albums)))
+ * </code>
  *
  * @see <a href="http://blog.linkedin.com/2009/07/08/brandon-duncan-java-one-building-consistent-restful-apis-in-a-high-performance-environment/">Brandon Duncan's Presentation</a>
  * @author Solomon Duskis <solomon@skyscreamer.org>

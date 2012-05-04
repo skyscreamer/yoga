@@ -2,25 +2,16 @@ package org.skyscreamer.yoga;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.skyscreamer.yoga.selector.LinkedInSelectorParser;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.SelectorParser;
 
 /**
- * Created by IntelliJ IDEA.
- * User: cpage
- * Date: 4/9/11
- * Time: 4:23 PM
+ * Shared test logic for selector tests
+ *
+ * @author Carter Page <carter@skyscreamer.org>
  */
-public class SelectorTest
-{
-    private SelectorParser _selectorParser = new LinkedInSelectorParser();
-
-    @Test
-    public void testSimpleSelector() throws Exception
+public class AbstractSelectorTest {
+    protected void testSimpleSelector(Selector selector) throws Exception
     {
-        Selector selector = _selectorParser.parseSelector( ":(gender,country)" );
-
         Assert.assertEquals(selector.getFields().size(), 2);
         Selector genderField = selector.getField( "gender" );
         Assert.assertNotNull( genderField );
@@ -31,11 +22,8 @@ public class SelectorTest
         Assert.assertEquals( countryField.getFields().size(), 0 );
     }
 
-    @Test
-    public void testNestedSelectors() throws Exception
+    protected void testNestedSelectors(Selector selector) throws Exception
     {
-        Selector selector = _selectorParser.parseSelector( ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)" );
-
         Assert.assertEquals( selector.getFields().size(), 3 );
         Selector genderField = selector.getField(  "gender" );
         Assert.assertNotNull( genderField );
@@ -66,5 +54,4 @@ public class SelectorTest
         Assert.assertNotNull( friendsField );
         Assert.assertEquals( friendsField.getFields().size(), 0 );
     }
-
 }
