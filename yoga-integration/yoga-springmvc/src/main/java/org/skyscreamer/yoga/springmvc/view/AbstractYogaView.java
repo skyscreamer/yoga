@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.dom4j.dom.DOMDocument;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.selector.ParseSelectorException;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,7 @@ public abstract class AbstractYogaView implements View
       render( response.getOutputStream(), getSelector( request ), model.values().iterator().next(), response );
    }
 
-   protected Selector getSelector(HttpServletRequest request)
-   {
+   protected Selector getSelector(HttpServletRequest request) throws ParseSelectorException {
       String selectorString = request.getParameter( "selector" );
       return _selectorParser.parseSelector( selectorString );
    }

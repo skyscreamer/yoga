@@ -3,8 +3,7 @@ package org.skyscreamer.yoga.selector;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 
 import java.beans.PropertyDescriptor;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CoreSelector implements Selector
 {
@@ -43,6 +42,11 @@ public class CoreSelector implements Selector
    @Override
    public Set<String> getFieldNames()
    {
-      return new HashSet<String>();
+      return Collections.emptySet();
    }
+
+    @Override
+    public Map<String, Selector> getFields() {
+        return Collections.emptyMap();
+    }
 }
