@@ -80,7 +80,7 @@
 		</property>
 	</bean>
 
-    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.SelectorParser"
+    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.LinkedInSelectorParser"
           p:aliasSelectorResolver-ref="aliasSelectorResolver" p:disableExplicitSelectors="false"/>
 
     <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.DynamicPropertyResolver"
