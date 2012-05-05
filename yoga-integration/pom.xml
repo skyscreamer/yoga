@@ -7,7 +7,6 @@
         <version>0.9.1-SNAPSHOT</version>
     </parent>
 
-    <name>yoga</name>
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-integration</artifactId>
     <version>0.9.1-SNAPSHOT</version>
