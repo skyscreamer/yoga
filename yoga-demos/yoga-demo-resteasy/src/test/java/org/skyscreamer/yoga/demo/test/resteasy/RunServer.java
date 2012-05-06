@@ -1,5 +1,6 @@
 package org.skyscreamer.yoga.demo.test.resteasy;
 
+import java.io.File;
 import java.util.Collections;
 
 import org.mortbay.jetty.Server;
@@ -37,6 +38,7 @@ public class RunServer {
 	}
 
 	public void run(boolean join) throws Exception {
+		System.out.println(new File("logs").getAbsolutePath());
 		WebAppContext context = new WebAppContext();
 
 		context.setResourceBase("src/main/webapp");

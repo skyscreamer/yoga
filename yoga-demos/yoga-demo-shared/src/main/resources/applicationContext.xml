@@ -66,19 +66,22 @@
 		p:dataSource-ref="dataSource" />
 
 	<bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser"
-		p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"
-		p:classFinderStrategy-ref="hibernateClassFinder"
-        p:maxEntities="100000">
+		p:instanceContextFactory-ref="yogaInstanceContextFactory">
 		<property name="enrichers">
 			<list>
-				<bean class="org.skyscreamer.yoga.mapper.enrich.HrefEnricher"/>
-                <bean class="org.skyscreamer.yoga.mapper.enrich.SelectorBuilderEnricher"/>
-				<bean class="org.skyscreamer.yoga.mapper.enrich.NavigationLinksEnricher"/>
-				<bean class="org.skyscreamer.yoga.mapper.enrich.ModelDefinitionBuilder"/>
-				<bean class="org.skyscreamer.yoga.mapper.enrich.MetadataLinkEnricher" p:metaDataService-ref="metaDataService"/>
+				<bean class="org.skyscreamer.yoga.enricher.HrefEnricher"/>
+                <bean class="org.skyscreamer.yoga.enricher.SelectorBuilderEnricher"/>
+				<bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher"/>
+				<bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder"/>
+				<bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher" p:metaDataService-ref="metaDataService"/>
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="yogaInstanceContextFactory" class="org.skyscreamer.yoga.mapper.YogaInstanceContextFactory" 
+		p:classFinderStrategy-ref="hibernateClassFinder"
+		p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"
+        p:maxEntities="100000" />
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.SelectorParser"
           p:aliasSelectorResolver-ref="aliasSelectorResolver" p:disableExplicitSelectors="false"/>

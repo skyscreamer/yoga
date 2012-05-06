@@ -3,7 +3,7 @@ package org.skyscreamer.yoga.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.skyscreamer.yoga.selector.Core;
+import org.skyscreamer.yoga.annotations.Core;
 
 public class TypeMetaData
 {

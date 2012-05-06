@@ -25,17 +25,6 @@ public class CombinedSelector implements Selector
         }
     }
 
-    @Override
-    public Selector getField(PropertyDescriptor propertyDescriptor)
-    {
-        List<Selector> children = new ArrayList<Selector>();
-        for (Selector s : _selectors)
-        {
-            children.add( s.getField( propertyDescriptor ) );
-        }
-        return new CombinedSelector( children );
-    }
-
     public Selector getField(String fieldName)
     {
         List<Selector> children = new ArrayList<Selector>();
@@ -47,7 +36,7 @@ public class CombinedSelector implements Selector
     }
 
     @Override
-    public boolean containsField(PropertyDescriptor property, FieldPopulator<?> fieldPopulator)
+    public boolean containsField(PropertyDescriptor property, FieldPopulator fieldPopulator)
     {
         for (Selector selector : _selectors)
         {

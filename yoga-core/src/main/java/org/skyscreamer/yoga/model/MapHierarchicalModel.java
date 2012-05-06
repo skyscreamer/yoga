@@ -1,6 +1,5 @@
-package org.skyscreamer.yoga.mapper;
+package org.skyscreamer.yoga.model;
 
-import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,12 +14,6 @@ public class MapHierarchicalModel extends AbstractHierarchicalModel
     public MapHierarchicalModel(Map<String, Object> objectTree)
     {
         _objectTree = objectTree;
-    }
-
-    @Override
-    public void addSimple(PropertyDescriptor property, Object value)
-    {
-        _objectTree.put( property.getName(), value );
     }
 
     @Override

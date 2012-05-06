@@ -7,10 +7,10 @@ import org.skyscreamer.yoga.util.EntityCountExceededException;
  */
 public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
 {
-    private final ResultTraverserContext _context;
+    private final YogaRequestContext _context;
     private final int _maxEntities;
 
-    public HierarchicalModelEntityCounter(ResultTraverserContext context, int maxEntities)
+    public HierarchicalModelEntityCounter(YogaRequestContext context, int maxEntities)
     {
         _context = context;
         _maxEntities = maxEntities;

@@ -1,46 +1,60 @@
 package org.skyscreamer.yoga.populator;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.skyscreamer.yoga.annotations.PopulationExtension;
 
 /**
  * Created by IntelliJ IDEA. User: corby
  */
 public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
 {
-    private Map<Class<?>, FieldPopulator<?>> _registry = new HashMap<Class<?>, FieldPopulator<?>>();
+    private Map<Class<?>, FieldPopulator> _registry = new HashMap<Class<?>, FieldPopulator>();
 
-    @SuppressWarnings("rawtypes")
-    public DefaultFieldPopulatorRegistry(List<FieldPopulator<?>> fieldPopulators)
+    public DefaultFieldPopulatorRegistry()
     {
-        for (FieldPopulator<?> fieldPopulator : fieldPopulators)
+        
+    }
+
+    public DefaultFieldPopulatorRegistry(List<FieldPopulator> fieldPopulators)
+    {
+        register( fieldPopulators );
+    }
+
+    public void register(List<FieldPopulator> fieldPopulators)
+    {
+        for (FieldPopulator fieldPopulator : fieldPopulators)
         {
             Class<? extends FieldPopulator> fieldPopulatorClass = fieldPopulator.getClass();
-            for (Type genericInterface : fieldPopulatorClass.getGenericInterfaces())
+
+            if (fieldPopulatorClass.isAnnotationPresent( PopulationExtension.class ))
             {
-                if (genericInterface.toString().contains( FieldPopulator.class.getName() ))
+                PopulationExtension annotation = fieldPopulatorClass
+                        .getAnnotation( PopulationExtension.class );
+                Class<?> type = annotation.value();
+                if (type != null)
                 {
-                    ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
-                    Class<?> clazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-                    _registry.put( clazz, fieldPopulator );
+                    register( type, fieldPopulator );
                     break;
                 }
             }
-            Type genericSuperclass = fieldPopulatorClass.getGenericSuperclass();
-            if (genericSuperclass.toString().contains( FieldPopulatorSupport.class.getName() ))
-            {
-                ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
-                Class<?> clazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-                _registry.put( clazz, fieldPopulator );
-                break;
-            }
+
+            // at this point, there should have been a registeration if
+            // @PopulatorExtension was set up correctly. If not, throw an
+            // exception
+            throw new IllegalStateException(
+                    "all FieldPopulators require the @PopulationExtension to specify the underlying object that's being populated" );
         }
     }
 
-    public FieldPopulator<?> getFieldPopulator(Class<?> clazz)
+    public FieldPopulator register(Class<?> typeToExtend, FieldPopulator fieldPopulator)
+    {
+        return _registry.put( typeToExtend, fieldPopulator );
+    }
+
+    public FieldPopulator getFieldPopulator(Class<?> clazz)
     {
         return _registry.get( clazz );
     }

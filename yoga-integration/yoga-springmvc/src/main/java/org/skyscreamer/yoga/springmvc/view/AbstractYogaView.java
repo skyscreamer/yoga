@@ -12,6 +12,7 @@ import org.dom4j.dom.DOMDocument;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
+import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.View;
 
@@ -27,10 +28,17 @@ public abstract class AbstractYogaView implements View {
 	protected ResultTraverser resultTraverser;
 
 	@Autowired
+	protected ClassFinderStrategy classFinderStrategy;
+
+	@Autowired
 	protected SelectorParser _selectorParser;
 
 	public void setResultTraverser(ResultTraverser resultTraverser) {
 		this.resultTraverser = resultTraverser;
+	}
+	
+	public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy) {
+		this.classFinderStrategy = classFinderStrategy;
 	}
 
 	@Override

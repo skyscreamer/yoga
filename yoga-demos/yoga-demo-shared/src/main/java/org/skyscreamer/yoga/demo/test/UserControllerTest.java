@@ -4,11 +4,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.yoga.util.EntityCountExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -19,8 +17,10 @@ import org.springframework.web.client.HttpServerErrorException;
 public class UserControllerTest extends AbstractTest {
 	public void testGetUser() throws Exception {
 		JSONObject data = getJSONObject("/user/2", null);
-		String expected = "{id:2,name:\"Corby Page\"," + "navigationLinks:{friends:{name:\"friends\",href:\"/user/friends/2.json\"},"
-				+ "favoriteArtists:{name:\"favoriteArtists\",href:\"/user/favoriteArtists/2.json\"}," + "isFriend:{name:\"isFriend\",href:\"/user/isFriend/2.json\"}}}";
+		String expected = "{id:2,name:\"Corby Page\"," 
+				+ "navigationLinks:{friends:{name:\"friends\",href:\"/user/friends/2.json\"},"
+				+ "favoriteArtists:{name:\"favoriteArtists\",href:\"/user/favoriteArtists/2.json\"},"
+				+ "isFriend:{name:\"isFriend\",href:\"/user/isFriend/2.json\"}}}";
 		JSONAssert.assertEquals(expected, data, false);
 	}
 

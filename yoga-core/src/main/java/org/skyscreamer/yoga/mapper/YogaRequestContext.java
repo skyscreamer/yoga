@@ -4,22 +4,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ResultTraverserContext
+public class YogaRequestContext
 {
-    private final String hrefSuffix;
+    private final String urlSuffix;
     private final HttpServletResponse response;
     private final Map<String, Object> properties = new HashMap<String, Object>();
     private int counter = 0;
 
-    public ResultTraverserContext(String hrefSuffix, HttpServletResponse response)
+    public YogaRequestContext(String urlSuffix, HttpServletResponse response)
     {
-        this.hrefSuffix = hrefSuffix;
+        this.urlSuffix = urlSuffix;
         this.response = response;
     }
 
-    public String getHrefSuffix()
+    public String getUrlSuffix()
     {
-        return hrefSuffix;
+        return urlSuffix;
     }
 
     public HttpServletResponse getResponse()

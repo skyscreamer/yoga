@@ -7,16 +7,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
-import org.skyscreamer.yoga.mapper.ResultTraverserContext;
-import org.skyscreamer.yoga.mapper.XmlHierarchyModel;
+import org.skyscreamer.yoga.mapper.YogaRequestContext;
+import org.skyscreamer.yoga.model.HierarchicalModel;
+import org.skyscreamer.yoga.model.XmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.NameUtil;
 
 public class XmlSelectorView extends AbstractYogaView {
 	@Override
 	public void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response) throws IOException {
-		ResultTraverserContext context = new ResultTraverserContext(getHrefSuffix(), response);
+		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(), response);
 
 		DOMDocument domDocument = new DOMDocument();
 		if (value instanceof Iterable) {
@@ -26,7 +26,7 @@ public class XmlSelectorView extends AbstractYogaView {
 				resultTraverser.traverse(child, selector, model, context);
 			}
 		} else {
-			String name = NameUtil.getName(resultTraverser.findClass(value));
+			String name = NameUtil.getName(classFinderStrategy.findClass(value));
 			DOMElement root = createDocument(domDocument, name);
 			resultTraverser.traverse(value, selector, new XmlHierarchyModel(root), context);
 		}

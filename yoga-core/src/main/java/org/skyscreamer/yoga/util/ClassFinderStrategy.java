@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.mapper;
+package org.skyscreamer.yoga.util;
 
 /**
  * Created by IntelliJ IDEA. User: corby

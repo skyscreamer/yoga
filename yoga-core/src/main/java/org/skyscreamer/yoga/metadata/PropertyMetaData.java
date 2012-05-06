@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.metadata;
 
-import org.skyscreamer.yoga.selector.Core;
+import org.skyscreamer.yoga.annotations.Core;
 
 public class PropertyMetaData
 {

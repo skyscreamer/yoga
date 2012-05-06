@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.mapper.ResultTraverserContext;
-import org.skyscreamer.yoga.mapper.XhtmlHierarchyModel;
+import org.skyscreamer.yoga.mapper.YogaRequestContext;
+import org.skyscreamer.yoga.model.HierarchicalModel;
+import org.skyscreamer.yoga.model.XhtmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.NameUtil;
 
@@ -19,7 +19,7 @@ public class XhtmlSelectorView extends AbstractYogaView {
 
 	@Override
 	public void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response) throws IOException {
-		ResultTraverserContext context = new ResultTraverserContext(getHrefSuffix(), response);
+		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(), response);
 
 		DOMDocument domDocument = new DOMDocument();
 		Element rootElement = new DOMElement("html");
@@ -39,8 +39,8 @@ public class XhtmlSelectorView extends AbstractYogaView {
 		write(outputStream, domDocument);
 	}
 
-	public void traverse(Object value, Selector selector, ResultTraverser traverser, Element body, ResultTraverserContext context) {
-		String name = NameUtil.getName(traverser.findClass(value));
+	public void traverse(Object value, Selector selector, ResultTraverser traverser, Element body, YogaRequestContext context) {
+		String name = NameUtil.getName(classFinderStrategy.findClass(value));
 		HierarchicalModel model = new XhtmlHierarchyModel(body.addElement("div").addAttribute("class", name));
 		traverser.traverse(value, selector, model, context);
 	}

@@ -1,6 +1,5 @@
-package org.skyscreamer.yoga.mapper;
+package org.skyscreamer.yoga.model;
 
-import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +7,6 @@ public class ListHierarchicalModel extends AbstractHierarchicalModel
 {
 
     List<Object> list = new ArrayList<Object>();
-
-    @Override
-    public void addSimple(PropertyDescriptor property, Object value)
-    {
-        list.add( value );
-    }
 
     @Override
     public void addSimple(String name, Object value)

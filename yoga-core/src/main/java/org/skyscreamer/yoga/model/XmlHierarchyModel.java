@@ -1,6 +1,4 @@
-package org.skyscreamer.yoga.mapper;
-
-import java.beans.PropertyDescriptor;
+package org.skyscreamer.yoga.model;
 
 import org.dom4j.Element;
 
@@ -22,15 +20,10 @@ public class XmlHierarchyModel implements HierarchicalModel
     }
 
     @Override
-    public void addSimple(PropertyDescriptor property, Object result)
-    {
-        addSimple( property.getName(), result );
-    }
-
-    @Override
     public void addSimple(String name, Object result)
     {
         String elementName = childName == null ? name : childName;
+        
         if (name.equals( "href" ))
         {
             element.addAttribute( elementName, result.toString() );
@@ -42,20 +35,9 @@ public class XmlHierarchyModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createChild(PropertyDescriptor property)
-    {
-        return createChild( property.getName() );
-    }
-
     public HierarchicalModel createChild(String name)
     {
         return new XmlHierarchyModel( element.addElement( name ) );
-    }
-
-    @Override
-    public HierarchicalModel createList(PropertyDescriptor property)
-    {
-        return createList( property.getName() );
     }
 
     @Override

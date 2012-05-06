@@ -15,8 +15,9 @@ public class AlbumControllerTest extends AbstractTest {
 	@Test
 	public void testGetAlbum() throws Exception {
 		JSONObject data = getJSONObject("/album/1", null);
-		String expected = "{id:1,title:\"Funeral\",year:\"2004\"," + "navigationLinks:{artist:{name:\"artist\",href:\"/album/1.json?selector=:(artist)\"},"
-				+ "songs:{name:\"songs\",href:\"/album/1.json?selector=:(songs)\"}}}";
+		String expected = "{id:1,title:\"Funeral\",year:\"2004\","
+			+ "navigationLinks:{artist:{name:\"artist\",href:\"/album/1.json?selector=:(artist)\"},"
+			+ "songs:{name:\"songs\",href:\"/album/1.json?selector=:(songs)\"}}}";
 		JSONAssert.assertEquals(expected, data, false);
 	}
 

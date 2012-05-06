@@ -16,19 +16,13 @@ public class DefinedSelectorImpl implements Selector
         return _fields;
     }
 
-    @Override
-    public DefinedSelectorImpl getField(PropertyDescriptor property)
-    {
-        return getField( property.getName() );
-    }
-
     public DefinedSelectorImpl getField(String field)
     {
         return _fields.get( field );
     }
 
     @Override
-    public boolean containsField(PropertyDescriptor property, FieldPopulator<?> fieldPopulator)
+    public boolean containsField(PropertyDescriptor property, FieldPopulator fieldPopulator)
     {
         return (fieldPopulator != null && fieldPopulator.getSupportedFields() != null && fieldPopulator
                 .getSupportedFields().contains( property.getName() ))

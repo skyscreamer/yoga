@@ -1,7 +1,7 @@
 package org.skyscreamer.yoga.demo.model;
 
+import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;
-import org.skyscreamer.yoga.selector.Core;
 
 import javax.persistence.*;
 import java.util.List;

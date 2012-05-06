@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.mapper;
+package org.skyscreamer.yoga.model;
 
 public class HrefValue
 {

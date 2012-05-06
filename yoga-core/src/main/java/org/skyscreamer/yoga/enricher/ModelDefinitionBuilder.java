@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.mapper.enrich;
+package org.skyscreamer.yoga.enricher;
 
 import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
 
@@ -7,35 +7,34 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.skyscreamer.yoga.mapper.HierarchicalModel;
-import org.skyscreamer.yoga.mapper.ResultTraverserContext;
+import org.skyscreamer.yoga.annotations.ExtraField;
+import org.skyscreamer.yoga.mapper.YogaInstanceContext;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
-import org.skyscreamer.yoga.populator.ExtraField;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
 
 public class ModelDefinitionBuilder implements Enricher
 {
 
     @Override
-    public void enrich(Object instance, Selector fieldSelector, HierarchicalModel model,
-            Class<?> instanceType, FieldPopulator<?> populator, ResultTraverserContext context)
+    public void enrich(YogaInstanceContext<?> entityContext)
     {
-        if (!(fieldSelector instanceof CoreSelector))
+        if (!(entityContext.getFieldSelector() instanceof CoreSelector))
         {
             return;
         }
 
         List<String> definition = new ArrayList<String>();
 
+        FieldPopulator populator = entityContext.getPopulator();
         if (populator != null && populator.getSupportedFields() != null)
         {
             definition = populator.getSupportedFields();
         }
         else
         {
+            Class<?> instanceType = entityContext.getInstanceType();
             for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
             {
                 definition.add( property.getName() );
@@ -47,7 +46,7 @@ public class ModelDefinitionBuilder implements Enricher
                 definition.add( extraField.value() );
             }
         }
-        model.addSimple( SelectorParser.DEFINITION, definition );
+        entityContext.getModel().addSimple( SelectorParser.DEFINITION, definition );
     }
 
 }

@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.populator.ExtraField;
+import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
-import org.skyscreamer.yoga.selector.Core;
 import org.skyscreamer.yoga.util.NameUtil;
+import org.skyscreamer.yoga.util.ObjectUtil;
 
 public class MapMetaDataServiceImpl implements MetaDataService
 {
@@ -121,7 +121,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
 
     protected void addPopulatorFields(Class<?> type, String suffix, TypeMetaData result)
     {
-        FieldPopulator<?> fieldPopulator = null;
+        FieldPopulator fieldPopulator = null;
         if (_fieldPopulatorRegistry != null)
         {
             fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( type );
@@ -149,7 +149,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
         propertyMetaData.setName( name );
         propertyMetaData.setIsCore( core );
 
-        if (ResultTraverser.isPrimitive( propertyType ))
+        if (ObjectUtil.isPrimitive( propertyType ))
         {
             propertyMetaData.setType( propertyType == String.class ? "String" : propertyType
                     .getName() );
