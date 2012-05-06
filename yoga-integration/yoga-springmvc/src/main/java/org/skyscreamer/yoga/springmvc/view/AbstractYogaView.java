@@ -24,46 +24,6 @@ import org.springframework.web.servlet.View;
  * 
  * @author Solomon Duskis
  */
-<<<<<<< HEAD
-public abstract class AbstractYogaView implements View {
-	@Autowired
-	protected ResultTraverser resultTraverser;
-
-	@Autowired
-	protected ClassFinderStrategy classFinderStrategy;
-
-	@Autowired
-	protected SelectorParser _selectorParser;
-
-	public void setResultTraverser(ResultTraverser resultTraverser) {
-		this.resultTraverser = resultTraverser;
-	}
-	
-	public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy) {
-		this.classFinderStrategy = classFinderStrategy;
-	}
-
-	@Override
-	public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		response.setContentType(getContentType());
-		render(response.getOutputStream(), getSelector(request), model.values().iterator().next(), response);
-	}
-
-	protected Selector getSelector(HttpServletRequest request) {
-		String selectorString = request.getParameter("selector");
-		return _selectorParser.parseSelector(selectorString);
-	}
-
-	protected static void write(OutputStream output, DOMDocument domDocument) throws IOException {
-		OutputStreamWriter out = new OutputStreamWriter(output);
-		domDocument.write(out);
-		out.flush();
-	}
-
-	public abstract void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response) throws IOException;
-
-	public abstract String getHrefSuffix();
-=======
 public abstract class AbstractYogaView implements View
 {
    @Autowired
@@ -72,6 +32,9 @@ public abstract class AbstractYogaView implements View
    @Autowired
    protected SelectorParser _selectorParser;
 
+   @Autowired
+   protected ClassFinderStrategy _classFinderStrategy;
+   
    public void setResultTraverser(ResultTraverser resultTraverser)
    {
       this.resultTraverser = resultTraverser;
@@ -100,5 +63,4 @@ public abstract class AbstractYogaView implements View
    public abstract void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response) throws IOException;
    
    public abstract String getHrefSuffix();
->>>>>>> upstream/master
 }

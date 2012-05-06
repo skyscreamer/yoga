@@ -39,14 +39,16 @@ public class NavigationLinksEnricher implements Enricher
             if (fieldSelector.containsField( property, populator ))
                 continue;
 
-            HierarchicalModel propertyLink = navigationLinks.createChild( property.getName() );
-            propertyLink.addSimple( "name", property.getName() );
+            HierarchicalModel navModel = navigationLinks.createChild( property.getName() );
+            navModel.addSimple( "name", property.getName() );
             String hrefSuffixAndSelector = requestContext.getUrlSuffix() + "?selector=:("
                     + property.getName() + ")";
             YogaInstanceContext<?> clone = entityContext.clone();
-            clone.setRequestContext( new YogaRequestContext( hrefSuffixAndSelector,
-                    requestContext.getResponse() ) );
-            hrefEnricher.enrich( clone  );
+            YogaRequestContext childRequestContext = new YogaRequestContext( hrefSuffixAndSelector,
+                    requestContext.getResponse() );
+            clone.setRequestContext( childRequestContext );
+            clone.setModel( navModel );
+            hrefEnricher.enrich( clone );
         }
     }
 

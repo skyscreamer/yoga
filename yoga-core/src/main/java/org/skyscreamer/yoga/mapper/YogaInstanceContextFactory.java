@@ -23,17 +23,22 @@ public class YogaInstanceContextFactory
             HierarchicalModel model, YogaRequestContext context)
     {
         Class<?> type = findClass( instance );
-        YogaInstanceContext entityContext = new YogaInstanceContext( instance, type, fieldSelector,
-                model, context );
 
+        HierarchicalModel entityModel = model;
         if (_maxEntities > -1)
         {
-            model = new ObservedHierarchicalModel( model, new HierarchicalModelEntityCounter(
-                    context, _maxEntities ) );
+            HierarchicalModelEntityCounter counter = (HierarchicalModelEntityCounter) context.getProperty("element_counter");
+            if(counter == null){
+                counter = new HierarchicalModelEntityCounter( _maxEntities );
+                context.setProperty( "element_counter", counter );
+            }
+            entityModel = new ObservedHierarchicalModel( model, counter );
         }
 
-        FieldPopulator fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( entityContext
-                .getInstanceType() );
+        YogaInstanceContext entityContext = new YogaInstanceContext( instance, type, fieldSelector,
+                entityModel, context );
+
+        FieldPopulator fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( type );
         entityContext.setPopulator( fieldPopulator );
 
         return entityContext;

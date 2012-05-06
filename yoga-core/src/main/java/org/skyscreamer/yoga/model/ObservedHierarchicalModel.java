@@ -24,25 +24,33 @@ public class ObservedHierarchicalModel implements HierarchicalModel
         _observers = observers;
     }
 
-    @Override
-    public void addSimple(String name, Object value)
-    {
-        _hierHierarchicalModel.addSimple( name, value );
-        for (HierarchicalModelObserver observer : _observers)
-        {
-            observer.addedSimple( name, value );
-        }
-    }
 
     @Override
     public HierarchicalModel createChild(String name)
     {
         for (HierarchicalModelObserver observer : _observers)
         {
-            observer.createdChild( name );
+            observer.creatingChild( name, _hierHierarchicalModel );
         }
-        return new ObservedHierarchicalModel( _hierHierarchicalModel.createChild( name ),
+        HierarchicalModel child = _hierHierarchicalModel.createChild( name );
+        return wrap( child );
+    }
+
+    public HierarchicalModel wrap(HierarchicalModel child)
+    {
+        return child instanceof ObservedHierarchicalModel ? child : new ObservedHierarchicalModel( child,
                 _observers );
+    }
+
+    @Override
+    public HierarchicalModel createChild()
+    {
+        for (HierarchicalModelObserver observer : _observers)
+        {
+            observer.creatingChild( _hierHierarchicalModel );
+        }
+        return wrap( _hierHierarchicalModel.createChild() );
+
     }
 
     @Override
@@ -50,8 +58,38 @@ public class ObservedHierarchicalModel implements HierarchicalModel
     {
         for (HierarchicalModelObserver observer : _observers)
         {
-            observer.createdList( name );
+            observer.creatingList( name, _hierHierarchicalModel );
         }
-        return new ObservedHierarchicalModel( _hierHierarchicalModel.createList( name ), _observers );
+        return wrap( _hierHierarchicalModel.createList( name ) );
+    }
+
+    @Override
+    public void addSimple(Object instance)
+    {
+        for (HierarchicalModelObserver observer : _observers)
+        {
+            observer.addingSimple( instance, _hierHierarchicalModel );
+        }
+        _hierHierarchicalModel.addSimple( instance );
+    }
+    
+    @Override
+    public void addSimple(String name, Object value)
+    {
+        for (HierarchicalModelObserver observer : _observers)
+        {
+            observer.addingSimple( name, value, _hierHierarchicalModel );
+        }
+        _hierHierarchicalModel.addSimple( name, value );
+    }
+
+    @Override
+    public HierarchicalModel createSimple(String name)
+    {
+        for (HierarchicalModelObserver observer : _observers)
+        {
+            observer.creatingSimple( name, _hierHierarchicalModel );
+        }
+        return wrap( _hierHierarchicalModel.createSimple( name ) );
     }
 }

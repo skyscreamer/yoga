@@ -1,10 +1,20 @@
 package org.skyscreamer.yoga.mapper;
 
+import org.skyscreamer.yoga.model.HierarchicalModel;
+
 public interface HierarchicalModelObserver
 {
-    void addedSimple(String name, Object value);
+    void addingSimple(Object value, HierarchicalModel model);
 
-    void createdChild(String name);
+    void addingSimple(String name, Object value, HierarchicalModel _hierHierarchicalModel);
 
-    void createdList(String name);
+    void creatingSimple(String name, HierarchicalModel model);
+
+    void creatingChild(String name, HierarchicalModel model);
+
+    void creatingList(String name, HierarchicalModel model);
+
+    void creatingChild(HierarchicalModel _hierHierarchicalModel);
+
+
 }

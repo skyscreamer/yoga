@@ -1,15 +1,15 @@
 package org.skyscreamer.yoga.mapper;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 public class YogaRequestContext
 {
     private final String urlSuffix;
     private final HttpServletResponse response;
     private final Map<String, Object> properties = new HashMap<String, Object>();
-    private int counter = 0;
 
     public YogaRequestContext(String urlSuffix, HttpServletResponse response)
     {
@@ -35,15 +35,5 @@ public class YogaRequestContext
     public Object getProperty(String key)
     {
         return properties.get( key );
-    }
-
-    public void incrementCounter()
-    {
-        ++counter;
-    }
-
-    public int readCounter()
-    {
-        return counter;
     }
 }

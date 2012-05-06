@@ -21,40 +21,37 @@ import org.skyscreamer.yoga.selector.SelectorParser;
 import org.skyscreamer.yoga.springmvc.view.AbstractYogaView;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object> {
-	@Autowired
-	protected ResultTraverser resultTraverser;
+public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
+{
+   @Autowired
+   protected ResultTraverser resultTraverser;
 
-	@Autowired
-	protected SelectorParser _selectorParser;
+   @Autowired
+   protected SelectorParser _selectorParser;
 
-	@Context
-	HttpServletRequest request;
+   @Context
+   HttpServletRequest request;
 
-	@Context
-	HttpServletResponse response;
+   @Context
+   HttpServletResponse response;
 
-	public AbstractSelectorMessageBodyWriter() {
-		// TODO Auto-generated constructor stub
-	}
+   public AbstractSelectorMessageBodyWriter()
+   {
+      // TODO Auto-generated constructor stub
+   }
 
-	@Override
-	public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4) {
-		return -1;
-	}
+   @Override
+   public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4)
+   {
+      return -1;
+   }
 
-	@Override
-	public boolean isWriteable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
-		return true;
-	}
+   @Override
+   public boolean isWriteable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3)
+   {
+      return true;
+   }
 
-<<<<<<< HEAD
-	@Override
-	public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-			OutputStream entityStream) throws IOException, WebApplicationException {
-		getView().render(entityStream, getSelector(), t, response);
-	}
-=======
    @Override
    public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations,
          MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
@@ -66,20 +63,12 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
        }
    }
->>>>>>> upstream/master
 
-	protected abstract AbstractYogaView getView();
+   protected abstract AbstractYogaView getView();
 
-<<<<<<< HEAD
-	protected Selector getSelector() {
-		String selectorString = request.getParameter("selector");
-		return _selectorParser.parseSelector(selectorString);
-	}
-=======
    protected Selector getSelector() throws ParseSelectorException {
       String selectorString = request.getParameter( "selector" );
       return _selectorParser.parseSelector( selectorString );
    }
->>>>>>> upstream/master
 
 }

@@ -25,27 +25,57 @@ public class ResultTraverser
 
     private YogaInstanceContextFactory instanceContextFactory;
 
-    @SuppressWarnings("rawtypes")
     public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model,
             YogaRequestContext context)
     {
-        YogaInstanceContext entityContext = instanceContextFactory.createEntityContext( 
-                instance, fieldSelector, model, context );
-
-        for (Enricher enricher : _enrichers)
+        if (instance != null)
         {
-            enricher.enrich( entityContext );
+            YogaInstanceContext<?> entity = instanceContextFactory.createEntityContext( instance,
+                    fieldSelector, model, context );
+            traverse( entity );
         }
+    }
 
-        addInstanceFields( entityContext );
-        addPopulatorExtraFields( entityContext );
+    public void traverse(YogaInstanceContext<?> entityContext)
+    {
+        Class<?> instanceType = entityContext.getInstanceType();
+        if (Iterable.class.isAssignableFrom( instanceType ))
+        {
+            YogaRequestContext requestContext = entityContext.getRequestContext();
+            Selector fieldSelector = entityContext.getFieldSelector();
+            for (Object o : (Iterable<?>) entityContext.getInstance())
+            {
+                if (isPrimitive( o.getClass() ))
+                {
+                    entityContext.getModel().addSimple( o );
+                }
+                else
+                {
+                    HierarchicalModel childModel = entityContext.getModel().createChild();
+                    traverse( o, fieldSelector, childModel, requestContext );
+                }
+            }
+        }
+        else
+        {
+            for (Enricher enricher : _enrichers)
+            {
+                enricher.enrich( entityContext );
+            }
+
+            addInstanceFields( entityContext );
+            addPopulatorExtraFields( entityContext );
+        }
     }
 
     protected void addInstanceFields(YogaInstanceContext<?> entityContext)
     {
-        for (PropertyDescriptor property : getReadableProperties( entityContext.getInstanceType() ))
+        List<PropertyDescriptor> readableProperties = getReadableProperties( entityContext
+                .getInstanceType() );
+
+        for (PropertyDescriptor property : readableProperties)
         {
-            if (entityContext.containsInstanceField( property ) )
+            if (entityContext.containsInstanceField( property ))
             {
                 String propertyName = property.getName();
                 Object fieldValue = entityContext.getInstanceFieldValue( propertyName );
@@ -53,17 +83,18 @@ public class ResultTraverser
             }
         }
     }
-    
+
     protected void addPopulatorExtraFields(YogaInstanceContext<?> entityContext)
     {
-        for (Method method : entityContext.getPopulatorExtraFieldMethods())
+        List<Method> populatorExtraFieldMethods = entityContext.getPopulatorExtraFieldMethods();
+
+        for (Method method : populatorExtraFieldMethods)
         {
             String propertyName = method.getAnnotation( ExtraField.class ).value();
             Object fieldValue = entityContext.getPopulatorFieldValue( method );
             addChild( propertyName, fieldValue, entityContext );
         }
     }
-
 
     protected void addChild(String fieldName, Object fieldValue,
             YogaInstanceContext<?> entityContext)
@@ -73,48 +104,29 @@ public class ResultTraverser
             return;
         }
 
-        Selector childSelector = entityContext.getFieldSelector().getField( fieldName );
-
-        Class<?> propertyClassType = fieldValue.getClass();
         HierarchicalModel model = entityContext.getModel();
 
-        if (fieldValue != null && isPrimitive( propertyClassType ))
+        if (isPrimitive( fieldValue.getClass() ))
         {
-            model.addSimple( fieldName, fieldValue );
-        }
-        else if (Iterable.class.isAssignableFrom( propertyClassType ))
-        {
-            traverseIterable( childSelector, model, fieldName, (Iterable<?>) fieldValue,
-                    entityContext.getRequestContext() );
+            model.createSimple( fieldName ).addSimple( fieldValue );
         }
         else
         {
-            traverse( fieldValue, childSelector, model.createChild( fieldName ),
-                    entityContext.getRequestContext() );
-        }
-    }
-
-    protected void traverseIterable(Selector fieldSelector, HierarchicalModel model,
-            String fieldName, Iterable<?> iterable, YogaRequestContext context)
-    {
-        if (iterable == null)
-            return;
-
-        HierarchicalModel listModel = model.createList( fieldName );
-
-        for (Object o : iterable)
-        {
-            if (isPrimitive( instanceContextFactory.findClass( o ) ))
+            HierarchicalModel childModel = null;
+            if (Iterable.class.isAssignableFrom( fieldValue.getClass() ))
             {
-                listModel.addSimple( fieldName, o );
+                childModel = model.createList( fieldName );
             }
             else
             {
-                traverse( o, fieldSelector.getField( fieldName ),
-                        listModel.createChild( fieldName ), context );
+                childModel = model.createChild( fieldName );
             }
+            Selector childSelector = entityContext.getFieldSelector().getField( fieldName );
+            traverse( fieldValue, childSelector, childModel, entityContext.getRequestContext() );
         }
     }
+
+    // GETTERS / SETTERS
 
     public void setEnrichers(List<Enricher> enrichers)
     {

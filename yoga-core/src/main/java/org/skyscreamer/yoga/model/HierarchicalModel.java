@@ -1,11 +1,17 @@
 package org.skyscreamer.yoga.model;
 
-
 public interface HierarchicalModel
 {
     void addSimple(String name, Object result);
 
-    HierarchicalModel createChild(String property);
+    void addSimple(Object instance);
 
-    HierarchicalModel createList(String property);
+    HierarchicalModel createChild(String name);
+    HierarchicalModel createChild();
+
+    HierarchicalModel createList(String name);
+    
+    HierarchicalModel createSimple(String name);
+
+
 }

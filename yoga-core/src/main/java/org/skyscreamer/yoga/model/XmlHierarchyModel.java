@@ -1,36 +1,27 @@
 package org.skyscreamer.yoga.model;
 
 import org.dom4j.Element;
+import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
 public class XmlHierarchyModel implements HierarchicalModel
 {
     Element element;
-    String childName = null;
 
     public XmlHierarchyModel(Element element)
     {
         this.element = element;
     }
 
-    public XmlHierarchyModel(Element element, String childName)
-    {
-        super();
-        this.element = element;
-        this.childName = childName;
-    }
-
     @Override
     public void addSimple(String name, Object result)
     {
-        String elementName = childName == null ? name : childName;
-        
         if (name.equals( "href" ))
         {
-            element.addAttribute( elementName, result.toString() );
+            element.addAttribute( name, result.toString() );
         }
         else
         {
-            element.addElement( elementName ).setText( result.toString() );
+            element.addElement( name ).setText( result.toString() );
         }
     }
 
@@ -41,9 +32,27 @@ public class XmlHierarchyModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createList(String property)
+    public HierarchicalModel createChild()
     {
         return this;
     }
 
+    
+    @Override
+    public HierarchicalModel createList(String name)
+    {
+        return this;
+    }
+
+    @Override
+    public HierarchicalModel createSimple(String property)
+    {
+        return new XmlTextElementHierarchyModel( element.addElement( property ) );
+    }
+
+    @Override
+    public void addSimple(Object instance)
+    {
+        throw new YogaRuntimeException("You must call createSimple first");
+    }
 }

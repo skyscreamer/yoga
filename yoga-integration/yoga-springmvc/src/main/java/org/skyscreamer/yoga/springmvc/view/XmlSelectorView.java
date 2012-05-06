@@ -26,7 +26,7 @@ public class XmlSelectorView extends AbstractYogaView {
 				resultTraverser.traverse(child, selector, model, context);
 			}
 		} else {
-			String name = NameUtil.getName(classFinderStrategy.findClass(value));
+			String name = NameUtil.getName(_classFinderStrategy.findClass(value));
 			DOMElement root = createDocument(domDocument, name);
 			resultTraverser.traverse(value, selector, new XmlHierarchyModel(root), context);
 		}

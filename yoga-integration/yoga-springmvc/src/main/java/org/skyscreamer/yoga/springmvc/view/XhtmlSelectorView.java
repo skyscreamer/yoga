@@ -40,7 +40,7 @@ public class XhtmlSelectorView extends AbstractYogaView {
 	}
 
 	public void traverse(Object value, Selector selector, ResultTraverser traverser, Element body, YogaRequestContext context) {
-		String name = NameUtil.getName(classFinderStrategy.findClass(value));
+		String name = NameUtil.getName(_classFinderStrategy.findClass(value));
 		HierarchicalModel model = new XhtmlHierarchyModel(body.addElement("div").addAttribute("class", name));
 		traverser.traverse(value, selector, model, context);
 	}

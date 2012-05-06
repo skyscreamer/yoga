@@ -50,13 +50,17 @@ public class UserControllerTest extends AbstractTest {
 		JSONObject data = getJSONObject("/user/1", params);
 		String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\"," + "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\"},"
 				+ "{id:3,name:\"Solomon Duskis\",href:\"/user/3.json\"}]}";
+		System.out.println(data);
 		JSONAssert.assertEquals(expected, data, false);
 	}
 
 	public void testDeepDiveSelector() throws Exception {
 		Map<String, String> params = Collections.singletonMap("selector", ":(isFriend,friends:(favoriteArtists:(albums:(songs))))");
 		JSONObject data = getJSONObject("/user/1", params);
-		String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:false," + "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\","
+		System.out.println(data);
+		String expected = 
+			      "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:false," 
+				+ "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\","
 				+ "favoriteArtists:[{id:2,name:\"Prince\",albums:[{id:4,title:\"1999\","
 				+ "songs:[{id:10},{id:11,title:\"Little Red Corvette\"},{id:12}]},{id:5},{id:6}]},{id:1}]}," + "{id:3}]}";
 		JSONAssert.assertEquals(expected, data, false);
@@ -75,8 +79,9 @@ public class UserControllerTest extends AbstractTest {
 		try {
 			getJSONObject("/user", params);
 		} catch (HttpServerErrorException e) {
-			Assert.assertNotNull(e.getMessage());
-			Assert.assertTrue(e.getMessage().contains("EntityCountExceededException"));
+			String message = e.getMessage();
+			Assert.assertNotNull(message);
+			Assert.assertTrue(message.contains("Exceeded"));
 			return;
 		}
 		Assert.fail("Expected this query to fail with a 500 error caused by an EntityCountExceededException");

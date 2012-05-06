@@ -3,6 +3,8 @@ package org.skyscreamer.yoga.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
+
 public class ListHierarchicalModel extends AbstractHierarchicalModel
 {
 
@@ -11,7 +13,14 @@ public class ListHierarchicalModel extends AbstractHierarchicalModel
     @Override
     public void addSimple(String name, Object value)
     {
-        list.add( value );
+        throw new YogaRuntimeException( new IllegalAccessError(
+                "you shouldn't be calling this method for a list" ) );
+    }
+
+    @Override
+    public void addSimple(Object instance)
+    {
+        list.add( instance );
     }
 
     public List<Object> getList()
@@ -19,4 +28,9 @@ public class ListHierarchicalModel extends AbstractHierarchicalModel
         return list;
     }
 
+    @Override
+    public HierarchicalModel createSimple(String name)
+    {
+        return this;
+    }
 }

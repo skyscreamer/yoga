@@ -8,11 +8,11 @@ public class BasicTestDataNode
 {
 
     String id;
-    BasicTestDataNode node;
+    BasicTestDataLeaf leaf;
 
-    public BasicTestDataNode getNode()
+    public BasicTestDataLeaf getLeaf()
     {
-        return node;
+        return leaf;
     }
 
     @Core
@@ -26,9 +26,9 @@ public class BasicTestDataNode
         this.id = id;
     }
 
-    public void setNode(BasicTestDataNode node)
+    public void setLeaf(BasicTestDataLeaf leaf)
     {
-        this.node = node;
+        this.leaf = leaf;
     }
 
 }

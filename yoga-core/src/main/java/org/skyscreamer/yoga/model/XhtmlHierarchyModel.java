@@ -1,6 +1,7 @@
 package org.skyscreamer.yoga.model;
 
 import org.dom4j.Element;
+import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
 public class XhtmlHierarchyModel implements HierarchicalModel
 {
@@ -11,13 +12,6 @@ public class XhtmlHierarchyModel implements HierarchicalModel
     public XhtmlHierarchyModel(Element element)
     {
         this.element = element;
-    }
-
-    public XhtmlHierarchyModel(Element element, String childName)
-    {
-        super();
-        this.element = element;
-        this.childName = childName;
     }
 
     @Override
@@ -48,9 +42,30 @@ public class XhtmlHierarchyModel implements HierarchicalModel
     }
 
     @Override
+    public HierarchicalModel createChild()
+    {
+        return new XhtmlHierarchyModel( element.addElement( "div" ) );
+    }
+    
+    @Override
     public HierarchicalModel createList(String property)
     {
         Element div = element.addElement( "div" ).addAttribute( "class", property );
-        return new XhtmlHierarchyModel( div, property );
+        return new XhtmlHierarchyModel( div );
+    }
+
+    @Override
+    public void addSimple(Object instance)
+    {
+        if(childName != null)
+            element.addElement( childName ).setText( instance.toString() );
+        else
+            throw new YogaRuntimeException("childName was never set");
+    }
+
+    @Override
+    public HierarchicalModel createSimple(String property)
+    {
+        return new XmlTextElementHierarchyModel( element.addElement( property ) );
     }
 }

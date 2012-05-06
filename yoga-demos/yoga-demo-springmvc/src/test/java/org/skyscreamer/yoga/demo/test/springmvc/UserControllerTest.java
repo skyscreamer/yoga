@@ -28,7 +28,7 @@ public class UserControllerTest extends org.skyscreamer.yoga.demo.test.UserContr
 		super.testGetUsers();
 	}
 
-	@Test
+	@Test()
 	public void testGetTooMuchData() throws Exception {
 		super.testGetTooMuchData();
 	}

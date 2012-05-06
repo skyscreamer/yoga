@@ -1,16 +1,16 @@
-package org.skyscreamer.yoga.mapper.enrich;
+package org.skyscreamer.yoga.enricher;
 
 import java.util.Map;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.skyscreamer.yoga.DummyHttpServletResponse;
 import org.skyscreamer.yoga.enricher.NavigationLinksEnricher;
 import org.skyscreamer.yoga.mapper.YogaInstanceContext;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.test.DummyHttpServletResponse;
 import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.data.BasicTestDataNode;
 
@@ -29,7 +29,6 @@ public class NavigationLinksEnricherTest
         enricher.enrich( entityContext );
 
         Map<String, Object> objectTree = model.getObjectTree();
-        Assert.assertEquals( "/basic-leaf/0.map?selector=:(other)", objectTree.get( "href" ) );
 
         Map<String, Object> navLinks = getMap( objectTree, "navigationLinks" );
         Assert.assertNotNull( navLinks );
@@ -38,6 +37,8 @@ public class NavigationLinksEnricherTest
         Assert.assertNotNull( otherMap );
 
         Assert.assertEquals( "other", otherMap.get( "name" ) );
+        Assert.assertEquals( "/basic-leaf/0.map?selector=:(other)", otherMap.get( "href" ) );
+        System.out.println(objectTree);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga;
+package org.skyscreamer.yoga.test;
 
 import java.io.IOException;
 import java.io.PrintWriter;

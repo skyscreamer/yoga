@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.test.data;
 
+import java.util.List;
+
 import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;
 
@@ -10,6 +12,17 @@ public class BasicTestDataLeaf
     private int id;
     private String name;
     private String other;
+    private List<String> randomStrings;
+
+    public List<String> getRandomStrings()
+    {
+        return randomStrings;
+    }
+
+    public void setRandomStrings(List<String> randomStrings)
+    {
+        this.randomStrings = randomStrings;
+    }
 
     @Core
     public int getId()

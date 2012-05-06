@@ -1,56 +1,69 @@
 package org.skyscreamer.yoga.mapper;
 
-import org.skyscreamer.yoga.util.EntityCountExceededException;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.skyscreamer.yoga.exceptions.EntityCountExceededException;
+import org.skyscreamer.yoga.model.HierarchicalModel;
 
 /**
- * Created by IntelliJ IDEA. User: Carter Page Date: 3/31/12 Time: 5:21 PM
+ * creating by IntelliJ IDEA. User: Carter Page Date: 3/31/12 Time: 5:21 PM
  */
 public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
 {
-    private final YogaRequestContext _context;
     private final int _maxEntities;
+    private AtomicInteger counter = new AtomicInteger();
 
-    public HierarchicalModelEntityCounter(YogaRequestContext context, int maxEntities)
+    public HierarchicalModelEntityCounter(int maxEntities)
     {
-        _context = context;
         _maxEntities = maxEntities;
     }
 
     @Override
-    public void addedSimple(String name, Object value)
+    public void addingSimple(String name, Object value, HierarchicalModel model)
     {
         // countAndCheck();
     }
 
     @Override
-    public void createdChild(String name)
+    public void creatingChild(String name, HierarchicalModel model)
     {
         countAndCheck();
     }
 
     @Override
-    public void createdList(String name)
+    public void creatingList(String name, HierarchicalModel model)
     {
-        // countAndCheck();
+        countAndCheck();
     }
 
     private void countAndCheck()
     {
-        _context.incrementCounter();
-        if (_maxEntities > -1 && _context.readCounter() > _maxEntities)
+        int currentCount = counter.incrementAndGet();
+        if (_maxEntities > -1 && currentCount > _maxEntities)
         {
             throw new EntityCountExceededException( "Exceeded maximum limit of " + _maxEntities
                     + " entities " + "in a single model" );
         }
     }
 
-    public int getCount()
-    {
-        return _context.readCounter();
-    }
-
     public int getMaxEntities()
     {
         return _maxEntities;
+    }
+
+    @Override
+    public void addingSimple(Object value, HierarchicalModel model)
+    {
+    }
+
+    @Override
+    public void creatingSimple(String name, HierarchicalModel model)
+    {
+        
+    }
+
+    @Override
+    public void creatingChild(HierarchicalModel _hierHierarchicalModel)
+    {
     }
 }

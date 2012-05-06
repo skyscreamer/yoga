@@ -3,7 +3,7 @@ package org.skyscreamer.yoga.populator;
 import org.junit.Assert;
 
 import org.junit.Test;
-import org.skyscreamer.yoga.DummyHttpServletResponse;
+import org.skyscreamer.yoga.test.DummyHttpServletResponse;
 import org.skyscreamer.yoga.uri.URICreator;
 
 public class AbstractFieldPopulatorHrefTest
