@@ -1,61 +1,71 @@
 package org.skyscreamer.yoga.demo.test.resteasy;
 
-import java.io.File;
-import java.util.Collections;
-
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-public class RunServer {
+import java.io.File;
+import java.util.Collections;
 
-	public static RunServer instance;
+public class RunServer
+{
 
-	Server server;
+    public static RunServer instance;
 
-	public RunServer() {
-		this(8082);
-	}
+    Server server;
 
-	public RunServer(int port) {
-		System.setProperty("org.mortbay.util.FileResource.checkAliases", "false");
-		server = new Server(port);
-	}
+    public RunServer()
+    {
+        this( 8082 );
+    }
 
-	public static void main(String[] args) throws Exception {
-		RunServer runServer = new RunServer(8081);
-		runServer.run();
-	}
+    public RunServer( int port )
+    {
+        System.setProperty( "org.mortbay.util.FileResource.checkAliases", "false" );
+        server = new Server( port );
+    }
 
-	public static void startServer() throws Exception {
-		if (instance == null) {
-			instance = new RunServer(8082);
-			instance.run(false);
-		}
-	}
+    public static void main( String[] args ) throws Exception
+    {
+        RunServer runServer = new RunServer( 8081 );
+        runServer.run();
+    }
 
-	public void run() throws Exception {
-		run(true);
-	}
+    public static void startServer() throws Exception
+    {
+        if ( instance == null )
+        {
+            instance = new RunServer( 8082 );
+            instance.run( false );
+        }
+    }
 
-	public void run(boolean join) throws Exception {
-		System.out.println(new File("logs").getAbsolutePath());
-		WebAppContext context = new WebAppContext();
+    public void run() throws Exception
+    {
+        run( true );
+    }
 
-		context.setResourceBase("src/main/webapp");
-		context.setContextPath("/");
-		context.setParentLoaderPriority(true);
-		context.setInitParams(Collections.singletonMap("org.mortbay.jetty.servlet.Default.aliases", "true"));
+    public void run( boolean join ) throws Exception
+    {
+        System.out.println( new File( "logs" ).getAbsolutePath() );
+        WebAppContext context = new WebAppContext();
 
-		server.setHandler(context);
+        context.setResourceBase( "src/main/webapp" );
+        context.setContextPath( "/" );
+        context.setParentLoaderPriority( true );
+        context.setInitParams( Collections.singletonMap( "org.mortbay.jetty.servlet.Default.aliases", "true" ) );
 
-		server.start();
-		if (join) {
-			server.join();
-		}
-	}
+        server.setHandler( context );
 
-	public void stop() throws Exception {
-		server.stop();
-	}
+        server.start();
+        if ( join )
+        {
+            server.join();
+        }
+    }
+
+    public void stop() throws Exception
+    {
+        server.stop();
+    }
 
 }

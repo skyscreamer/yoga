@@ -10,13 +10,13 @@ public class ObservedHierarchicalModel implements HierarchicalModel
     private final HierarchicalModel _hierHierarchicalModel;
     private final HierarchicalModelObserver[] _observers;
 
-    public ObservedHierarchicalModel(HierarchicalModel hierarchicalModel,
-            HierarchicalModelObserver... observers)
+    public ObservedHierarchicalModel( HierarchicalModel hierarchicalModel,
+            HierarchicalModelObserver... observers )
     {
         _hierHierarchicalModel = hierarchicalModel;
-        for (HierarchicalModelObserver observer : observers)
+        for ( HierarchicalModelObserver observer : observers )
         {
-            if (observer == null)
+            if ( observer == null )
             {
                 throw new NullPointerException( "Null observer not allowed" );
             }
@@ -26,9 +26,9 @@ public class ObservedHierarchicalModel implements HierarchicalModel
 
 
     @Override
-    public HierarchicalModel createChild(String name)
+    public HierarchicalModel createChild( String name )
     {
-        for (HierarchicalModelObserver observer : _observers)
+        for ( HierarchicalModelObserver observer : _observers )
         {
             observer.creatingChild( name, _hierHierarchicalModel );
         }
@@ -36,7 +36,7 @@ public class ObservedHierarchicalModel implements HierarchicalModel
         return wrap( child );
     }
 
-    public HierarchicalModel wrap(HierarchicalModel child)
+    public HierarchicalModel wrap( HierarchicalModel child )
     {
         return child instanceof ObservedHierarchicalModel ? child : new ObservedHierarchicalModel( child,
                 _observers );
@@ -45,7 +45,7 @@ public class ObservedHierarchicalModel implements HierarchicalModel
     @Override
     public HierarchicalModel createChild()
     {
-        for (HierarchicalModelObserver observer : _observers)
+        for ( HierarchicalModelObserver observer : _observers )
         {
             observer.creatingChild( _hierHierarchicalModel );
         }
@@ -54,9 +54,9 @@ public class ObservedHierarchicalModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createList(String name)
+    public HierarchicalModel createList( String name )
     {
-        for (HierarchicalModelObserver observer : _observers)
+        for ( HierarchicalModelObserver observer : _observers )
         {
             observer.creatingList( name, _hierHierarchicalModel );
         }
@@ -64,19 +64,19 @@ public class ObservedHierarchicalModel implements HierarchicalModel
     }
 
     @Override
-    public void addSimple(Object instance)
+    public void addSimple( Object instance )
     {
-        for (HierarchicalModelObserver observer : _observers)
+        for ( HierarchicalModelObserver observer : _observers )
         {
             observer.addingSimple( instance, _hierHierarchicalModel );
         }
         _hierHierarchicalModel.addSimple( instance );
     }
-    
+
     @Override
-    public void addSimple(String name, Object value)
+    public void addSimple( String name, Object value )
     {
-        for (HierarchicalModelObserver observer : _observers)
+        for ( HierarchicalModelObserver observer : _observers )
         {
             observer.addingSimple( name, value, _hierHierarchicalModel );
         }
@@ -84,9 +84,9 @@ public class ObservedHierarchicalModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createSimple(String name)
+    public HierarchicalModel createSimple( String name )
     {
-        for (HierarchicalModelObserver observer : _observers)
+        for ( HierarchicalModelObserver observer : _observers )
         {
             observer.creatingSimple( name, _hierHierarchicalModel );
         }

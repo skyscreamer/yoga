@@ -1,6 +1,11 @@
 package org.skyscreamer.yoga.metadata;
 
-import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
+import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.annotations.ExtraField;
+import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.util.NameUtil;
+import org.skyscreamer.yoga.util.ObjectUtil;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -10,12 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.skyscreamer.yoga.annotations.Core;
-import org.skyscreamer.yoga.annotations.ExtraField;
-import org.skyscreamer.yoga.populator.FieldPopulator;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
-import org.skyscreamer.yoga.util.NameUtil;
-import org.skyscreamer.yoga.util.ObjectUtil;
+import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
 
 public class MapMetaDataServiceImpl implements MetaDataService
 {
@@ -31,7 +31,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
         return _fieldPopulatorRegistry;
     }
 
-    public void setFieldPopulatorRegistry(FieldPopulatorRegistry fieldPopulatorRegistry)
+    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
     {
         _fieldPopulatorRegistry = fieldPopulatorRegistry;
     }
@@ -41,16 +41,16 @@ public class MapMetaDataServiceImpl implements MetaDataService
         return rootMetaDataUrl;
     }
 
-    public void setRootMetaDataUrl(String rootMetaDataUrl)
+    public void setRootMetaDataUrl( String rootMetaDataUrl )
     {
         this.rootMetaDataUrl = rootMetaDataUrl;
     }
 
-    public void setTypeMappings(Map<String, Class<?>> map)
+    public void setTypeMappings( Map<String, Class<?>> map )
     {
         this._typeMappings = map;
         _typeToStringMap.clear();
-        for (Entry<String, Class<?>> entry : map.entrySet())
+        for ( Entry<String, Class<?>> entry : map.entrySet() )
         {
             _typeToStringMap.put( entry.getValue(), entry.getKey() );
         }
@@ -63,7 +63,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
     }
 
     @Override
-    public Class<?> getTypeForName(String name)
+    public Class<?> getTypeForName( String name )
     {
         return _typeMappings.get( name );
     }
@@ -74,16 +74,16 @@ public class MapMetaDataServiceImpl implements MetaDataService
      * closest
      */
     @Override
-    public String getNameForType(Class<?> type)
+    public String getNameForType( Class<?> type )
     {
-        if (_typeToStringMap.containsKey( type ))
+        if ( _typeToStringMap.containsKey( type ) )
         {
             return _typeToStringMap.get( type );
         }
 
-        for (Entry<String, Class<?>> entry : _typeMappings.entrySet())
+        for ( Entry<String, Class<?>> entry : _typeMappings.entrySet() )
         {
-            if (entry.getValue().isAssignableFrom( type ))
+            if ( entry.getValue().isAssignableFrom( type ) )
             {
                 return entry.getKey();
             }
@@ -92,13 +92,13 @@ public class MapMetaDataServiceImpl implements MetaDataService
     }
 
     @Override
-    public TypeMetaData getMetaData(String name, String suffix)
+    public TypeMetaData getMetaData( String name, String suffix )
     {
         return getMetaData( getTypeForName( name ), suffix );
     }
 
     @Override
-    public TypeMetaData getMetaData(Class<?> type, String suffix)
+    public TypeMetaData getMetaData( Class<?> type, String suffix )
     {
         TypeMetaData result = new TypeMetaData();
         result.setName( NameUtil.getFormalName( type ) );
@@ -107,9 +107,9 @@ public class MapMetaDataServiceImpl implements MetaDataService
         return result;
     }
 
-    protected void addCoreFields(Class<?> type, String suffix, TypeMetaData result)
+    protected void addCoreFields( Class<?> type, String suffix, TypeMetaData result )
     {
-        for (PropertyDescriptor property : PropertyUtil.getReadableProperties( type ))
+        for ( PropertyDescriptor property : PropertyUtil.getReadableProperties( type ) )
         {
             Method readMethod = property.getReadMethod();
             String name = property.getName();
@@ -119,28 +119,28 @@ public class MapMetaDataServiceImpl implements MetaDataService
         }
     }
 
-    protected void addPopulatorFields(Class<?> type, String suffix, TypeMetaData result)
+    protected void addPopulatorFields( Class<?> type, String suffix, TypeMetaData result )
     {
         FieldPopulator fieldPopulator = null;
-        if (_fieldPopulatorRegistry != null)
+        if ( _fieldPopulatorRegistry != null )
         {
             fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( type );
         }
 
-        if (fieldPopulator == null)
+        if ( fieldPopulator == null )
         {
             return;
         }
 
-        for (Method method : getPopulatorExtraFieldMethods( fieldPopulator, type ))
+        for ( Method method : getPopulatorExtraFieldMethods( fieldPopulator, type ) )
         {
             String name = method.getAnnotation( ExtraField.class ).value();
             addField( suffix, result, method, name, false );
         }
     }
 
-    protected PropertyMetaData addField(String suffix, TypeMetaData result, Method readMethod,
-            String name, boolean core)
+    protected PropertyMetaData addField( String suffix, TypeMetaData result, Method readMethod,
+            String name, boolean core )
     {
         Class<?> propertyType = readMethod.getReturnType();
         PropertyMetaData propertyMetaData = new PropertyMetaData();
@@ -149,12 +149,12 @@ public class MapMetaDataServiceImpl implements MetaDataService
         propertyMetaData.setName( name );
         propertyMetaData.setIsCore( core );
 
-        if (ObjectUtil.isPrimitive( propertyType ))
+        if ( ObjectUtil.isPrimitive( propertyType ) )
         {
             propertyMetaData.setType( propertyType == String.class ? "String" : propertyType
                     .getName() );
         }
-        else if (Iterable.class.isAssignableFrom( propertyType ) || propertyType.isArray())
+        else if ( Iterable.class.isAssignableFrom( propertyType ) || propertyType.isArray() )
         {
             Class<?> collectionValueType = getCollectionType( readMethod, propertyType );
             String typeName = NameUtil.getFormalName( collectionValueType ) + "[]";
@@ -170,17 +170,17 @@ public class MapMetaDataServiceImpl implements MetaDataService
         return propertyMetaData;
     }
 
-    protected Class<?> getCollectionType(Method readMethod, Class<?> propertyType)
+    protected Class<?> getCollectionType( Method readMethod, Class<?> propertyType )
     {
         Class<?> collectionValueType = null;
-        if (propertyType.isArray())
+        if ( propertyType.isArray() )
         {
             collectionValueType = propertyType.getComponentType();
         }
         else
         {
             Type genericReturnType = readMethod.getGenericReturnType();
-            if (genericReturnType instanceof ParameterizedType)
+            if ( genericReturnType instanceof ParameterizedType )
             {
                 ParameterizedType zType = (ParameterizedType) genericReturnType;
                 collectionValueType = (Class<?>) zType.getActualTypeArguments()[0];
@@ -190,10 +190,10 @@ public class MapMetaDataServiceImpl implements MetaDataService
     }
 
     @Override
-    public String getHref(Class<?> propertyType, String suffix)
+    public String getHref( Class<?> propertyType, String suffix )
     {
         String nameForType = getNameForType( propertyType );
-        if (nameForType != null)
+        if ( nameForType != null )
         {
             return getRootMetaDataUrl() + nameForType + "." + suffix;
         }
@@ -203,10 +203,10 @@ public class MapMetaDataServiceImpl implements MetaDataService
         }
     }
 
-    protected void addHref(PropertyMetaData propertyMetaData, Class<?> propertyType, String suffix)
+    protected void addHref( PropertyMetaData propertyMetaData, Class<?> propertyType, String suffix )
     {
         String href = getHref( propertyType, suffix );
-        if (href != null)
+        if ( href != null )
         {
             propertyMetaData.setHref( href );
         }

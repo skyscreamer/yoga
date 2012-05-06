@@ -9,20 +9,20 @@ public class YogaRuntimeException extends RuntimeException
         super();
     }
 
-    public YogaRuntimeException(String arg0, Throwable arg1)
+    public YogaRuntimeException( String arg0, Throwable arg1 )
     {
         super( arg0, arg1 );
     }
 
-    public YogaRuntimeException(String arg0)
+    public YogaRuntimeException( String arg0 )
     {
         super( arg0 );
     }
 
-    public YogaRuntimeException(Throwable arg0)
+    public YogaRuntimeException( Throwable arg0 )
     {
         super( arg0 );
     }
 
-    
+
 }

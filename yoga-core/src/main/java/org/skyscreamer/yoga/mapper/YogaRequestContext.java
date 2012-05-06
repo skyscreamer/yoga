@@ -1,9 +1,8 @@
 package org.skyscreamer.yoga.mapper;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 public class YogaRequestContext
 {
@@ -11,7 +10,7 @@ public class YogaRequestContext
     private final HttpServletResponse response;
     private final Map<String, Object> properties = new HashMap<String, Object>();
 
-    public YogaRequestContext(String urlSuffix, HttpServletResponse response)
+    public YogaRequestContext( String urlSuffix, HttpServletResponse response )
     {
         this.urlSuffix = urlSuffix;
         this.response = response;
@@ -27,12 +26,12 @@ public class YogaRequestContext
         return response;
     }
 
-    public void setProperty(String key, Object value)
+    public void setProperty( String key, Object value )
     {
         properties.put( key, value );
     }
 
-    public Object getProperty(String key)
+    public Object getProperty( String key )
     {
         return properties.get( key );
     }

@@ -1,9 +1,9 @@
 package org.skyscreamer.yoga.metadata;
 
+import org.skyscreamer.yoga.annotations.Core;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.skyscreamer.yoga.annotations.Core;
 
 public class TypeMetaData
 {
@@ -16,7 +16,7 @@ public class TypeMetaData
         return name;
     }
 
-    public void setName(String name)
+    public void setName( String name )
     {
         this.name = name;
     }
@@ -27,7 +27,7 @@ public class TypeMetaData
         return propertyMetaData;
     }
 
-    public void setPropertyMetaData(List<PropertyMetaData> propertyMetaData)
+    public void setPropertyMetaData( List<PropertyMetaData> propertyMetaData )
     {
         this.propertyMetaData = propertyMetaData;
     }

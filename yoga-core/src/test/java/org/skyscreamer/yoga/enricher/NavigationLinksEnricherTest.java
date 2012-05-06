@@ -1,11 +1,7 @@
 package org.skyscreamer.yoga.enricher;
 
-import java.util.Map;
-
 import junit.framework.Assert;
-
 import org.junit.Test;
-import org.skyscreamer.yoga.enricher.NavigationLinksEnricher;
 import org.skyscreamer.yoga.mapper.YogaInstanceContext;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
@@ -13,6 +9,8 @@ import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.test.DummyHttpServletResponse;
 import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.data.BasicTestDataNode;
+
+import java.util.Map;
 
 public class NavigationLinksEnricherTest
 {
@@ -38,7 +36,7 @@ public class NavigationLinksEnricherTest
 
         Assert.assertEquals( "other", otherMap.get( "name" ) );
         Assert.assertEquals( "/basic-leaf/0.map?selector=:(other)", otherMap.get( "href" ) );
-        System.out.println(objectTree);
+        System.out.println( objectTree );
     }
 
     @Test
@@ -51,11 +49,11 @@ public class NavigationLinksEnricherTest
                 node, BasicTestDataNode.class, new CoreSelector(), model,
                 new YogaRequestContext( "map", new DummyHttpServletResponse() ) );
         enricher.enrich( entityContext );
-        System.out.println(model.getObjectTree());
+        System.out.println( model.getObjectTree() );
     }
 
     @SuppressWarnings("unchecked")
-    private Map<String, Object> getMap(Map<String, Object> map, String key)
+    private Map<String, Object> getMap( Map<String, Object> map, String key )
     {
         return (Map<String, Object>) map.get( key );
     }

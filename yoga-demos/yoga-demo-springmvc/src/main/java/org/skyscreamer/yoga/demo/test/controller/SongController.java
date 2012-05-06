@@ -9,5 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/song")
-public class SongController extends AbstractController<Song> {
+public class SongController extends AbstractController<Song>
+{
 }

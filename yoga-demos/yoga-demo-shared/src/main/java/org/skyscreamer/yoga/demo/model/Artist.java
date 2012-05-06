@@ -12,48 +12,57 @@ import java.util.Set;
  */
 @Entity
 @URITemplate("/artist/{id}")
-public class Artist {
-	@Id
-	@GeneratedValue
-	private long id;
-	private String name;
-	@OneToMany(mappedBy = "artist")
-	private List<Album> albums;
-	@ManyToMany(mappedBy = "favoriteArtists")
-	private Set<User> fans;
+public class Artist
+{
+    @Id
+    @GeneratedValue
+    private long id;
+    private String name;
+    @OneToMany(mappedBy = "artist")
+    private List<Album> albums;
+    @ManyToMany(mappedBy = "favoriteArtists")
+    private Set<User> fans;
 
-	@Core
-	public long getId() {
-		return id;
-	}
+    @Core
+    public long getId()
+    {
+        return id;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setId( long id )
+    {
+        this.id = id;
+    }
 
-	@Core
-	public String getName() {
-		return name;
-	}
+    @Core
+    public String getName()
+    {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName( String name )
+    {
+        this.name = name;
+    }
 
-	public List<Album> getAlbums() {
-		return albums;
-	}
+    public List<Album> getAlbums()
+    {
+        return albums;
+    }
 
-	public void setAlbums(List<Album> albums) {
-		this.albums = albums;
-	}
+    public void setAlbums( List<Album> albums )
+    {
+        this.albums = albums;
+    }
 
-	public Set<User> getFans() {
-		return fans;
-	}
+    public Set<User> getFans()
+    {
+        return fans;
+    }
 
-	public void setFans(Set<User> fans) {
-		this.fans = fans;
-	}
+    public void setFans( Set<User> fans )
+    {
+        this.fans = fans;
+    }
 
 }

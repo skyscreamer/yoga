@@ -1,13 +1,5 @@
 package org.skyscreamer.yoga.mapper;
 
-import static org.skyscreamer.yoga.metadata.PropertyUtil.getReadableProperties;
-import static org.skyscreamer.yoga.util.ObjectUtil.isPrimitive;
-
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-
 import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.enricher.Enricher;
 import org.skyscreamer.yoga.enricher.HrefEnricher;
@@ -15,6 +7,14 @@ import org.skyscreamer.yoga.enricher.ModelDefinitionBuilder;
 import org.skyscreamer.yoga.enricher.NavigationLinksEnricher;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.selector.Selector;
+
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.skyscreamer.yoga.metadata.PropertyUtil.getReadableProperties;
+import static org.skyscreamer.yoga.util.ObjectUtil.isPrimitive;
 
 public class ResultTraverser
 {
@@ -25,10 +25,10 @@ public class ResultTraverser
 
     private YogaInstanceContextFactory instanceContextFactory;
 
-    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model,
-            YogaRequestContext context)
+    public void traverse( Object instance, Selector fieldSelector, HierarchicalModel model,
+            YogaRequestContext context )
     {
-        if (instance != null)
+        if ( instance != null )
         {
             YogaInstanceContext<?> entity = instanceContextFactory.createEntityContext( instance,
                     fieldSelector, model, context );
@@ -36,16 +36,16 @@ public class ResultTraverser
         }
     }
 
-    public void traverse(YogaInstanceContext<?> entityContext)
+    public void traverse( YogaInstanceContext<?> entityContext )
     {
         Class<?> instanceType = entityContext.getInstanceType();
-        if (Iterable.class.isAssignableFrom( instanceType ))
+        if ( Iterable.class.isAssignableFrom( instanceType ) )
         {
             YogaRequestContext requestContext = entityContext.getRequestContext();
             Selector fieldSelector = entityContext.getFieldSelector();
-            for (Object o : (Iterable<?>) entityContext.getInstance())
+            for ( Object o : (Iterable<?>) entityContext.getInstance() )
             {
-                if (isPrimitive( o.getClass() ))
+                if ( isPrimitive( o.getClass() ) )
                 {
                     entityContext.getModel().addSimple( o );
                 }
@@ -58,7 +58,7 @@ public class ResultTraverser
         }
         else
         {
-            for (Enricher enricher : _enrichers)
+            for ( Enricher enricher : _enrichers )
             {
                 enricher.enrich( entityContext );
             }
@@ -68,14 +68,14 @@ public class ResultTraverser
         }
     }
 
-    protected void addInstanceFields(YogaInstanceContext<?> entityContext)
+    protected void addInstanceFields( YogaInstanceContext<?> entityContext )
     {
         List<PropertyDescriptor> readableProperties = getReadableProperties( entityContext
                 .getInstanceType() );
 
-        for (PropertyDescriptor property : readableProperties)
+        for ( PropertyDescriptor property : readableProperties )
         {
-            if (entityContext.containsInstanceField( property ))
+            if ( entityContext.containsInstanceField( property ) )
             {
                 String propertyName = property.getName();
                 Object fieldValue = entityContext.getInstanceFieldValue( propertyName );
@@ -84,11 +84,11 @@ public class ResultTraverser
         }
     }
 
-    protected void addPopulatorExtraFields(YogaInstanceContext<?> entityContext)
+    protected void addPopulatorExtraFields( YogaInstanceContext<?> entityContext )
     {
         List<Method> populatorExtraFieldMethods = entityContext.getPopulatorExtraFieldMethods();
 
-        for (Method method : populatorExtraFieldMethods)
+        for ( Method method : populatorExtraFieldMethods )
         {
             String propertyName = method.getAnnotation( ExtraField.class ).value();
             Object fieldValue = entityContext.getPopulatorFieldValue( method );
@@ -96,24 +96,24 @@ public class ResultTraverser
         }
     }
 
-    protected void addChild(String fieldName, Object fieldValue,
-            YogaInstanceContext<?> entityContext)
+    protected void addChild( String fieldName, Object fieldValue,
+            YogaInstanceContext<?> entityContext )
     {
-        if (fieldValue == null)
+        if ( fieldValue == null )
         {
             return;
         }
 
         HierarchicalModel model = entityContext.getModel();
 
-        if (isPrimitive( fieldValue.getClass() ))
+        if ( isPrimitive( fieldValue.getClass() ) )
         {
             model.createSimple( fieldName ).addSimple( fieldValue );
         }
         else
         {
-            HierarchicalModel childModel = null;
-            if (Iterable.class.isAssignableFrom( fieldValue.getClass() ))
+            HierarchicalModel childModel;
+            if ( Iterable.class.isAssignableFrom( fieldValue.getClass() ) )
             {
                 childModel = model.createList( fieldName );
             }
@@ -128,12 +128,12 @@ public class ResultTraverser
 
     // GETTERS / SETTERS
 
-    public void setEnrichers(List<Enricher> enrichers)
+    public void setEnrichers( List<Enricher> enrichers )
     {
         this._enrichers = enrichers;
     }
 
-    public void setInstanceContextFactory(YogaInstanceContextFactory instanceContextFactory)
+    public void setInstanceContextFactory( YogaInstanceContextFactory instanceContextFactory )
     {
         this.instanceContextFactory = instanceContextFactory;
     }

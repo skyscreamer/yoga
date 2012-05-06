@@ -1,12 +1,5 @@
 package org.skyscreamer.yoga.enricher;
 
-import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
-
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.mapper.YogaInstanceContext;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
@@ -14,13 +7,20 @@ import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.SelectorParser;
 
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
+
 public class ModelDefinitionBuilder implements Enricher
 {
 
     @Override
-    public void enrich(YogaInstanceContext<?> entityContext)
+    public void enrich( YogaInstanceContext<?> entityContext )
     {
-        if (!(entityContext.getFieldSelector() instanceof CoreSelector))
+        if ( !(entityContext.getFieldSelector() instanceof CoreSelector) )
         {
             return;
         }
@@ -28,19 +28,19 @@ public class ModelDefinitionBuilder implements Enricher
         List<String> definition = new ArrayList<String>();
 
         FieldPopulator populator = entityContext.getPopulator();
-        if (populator != null && populator.getSupportedFields() != null)
+        if ( populator != null && populator.getSupportedFields() != null )
         {
             definition = populator.getSupportedFields();
         }
         else
         {
             Class<?> instanceType = entityContext.getInstanceType();
-            for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
+            for ( PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ) )
             {
                 definition.add( property.getName() );
             }
 
-            for (Method method : getPopulatorExtraFieldMethods( populator, instanceType ))
+            for ( Method method : getPopulatorExtraFieldMethods( populator, instanceType ) )
             {
                 ExtraField extraField = method.getAnnotation( ExtraField.class );
                 definition.add( extraField.value() );

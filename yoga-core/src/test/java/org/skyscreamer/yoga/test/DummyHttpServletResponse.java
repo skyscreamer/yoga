@@ -1,12 +1,11 @@
 package org.skyscreamer.yoga.test;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Locale;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Locale;
 
 public class DummyHttpServletResponse implements HttpServletResponse
 {
@@ -36,22 +35,22 @@ public class DummyHttpServletResponse implements HttpServletResponse
     }
 
     @Override
-    public void setCharacterEncoding(String charset)
+    public void setCharacterEncoding( String charset )
     {
     }
 
     @Override
-    public void setContentLength(int len)
+    public void setContentLength( int len )
     {
     }
 
     @Override
-    public void setContentType(String type)
+    public void setContentType( String type )
     {
     }
 
     @Override
-    public void setBufferSize(int size)
+    public void setBufferSize( int size )
     {
     }
 
@@ -83,7 +82,7 @@ public class DummyHttpServletResponse implements HttpServletResponse
     }
 
     @Override
-    public void setLocale(Locale loc)
+    public void setLocale( Locale loc )
     {
     }
 
@@ -94,92 +93,92 @@ public class DummyHttpServletResponse implements HttpServletResponse
     }
 
     @Override
-    public void addCookie(Cookie cookie)
+    public void addCookie( Cookie cookie )
     {
     }
 
     @Override
-    public boolean containsHeader(String name)
+    public boolean containsHeader( String name )
     {
         return false;
     }
 
     @Override
-    public String encodeURL(String url)
+    public String encodeURL( String url )
     {
         return url;
     }
 
     @Override
-    public String encodeRedirectURL(String url)
+    public String encodeRedirectURL( String url )
     {
         return url;
     }
 
     @Override
-    public String encodeUrl(String url)
+    public String encodeUrl( String url )
     {
         return url;
     }
 
     @Override
-    public String encodeRedirectUrl(String url)
+    public String encodeRedirectUrl( String url )
     {
         return url;
     }
 
     @Override
-    public void sendError(int sc, String msg) throws IOException
+    public void sendError( int sc, String msg ) throws IOException
     {
     }
 
     @Override
-    public void sendError(int sc) throws IOException
+    public void sendError( int sc ) throws IOException
     {
     }
 
     @Override
-    public void sendRedirect(String location) throws IOException
+    public void sendRedirect( String location ) throws IOException
     {
     }
 
     @Override
-    public void setDateHeader(String name, long date)
+    public void setDateHeader( String name, long date )
     {
     }
 
     @Override
-    public void addDateHeader(String name, long date)
+    public void addDateHeader( String name, long date )
     {
     }
 
     @Override
-    public void setHeader(String name, String value)
+    public void setHeader( String name, String value )
     {
     }
 
     @Override
-    public void addHeader(String name, String value)
+    public void addHeader( String name, String value )
     {
     }
 
     @Override
-    public void setIntHeader(String name, int value)
+    public void setIntHeader( String name, int value )
     {
     }
 
     @Override
-    public void addIntHeader(String name, int value)
+    public void addIntHeader( String name, int value )
     {
     }
 
     @Override
-    public void setStatus(int sc)
+    public void setStatus( int sc )
     {
     }
 
     @Override
-    public void setStatus(int sc, String sm)
+    public void setStatus( int sc, String sm )
     {
     }
 
