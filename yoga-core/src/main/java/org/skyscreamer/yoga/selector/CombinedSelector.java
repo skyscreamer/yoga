@@ -61,6 +61,7 @@ public class CombinedSelector implements Selector
         return false;
     }
 
+<<<<<<< HEAD
     public Set<String> getFieldNames()
     {
         Set<String> result = new HashSet<String>();
@@ -69,5 +70,38 @@ public class CombinedSelector implements Selector
             result.addAll( selector.getFieldNames() );
         }
         return result;
+=======
+   @Override
+   public boolean containsField(String property)
+   {
+      for (Selector selector : _selectors)
+      {
+         if (selector.containsField(property))
+         {
+            return true;
+         }
+      }
+      return false;   
+   }
+
+   public Set<String> getFieldNames()
+   {
+      Set<String> fieldNames = new HashSet<String>();
+      for (Selector selector : _selectors)
+      {
+         fieldNames.addAll(selector.getFieldNames());
+      }
+      return fieldNames;
+   }
+
+    @Override
+    public Map<String, Selector> getFields() {
+        Map<String, Selector> fields = new HashMap<String, Selector>();
+        for(Selector selector : _selectors)
+        {
+            fields.putAll(selector.getFields());
+        }
+        return fields;
+>>>>>>> upstream/master
     }
 }

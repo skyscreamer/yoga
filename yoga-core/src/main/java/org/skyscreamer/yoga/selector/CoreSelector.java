@@ -4,9 +4,13 @@ import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 
 import java.beans.PropertyDescriptor;
+<<<<<<< HEAD
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+=======
+import java.util.*;
+>>>>>>> upstream/master
 
 public class CoreSelector implements Selector
 {
@@ -34,9 +38,27 @@ public class CoreSelector implements Selector
         return false;
     }
 
+<<<<<<< HEAD
     @Override
     public Set<String> getFieldNames()
     {
         return new HashSet<String>();
+=======
+   @Override
+   public boolean containsField(String property)
+   {
+      return false;
+   }
+
+   @Override
+   public Set<String> getFieldNames()
+   {
+      return Collections.emptySet();
+   }
+
+    @Override
+    public Map<String, Selector> getFields() {
+        return Collections.emptyMap();
+>>>>>>> upstream/master
     }
 }

@@ -7,16 +7,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class DefinedSelectorImpl implements Selector
+public class FieldSelector implements Selector
 {
-    Map<String, DefinedSelectorImpl> _fields = new HashMap<String, DefinedSelectorImpl>();
+    Map<String, Selector> _fields = new HashMap<String, Selector>();
 
-    public Map<String, DefinedSelectorImpl> getFields()
+    public Map<String, Selector> getFields()
     {
         return _fields;
     }
 
+<<<<<<< HEAD:yoga-core/src/main/java/org/skyscreamer/yoga/selector/DefinedSelectorImpl.java
     public DefinedSelectorImpl getField(String field)
+=======
+    @Override
+    public Selector getField( PropertyDescriptor property )
+    {
+        return getField( property.getName() );
+    }
+
+    @Override
+    public Selector getField( String field )
+>>>>>>> upstream/master:yoga-core/src/main/java/org/skyscreamer/yoga/selector/FieldSelector.java
     {
         return _fields.get( field );
     }

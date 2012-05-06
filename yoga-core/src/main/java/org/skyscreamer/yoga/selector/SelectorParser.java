@@ -1,16 +1,25 @@
 package org.skyscreamer.yoga.selector;
 
-public class SelectorParser
+/**
+ * A SelectorParser takes a string selector argument and translates it into a Selector which is used to navigate
+ * the object tree and build results.
+ *
+ * @author Solomon Duskis <solomon@skyscreamer.org>
+ * @author Corby Page <corby@skyscreamer.org>
+ * @author Carter Page <carter@skyscreamer.org>
+ */
+public abstract class SelectorParser
 {
+    public static final String ALIAS_SELECTOR_PREFIX = "$";
     public static final String HREF = "href";
     public static final String DEFINITION = "definition";
 
-    private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
-    private static final String ALIAS_SELECTOR_PREFIX = "$";
+    protected AliasSelectorResolver _aliasSelectorResolver;
+    protected boolean _disableExplicitSelectors = false;
 
-    private AliasSelectorResolver _aliasSelectorResolver;
-    private boolean _disableExplicitSelectors = false;
+    public abstract Selector parse( String selectorExpression ) throws ParseSelectorException;
 
+<<<<<<< HEAD
     public Selector parseSelector(String selectorStr)
     {
         Selector selector = new CoreSelector();
@@ -38,6 +47,10 @@ public class SelectorParser
         }
 
         if (selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ) && _disableExplicitSelectors)
+=======
+    public Selector parseSelector( String selectorExpression ) throws ParseSelectorException {
+        if ( _disableExplicitSelectors && !selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
+>>>>>>> upstream/master
         {
             throw new ParseSelectorException( "Explicit selectors have been disabled" );
         }
@@ -47,6 +60,7 @@ public class SelectorParser
             selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
         }
 
+<<<<<<< HEAD
         if (!selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ))
         {
             String message = "Selector must start with " + ALIAS_SELECTOR_PREFIX;
@@ -64,12 +78,17 @@ public class SelectorParser
         stringBuilder.delete( 0, 2 );
 
         while (stringBuilder.length() > 0)
+=======
+        Selector selector = new CoreSelector();
+        if ( selectorExpression != null )
+>>>>>>> upstream/master
         {
-            processNextSelectorField( selector, stringBuilder );
+            selector = new CombinedSelector( selector, parse( selectorExpression ) );
         }
         return selector;
     }
 
+<<<<<<< HEAD
     private int getMatchingParenthesesIndex(StringBuilder selector, int index)
             throws ParseSelectorException
     {
@@ -144,6 +163,9 @@ public class SelectorParser
     }
 
     public void setAliasSelectorResolver(AliasSelectorResolver aliasSelectorResolver)
+=======
+    public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )
+>>>>>>> upstream/master
     {
         _aliasSelectorResolver = aliasSelectorResolver;
     }
