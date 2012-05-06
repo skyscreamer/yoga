@@ -11,18 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/metadata")
-public class MetaDataController
-{
-   @Autowired
-   MetaDataService metaDataService;
+public class MetaDataController {
+	@Autowired
+	MetaDataService metaDataService;
 
-   @RequestMapping("/{type}")
-   public TypeMetaData getTypeMetaData(@PathVariable("type") String type,
-         HttpServletRequest request)
-   {
-      String uri = request.getRequestURI();
-      String parts[] = uri.split( "\\." );
-      return metaDataService.getMetaData( type, parts[parts.length - 1] );
-   }
+	@RequestMapping("/{type}")
+	public TypeMetaData getTypeMetaData(@PathVariable("type") String type, HttpServletRequest request) {
+		String uri = request.getRequestURI();
+		String parts[] = uri.split("\\.");
+		return metaDataService.getMetaData(type, parts[parts.length - 1]);
+	}
 
 }

@@ -13,6 +13,7 @@ import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.ParseSelectorException;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
+import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.View;
 
@@ -31,6 +32,9 @@ public abstract class AbstractYogaView implements View
    @Autowired
    protected SelectorParser _selectorParser;
 
+   @Autowired
+   protected ClassFinderStrategy _classFinderStrategy;
+   
    public void setResultTraverser(ResultTraverser resultTraverser)
    {
       this.resultTraverser = resultTraverser;

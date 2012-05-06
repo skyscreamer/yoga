@@ -2,5 +2,5 @@ package org.skyscreamer.yoga.uri;
 
 public interface URITemplateGenerator
 {
-   String getTemplate(Object instance, Class<?> type);
+    String getTemplate(Object instance, Class<?> type);
 }

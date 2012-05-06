@@ -9,13 +9,11 @@ import org.skyscreamer.yoga.springmvc.view.XmlSelectorView;
 
 @Provider
 @Produces(MediaType.APPLICATION_XML)
-public class XmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter
-{
-   @Override
-   protected AbstractYogaView getView()
-   {
-      XmlSelectorView view = new XmlSelectorView();
-      view.setResultTraverser( resultTraverser );
-      return view;
-   }
+public class XmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter {
+	@Override
+	protected AbstractYogaView getView() {
+		XmlSelectorView view = new XmlSelectorView();
+		view.setResultTraverser(resultTraverser);
+		return view;
+	}
 }

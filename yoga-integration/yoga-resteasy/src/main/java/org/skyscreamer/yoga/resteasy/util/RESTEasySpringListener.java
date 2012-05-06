@@ -23,118 +23,97 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.SmartApplicationListener;
 
-public class RESTEasySpringListener implements SmartApplicationListener
-{
-   @Autowired
-   ConfigurableListableBeanFactory beanFactory;
+public class RESTEasySpringListener implements SmartApplicationListener {
+	@Autowired
+	ConfigurableListableBeanFactory beanFactory;
 
-   @Autowired
-   protected Registry registry;
+	@Autowired
+	protected Registry registry;
 
-   @Autowired
-   protected ResteasyProviderFactory providerFactory;
+	@Autowired
+	protected ResteasyProviderFactory providerFactory;
 
-   @Autowired
-   protected Dispatcher dispatcher;
+	@Autowired
+	protected Dispatcher dispatcher;
 
-   @Override
-   public void onApplicationEvent(ApplicationEvent event)
-   {
-      beanFactory.registerResolvableDependency(Registry.class, registry);
-      beanFactory.registerResolvableDependency(ResteasyProviderFactory.class, providerFactory);
-      if (dispatcher != null)
-      {
-         beanFactory.registerResolvableDependency(Dispatcher.class, dispatcher);
-      }
-      Collection<String> ignoreList = createRestEasyRegistrations(beanFactory);
+	@Override
+	public void onApplicationEvent(ApplicationEvent event) {
+		beanFactory.registerResolvableDependency(Registry.class, registry);
+		beanFactory.registerResolvableDependency(ResteasyProviderFactory.class, providerFactory);
+		if (dispatcher != null) {
+			beanFactory.registerResolvableDependency(Dispatcher.class, dispatcher);
+		}
+		Collection<String> ignoreList = createRestEasyRegistrations(beanFactory);
 
-      List<ResourceFactory> springResourceFactories = new ArrayList<ResourceFactory>();
-      for (String name : beanFactory.getBeanDefinitionNames())
-      {
-         if (ignoreList.contains(name))
-            continue;
+		List<ResourceFactory> springResourceFactories = new ArrayList<ResourceFactory>();
+		for (String name : beanFactory.getBeanDefinitionNames()) {
+			if (ignoreList.contains(name))
+				continue;
 
-         BeanDefinition beanDef = beanFactory.getBeanDefinition(name);
-         if (beanDef.getBeanClassName() == null || beanDef.isAbstract())
-            continue;
+			BeanDefinition beanDef = beanFactory.getBeanDefinition(name);
+			if (beanDef.getBeanClassName() == null || beanDef.isAbstract())
+				continue;
 
-         Class<?> beanClass = getBeanClass( beanDef );
-         
-         if (beanClass.isAnnotationPresent(Provider.class))
-         {
-            Object bean = beanFactory.getBean(name);
-            providerFactory.getInjectorFactory().createPropertyInjector(beanClass).inject(bean);
-            providerFactory.registerProviderInstance(bean);
-         }
+			Class<?> beanClass = getBeanClass(beanDef);
 
-         if (GetRestful.isRootResource(beanClass))
-         {
-            // defer registrations of resource factories until after all of the @Providers are registered
-            springResourceFactories.add(new SpringResourceFactory(name, beanFactory, beanClass));
-         }
-      }
+			if (beanClass.isAnnotationPresent(Provider.class)) {
+				Object bean = beanFactory.getBean(name);
+				providerFactory.getInjectorFactory().createPropertyInjector(beanClass).inject(bean);
+				providerFactory.registerProviderInstance(bean);
+			}
 
-      for (ResourceFactory resourceFactory : springResourceFactories)
-      {
-         registry.addResourceFactory(resourceFactory);
-      }
-   }
+			if (GetRestful.isRootResource(beanClass)) {
+				// defer registrations of resource factories until after all of
+				// the @Providers are registered
+				springResourceFactories.add(new SpringResourceFactory(name, beanFactory, beanClass));
+			}
+		}
 
-   protected Class<?> getBeanClass(BeanDefinition beanDef)
-   {
-      try
-      {
-         return Thread.currentThread().getContextClassLoader()
-               .loadClass(beanDef.getBeanClassName());
-      }
-      catch (ClassNotFoundException e)
-      {
-         throw new RuntimeException(e);
-      }
-   }
+		for (ResourceFactory resourceFactory : springResourceFactories) {
+			registry.addResourceFactory(resourceFactory);
+		}
+	}
 
-   @Override
-   public int getOrder()
-   {
-      return 1000;
-   }
+	protected Class<?> getBeanClass(BeanDefinition beanDef) {
+		try {
+			return Thread.currentThread().getContextClassLoader().loadClass(beanDef.getBeanClassName());
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-   @Override
-   public boolean supportsEventType(Class<? extends ApplicationEvent> eventType)
-   {
-      return eventType == ContextRefreshedEvent.class;
-   }
+	@Override
+	public int getOrder() {
+		return 1000;
+	}
 
-   @Override
-   public boolean supportsSourceType(Class<?> sourceType)
-   {
-      return ApplicationContext.class.isAssignableFrom(sourceType);
-   }
+	@Override
+	public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
+		return eventType == ContextRefreshedEvent.class;
+	}
 
-   private Collection<String> createRestEasyRegistrations(final ConfigurableListableBeanFactory beanFactory)
-   {
-      Map<String, ResteasyRegistration> registries = beanFactory
-            .getBeansOfType(ResteasyRegistration.class);
+	@Override
+	public boolean supportsSourceType(Class<?> sourceType) {
+		return ApplicationContext.class.isAssignableFrom(sourceType);
+	}
 
-      final Collection<String> resteasyRegistrations = new HashSet<String>();
-      ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-      for (ResteasyRegistration registration : registries.values())
-      {
-         String beanName = registration.getBeanName();
-         resteasyRegistrations.add(beanName);
-         BeanDefinition beanDef = beanFactory.getBeanDefinition(beanName);
-         try
-         {
-            Class<?> beanClass = contextClassLoader
-                  .loadClass(beanDef.getBeanClassName());
-            SpringResourceFactory reg = new SpringResourceFactory(beanName, beanFactory, beanClass);
-            registry.addResourceFactory(reg, registration.getContext());
-         }
-         catch (ClassNotFoundException e)
-         {
-            throw new RuntimeException(e);
-         }
-      }
-      return resteasyRegistrations;
-   }
+	private Collection<String> createRestEasyRegistrations(final ConfigurableListableBeanFactory beanFactory) {
+		Map<String, ResteasyRegistration> registries = beanFactory.getBeansOfType(ResteasyRegistration.class);
+
+		final Collection<String> resteasyRegistrations = new HashSet<String>();
+		ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+		for (ResteasyRegistration registration : registries.values()) {
+			String beanName = registration.getBeanName();
+			resteasyRegistrations.add(beanName);
+			BeanDefinition beanDef = beanFactory.getBeanDefinition(beanName);
+			try {
+				Class<?> beanClass = contextClassLoader.loadClass(beanDef.getBeanClassName());
+				SpringResourceFactory reg = new SpringResourceFactory(beanName, beanFactory, beanClass);
+				registry.addResourceFactory(reg, registration.getContext());
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return resteasyRegistrations;
+	}
 }

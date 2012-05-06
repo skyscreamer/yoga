@@ -1,21 +1,20 @@
 package org.skyscreamer.yoga.selector;
 
-import org.skyscreamer.yoga.populator.FieldPopulator;
-
 import java.beans.PropertyDescriptor;
 import java.util.Map;
 import java.util.Set;
 
+import org.skyscreamer.yoga.populator.FieldPopulator;
+
 public interface Selector
 {
-   Selector getField(PropertyDescriptor descriptor);
+    Selector getField(String fieldName);
 
-   boolean containsField( PropertyDescriptor descriptor, FieldPopulator<?> fieldPopulator );
-   boolean containsField( String property );
+    boolean containsField(PropertyDescriptor descriptor, FieldPopulator fieldPopulator);
 
-   Selector getField(String fieldName);
+    boolean containsField(String property);
 
-   Set<String> getFieldNames();
+    Set<String> getFieldNames();
 
     Map<String, Selector> getFields();
 }

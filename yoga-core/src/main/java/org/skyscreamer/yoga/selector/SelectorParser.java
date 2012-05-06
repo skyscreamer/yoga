@@ -1,9 +1,9 @@
 package org.skyscreamer.yoga.selector;
 
 /**
- * A SelectorParser takes a string selector argument and translates it into a Selector which is used to navigate
- * the object tree and build results.
- *
+ * A SelectorParser takes a string selector argument and translates it into a
+ * Selector which is used to navigate the object tree and build results.
+ * 
  * @author Solomon Duskis <solomon@skyscreamer.org>
  * @author Corby Page <corby@skyscreamer.org>
  * @author Carter Page <carter@skyscreamer.org>
@@ -53,3 +53,4 @@ public abstract class SelectorParser
         _disableExplicitSelectors = disableExplicitSelectors;
     }
 }
+

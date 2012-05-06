@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: corby
+ * Created by IntelliJ IDEA. User: corby
  */
-public abstract class FieldPopulatorSupport<M> implements FieldPopulator<M>
+public abstract class FieldPopulatorSupport implements FieldPopulator
 {
     public List<String> getCoreFields()
     {

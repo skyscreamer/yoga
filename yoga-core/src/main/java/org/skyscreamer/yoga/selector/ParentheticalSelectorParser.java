@@ -65,6 +65,6 @@ public abstract class ParentheticalSelectorParser extends SelectorParser {
         {
             throw new IllegalArgumentException( HREF + " is a reserved keyword for selectors" );
         }
-        selector._fields.put( fieldName, subSelector);
+        selector.addField( fieldName, subSelector );
     }
 }
