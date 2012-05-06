@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Created by IntelliJ IDEA.
- * User: corby
+ * Created by IntelliJ IDEA. User: corby
  */
 public class DynamicPropertyResolver implements AliasSelectorResolver
 {
@@ -16,27 +15,28 @@ public class DynamicPropertyResolver implements AliasSelectorResolver
     private Properties _properties = new Properties();
     private Resource _propertyFile;
 
-    public String resolveSelector( String aliasSelectorExpression ) throws ParseSelectorException
+    public String resolveSelector(String aliasSelectorExpression) throws ParseSelectorException
     {
-        if ( _nextReloadTime == 0 || _reloadIntervalSeconds > 0 )
+        if (_nextReloadTime == 0 || _reloadIntervalSeconds > 0)
         {
             long milliseconds = System.currentTimeMillis();
-            if ( milliseconds > _nextReloadTime )
+            if (milliseconds > _nextReloadTime)
             {
                 try
                 {
                     _properties.load( _propertyFile.getInputStream() );
-                    _nextReloadTime = milliseconds + ( _reloadIntervalSeconds * 1000 );
+                    _nextReloadTime = milliseconds + (_reloadIntervalSeconds * 1000);
                 }
-                catch ( IOException e )
+                catch (IOException e)
                 {
-                    throw new ParseSelectorException( "Could not load property file " + _propertyFile.getFilename() );
+                    throw new ParseSelectorException( "Could not load property file "
+                            + _propertyFile.getFilename() );
                 }
             }
         }
 
         String result = _properties.getProperty( aliasSelectorExpression );
-        if ( result == null )
+        if (result == null)
         {
             throw new ParseSelectorException( "No selector defined for " + aliasSelectorExpression );
         }
@@ -44,12 +44,12 @@ public class DynamicPropertyResolver implements AliasSelectorResolver
         return result;
     }
 
-    public void setReloadIntervalSeconds( int reloadIntervalSeconds )
+    public void setReloadIntervalSeconds(int reloadIntervalSeconds)
     {
         _reloadIntervalSeconds = reloadIntervalSeconds;
     }
 
-    public void setPropertyFile( Resource propertyFile )
+    public void setPropertyFile(Resource propertyFile)
     {
         _propertyFile = propertyFile;
     }

@@ -13,18 +13,15 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @Path("/metadata/{type}")
-public class MetaDataController
-{
-   @Autowired
-   MetaDataService metaDataService;
+public class MetaDataController {
+	@Autowired
+	MetaDataService metaDataService;
 
-   @GET
-   public TypeMetaData getTypeMetaData(@PathParam("type") String type,
-         @Context HttpServletRequest request)
-   {
-      String uri = request.getRequestURI();
-      String parts[] = uri.split( "\\." );
-      return metaDataService.getMetaData( type, parts[parts.length - 1] );
-   }
+	@GET
+	public TypeMetaData getTypeMetaData(@PathParam("type") String type, @Context HttpServletRequest request) {
+		String uri = request.getRequestURI();
+		String parts[] = uri.split("\\.");
+		return metaDataService.getMetaData(type, parts[parts.length - 1]);
+	}
 
 }

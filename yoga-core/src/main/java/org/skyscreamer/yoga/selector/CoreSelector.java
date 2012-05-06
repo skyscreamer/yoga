@@ -1,50 +1,46 @@
 package org.skyscreamer.yoga.selector;
 
-import org.skyscreamer.yoga.populator.FieldPopulator;
-
 import java.beans.PropertyDescriptor;
-import java.util.*;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+
+import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.populator.FieldPopulator;
 
 public class CoreSelector implements Selector
 {
-   @Override
-   public Selector getField(PropertyDescriptor property)
-   {
-      return this;
-   }
+    @Override
+    public Selector getField(String fieldName)
+    {
+        return this;
+    }
 
-   @Override
-   public Selector getField(String fieldName)
-   {
-      return this;
-   }
+    @Override
+    public boolean containsField(PropertyDescriptor property, FieldPopulator fieldPopulator)
+    {
+        Method readMethod = property.getReadMethod();
+        boolean isCore = readMethod.isAnnotationPresent( Core.class );
+        if (!isCore && fieldPopulator != null)
+        {
+            isCore = fieldPopulator.getCoreFields().contains( property.getName() );
+        }
+        return isCore;
+    }
 
-   @Override
-   public boolean containsField( PropertyDescriptor property, FieldPopulator<?> fieldPopulator )
-   {
-       boolean result = property.getReadMethod().isAnnotationPresent( Core.class );
-       if ( result == false )
-       {
-           if ( fieldPopulator != null )
-           {
-               result = fieldPopulator.getCoreFields().contains( property.getName() );
-           }
-       }
-       return result;
-   }
+    @Override
+    public boolean containsField(String property)
+    {
+        return false;
+    }
 
-   @Override
-   public boolean containsField(String property)
-   {
-      return false;
-   }
-
-   @Override
-   public Set<String> getFieldNames()
-   {
-      return Collections.emptySet();
-   }
-
+    @Override
+    public Set<String> getFieldNames()
+    {
+        return Collections.emptySet();
+    }
+    
     @Override
     public Map<String, Selector> getFields() {
         return Collections.emptyMap();
