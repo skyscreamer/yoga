@@ -9,7 +9,7 @@ import org.skyscreamer.yoga.selector.Selector;
  *
  * @author Carter Page <carter@skyscreamer.org>
  */
-public class AbstractSelectorTest {
+public abstract class AbstractSelectorTest {
     protected void testSimpleSelector(Selector selector) throws Exception
     {
         Assert.assertEquals(selector.getFields().size(), 2);
