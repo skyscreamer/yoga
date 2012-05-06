@@ -9,15 +9,15 @@ public class MetadataLinkEnricher implements Enricher
 {
     private MetaDataService metaDataService;
 
-    public void setMetaDataService(MetaDataService metaDataService)
+    public void setMetaDataService( MetaDataService metaDataService )
     {
         this.metaDataService = metaDataService;
     }
 
     @Override
-    public void enrich(YogaInstanceContext<?> entityContext)
+    public void enrich( YogaInstanceContext<?> entityContext )
     {
-        if (!(entityContext.getFieldSelector() instanceof CoreSelector))
+        if ( !(entityContext.getFieldSelector() instanceof CoreSelector) )
         {
             return;
         }

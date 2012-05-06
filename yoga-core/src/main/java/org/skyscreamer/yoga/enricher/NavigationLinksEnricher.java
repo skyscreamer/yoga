@@ -1,7 +1,5 @@
 package org.skyscreamer.yoga.enricher;
 
-import java.beans.PropertyDescriptor;
-
 import org.skyscreamer.yoga.mapper.YogaInstanceContext;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
@@ -10,21 +8,23 @@ import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 
+import java.beans.PropertyDescriptor;
+
 public class NavigationLinksEnricher implements Enricher
 {
 
     private HrefEnricher hrefEnricher = new HrefEnricher();
 
-    public void setHrefEnricher(HrefEnricher hrefEnricher)
+    public void setHrefEnricher( HrefEnricher hrefEnricher )
     {
         this.hrefEnricher = hrefEnricher;
     }
 
     @Override
-    public void enrich(YogaInstanceContext<?> entityContext)
+    public void enrich( YogaInstanceContext<?> entityContext )
     {
         Selector fieldSelector = entityContext.getFieldSelector();
-        if (!(fieldSelector instanceof CoreSelector))
+        if ( !(fieldSelector instanceof CoreSelector) )
         {
             return;
         }
@@ -34,9 +34,9 @@ public class NavigationLinksEnricher implements Enricher
         FieldPopulator populator = entityContext.getPopulator();
 
         HierarchicalModel navigationLinks = entityContext.getModel().createChild( "navigationLinks" );
-        for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
+        for ( PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ) )
         {
-            if (fieldSelector.containsField( property, populator ))
+            if ( fieldSelector.containsField( property, populator ) )
                 continue;
 
             HierarchicalModel navModel = navigationLinks.createChild( property.getName() );

@@ -23,15 +23,15 @@ public class FieldSelector implements Selector
     }
 
     @Override
-    public boolean containsField(PropertyDescriptor property, FieldPopulator fieldPopulator)
+    public boolean containsField( PropertyDescriptor property, FieldPopulator fieldPopulator )
     {
         String propertyName = property.getName();
         return containsField( propertyName )
                 || (fieldPopulator != null && fieldPopulator.getSupportedFields() != null && fieldPopulator
-                        .getSupportedFields().contains( propertyName ));
+                .getSupportedFields().contains( propertyName ));
     }
 
-    public boolean containsField(String field)
+    public boolean containsField( String field )
     {
         return _fields.containsKey( field );
     }
@@ -45,8 +45,8 @@ public class FieldSelector implements Selector
     {
         return _fields.keySet();
     }
-    
-    public void addField(String key, Selector selector)
+
+    public void addField( String key, Selector selector )
     {
         _fields.put( key, selector );
     }

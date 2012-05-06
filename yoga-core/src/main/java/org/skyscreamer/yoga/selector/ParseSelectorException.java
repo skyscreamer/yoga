@@ -9,7 +9,7 @@ public class ParseSelectorException extends Exception
         super();
     }
 
-    public ParseSelectorException(String s)
+    public ParseSelectorException( String s )
     {
         super( s );
     }

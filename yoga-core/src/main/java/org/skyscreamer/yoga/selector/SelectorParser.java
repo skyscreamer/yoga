@@ -3,7 +3,7 @@ package org.skyscreamer.yoga.selector;
 /**
  * A SelectorParser takes a string selector argument and translates it into a
  * Selector which is used to navigate the object tree and build results.
- * 
+ *
  * @author Solomon Duskis <solomon@skyscreamer.org>
  * @author Corby Page <corby@skyscreamer.org>
  * @author Carter Page <carter@skyscreamer.org>
@@ -19,8 +19,9 @@ public abstract class SelectorParser
 
     public abstract Selector parse( String selectorExpression ) throws ParseSelectorException;
 
-    public Selector parseSelector( String selectorExpression ) throws ParseSelectorException {
-        if (selectorExpression == null)
+    public Selector parseSelector( String selectorExpression ) throws ParseSelectorException
+    {
+        if ( selectorExpression == null )
         {
             return new CoreSelector();
         }

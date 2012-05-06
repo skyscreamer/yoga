@@ -9,11 +9,12 @@ import org.skyscreamer.yoga.selector.ParseSelectorException;
  * @author Corby Page <corby@skyscreamer.org>
  * @author Carter Page <carter@skyscreamer.org>
  */
-public class ParenthesisUtil {
+public class ParenthesisUtil
+{
     /**
      * Given an index of an opening parenthesis "(", find the matching closing parenthesis ")".  If there are embedded
      * parenthesis inside the matching pair, this method will ignore them.
-     *
+     * <p/>
      * Example:
      * <pre>
      *      getMatchingParenthesis("a(b(c))", 1) returns 6
@@ -21,27 +22,28 @@ public class ParenthesisUtil {
      * </pre>
      *
      * @param selector String to analyze for the matching selector
-     * @param index Index of the opening parenthesis to match
+     * @param index    Index of the opening parenthesis to match
      * @return Index of matching closing parenthesis
      * @throws org.skyscreamer.yoga.selector.ParseSelectorException
+     *
      */
-    public static int getMatchingParenthesisIndex(CharSequence selector, int index) throws ParseSelectorException
+    public static int getMatchingParenthesisIndex( CharSequence selector, int index ) throws ParseSelectorException
     {
-        return getMatchingBracketIndex(selector, index, '(', ')');
+        return getMatchingBracketIndex( selector, index, '(', ')' );
     }
 
-    private static int getMatchingBracketIndex(CharSequence selector, int index, char openBracket, char closeBracket)
+    private static int getMatchingBracketIndex( CharSequence selector, int index, char openBracket, char closeBracket )
             throws ParseSelectorException
     {
-        if (selector.charAt( index ) != openBracket)
+        if ( selector.charAt( index ) != openBracket )
         {
-            throw new ParseSelectorException( "Selector does not have an opening bracket at index " + index);
+            throw new ParseSelectorException( "Selector does not have an opening bracket at index " + index );
         }
         int parenthesesCount = 1;
         while ( parenthesesCount > 0 && index < selector.length() - 1 )
         {
             index++;
-            if ( selector.charAt( index ) == openBracket)
+            if ( selector.charAt( index ) == openBracket )
             {
                 parenthesesCount++;
             }

@@ -9,21 +9,21 @@ public class XhtmlHierarchyModel implements HierarchicalModel
     String childName = null;
     Element a = null;
 
-    public XhtmlHierarchyModel(Element element)
+    public XhtmlHierarchyModel( Element element )
     {
         this.element = element;
     }
 
     @Override
-    public void addSimple(String name, Object result)
+    public void addSimple( String name, Object result )
     {
         String elementName = childName == null ? name : childName;
-        if (elementName.equals( "href" ))
+        if ( elementName.equals( "href" ) )
         {
             a = element.addElement( "a" );
             a.addAttribute( "href", result.toString() );
         }
-        else if (a != null)
+        else if ( a != null )
         {
             a.setText( result.toString() );
         }
@@ -35,7 +35,7 @@ public class XhtmlHierarchyModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createChild(String property)
+    public HierarchicalModel createChild( String property )
     {
         return new XhtmlHierarchyModel( element.addElement( "div" )
                 .addAttribute( "class", property ) );
@@ -46,25 +46,25 @@ public class XhtmlHierarchyModel implements HierarchicalModel
     {
         return new XhtmlHierarchyModel( element.addElement( "div" ) );
     }
-    
+
     @Override
-    public HierarchicalModel createList(String property)
+    public HierarchicalModel createList( String property )
     {
         Element div = element.addElement( "div" ).addAttribute( "class", property );
         return new XhtmlHierarchyModel( div );
     }
 
     @Override
-    public void addSimple(Object instance)
+    public void addSimple( Object instance )
     {
-        if(childName != null)
+        if ( childName != null )
             element.addElement( childName ).setText( instance.toString() );
         else
-            throw new YogaRuntimeException("childName was never set");
+            throw new YogaRuntimeException( "childName was never set" );
     }
 
     @Override
-    public HierarchicalModel createSimple(String property)
+    public HierarchicalModel createSimple( String property )
     {
         return new XmlTextElementHierarchyModel( element.addElement( property ) );
     }

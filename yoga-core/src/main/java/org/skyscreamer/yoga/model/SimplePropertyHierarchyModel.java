@@ -7,9 +7,9 @@ public class SimplePropertyHierarchyModel extends AbstractSimplePropertyHierarch
     private HierarchicalModel underlying;
     private String name;
 
-    public SimplePropertyHierarchyModel(String name, HierarchicalModel underlying)
+    public SimplePropertyHierarchyModel( String name, HierarchicalModel underlying )
     {
-        if (name == null || underlying == null)
+        if ( name == null || underlying == null )
         {
             throw new YogaRuntimeException( new IllegalAccessException(
                     "name and underlying were not set" ) );
@@ -19,7 +19,7 @@ public class SimplePropertyHierarchyModel extends AbstractSimplePropertyHierarch
     }
 
     @Override
-    public void addSimple(Object value)
+    public void addSimple( Object value )
     {
         underlying.addSimple( name, value );
     }

@@ -1,17 +1,17 @@
 package org.skyscreamer.yoga.selector;
 
 import org.junit.Assert;
-import org.skyscreamer.yoga.selector.Selector;
 
 /**
  * Shared test logic for selector tests
  *
  * @author Carter Page <carter@skyscreamer.org>
  */
-public abstract class AbstractSelectorTest {
-    protected void testSimpleSelector(Selector selector) throws Exception
+public abstract class AbstractSelectorTest
+{
+    protected void testSimpleSelector( Selector selector ) throws Exception
     {
-        Assert.assertEquals(selector.getFields().size(), 2);
+        Assert.assertEquals( selector.getFields().size(), 2 );
         Selector genderField = selector.getField( "gender" );
         Assert.assertNotNull( genderField );
         Assert.assertEquals( genderField.getFields().size(), 0 );
@@ -21,14 +21,14 @@ public abstract class AbstractSelectorTest {
         Assert.assertEquals( countryField.getFields().size(), 0 );
     }
 
-    protected void testNestedSelectors(Selector selector) throws Exception
+    protected void testNestedSelectors( Selector selector ) throws Exception
     {
         Assert.assertEquals( selector.getFields().size(), 3 );
-        Selector genderField = selector.getField(  "gender" );
+        Selector genderField = selector.getField( "gender" );
         Assert.assertNotNull( genderField );
         Assert.assertEquals( genderField.getFields().size(), 0 );
 
-        Selector favoriteArtistsField = selector.getField(  "favoriteArtists" );
+        Selector favoriteArtistsField = selector.getField( "favoriteArtists" );
         Assert.assertNotNull( favoriteArtistsField );
         Assert.assertEquals( favoriteArtistsField.getFields().size(), 2 );
 
@@ -49,7 +49,7 @@ public abstract class AbstractSelectorTest {
         Assert.assertEquals( titleField.getFields().size(), 0 );
 
         Assert.assertEquals( selector.getFields().size(), 3 );
-        Selector friendsField = selector.getField(  "friends" );
+        Selector friendsField = selector.getField( "friends" );
         Assert.assertNotNull( friendsField );
         Assert.assertEquals( friendsField.getFields().size(), 0 );
     }
