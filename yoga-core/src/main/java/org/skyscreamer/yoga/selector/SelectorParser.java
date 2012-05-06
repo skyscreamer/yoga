@@ -17,38 +17,40 @@ public abstract class SelectorParser
     protected AliasSelectorResolver _aliasSelectorResolver;
     protected boolean _disableExplicitSelectors = false;
 
-    public abstract Selector parse(String selectorExpression) throws ParseSelectorException;
+    public abstract Selector parse( String selectorExpression ) throws ParseSelectorException;
 
-    public Selector parseSelector(String selectorExpression) throws ParseSelectorException
-    {
-        if (selectorExpression != null)
+    public Selector parseSelector( String selectorExpression ) throws ParseSelectorException {
+        if (selectorExpression == null)
         {
-            if (_disableExplicitSelectors && !selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ))
-            {
-                throw new ParseSelectorException( "Explicit selectors have been disabled" );
-            }
+            return new CoreSelector();
+        }
 
-            if (selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ))
-            {
-                selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
-            }
+        if ( _disableExplicitSelectors && !selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
+        {
+            throw new ParseSelectorException( "Explicit selectors have been disabled" );
+        }
+
+        if ( selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
+        {
+            selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
         }
 
         Selector selector = new CoreSelector();
-        if (selectorExpression != null)
+        if ( selectorExpression != null )
         {
             selector = new CombinedSelector( selector, parse( selectorExpression ) );
         }
         return selector;
     }
 
-    public void setAliasSelectorResolver(AliasSelectorResolver aliasSelectorResolver)
+    public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )
     {
         _aliasSelectorResolver = aliasSelectorResolver;
     }
 
-    public void setDisableExplicitSelectors(boolean disableExplicitSelectors)
+    public void setDisableExplicitSelectors( boolean disableExplicitSelectors )
     {
         _disableExplicitSelectors = disableExplicitSelectors;
     }
 }
+
