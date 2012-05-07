@@ -12,16 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Path("/metadata/{type}")
-public class MetaDataController {
-	@Autowired
-	MetaDataService metaDataService;
+@Path("/metadata/")
+public class MetaDataController
+{
+    @Autowired
+    MetaDataService metaDataService;
 
-	@GET
-	public TypeMetaData getTypeMetaData(@PathParam("type") String type, @Context HttpServletRequest request) {
-		String uri = request.getRequestURI();
-		String parts[] = uri.split("\\.");
-		return metaDataService.getMetaData(type, parts[parts.length - 1]);
-	}
+    @GET
+    @Path("/{type}")
+    public TypeMetaData getTypeMetaData(@PathParam("type") String type,
+            @Context HttpServletRequest request)
+    {
+        String uri = request.getRequestURI();
+        String parts[] = uri.split( "\\." );
+        return metaDataService.getMetaData( type, parts[parts.length - 1] );
+    }
 
 }

@@ -1,9 +1,8 @@
-package org.skyscreamer.yoga.mapper;
+package org.skyscreamer.yoga.model;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.skyscreamer.yoga.exceptions.EntityCountExceededException;
-import org.skyscreamer.yoga.model.HierarchicalModel;
 
 /**
  * creating by IntelliJ IDEA. User: Carter Page Date: 3/31/12 Time: 5:21 PM
@@ -16,12 +15,6 @@ public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
     public HierarchicalModelEntityCounter(int maxEntities)
     {
         _maxEntities = maxEntities;
-    }
-
-    @Override
-    public void addingSimple(String name, Object value, HierarchicalModel model)
-    {
-        // countAndCheck();
     }
 
     @Override
@@ -52,6 +45,11 @@ public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
     }
 
     @Override
+    public void addingSimple(String name, Object value, HierarchicalModel model)
+    {
+    }
+
+    @Override
     public void addingSimple(Object value, HierarchicalModel model)
     {
     }
@@ -59,7 +57,6 @@ public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
     @Override
     public void creatingSimple(String name, HierarchicalModel model)
     {
-        
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
 public class XmlHierarchyModel implements HierarchicalModel
 {
-    Element element;
+    protected Element element;
 
     public XmlHierarchyModel(Element element)
     {

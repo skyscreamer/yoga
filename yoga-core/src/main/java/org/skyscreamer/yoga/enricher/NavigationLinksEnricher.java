@@ -45,7 +45,7 @@ public class NavigationLinksEnricher implements Enricher
                     + property.getName() + ")";
             YogaInstanceContext<?> clone = entityContext.clone();
             YogaRequestContext childRequestContext = new YogaRequestContext( hrefSuffixAndSelector,
-                    requestContext.getResponse() );
+                    requestContext.getRequest(), requestContext.getResponse() );
             clone.setRequestContext( childRequestContext );
             clone.setModel( navModel );
             hrefEnricher.enrich( clone );

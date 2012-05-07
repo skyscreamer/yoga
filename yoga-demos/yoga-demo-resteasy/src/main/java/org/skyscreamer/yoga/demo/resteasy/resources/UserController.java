@@ -14,9 +14,11 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @Path("/user")
-public class UserController extends AbstractController<User> {
-	@GET
-	public List<User> getUsers(@QueryParam("selector") String selectorString) {
-		return _genericDao.findAll(User.class);
-	}
+public class UserController extends AbstractController<User>
+{
+    @GET
+    public List<User> getUsers(@QueryParam("selector") String selectorString)
+    {
+        return _genericDao.findAll( User.class );
+    }
 }

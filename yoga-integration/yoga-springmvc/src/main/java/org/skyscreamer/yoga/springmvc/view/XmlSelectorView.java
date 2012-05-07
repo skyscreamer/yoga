@@ -3,6 +3,7 @@ package org.skyscreamer.yoga.springmvc.view;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dom4j.dom.DOMDocument;
@@ -13,39 +14,44 @@ import org.skyscreamer.yoga.model.XmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.NameUtil;
 
-public class XmlSelectorView extends AbstractYogaView {
-	@Override
-	public void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response) throws IOException {
-		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(), response);
+public class XmlSelectorView extends AbstractYogaView
+{
+    @Override
+    public void render(OutputStream outputStream, Selector selector, Object value,
+            HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response );
 
-		DOMDocument domDocument = new DOMDocument();
-		if (value instanceof Iterable) {
-			DOMElement root = createDocument(domDocument, "result");
-			HierarchicalModel model = new XmlHierarchyModel(root);
-			for (Object child : (Iterable<?>) value) {
-				resultTraverser.traverse(child, selector, model, context);
-			}
-		} else {
-			String name = NameUtil.getName(_classFinderStrategy.findClass(value));
-			DOMElement root = createDocument(domDocument, name);
-			resultTraverser.traverse(value, selector, new XmlHierarchyModel(root), context);
-		}
-		write(outputStream, domDocument);
-	}
+        DOMDocument domDocument = new DOMDocument();
+        String rootName = getRootName( value );
+        DOMElement root = new DOMElement( rootName );
+        domDocument.setRootElement( root );
+        HierarchicalModel model = new XmlHierarchyModel( root );
+        resultTraverser.traverse( value, selector, model, context );
+        write( outputStream, domDocument );
+    }
 
-	public DOMElement createDocument(DOMDocument domDocument, String name) {
-		DOMElement root = new DOMElement(name);
-		domDocument.setRootElement(root);
-		return root;
-	}
+    protected String getRootName(Object value)
+    {
+        if (value instanceof Iterable)
+        {
+            return "result";
+        }
+        else
+        {
+            return NameUtil.getName( _classFinderStrategy.findClass( value ) );
+        }
+    }
 
-	@Override
-	public String getContentType() {
-		return "application/xml";
-	}
+    @Override
+    public String getContentType()
+    {
+        return "application/xml";
+    }
 
-	@Override
-	public String getHrefSuffix() {
-		return "xml";
-	}
+    @Override
+    public String getHrefSuffix()
+    {
+        return "xml";
+    }
 }

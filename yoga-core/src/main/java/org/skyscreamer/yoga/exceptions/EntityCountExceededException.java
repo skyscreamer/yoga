@@ -4,7 +4,7 @@ package org.skyscreamer.yoga.exceptions;
 /**
  * This exception is thrown when the maximum number of entities for a request is exceeded.
  *
- * @see org.skyscreamer.yoga.mapper.HierarchicalModelEntityCounter
+ * @see org.skyscreamer.yoga.model.HierarchicalModelEntityCounter
  * @author Carter Page <carter@skyscreamer.org>
  */
 @SuppressWarnings("serial")

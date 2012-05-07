@@ -1,6 +1,5 @@
-package org.skyscreamer.yoga.mapper;
+package org.skyscreamer.yoga.model;
 
-import org.skyscreamer.yoga.model.HierarchicalModel;
 
 public interface HierarchicalModelObserver
 {

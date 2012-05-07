@@ -13,24 +13,31 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.mvc.annotation.ModelAndViewResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-public class YogaModelAndViewResolver implements ModelAndViewResolver {
-	ViewResolver viewResolver;
+public class YogaModelAndViewResolver implements ModelAndViewResolver
+{
+    ViewResolver viewResolver;
 
-	public void setViewResolver(ViewResolver viewResolver) {
-		this.viewResolver = viewResolver;
-	}
+    public void setViewResolver(ViewResolver viewResolver)
+    {
+        this.viewResolver = viewResolver;
+    }
 
-	@Override
-	@SuppressWarnings("rawtypes")
-	public ModelAndView resolveModelAndView(Method handlerMethod, Class handlerType, Object returnValue, ExtendedModelMap implicitModel, NativeWebRequest webRequest) {
-		try {
-			HttpServletRequest nativeRequest = (HttpServletRequest) webRequest.getNativeRequest();
-			Locale locale = RequestContextUtils.getLocale(nativeRequest);
-			View view = viewResolver.resolveViewName("yoga", locale);
-			return new ModelAndView(view, "value", returnValue);
-		} catch (Exception e) {
-			throw new RuntimeException("could not process request", e);
-		}
-	}
+    @Override
+    @SuppressWarnings("rawtypes")
+    public ModelAndView resolveModelAndView(Method handlerMethod, Class handlerType,
+            Object returnValue, ExtendedModelMap implicitModel, NativeWebRequest webRequest)
+    {
+        try
+        {
+            HttpServletRequest nativeRequest = (HttpServletRequest) webRequest.getNativeRequest();
+            Locale locale = RequestContextUtils.getLocale( nativeRequest );
+            View view = viewResolver.resolveViewName( "yoga", locale );
+            return new ModelAndView( view, "value", returnValue );
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException( "could not process request", e );
+        }
+    }
 
 }

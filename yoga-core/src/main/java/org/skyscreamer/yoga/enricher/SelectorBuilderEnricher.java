@@ -22,7 +22,7 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
             if (href != null)
             {
                 href += "." + suffix;
-                entityContext.getModel().addSimple( FIELD_NAME, getUrl( entityContext.getRequestContext().getResponse(), href, entityContext.getInstance() ) );
+                entityContext.getModel().addSimple( FIELD_NAME, getUrl( href, entityContext) );
             }
             return;
         }

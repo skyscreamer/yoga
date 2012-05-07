@@ -45,7 +45,7 @@ public abstract class AbstractYogaView implements View
          throws Exception
    {
       response.setContentType( getContentType() );
-      render( response.getOutputStream(), getSelector( request ), model.values().iterator().next(), response );
+      render( response.getOutputStream(), getSelector( request ), model.values().iterator().next(), request, response );
    }
 
    protected Selector getSelector(HttpServletRequest request) throws ParseSelectorException {
@@ -60,7 +60,7 @@ public abstract class AbstractYogaView implements View
       out.flush();
    }
 
-   public abstract void render(OutputStream outputStream, Selector selector, Object value, HttpServletResponse response) throws IOException;
+   public abstract void render(OutputStream outputStream, Selector selector, Object value, HttpServletRequest request, HttpServletResponse response) throws IOException;
    
    public abstract String getHrefSuffix();
 }

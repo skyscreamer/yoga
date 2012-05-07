@@ -6,6 +6,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -57,9 +58,9 @@ public class MapMetaDataServiceImpl implements MetaDataService
     }
 
     @Override
-    public Map<String, Class<?>> getTypeMappings()
+    public Collection<String> getTypes()
     {
-        return _typeMappings;
+        return _typeMappings.keySet();
     }
 
     @Override
@@ -190,7 +191,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
     }
 
     @Override
-    public String getHref(Class<?> propertyType, String suffix)
+    public String getMetadataHref(Class<?> propertyType, String suffix)
     {
         String nameForType = getNameForType( propertyType );
         if (nameForType != null)
@@ -205,7 +206,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
 
     protected void addHref(PropertyMetaData propertyMetaData, Class<?> propertyType, String suffix)
     {
-        String href = getHref( propertyType, suffix );
+        String href = getMetadataHref( propertyType, suffix );
         if (href != null)
         {
             propertyMetaData.setHref( href );

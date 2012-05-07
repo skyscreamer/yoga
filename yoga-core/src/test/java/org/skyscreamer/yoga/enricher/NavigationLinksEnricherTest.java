@@ -11,12 +11,14 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.test.DummyHttpServletResponse;
+import org.skyscreamer.yoga.test.DummyServletRequest;
 import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.data.BasicTestDataNode;
 
 public class NavigationLinksEnricherTest
 {
     NavigationLinksEnricher enricher = new NavigationLinksEnricher();
+    static YogaRequestContext requestContext = new YogaRequestContext( "map", new DummyServletRequest(), new DummyHttpServletResponse() );
 
     @Test
     public void testBasic()
@@ -25,7 +27,7 @@ public class NavigationLinksEnricherTest
         MapHierarchicalModel model = new MapHierarchicalModel();
         YogaInstanceContext<BasicTestDataLeaf> entityContext = new YogaInstanceContext<BasicTestDataLeaf>(
                 leaf, BasicTestDataLeaf.class, new CoreSelector(), model,
-                new YogaRequestContext( "map", new DummyHttpServletResponse() ) );
+                requestContext );
         enricher.enrich( entityContext );
 
         Map<String, Object> objectTree = model.getObjectTree();
@@ -48,8 +50,7 @@ public class NavigationLinksEnricherTest
         node.setId( "foo" );
         MapHierarchicalModel model = new MapHierarchicalModel();
         YogaInstanceContext<BasicTestDataNode> entityContext = new YogaInstanceContext<BasicTestDataNode>(
-                node, BasicTestDataNode.class, new CoreSelector(), model,
-                new YogaRequestContext( "map", new DummyHttpServletResponse() ) );
+                node, BasicTestDataNode.class, new CoreSelector(), model, requestContext );
         enricher.enrich( entityContext );
         System.out.println(model.getObjectTree());
     }

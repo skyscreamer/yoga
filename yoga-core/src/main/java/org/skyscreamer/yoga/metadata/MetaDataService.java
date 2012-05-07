@@ -1,10 +1,10 @@
 package org.skyscreamer.yoga.metadata;
 
-import java.util.Map;
+import java.util.Collection;
 
 public interface MetaDataService
 {
-    Map<String, Class<?>> getTypeMappings();
+    Collection<String> getTypes();
 
     Class<?> getTypeForName(String name);
 
@@ -14,6 +14,6 @@ public interface MetaDataService
 
     TypeMetaData getMetaData(Class<?> type, String suffix);
 
-    String getHref(Class<?> type, String suffix);
+    String getMetadataHref(Class<?> type, String suffix);
 
 }

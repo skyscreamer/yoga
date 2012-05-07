@@ -1,6 +1,5 @@
 package org.skyscreamer.yoga.model;
 
-import org.skyscreamer.yoga.mapper.HierarchicalModelObserver;
 
 /**
  * Wrapper class that allows a model to be observed as it is constructed.

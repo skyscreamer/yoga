@@ -58,7 +58,7 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
          throws IOException, WebApplicationException
    {
        try {
-           getView().render( entityStream, getSelector(), t, response );
+           getView().render( entityStream, getSelector(), t, request,  response );
        } catch (ParseSelectorException e) {
            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
        }

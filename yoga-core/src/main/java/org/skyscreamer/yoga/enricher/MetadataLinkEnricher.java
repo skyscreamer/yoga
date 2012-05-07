@@ -2,7 +2,6 @@ package org.skyscreamer.yoga.enricher;
 
 import org.skyscreamer.yoga.mapper.YogaInstanceContext;
 import org.skyscreamer.yoga.metadata.MetaDataService;
-import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.selector.CoreSelector;
 
 public class MetadataLinkEnricher implements Enricher
@@ -22,9 +21,12 @@ public class MetadataLinkEnricher implements Enricher
             return;
         }
 
-        HierarchicalModel metaDataLink = entityContext.getModel().createChild( "metadata" );
-        metaDataLink.addSimple( "href",
-                metaDataService.getHref( entityContext.getInstanceType(), entityContext.getRequestContext().getUrlSuffix() ) );
+        Class<?> type = entityContext.getInstanceType();
+        String urlSuffix = entityContext.getRequestContext().getUrlSuffix();
+        
+        String url = metaDataService.getMetadataHref( type, urlSuffix );
+
+        entityContext.getModel().createChild( "metadata" ).addSimple( "href", url );
     }
 
 }

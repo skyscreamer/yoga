@@ -20,6 +20,7 @@ import org.skyscreamer.yoga.selector.CombinedSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.test.DummyHttpServletResponse;
+import org.skyscreamer.yoga.test.DummyServletRequest;
 import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.data.BasicTestDataNode;
 import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
@@ -52,7 +53,7 @@ public class ResultTraverserTest
         } );
         instanceContextFactory.setFieldPopulatorRegistry( registry );
 
-        requestContext = new YogaRequestContext( "map", new DummyHttpServletResponse() );
+        requestContext = new YogaRequestContext( "map", new DummyServletRequest(), new DummyHttpServletResponse() );
     }
 
     @SuppressWarnings("unchecked")

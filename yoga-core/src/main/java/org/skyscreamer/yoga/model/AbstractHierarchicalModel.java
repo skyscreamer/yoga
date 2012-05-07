@@ -9,7 +9,7 @@ public abstract class AbstractHierarchicalModel implements HierarchicalModel
     public HierarchicalModel createChild(String name)
     {
         MapHierarchicalModel child = new MapHierarchicalModel();
-        addSimple( name, child.getObjectTree() );
+        createSimple( name ).addSimple( child.getObjectTree() );
         return child;
     }
     
@@ -24,7 +24,7 @@ public abstract class AbstractHierarchicalModel implements HierarchicalModel
     public HierarchicalModel createList(String name)
     {
         ListHierarchicalModel child = new ListHierarchicalModel();
-        addSimple( name, child.getList() );
+        createSimple( name ).addSimple( child.getList() );
         return child;
     }
     

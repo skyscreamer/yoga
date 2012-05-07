@@ -1,7 +1,5 @@
 package org.skyscreamer.yoga.enricher;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
@@ -32,7 +30,7 @@ public class HrefEnricher implements Enricher
             {
                 urlTemplate += "." + urlSuffix;
             }
-            String url = getUrl( requestContext.getResponse(), urlTemplate, entityContext.getInstance() );
+            String url = getUrl( urlTemplate, entityContext );
             entityContext.getModel().addSimple( SelectorParser.HREF, url );
         }
     }
@@ -50,21 +48,21 @@ public class HrefEnricher implements Enricher
         return null;
     }
 
-    protected String getUrl(HttpServletResponse response, String uriTemplate, final Object instance)
+    protected String getUrl(String uriTemplate, final YogaInstanceContext<?> entityContext)
     {
-        return _uriCreator.getHref( uriTemplate, response, new ValueReader()
+        return _uriCreator.getHref( uriTemplate, entityContext.getRequestContext().getResponse(), new ValueReader()
         {
             @Override
             public Object getValue(String property)
             {
                 try
                 {
-                    return PropertyUtils.getNestedProperty( instance, property );
+                    return PropertyUtils.getNestedProperty( entityContext.getInstance(), property );
                 }
                 catch (Exception e)
                 {
                     throw new YogaRuntimeException( "Could not invoke getter for property " + property
-                            + " on class " + instance.getClass().getName(), e );
+                            + " on class " + entityContext.getInstanceType().getName(), e );
                 }
             }
         } );
