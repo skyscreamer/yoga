@@ -4,5 +4,5 @@ import org.skyscreamer.yoga.mapper.YogaInstanceContext;
 
 public interface Enricher
 {
-    void enrich(YogaInstanceContext<?> entityContext);
+    void enrich( YogaInstanceContext<?> entityContext );
 }

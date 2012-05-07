@@ -11,14 +11,14 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * Wraps a gzipped Resource so that it decompresses on the fly.
- * 
+ *
  * @author Carter Page
  */
 public class GzippedResource implements Resource
 {
     private final Resource _resource;
 
-    public GzippedResource(Resource resource)
+    public GzippedResource( Resource resource )
     {
         _resource = resource;
     }
@@ -79,7 +79,7 @@ public class GzippedResource implements Resource
     }
 
     @Override
-    public Resource createRelative(String relativePath) throws IOException
+    public Resource createRelative( String relativePath ) throws IOException
     {
         return _resource.createRelative( relativePath );
     }

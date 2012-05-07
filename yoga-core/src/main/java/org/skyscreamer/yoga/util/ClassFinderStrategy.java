@@ -5,5 +5,5 @@ package org.skyscreamer.yoga.util;
  */
 public interface ClassFinderStrategy
 {
-    Class<?> findClass(Object instance);
+    Class<?> findClass( Object instance );
 }

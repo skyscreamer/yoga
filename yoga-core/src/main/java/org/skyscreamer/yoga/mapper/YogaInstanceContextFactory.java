@@ -16,19 +16,19 @@ public class YogaInstanceContextFactory
 
     protected ClassFinderStrategy _classFinderStrategy;
 
-    
-    
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public YogaInstanceContext createEntityContext(Object instance, Selector fieldSelector,
-            HierarchicalModel model, YogaRequestContext context)
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public YogaInstanceContext createEntityContext( Object instance, Selector fieldSelector,
+            HierarchicalModel model, YogaRequestContext context )
     {
         Class<?> type = findClass( instance );
 
         HierarchicalModel entityModel = model;
-        if (_maxEntities > -1)
+        if ( _maxEntities > -1 )
         {
-            HierarchicalModelEntityCounter counter = (HierarchicalModelEntityCounter) context.getProperty("element_counter");
-            if(counter == null){
+            HierarchicalModelEntityCounter counter = (HierarchicalModelEntityCounter) context.getProperty( "element_counter" );
+            if ( counter == null )
+            {
                 counter = new HierarchicalModelEntityCounter( _maxEntities );
                 context.setProperty( "element_counter", counter );
             }
@@ -49,22 +49,22 @@ public class YogaInstanceContextFactory
         return _maxEntities;
     }
 
-    public void setMaxEntities(int _maxEntities)
+    public void setMaxEntities( int _maxEntities )
     {
         this._maxEntities = _maxEntities;
     }
 
-    public void setFieldPopulatorRegistry(FieldPopulatorRegistry fieldPopulatorRegistry)
+    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
     {
         _fieldPopulatorRegistry = fieldPopulatorRegistry;
     }
 
-    public Class<?> findClass(Object instance)
+    public Class<?> findClass( Object instance )
     {
         return _classFinderStrategy.findClass( instance );
     }
 
-    public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy)
+    public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
         _classFinderStrategy = classFinderStrategy;
     }

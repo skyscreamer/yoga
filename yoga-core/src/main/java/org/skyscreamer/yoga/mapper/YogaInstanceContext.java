@@ -1,16 +1,16 @@
 package org.skyscreamer.yoga.mapper;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.selector.Selector;
+
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class YogaInstanceContext<T> implements Cloneable
 {
@@ -27,8 +27,8 @@ public class YogaInstanceContext<T> implements Cloneable
 
     }
 
-    public YogaInstanceContext(T instance, Class<T> instanceType, Selector fieldSelector,
-            HierarchicalModel model, YogaRequestContext requestContext)
+    public YogaInstanceContext( T instance, Class<T> instanceType, Selector fieldSelector,
+            HierarchicalModel model, YogaRequestContext requestContext )
     {
         this.instance = instance;
         this.instanceType = instanceType;
@@ -42,7 +42,7 @@ public class YogaInstanceContext<T> implements Cloneable
         return requestContext;
     }
 
-    public void setRequestContext(YogaRequestContext requestContext)
+    public void setRequestContext( YogaRequestContext requestContext )
     {
         this.requestContext = requestContext;
     }
@@ -52,7 +52,7 @@ public class YogaInstanceContext<T> implements Cloneable
         return fieldSelector;
     }
 
-    public void setFieldSelector(Selector fieldSelector)
+    public void setFieldSelector( Selector fieldSelector )
     {
         this.fieldSelector = fieldSelector;
     }
@@ -62,7 +62,7 @@ public class YogaInstanceContext<T> implements Cloneable
         return model;
     }
 
-    public void setModel(HierarchicalModel model)
+    public void setModel( HierarchicalModel model )
     {
         this.model = model;
     }
@@ -72,7 +72,7 @@ public class YogaInstanceContext<T> implements Cloneable
         return populator;
     }
 
-    public void setPopulator(FieldPopulator populator)
+    public void setPopulator( FieldPopulator populator )
     {
         this.populator = populator;
     }
@@ -82,7 +82,7 @@ public class YogaInstanceContext<T> implements Cloneable
         return instance;
     }
 
-    public void setInstance(T instance)
+    public void setInstance( T instance )
     {
         this.instance = instance;
     }
@@ -92,7 +92,7 @@ public class YogaInstanceContext<T> implements Cloneable
         return instanceType;
     }
 
-    public void setInstanceType(Class<T> instanceType)
+    public void setInstanceType( Class<T> instanceType )
     {
         this.instanceType = instanceType;
     }
@@ -105,24 +105,24 @@ public class YogaInstanceContext<T> implements Cloneable
         {
             return (YogaInstanceContext<T>) super.clone();
         }
-        catch (CloneNotSupportedException e)
+        catch ( CloneNotSupportedException e )
         {
             throw new IllegalStateException( e );
         }
     }
 
-    public boolean containsInstanceField(PropertyDescriptor property)
+    public boolean containsInstanceField( PropertyDescriptor property )
     {
         return getFieldSelector().containsField( property, getPopulator() );
     }
 
-    public Object getInstanceFieldValue(String propertyName)
+    public Object getInstanceFieldValue( String propertyName )
     {
         try
         {
             return PropertyUtils.getNestedProperty( instance, propertyName );
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
             throw new YogaRuntimeException( e );
         }
@@ -131,11 +131,11 @@ public class YogaInstanceContext<T> implements Cloneable
     public List<Method> getPopulatorExtraFieldMethods()
     {
         List<Method> result = new ArrayList<Method>();
-        if (populator != null && fieldSelector != null)
+        if ( populator != null && fieldSelector != null )
         {
-            for (Method method : populator.getClass().getDeclaredMethods())
+            for ( Method method : populator.getClass().getDeclaredMethods() )
             {
-                if (isSelectedPopulatorMethod( method ))
+                if ( isSelectedPopulatorMethod( method ) )
                 {
                     result.add( method );
                 }
@@ -144,29 +144,29 @@ public class YogaInstanceContext<T> implements Cloneable
         return result;
     }
 
-    public boolean isSelectedPopulatorMethod(Method method)
+    public boolean isSelectedPopulatorMethod( Method method )
     {
         return method.isAnnotationPresent( ExtraField.class )
                 && isPopulatorField( instanceType, method.getParameterTypes() )
                 && this.fieldSelector.containsField( method.getAnnotation( ExtraField.class )
-                        .value() );
+                .value() );
     }
 
-    public static boolean isPopulatorField(Class<?> instanceType, Class<?>[] parameterTypes)
+    public static boolean isPopulatorField( Class<?> instanceType, Class<?>[] parameterTypes )
     {
         return parameterTypes.length == 0
                 || (parameterTypes.length == 1 && parameterTypes[0].equals( instanceType ));
     }
-    
-    public Object getPopulatorFieldValue(Method method)
+
+    public Object getPopulatorFieldValue( Method method )
     {
-        switch (method.getParameterTypes().length)
+        switch ( method.getParameterTypes().length )
         {
             case 0:
-                return retrievePopulatorFieldValue(method);
-            
+                return retrievePopulatorFieldValue( method );
+
             case 1:
-                return retrievePopulatorFieldValue(method, instance);
+                return retrievePopulatorFieldValue( method, instance );
 
             default:
                 throw new YogaRuntimeException(
@@ -174,13 +174,14 @@ public class YogaInstanceContext<T> implements Cloneable
                                 + method + " has more" );
         }
     }
-    
-    protected Object retrievePopulatorFieldValue(Method method, Object... args){
+
+    protected Object retrievePopulatorFieldValue( Method method, Object... args )
+    {
         try
         {
             return method.invoke( populator, args );
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
             throw new YogaRuntimeException( "Could not invoke " + method, e );
         }

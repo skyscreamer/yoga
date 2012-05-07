@@ -17,13 +17,13 @@ public class StaticForwardServlet extends HttpServlet
     String path;
 
     @Override
-    public void init(ServletConfig config) throws ServletException
+    public void init( ServletConfig config ) throws ServletException
     {
         path = config.getInitParameter( "path" );
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+    protected void doGet( HttpServletRequest req, HttpServletResponse resp ) throws ServletException,
             IOException
     {
         req.getSession().getServletContext().getRequestDispatcher( path ).forward( req, resp );

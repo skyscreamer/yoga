@@ -11,9 +11,11 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController extends AbstractController<User> {
-	@RequestMapping
-	public List<User> getUsers() {
-		return _genericDao.findAll(User.class);
-	}
+public class UserController extends AbstractController<User>
+{
+    @RequestMapping
+    public List<User> getUsers()
+    {
+        return _genericDao.findAll( User.class );
+    }
 }

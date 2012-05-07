@@ -1,28 +1,28 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.populator.FieldPopulator;
+
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.skyscreamer.yoga.annotations.Core;
-import org.skyscreamer.yoga.populator.FieldPopulator;
-
 public class CoreSelector implements Selector
 {
     @Override
-    public Selector getField(String fieldName)
+    public Selector getField( String fieldName )
     {
         return this;
     }
 
     @Override
-    public boolean containsField(PropertyDescriptor property, FieldPopulator fieldPopulator)
+    public boolean containsField( PropertyDescriptor property, FieldPopulator fieldPopulator )
     {
         Method readMethod = property.getReadMethod();
         boolean isCore = readMethod.isAnnotationPresent( Core.class );
-        if (!isCore && fieldPopulator != null)
+        if ( !isCore && fieldPopulator != null )
         {
             isCore = fieldPopulator.getCoreFields().contains( property.getName() );
         }
@@ -30,7 +30,7 @@ public class CoreSelector implements Selector
     }
 
     @Override
-    public boolean containsField(String property)
+    public boolean containsField( String property )
     {
         return false;
     }
@@ -40,9 +40,10 @@ public class CoreSelector implements Selector
     {
         return Collections.emptySet();
     }
-    
+
     @Override
-    public Map<String, Selector> getFields() {
+    public Map<String, Selector> getFields()
+    {
         return Collections.emptyMap();
     }
 }

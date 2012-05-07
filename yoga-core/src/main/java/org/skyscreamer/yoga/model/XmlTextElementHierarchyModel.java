@@ -7,9 +7,9 @@ public class XmlTextElementHierarchyModel extends AbstractSimplePropertyHierarch
 {
     Element element;
 
-    public XmlTextElementHierarchyModel(Element element)
+    public XmlTextElementHierarchyModel( Element element )
     {
-        if (element == null)
+        if ( element == null )
         {
             throw new YogaRuntimeException( new IllegalAccessException( "element was not set" ) );
         }
@@ -17,7 +17,7 @@ public class XmlTextElementHierarchyModel extends AbstractSimplePropertyHierarch
     }
 
     @Override
-    public void addSimple(Object instance)
+    public void addSimple( Object instance )
     {
         element.addText( instance.toString() );
     }
