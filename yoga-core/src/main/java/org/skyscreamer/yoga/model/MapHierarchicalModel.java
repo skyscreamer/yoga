@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
-public class MapHierarchicalModel extends AbstractHierarchicalModel
+public class MapHierarchicalModel extends AbstractHierarchicalModel<Map<String, Object>>
 {
     final Map<String, Object> _objectTree;
 
@@ -26,7 +26,7 @@ public class MapHierarchicalModel extends AbstractHierarchicalModel
     }
     
     @Override
-    public HierarchicalModel createSimple(String name)
+    public HierarchicalModel<?> createSimple(String name)
     {
         return new SimplePropertyHierarchyModel(name, this);
     }
@@ -38,8 +38,8 @@ public class MapHierarchicalModel extends AbstractHierarchicalModel
                 "addSimple with a single value is not supported" ) );
     }
 
-    
-    public Map<String, Object> getObjectTree()
+    @Override
+    public Map<String, Object> getUnderlyingModel()
     {
         return _objectTree;
     }

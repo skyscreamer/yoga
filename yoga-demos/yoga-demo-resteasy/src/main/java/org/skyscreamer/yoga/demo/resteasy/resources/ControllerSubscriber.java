@@ -22,9 +22,7 @@ public class ControllerSubscriber<T>
         }
     }
 
-    ;
-
-    Class<T> entityClass;
+    protected Class<T> entityClass;
 
     ResourceMethodRegistry registry;
     @Autowired

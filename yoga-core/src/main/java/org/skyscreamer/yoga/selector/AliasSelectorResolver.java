@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+
 /**
  * Created by IntelliJ IDEA. User: corby
  */

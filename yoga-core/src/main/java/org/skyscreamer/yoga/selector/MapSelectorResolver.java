@@ -2,6 +2,8 @@ package org.skyscreamer.yoga.selector;
 
 import java.util.Map;
 
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+
 /**
  * Created by IntelliJ IDEA. User: corby
  */

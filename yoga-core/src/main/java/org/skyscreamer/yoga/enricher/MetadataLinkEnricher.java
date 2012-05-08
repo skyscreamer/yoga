@@ -26,7 +26,8 @@ public class MetadataLinkEnricher implements Enricher
         
         String url = metaDataService.getMetadataHref( type, urlSuffix );
 
-        entityContext.getModel().createChild( "metadata" ).addSimple( "href", url );
+        if(url != null)
+            entityContext.getModel().createChild( "metadata" ).addSimple( "href", url );
     }
 
 }

@@ -1,45 +1,37 @@
 package org.skyscreamer.yoga.springmvc.view;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.dom4j.dom.DOMDocument;
+import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.XmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.util.NameUtil;
 
-public class XmlSelectorView extends AbstractYogaView
+public class XmlSelectorView extends AbstractXmlYogaView
 {
     @Override
-    public void render(OutputStream outputStream, Selector selector, Object value,
-            HttpServletRequest request, HttpServletResponse response) throws IOException
+    public void render(Selector selector, Object value, YogaRequestContext context)
+            throws IOException
     {
-        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response );
-
-        DOMDocument domDocument = new DOMDocument();
-        String rootName = getRootName( value );
-        DOMElement root = new DOMElement( rootName );
-        domDocument.setRootElement( root );
-        HierarchicalModel model = new XmlHierarchyModel( root );
+        HierarchicalModel<Element> model = getModel( value );
         resultTraverser.traverse( value, selector, model, context );
-        write( outputStream, domDocument );
+        write( context, model.getUnderlyingModel() );
     }
 
-    protected String getRootName(Object value)
+    protected HierarchicalModel<Element> getModel(Object value)
     {
         if (value instanceof Iterable)
         {
-            return "result";
+            String name = getClassName( ((Iterable<?>) value).iterator().next() );
+            DOMElement root = new DOMElement( "result" );
+            return new XmlHierarchyModel( root, name );
         }
         else
         {
-            return NameUtil.getName( _classFinderStrategy.findClass( value ) );
+            DOMElement root = new DOMElement( getClassName( value ) );
+            return new XmlHierarchyModel( root );
         }
     }
 

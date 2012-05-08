@@ -30,7 +30,7 @@ public class NavigationLinksEnricherTest
                 requestContext );
         enricher.enrich( entityContext );
 
-        Map<String, Object> objectTree = model.getObjectTree();
+        Map<String, Object> objectTree = model.getUnderlyingModel();
 
         Map<String, Object> navLinks = getMap( objectTree, "navigationLinks" );
         Assert.assertNotNull( navLinks );
@@ -52,7 +52,7 @@ public class NavigationLinksEnricherTest
         YogaInstanceContext<BasicTestDataNode> entityContext = new YogaInstanceContext<BasicTestDataNode>(
                 node, BasicTestDataNode.class, new CoreSelector(), model, requestContext );
         enricher.enrich( entityContext );
-        System.out.println(model.getObjectTree());
+        System.out.println(model.getUnderlyingModel());
     }
 
     @SuppressWarnings("unchecked")

@@ -4,10 +4,10 @@ import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
 public class SimplePropertyHierarchyModel extends AbstractSimplePropertyHierarchyModel
 {
-    private HierarchicalModel underlying;
+    private HierarchicalModel<?> underlying;
     private String name;
 
-    public SimplePropertyHierarchyModel(String name, HierarchicalModel underlying)
+    public SimplePropertyHierarchyModel(String name, HierarchicalModel<?> underlying)
     {
         if (name == null || underlying == null)
         {

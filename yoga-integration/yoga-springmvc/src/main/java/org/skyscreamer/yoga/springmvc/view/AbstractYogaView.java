@@ -1,19 +1,15 @@
 package org.skyscreamer.yoga.springmvc.view;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.dom4j.dom.DOMDocument;
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.selector.ParseSelectorException;
+import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.View;
 
@@ -26,41 +22,41 @@ import org.springframework.web.servlet.View;
  */
 public abstract class AbstractYogaView implements View
 {
-   @Autowired
-   protected ResultTraverser resultTraverser;
+    @Autowired
+    protected ResultTraverser resultTraverser;
 
-   @Autowired
-   protected SelectorParser _selectorParser;
+    @Autowired
+    protected SelectorParser selectorParser;
 
-   @Autowired
-   protected ClassFinderStrategy _classFinderStrategy;
-   
-   public void setResultTraverser(ResultTraverser resultTraverser)
-   {
-      this.resultTraverser = resultTraverser;
-   }
-   
-   @Override
-   public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response)
-         throws Exception
-   {
-      response.setContentType( getContentType() );
-      render( response.getOutputStream(), getSelector( request ), model.values().iterator().next(), request, response );
-   }
+    public void setResultTraverser(ResultTraverser resultTraverser)
+    {
+        this.resultTraverser = resultTraverser;
+    }
 
-   protected Selector getSelector(HttpServletRequest request) throws ParseSelectorException {
-      String selectorString = request.getParameter( "selector" );
-      return _selectorParser.parseSelector( selectorString );
-   }
+    public void setSelectorParser(SelectorParser selectorParser)
+    {
+        this.selectorParser = selectorParser;
+    }
+    
+    @Override
+    public void render(Map<String, ?> model, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        response.setContentType( getContentType() );
+        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response );
+        Object value = model.values().iterator().next();
+        Selector selector = getSelector( request );
+        render( selector, value, context );
+    }
 
-   protected static void write(OutputStream output, DOMDocument domDocument) throws IOException
-   {
-      OutputStreamWriter out = new OutputStreamWriter( output );
-      domDocument.write( out );
-      out.flush();
-   }
+    public Selector getSelector(HttpServletRequest request) throws ParseSelectorException
+    {
+        String selectorString = request.getParameter( "selector" );
+        return selectorParser.parseSelector( selectorString );
+    }
 
-   public abstract void render(OutputStream outputStream, Selector selector, Object value, HttpServletRequest request, HttpServletResponse response) throws IOException;
-   
-   public abstract String getHrefSuffix();
+    public abstract void render(Selector selector, Object value, YogaRequestContext context)
+            throws Exception;
+
+    public abstract String getHrefSuffix();
 }

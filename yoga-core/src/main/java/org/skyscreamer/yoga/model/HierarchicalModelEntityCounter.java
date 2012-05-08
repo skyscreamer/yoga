@@ -18,13 +18,13 @@ public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
     }
 
     @Override
-    public void creatingChild(String name, HierarchicalModel model)
+    public void creatingChild(String name, HierarchicalModel<?> model)
     {
         countAndCheck();
     }
 
     @Override
-    public void creatingList(String name, HierarchicalModel model)
+    public void creatingList(String name, HierarchicalModel<?> model)
     {
         countAndCheck();
     }
@@ -34,8 +34,8 @@ public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
         int currentCount = counter.incrementAndGet();
         if (_maxEntities > -1 && currentCount > _maxEntities)
         {
-            throw new EntityCountExceededException( "Exceeded maximum limit of " + _maxEntities
-                    + " entities " + "in a single model" );
+            throw new EntityCountExceededException( String.format(
+                    "Exceeded maximum limit of %d entities in a single model", _maxEntities ) );
         }
     }
 
@@ -45,22 +45,22 @@ public class HierarchicalModelEntityCounter implements HierarchicalModelObserver
     }
 
     @Override
-    public void addingSimple(String name, Object value, HierarchicalModel model)
+    public void addingSimple(String name, Object value, HierarchicalModel<?> model)
     {
     }
 
     @Override
-    public void addingSimple(Object value, HierarchicalModel model)
+    public void addingSimple(Object value, HierarchicalModel<?> model)
     {
     }
 
     @Override
-    public void creatingSimple(String name, HierarchicalModel model)
+    public void creatingSimple(String name, HierarchicalModel<?> model)
     {
     }
 
     @Override
-    public void creatingChild(HierarchicalModel _hierHierarchicalModel)
+    public void creatingChild(HierarchicalModel<?> _hierHierarchicalModel)
     {
     }
 }

@@ -1,6 +1,7 @@
-package org.skyscreamer.yoga.selector;
+package org.skyscreamer.yoga.exceptions;
 
-public class ParseSelectorException extends Exception
+
+public class ParseSelectorException extends YogaRuntimeException
 {
     private static final long serialVersionUID = -5307328628794516457L;
 

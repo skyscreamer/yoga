@@ -25,7 +25,7 @@ public class ResultTraverser
 
     private YogaInstanceContextFactory instanceContextFactory;
 
-    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel model,
+    public void traverse(Object instance, Selector fieldSelector, HierarchicalModel<?> model,
             YogaRequestContext context)
     {
         if (instance == null)
@@ -43,7 +43,7 @@ public class ResultTraverser
                 }
                 else
                 {
-                    HierarchicalModel childModel = model.createChild();
+                    HierarchicalModel<?> childModel = model.createChild();
                     traverse( o, fieldSelector, childModel, context );
                 }
             }
@@ -93,14 +93,14 @@ public class ResultTraverser
     }
 
     protected void addChild(String fieldName, Object fieldValue,
-            YogaInstanceContext<?> entityContext)
+            YogaInstanceContext<?> parentContext)
     {
         if (fieldValue == null)
         {
             return;
         }
 
-        HierarchicalModel model = entityContext.getModel();
+        HierarchicalModel<?> model = parentContext.getModel();
 
         if (isPrimitive( fieldValue.getClass() ))
         {
@@ -108,15 +108,15 @@ public class ResultTraverser
         }
         else
         {
-            HierarchicalModel childModel = getChildModel( fieldName, fieldValue, model );
-            Selector childSelector = entityContext.getFieldSelector().getField( fieldName );
-            traverse( fieldValue, childSelector, childModel, entityContext.getRequestContext() );
+            HierarchicalModel<?> childModel = getChildModel( fieldName, fieldValue, model );
+            Selector childSelector = parentContext.getFieldSelector().getField( fieldName );
+            traverse( fieldValue, childSelector, childModel, parentContext.getRequestContext() );
         }
     }
 
 
-    protected HierarchicalModel getChildModel(String fieldName, Object fieldValue,
-            HierarchicalModel model)
+    protected HierarchicalModel<?> getChildModel(String fieldName, Object fieldValue,
+            HierarchicalModel<?> model)
     {
         if (Iterable.class.isAssignableFrom( fieldValue.getClass() ))
         {

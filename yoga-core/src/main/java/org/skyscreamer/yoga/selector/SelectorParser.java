@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+
 /**
  * A SelectorParser takes a string selector argument and translates it into a
  * Selector which is used to navigate the object tree and build results.

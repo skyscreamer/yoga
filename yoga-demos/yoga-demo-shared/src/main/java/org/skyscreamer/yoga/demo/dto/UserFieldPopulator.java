@@ -16,12 +16,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @PopulationExtension(User.class)
-public class UserFieldPopulator extends FieldPopulatorSupport {
-	@Autowired
-	GenericDao _genericDao;
+public class UserFieldPopulator extends FieldPopulatorSupport
+{
+    @Autowired
+    GenericDao _genericDao;
 
-	@ExtraField("recommendedAlbums")
-	public List<Album> getRecommendedAlbums() {
-		return _genericDao.findAll(Album.class);
-	}
+    @ExtraField("recommendedAlbums")
+    public List<Album> getRecommendedAlbums()
+    {
+        return _genericDao.findAll( Album.class );
+    }
 }

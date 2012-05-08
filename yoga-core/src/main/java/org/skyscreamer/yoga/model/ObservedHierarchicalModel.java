@@ -4,12 +4,12 @@ package org.skyscreamer.yoga.model;
 /**
  * Wrapper class that allows a model to be observed as it is constructed.
  */
-public class ObservedHierarchicalModel implements HierarchicalModel
+public class ObservedHierarchicalModel<T> implements HierarchicalModel<T>
 {
-    private final HierarchicalModel _hierHierarchicalModel;
+    private final HierarchicalModel<T> _hierHierarchicalModel;
     private final HierarchicalModelObserver[] _observers;
 
-    public ObservedHierarchicalModel(HierarchicalModel hierarchicalModel,
+    public ObservedHierarchicalModel(HierarchicalModel<T> hierarchicalModel,
             HierarchicalModelObserver... observers)
     {
         _hierHierarchicalModel = hierarchicalModel;
@@ -25,24 +25,26 @@ public class ObservedHierarchicalModel implements HierarchicalModel
 
 
     @Override
-    public HierarchicalModel createChild(String name)
+    public HierarchicalModel<?> createChild(String name)
     {
         for (HierarchicalModelObserver observer : _observers)
         {
             observer.creatingChild( name, _hierHierarchicalModel );
         }
-        HierarchicalModel child = _hierHierarchicalModel.createChild( name );
+        HierarchicalModel<?> child = _hierHierarchicalModel.createChild( name );
         return wrap( child );
     }
 
-    public HierarchicalModel wrap(HierarchicalModel child)
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public HierarchicalModel<?> wrap(HierarchicalModel<?> child)
     {
-        return child instanceof ObservedHierarchicalModel ? child : new ObservedHierarchicalModel( child,
-                _observers );
+        return child instanceof ObservedHierarchicalModel ? 
+                child :
+                new ObservedHierarchicalModel( child, _observers );
     }
 
     @Override
-    public HierarchicalModel createChild()
+    public HierarchicalModel<?> createChild()
     {
         for (HierarchicalModelObserver observer : _observers)
         {
@@ -53,7 +55,7 @@ public class ObservedHierarchicalModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createList(String name)
+    public HierarchicalModel<?> createList(String name)
     {
         for (HierarchicalModelObserver observer : _observers)
         {
@@ -83,12 +85,19 @@ public class ObservedHierarchicalModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createSimple(String name)
+    public HierarchicalModel<?> createSimple(String name)
     {
         for (HierarchicalModelObserver observer : _observers)
         {
             observer.creatingSimple( name, _hierHierarchicalModel );
         }
         return wrap( _hierHierarchicalModel.createSimple( name ) );
+    }
+
+
+    @Override
+    public T getUnderlyingModel()
+    {
+        return _hierHierarchicalModel.getUnderlyingModel();
     }
 }

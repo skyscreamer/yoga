@@ -1,43 +1,42 @@
 package org.skyscreamer.yoga.springmvc.view;
 
 import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.dom4j.Element;
-import org.dom4j.dom.DOMDocument;
 import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.XhtmlHierarchyModel;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.util.NameUtil;
 
-public class XhtmlSelectorView extends AbstractYogaView
+public class XhtmlSelectorView extends AbstractXmlYogaView
 {
 
     @Override
-    public void render(OutputStream outputStream, Selector selector, Object value,
-            HttpServletRequest request, HttpServletResponse response) throws IOException
+    public void render(Selector selector, Object value, YogaRequestContext context) throws IOException
     {
-        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response );
-
-        DOMDocument domDocument = new DOMDocument();
         Element rootElement = new DOMElement( "html" );
-        domDocument.setRootElement( rootElement );
+        initHead( rootElement );
+        HierarchicalModel<Element> model = getModel( value, rootElement );
+        resultTraverser.traverse( value, selector, model, context );
+        write( context, rootElement );
+    }
+
+    protected HierarchicalModel<Element> getModel(Object value, Element rootElement)
+    {
+        Element topDiv = rootElement
+                .addElement( "body" )
+                .addElement( "div" )
+                .addAttribute( "class", getClassName( value ) );
+
+        return new XhtmlHierarchyModel( topDiv );
+    }
+
+    protected void initHead(Element rootElement)
+    {
         Element cssLink = rootElement.addElement( "head" ).addElement( "link" );
         cssLink.addAttribute( "href", "/css/xhtml.css" );
         cssLink.addAttribute( "rel", "stylesheet" );
-        Element body = rootElement.addElement( "body" );
-
-        String name = NameUtil.getName( _classFinderStrategy.findClass( value ) );
-        HierarchicalModel model = new XhtmlHierarchyModel( body.addElement( "div" ).addAttribute(
-                "class", name ) );
-        resultTraverser.traverse( value, selector, model, context );
-
-        write( outputStream, domDocument );
     }
 
     @Override

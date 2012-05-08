@@ -65,7 +65,7 @@ public class ResultTraverserTest
 
         resultTraverser.traverse( input, new CoreSelector(), model, requestContext );
 
-        Map<String, Object> objectTree = model.getObjectTree();
+        Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( 0, objectTree.get( "id" ) );
         Assert.assertEquals( sort(Arrays.asList( "id", "name", "other", "someValue", "randomStrings" )),
                 sort((List<String>)objectTree.get( "definition" )) );
@@ -91,7 +91,7 @@ public class ResultTraverserTest
 
         resultTraverser.traverse( input, selector, model, requestContext );
 
-        Map<String, Object> objectTree = model.getObjectTree();
+        Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( "someValue", objectTree.get( "other" ) );
         Assert.assertEquals( "/basic-leaf/0.map", objectTree.get( "href" ) );
     }
@@ -109,7 +109,7 @@ public class ResultTraverserTest
 
         resultTraverser.traverse( input, selector, model, requestContext );
 
-        Map<String, Object> objectTree = model.getObjectTree();
+        Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( list, objectTree.get( "randomStrings" ) );
     }
 
@@ -126,7 +126,7 @@ public class ResultTraverserTest
         CombinedSelector selector = new CombinedSelector( fieldSelector, new CoreSelector() );
         resultTraverser.traverse( input, selector, model, requestContext );
 
-        Map<String, Object> objectTree = model.getObjectTree();
+        Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( 0, objectTree.get( "id" ) );
         Assert.assertEquals( "someValue", objectTree.get( "other" ) );
         Assert.assertEquals( "/basic-leaf/0.map", objectTree.get( "href" ) );
@@ -148,7 +148,7 @@ public class ResultTraverserTest
         CombinedSelector selector = new CombinedSelector( fieldSelector, new CoreSelector() );
         resultTraverser.traverse( input, selector, model, requestContext );
 
-        Map<String, Object> objectTree = model.getObjectTree();
+        Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( "fooId", objectTree.get( "id" ) );
         Assert.assertEquals( "/basic-node/fooId.map", objectTree.get( "href" ) );
 
@@ -165,7 +165,7 @@ public class ResultTraverserTest
         FieldSelector fieldSelector = new FieldSelector();
         fieldSelector.addField( "someValue", new FieldSelector() );
         resultTraverser.traverse( input, fieldSelector, model, requestContext );
-        Map<String, Object> objectTree = model.getObjectTree();
+        Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( "someValue", objectTree.get( "someValue" ) );
         Assert.assertEquals( "/basic-leaf/0.map", objectTree.get( "href" ) );
     }

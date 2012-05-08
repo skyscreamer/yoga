@@ -9,11 +9,11 @@ import org.skyscreamer.yoga.springmvc.view.JsonSelectorView;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
-public class JsonSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter {
-	@Override
-	protected AbstractYogaView getView() {
-		JsonSelectorView view = new JsonSelectorView();
-		view.setResultTraverser(resultTraverser);
-		return view;
-	}
+public class JsonSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter
+{
+    @Override
+    protected AbstractYogaView getView()
+    {
+        return new JsonSelectorView();
+    }
 }

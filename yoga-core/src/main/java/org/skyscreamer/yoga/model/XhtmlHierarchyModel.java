@@ -3,7 +3,7 @@ package org.skyscreamer.yoga.model;
 import org.dom4j.Element;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
-public class XhtmlHierarchyModel implements HierarchicalModel
+public class XhtmlHierarchyModel implements HierarchicalModel<Element>
 {
     Element element;
     String childName = null;
@@ -35,20 +35,20 @@ public class XhtmlHierarchyModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createChild(String property)
+    public HierarchicalModel<?> createChild(String property)
     {
         return new XhtmlHierarchyModel( element.addElement( "div" )
                 .addAttribute( "class", property ) );
     }
 
     @Override
-    public HierarchicalModel createChild()
+    public HierarchicalModel<?> createChild()
     {
         return new XhtmlHierarchyModel( element.addElement( "div" ) );
     }
     
     @Override
-    public HierarchicalModel createList(String property)
+    public HierarchicalModel<?> createList(String property)
     {
         Element div = element.addElement( "div" ).addAttribute( "class", property );
         return new XhtmlHierarchyModel( div );
@@ -64,8 +64,14 @@ public class XhtmlHierarchyModel implements HierarchicalModel
     }
 
     @Override
-    public HierarchicalModel createSimple(String property)
+    public HierarchicalModel<?> createSimple(String property)
     {
         return new XmlTextElementHierarchyModel( element.addElement( property ) );
+    }
+
+    @Override
+    public Element getUnderlyingModel()
+    {
+        return this.element;
     }
 }

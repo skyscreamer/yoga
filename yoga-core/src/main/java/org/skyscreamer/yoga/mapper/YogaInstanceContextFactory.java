@@ -19,11 +19,11 @@ public class YogaInstanceContextFactory
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public YogaInstanceContext createEntityContext(Object instance, Selector fieldSelector,
-            HierarchicalModel model, YogaRequestContext context)
+            HierarchicalModel<?> model, YogaRequestContext context)
     {
         Class<?> type = findClass( instance );
 
-        HierarchicalModel entityModel = getEntityModel( model, context );
+        HierarchicalModel<?> entityModel = getEntityModel( model, context );
 
         YogaInstanceContext entityContext = new YogaInstanceContext( instance, type, fieldSelector, entityModel, context );
         entityContext.setPopulator( _fieldPopulatorRegistry.getFieldPopulator( type ) );
@@ -31,7 +31,7 @@ public class YogaInstanceContextFactory
         return entityContext;
     }
 
-    protected HierarchicalModel getEntityModel(HierarchicalModel model, YogaRequestContext context)
+    protected <T> HierarchicalModel<T> getEntityModel(HierarchicalModel<T> model, YogaRequestContext context)
     {
         if (_maxEntities == null)
         {
@@ -40,7 +40,7 @@ public class YogaInstanceContextFactory
         else
         {
             HierarchicalModelEntityCounter counter = getCounter( context );
-            return new ObservedHierarchicalModel( model, counter );
+            return new ObservedHierarchicalModel<T>( model, counter );
         }
     }
 

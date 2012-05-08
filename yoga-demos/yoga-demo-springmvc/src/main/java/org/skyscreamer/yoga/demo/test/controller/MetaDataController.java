@@ -14,24 +14,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/metadata")
-public class MetaDataController {
-	@Autowired
-	MetaDataService metaDataService;
+public class MetaDataController
+{
+    @Autowired
+    MetaDataService metaDataService;
 
-	@RequestMapping()
-	public Map<String, String> getTypes() {
-		Map<String, String> response = new TreeMap<String, String>();
-		for (String type : metaDataService.getTypes()) {
-			response.put(type, "/metadata/" + type);
-		}
-		return response;
-	}
+    @RequestMapping()
+    public Map<String, String> getTypes()
+    {
+        Map<String, String> response = new TreeMap<String, String>();
+        for (String type : metaDataService.getTypes())
+        {
+            response.put( type, "/metadata/" + type );
+        }
+        return response;
+    }
 
-	@RequestMapping("/{type}")
-	public TypeMetaData getTypeMetaData(@PathVariable("type") String type, HttpServletRequest request) {
-		String uri = request.getRequestURI();
-		String parts[] = uri.split("\\.");
-		return metaDataService.getMetaData(type, parts[parts.length - 1]);
-	}
+    @RequestMapping("/{type}")
+    public TypeMetaData getTypeMetaData(@PathVariable("type") String type,
+            HttpServletRequest request)
+    {
+        String uri = request.getRequestURI();
+        String parts[] = uri.split( "\\." );
+        return metaDataService.getMetaData( type, parts[parts.length - 1] );
+    }
 
 }

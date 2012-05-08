@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <diskStore path="java.io.tmpdir" />
+    <defaultCache 
+        maxEntriesLocalHeap="10000" 
+        eternal="false"
+        timeToIdleSeconds="6000" 
+        timeToLiveSeconds="6000" 
+        maxEntriesLocalDisk="100000" 
+        memoryStoreEvictionPolicy="LRU" />
+</ehcache>

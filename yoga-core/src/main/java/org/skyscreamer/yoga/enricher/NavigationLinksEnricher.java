@@ -33,13 +33,13 @@ public class NavigationLinksEnricher implements Enricher
         YogaRequestContext requestContext = entityContext.getRequestContext();
         FieldPopulator populator = entityContext.getPopulator();
 
-        HierarchicalModel navigationLinks = entityContext.getModel().createChild( "navigationLinks" );
+        HierarchicalModel<?> navigationLinks = entityContext.getModel().createChild( "navigationLinks" );
         for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
         {
             if (fieldSelector.containsField( property, populator ))
                 continue;
 
-            HierarchicalModel navModel = navigationLinks.createChild( property.getName() );
+            HierarchicalModel<?> navModel = navigationLinks.createChild( property.getName() );
             navModel.addSimple( "name", property.getName() );
             String hrefSuffixAndSelector = requestContext.getUrlSuffix() + "?selector=:("
                     + property.getName() + ")";

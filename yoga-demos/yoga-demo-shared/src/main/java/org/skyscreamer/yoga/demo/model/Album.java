@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.demo.model;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;
 
@@ -11,59 +13,74 @@ import java.util.List;
  */
 @Entity
 @URITemplate("/album/{id}")
-public class Album {
-	@Id
-	@GeneratedValue
-	private long id;
-	private String title;
-	@ManyToOne
-	@JoinColumn(name = "artistId")
-	private Artist artist;
-	private int year;
-	@OneToMany(mappedBy = "album")
-	@OrderBy("id")
-	private List<Song> songs;
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Album
+{
+    @Id
+    @GeneratedValue
+    private long id;
+    private String title;
+    private int year;
 
-	@Core
-	public long getId() {
-		return id;
-	}
+    @ManyToOne
+    @JoinColumn(name = "artistId")
+    private Artist artist;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    @OneToMany(mappedBy = "album")
+    @OrderBy("id")
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    private List<Song> songs;
 
-	@Core
-	public String getTitle() {
-		return title;
-	}
+    @Core
+    public long getId()
+    {
+        return id;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setId(long id)
+    {
+        this.id = id;
+    }
 
-	public Artist getArtist() {
-		return artist;
-	}
+    @Core
+    public String getTitle()
+    {
+        return title;
+    }
 
-	public void setArtist(Artist artist) {
-		this.artist = artist;
-	}
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
 
-	@Core
-	public int getYear() {
-		return year;
-	}
+    public Artist getArtist()
+    {
+        return artist;
+    }
 
-	public void setYear(int year) {
-		this.year = year;
-	}
+    public void setArtist(Artist artist)
+    {
+        this.artist = artist;
+    }
 
-	public List<Song> getSongs() {
-		return songs;
-	}
+    @Core
+    public int getYear()
+    {
+        return year;
+    }
 
-	public void setSongs(List<Song> songs) {
-		this.songs = songs;
-	}
+    public void setYear(int year)
+    {
+        this.year = year;
+    }
+
+    public List<Song> getSongs()
+    {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs)
+    {
+        this.songs = songs;
+    }
 }

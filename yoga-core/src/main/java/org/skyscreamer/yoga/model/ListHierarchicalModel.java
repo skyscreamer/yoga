@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
-public class ListHierarchicalModel extends AbstractHierarchicalModel
+public class ListHierarchicalModel extends AbstractHierarchicalModel<List<?>>
 {
 
     List<Object> list = new ArrayList<Object>();
@@ -23,13 +23,13 @@ public class ListHierarchicalModel extends AbstractHierarchicalModel
         list.add( instance );
     }
 
-    public List<Object> getList()
+    public List<?> getUnderlyingModel()
     {
         return list;
     }
-
+    
     @Override
-    public HierarchicalModel createSimple(String name)
+    public HierarchicalModel<?> createSimple(String name)
     {
         return this;
     }

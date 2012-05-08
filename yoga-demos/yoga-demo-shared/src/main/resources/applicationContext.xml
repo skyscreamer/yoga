@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
-	                    http://www.springframework.org/schema/util   http://www.springframework.org/schema/util/spring-util-3.0.xsd
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/util   http://www.springframework.org/schema/util/spring-util-3.0.xsd
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
                         http://www.springframework.org/schema/jdbc    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
-	<context:annotation-config />
-	<context:component-scan base-package="org.skyscreamer.yoga.demo">
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-	</context:component-scan>
+    <context:annotation-config />
+    <context:component-scan base-package="org.skyscreamer.yoga.demo">
+        <context:exclude-filter type="annotation"
+            expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
 
-	<jdbc:embedded-database id="dataSource" type="HSQL" />
+    <jdbc:embedded-database id="dataSource" type="H2" />
 
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
-		p:dataSource-ref="dataSource" p:packagesToScan="org.skyscreamer.yoga.demo.model">
-		<property name="hibernateProperties">
-			<value>
-				hibernate.dialect = org.hibernate.dialect.HSQLDialect
-				hibernate.cache.provider_class = org.hibernate.cache.HashtableCacheProvider
-				hibernate.hbm2ddl.auto = update
-				hibernate.show_sql = true
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+        p:dataSource-ref="dataSource" p:packagesToScan="org.skyscreamer.yoga.demo.model">
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect = org.hibernate.dialect.H2Dialect
+                hibernate.cache.provider_class = org.hibernate.cache.HashtableCacheProvider
+                hibernate.hbm2ddl.auto = update
+                hibernate.show_sql = true
+                hibernate.cache.use_second_level_cache = true
+                hibernate.cache.use_query_cache = true
+                hibernate.cache.region.factory_class = net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory
             </value>
-		</property>
-	</bean>
+        </property>
+    </bean>
 
-	<!-- This can normally be done via jdbc:init, but we wanted to let hibernate 
-		initialize the database -->
-	<bean id="dbInit"
-		class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
-		p:dataSource-ref="dataSource" p:databasePopulator-ref="dbPopulator"
-		depends-on="sessionFactory">
-	</bean>
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate"
+        p:cacheQueries="true" p:sessionFactory-ref="sessionFactory"/>
 
-	<bean id="dbPopulator"
-		class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
-		p:scripts="classpath:sampledb.sql" />
+    <!-- This can normally be done via jdbc:init, but we wanted to let hibernate 
+        initialize the database -->
+    <bean id="dbInit"
+        class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
+        p:dataSource-ref="dataSource" p:databasePopulator-ref="dbPopulator" />
+
+    <bean id="dbPopulator"
+        class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
+        p:scripts="classpath:sampledb.sql" depends-on="sessionFactory" />
 
     <!-- This is for loading large quantities of data for testing data scaling.  Disabled by default. -->
     <bean id="extendedDbInit"
@@ -61,27 +65,27 @@
           class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
           p:scripts-ref="extendedDbResource" />
 
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-		p:dataSource-ref="dataSource" />
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+        p:dataSource-ref="dataSource" />
 
-	<bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser"
-		p:instanceContextFactory-ref="yogaInstanceContextFactory">
-		<property name="enrichers">
-			<list>
-				<bean class="org.skyscreamer.yoga.enricher.HrefEnricher"/>
+    <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser"
+        p:instanceContextFactory-ref="yogaInstanceContextFactory">
+        <property name="enrichers">
+            <list>
+                <bean class="org.skyscreamer.yoga.enricher.HrefEnricher"/>
                 <bean class="org.skyscreamer.yoga.enricher.SelectorBuilderEnricher"/>
-				<bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher"/>
-				<bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder"/>
-				<bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher" p:metaDataService-ref="metaDataService"/>
-			</list>
-		</property>
-	</bean>
-	
-	<bean id="yogaInstanceContextFactory" class="org.skyscreamer.yoga.mapper.YogaInstanceContextFactory" 
-		p:classFinderStrategy-ref="hibernateClassFinder"
-		p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"
-        p:maxEntities="100000" />
+                <bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher"/>
+                <bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder"/>
+                <bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher" p:metaDataService-ref="metaDataService"/>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="yogaInstanceContextFactory" class="org.skyscreamer.yoga.mapper.YogaInstanceContextFactory" 
+        p:classFinderStrategy-ref="hibernateClassFinder"
+        p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"
+        p:maxEntities="10000" />
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.LinkedInSelectorParser"
           p:aliasSelectorResolver-ref="aliasSelectorResolver" p:disableExplicitSelectors="false"/>
@@ -89,28 +93,28 @@
     <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.DynamicPropertyResolver"
           p:propertyFile="classpath:selectorAlias.properties"/>
 
-	<bean id="hibernateClassFinder"
-		class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
+    <bean id="hibernateClassFinder"
+        class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
 
-	<bean id="fieldPopulatorRegistry"
-		class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">
-		<constructor-arg>
-			<list>
-				<bean class="org.skyscreamer.yoga.demo.dto.UserFieldPopulator" />
-			</list>
-		</constructor-arg>
-	</bean>
+    <bean id="fieldPopulatorRegistry"
+        class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">
+        <constructor-arg>
+            <list>
+                <bean class="org.skyscreamer.yoga.demo.dto.UserFieldPopulator" />
+            </list>
+        </constructor-arg>
+    </bean>
 
-	<bean id="metaDataService" class="org.skyscreamer.yoga.metadata.MapMetaDataServiceImpl">
-		<property name="rootMetaDataUrl" value="/metadata/" />
-		<property name="typeMappings">
-			<map>
-				<entry key="album" value="org.skyscreamer.yoga.demo.model.Album" />
-				<entry key="artist" value="org.skyscreamer.yoga.demo.model.Artist" />
-				<entry key="song" value="org.skyscreamer.yoga.demo.model.Song" />
-				<entry key="user" value="org.skyscreamer.yoga.demo.model.User" />
-			</map>
-		</property>
-		<property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry" />
-	</bean>
+    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.MapMetaDataServiceImpl">
+        <property name="rootMetaDataUrl" value="/metadata/" />
+        <property name="typeMappings">
+            <map>
+                <entry key="album" value="org.skyscreamer.yoga.demo.model.Album" />
+                <entry key="artist" value="org.skyscreamer.yoga.demo.model.Artist" />
+                <entry key="song" value="org.skyscreamer.yoga.demo.model.Song" />
+                <entry key="user" value="org.skyscreamer.yoga.demo.model.User" />
+            </map>
+        </property>
+        <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry" />
+    </bean>
 </beans>

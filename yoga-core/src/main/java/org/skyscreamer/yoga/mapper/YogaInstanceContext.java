@@ -17,7 +17,7 @@ public class YogaInstanceContext<T> implements Cloneable
     private YogaRequestContext requestContext;
 
     private Selector fieldSelector;
-    private HierarchicalModel model;
+    private HierarchicalModel<?> model;
     private FieldPopulator populator;
     private T instance;
     private Class<T> instanceType;
@@ -28,7 +28,7 @@ public class YogaInstanceContext<T> implements Cloneable
     }
 
     public YogaInstanceContext(T instance, Class<T> instanceType, Selector fieldSelector,
-            HierarchicalModel model, YogaRequestContext requestContext)
+            HierarchicalModel<?> model, YogaRequestContext requestContext)
     {
         this.instance = instance;
         this.instanceType = instanceType;
@@ -57,12 +57,12 @@ public class YogaInstanceContext<T> implements Cloneable
         this.fieldSelector = fieldSelector;
     }
 
-    public HierarchicalModel getModel()
+    public HierarchicalModel<?> getModel()
     {
         return model;
     }
 
-    public void setModel(HierarchicalModel model)
+    public void setModel(HierarchicalModel<?> model)
     {
         this.model = model;
     }

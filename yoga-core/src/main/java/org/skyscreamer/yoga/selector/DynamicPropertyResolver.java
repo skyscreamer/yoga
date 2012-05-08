@@ -1,5 +1,6 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
