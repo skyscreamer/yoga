@@ -15,7 +15,6 @@ import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.test.DummyHttpServletResponse;
 import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.data.BasicTestDataNode;
-import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 
 import java.util.*;
 
@@ -30,7 +29,6 @@ public class ResultTraverserTest
     {
         resultTraverser = new ResultTraverser();
         YogaInstanceContextFactory instanceContextFactory = new YogaInstanceContextFactory();
-        instanceContextFactory.setClassFinderStrategy( new DefaultClassFinderStrategy() );
 
         resultTraverser.setInstanceContextFactory( instanceContextFactory );
         instanceContextFactory.setMaxEntities( MAX_RESULTS );
@@ -74,7 +72,7 @@ public class ResultTraverserTest
     }
 
     @Test
-    public void testBasicFieldSelctor()
+    public void testBasicFieldSelector()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         input.setOther( "someValue" );

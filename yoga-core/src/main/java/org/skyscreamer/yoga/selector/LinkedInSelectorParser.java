@@ -17,7 +17,7 @@ public class LinkedInSelectorParser extends ParentheticalSelectorParser
 {
     private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
 
-    public FieldSelector parse( String selectorExpression ) throws ParseSelectorException
+    protected FieldSelector parse( String selectorExpression ) throws ParseSelectorException
     {
         if ( selectorExpression.equals( ":" ) )
         {

@@ -11,7 +11,7 @@ package org.skyscreamer.yoga.selector;
 public class GDataSelectorParser extends ParentheticalSelectorParser
 {
     @Override
-    public Selector parse( String selectorExpression ) throws ParseSelectorException
+    protected Selector parse( String selectorExpression ) throws ParseSelectorException
     {
         return parseParentheticalSelector( selectorExpression, "(" );
     }
