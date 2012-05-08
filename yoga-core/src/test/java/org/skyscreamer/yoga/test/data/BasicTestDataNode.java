@@ -21,12 +21,12 @@ public class BasicTestDataNode
         return id;
     }
 
-    public void setId(String id)
+    public void setId( String id )
     {
         this.id = id;
     }
 
-    public void setLeaf(BasicTestDataLeaf leaf)
+    public void setLeaf( BasicTestDataLeaf leaf )
     {
         this.leaf = leaf;
     }

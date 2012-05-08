@@ -36,7 +36,7 @@ public class Artist
         return id;
     }
 
-    public void setId(long id)
+    public void setId( long id )
     {
         this.id = id;
     }
@@ -47,7 +47,7 @@ public class Artist
         return name;
     }
 
-    public void setName(String name)
+    public void setName( String name )
     {
         this.name = name;
     }
@@ -57,7 +57,7 @@ public class Artist
         return albums;
     }
 
-    public void setAlbums(List<Album> albums)
+    public void setAlbums( List<Album> albums )
     {
         this.albums = albums;
     }
@@ -67,7 +67,7 @@ public class Artist
         return fans;
     }
 
-    public void setFans(Set<User> fans)
+    public void setFans( Set<User> fans )
     {
         this.fans = fans;
     }

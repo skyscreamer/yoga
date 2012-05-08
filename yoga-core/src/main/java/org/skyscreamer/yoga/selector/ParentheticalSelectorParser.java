@@ -13,8 +13,7 @@ import org.skyscreamer.yoga.util.ParenthesisUtil;
  */
 public abstract class ParentheticalSelectorParser extends SelectorParser
 {
-    protected FieldSelector parseParentheticalSelector(String rawSelectorExpression,
-            String openParenthesis) throws ParseSelectorException
+    protected FieldSelector parseParentheticalSelector( String rawSelectorExpression, String openParenthesis ) throws ParseSelectorException
     {
         FieldSelector selector = new FieldSelector();
         StringBuilder stringBuilder = new StringBuilder( rawSelectorExpression );
@@ -39,7 +38,7 @@ public abstract class ParentheticalSelectorParser extends SelectorParser
             {
                 done = true;
             }
-            else if (selectorBuff.substring( index ).startsWith( openParenthesis ))
+            else if ( selectorBuff.substring( index ).startsWith( openParenthesis ) )
             {
                 done = true;
                 int matchIndex = ParenthesisUtil.getMatchingParenthesisIndex( selectorBuff, index
@@ -51,8 +50,7 @@ public abstract class ParentheticalSelectorParser extends SelectorParser
                 if (selectorBuff.length() > matchIndex + 1
                         && selectorBuff.charAt( matchIndex + 1 ) != ',')
                 {
-                    throw new ParseSelectorException(
-                            "A nested selector not at the end of its parent must be followed by a comma" );
+                    throw new ParseSelectorException( "A nested selector not at the end of its parent must be followed by a comma" );
                 }
                 index = matchIndex + 1;
             }

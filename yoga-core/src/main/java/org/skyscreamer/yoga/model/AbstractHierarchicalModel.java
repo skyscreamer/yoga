@@ -1,12 +1,12 @@
 package org.skyscreamer.yoga.model;
 
 
-
 public abstract class AbstractHierarchicalModel<T> implements HierarchicalModel<T>
 {
 
     @Override
-    public HierarchicalModel<?> createChild(String name)
+    public HierarchicalModel<?> createChild( String name )
+
     {
         MapHierarchicalModel child = new MapHierarchicalModel();
         createSimple( name ).addSimple( child.getUnderlyingModel() );
@@ -21,11 +21,11 @@ public abstract class AbstractHierarchicalModel<T> implements HierarchicalModel<
     }
 
     @Override
-    public HierarchicalModel<?> createList(String name)
+    public HierarchicalModel<?> createList( String name )
     {
         ListHierarchicalModel child = new ListHierarchicalModel();
         createSimple( name ).addSimple( child.getUnderlyingModel() );
         return child;
     }
-    
+
 }

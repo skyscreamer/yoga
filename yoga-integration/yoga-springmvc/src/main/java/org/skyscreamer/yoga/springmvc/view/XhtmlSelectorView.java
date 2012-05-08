@@ -13,7 +13,8 @@ public class XhtmlSelectorView extends AbstractXmlYogaView
 {
 
     @Override
-    public void render(Selector selector, Object value, YogaRequestContext context) throws IOException
+    public void render( Selector selector, Object value, YogaRequestContext context )
+            throws IOException
     {
         Element rootElement = new DOMElement( "html" );
         initHead( rootElement );
@@ -22,17 +23,15 @@ public class XhtmlSelectorView extends AbstractXmlYogaView
         write( context, rootElement );
     }
 
-    protected HierarchicalModel<Element> getModel(Object value, Element rootElement)
+    protected HierarchicalModel<Element> getModel( Object value, Element rootElement )
     {
-        Element topDiv = rootElement
-                .addElement( "body" )
-                .addElement( "div" )
+        Element topDiv = rootElement.addElement( "body" ).addElement( "div" )
                 .addAttribute( "class", getClassName( value ) );
 
         return new XhtmlHierarchyModel( topDiv );
     }
 
-    protected void initHead(Element rootElement)
+    protected void initHead( Element rootElement )
     {
         Element cssLink = rootElement.addElement( "head" ).addElement( "link" );
         cssLink.addAttribute( "href", "/css/xhtml.css" );

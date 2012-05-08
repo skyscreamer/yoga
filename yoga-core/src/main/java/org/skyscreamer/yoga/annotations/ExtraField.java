@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Created by IntelliJ IDEA. User: corby
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD })
+@Target({ElementType.METHOD})
 public @interface ExtraField
 {
     String value();

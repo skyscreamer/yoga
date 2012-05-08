@@ -13,7 +13,7 @@ public class YogaRequestContext
     private final HttpServletResponse response;
     private final Map<String, Object> properties = new HashMap<String, Object>();
 
-    public YogaRequestContext(String urlSuffix, HttpServletRequest request, HttpServletResponse response)
+    public YogaRequestContext( String urlSuffix, HttpServletRequest request, HttpServletResponse response )
     {
         this.urlSuffix = urlSuffix;
         this.request = request;
@@ -35,12 +35,12 @@ public class YogaRequestContext
         return response;
     }
 
-    public void setProperty(String key, Object value)
+    public void setProperty( String key, Object value )
     {
         properties.put( key, value );
     }
 
-    public Object getProperty(String key)
+    public Object getProperty( String key )
     {
         return properties.get( key );
     }

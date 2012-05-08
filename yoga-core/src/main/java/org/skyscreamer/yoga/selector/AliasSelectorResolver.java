@@ -7,5 +7,5 @@ import org.skyscreamer.yoga.exceptions.ParseSelectorException;
  */
 public interface AliasSelectorResolver
 {
-    String resolveSelector(String aliasSelectorExpression) throws ParseSelectorException;
+    String resolveSelector( String aliasSelectorExpression ) throws ParseSelectorException;
 }

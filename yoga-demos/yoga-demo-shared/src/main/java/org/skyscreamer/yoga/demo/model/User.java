@@ -44,7 +44,7 @@ public class User
         return false;
     }
 
-    public void setIsFriend(boolean isFriend)
+    public void setIsFriend( boolean isFriend )
     {
         // to be implemented
     }
@@ -55,7 +55,7 @@ public class User
         return id;
     }
 
-    public void setId(long id)
+    public void setId( long id )
     {
         this.id = id;
     }
@@ -66,7 +66,7 @@ public class User
         return name;
     }
 
-    public void setName(String name)
+    public void setName( String name )
     {
         this.name = name;
     }
@@ -76,7 +76,7 @@ public class User
         return friends;
     }
 
-    public void setFriends(Set<User> friends)
+    public void setFriends( Set<User> friends )
     {
         this.friends = friends;
     }
@@ -86,7 +86,7 @@ public class User
         return favoriteArtists;
     }
 
-    public void setFavoriteArtists(Set<Artist> favoriteArtists)
+    public void setFavoriteArtists( Set<Artist> favoriteArtists )
     {
         this.favoriteArtists = favoriteArtists;
     }

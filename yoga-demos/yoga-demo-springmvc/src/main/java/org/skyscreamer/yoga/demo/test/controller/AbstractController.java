@@ -22,7 +22,7 @@ public abstract class AbstractController<T>
     Class<T> _entityClass = returnedClass();
 
     @RequestMapping("/{id}")
-    public T get(@PathVariable long id)
+    public T get( @PathVariable long id )
     {
         return _genericDao.find( _entityClass, id );
     }

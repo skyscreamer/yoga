@@ -30,6 +30,7 @@ public class JsonSelectorView extends AbstractYogaView
         {
             return new MapHierarchicalModel();
         }
+
     }
 
     protected ObjectMapper getObjectMapper()

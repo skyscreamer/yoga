@@ -13,13 +13,13 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
     private String suffix = "yoga";
 
     @Override
-    public void enrich(YogaInstanceContext<?> entityContext)
+    public void enrich( YogaInstanceContext<?> entityContext )
     {
-        if (entityContext.getFieldSelector() instanceof CoreSelector)
+        if ( entityContext.getFieldSelector() instanceof CoreSelector )
         {
             String href = determineTemplate( entityContext.getInstanceType(), entityContext.getPopulator() );
 
-            if (href != null)
+            if ( href != null )
             {
                 href += "." + suffix;
                 entityContext.getModel().addSimple( FIELD_NAME, getUrl( href, entityContext) );
@@ -29,7 +29,7 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
     }
 
     // Spring injection points
-    public void setSuffix(String suffix)
+    public void setSuffix( String suffix )
     {
         this.suffix = suffix;
     }

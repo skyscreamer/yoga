@@ -1,10 +1,10 @@
 package org.skyscreamer.yoga.populator;
 
+import org.skyscreamer.yoga.annotations.PopulationExtension;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.skyscreamer.yoga.annotations.PopulationExtension;
 
 /**
  * Created by IntelliJ IDEA. User: corby
@@ -15,26 +15,26 @@ public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
 
     public DefaultFieldPopulatorRegistry()
     {
-        
+
     }
 
-    public DefaultFieldPopulatorRegistry(List<FieldPopulator> fieldPopulators)
+    public DefaultFieldPopulatorRegistry( List<FieldPopulator> fieldPopulators )
     {
         register( fieldPopulators );
     }
 
-    public void register(List<FieldPopulator> fieldPopulators)
+    public void register( List<FieldPopulator> fieldPopulators )
     {
-        for (FieldPopulator fieldPopulator : fieldPopulators)
+        for ( FieldPopulator fieldPopulator : fieldPopulators )
         {
             Class<? extends FieldPopulator> fieldPopulatorClass = fieldPopulator.getClass();
 
-            if (fieldPopulatorClass.isAnnotationPresent( PopulationExtension.class ))
+            if ( fieldPopulatorClass.isAnnotationPresent( PopulationExtension.class ) )
             {
                 PopulationExtension annotation = fieldPopulatorClass
                         .getAnnotation( PopulationExtension.class );
                 Class<?> type = annotation.value();
-                if (type != null)
+                if ( type != null )
                 {
                     register( type, fieldPopulator );
                     break;
@@ -49,12 +49,12 @@ public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
         }
     }
 
-    public FieldPopulator register(Class<?> typeToExtend, FieldPopulator fieldPopulator)
+    public FieldPopulator register( Class<?> typeToExtend, FieldPopulator fieldPopulator )
     {
         return _registry.put( typeToExtend, fieldPopulator );
     }
 
-    public FieldPopulator getFieldPopulator(Class<?> clazz)
+    public FieldPopulator getFieldPopulator( Class<?> clazz )
     {
         return _registry.get( clazz );
     }

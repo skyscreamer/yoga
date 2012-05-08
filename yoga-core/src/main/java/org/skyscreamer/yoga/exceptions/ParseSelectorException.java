@@ -10,7 +10,7 @@ public class ParseSelectorException extends YogaRuntimeException
         super();
     }
 
-    public ParseSelectorException(String s)
+    public ParseSelectorException( String s )
     {
         super( s );
     }

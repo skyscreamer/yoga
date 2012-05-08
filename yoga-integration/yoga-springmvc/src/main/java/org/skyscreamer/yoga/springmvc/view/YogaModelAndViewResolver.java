@@ -17,15 +17,15 @@ public class YogaModelAndViewResolver implements ModelAndViewResolver
 {
     ViewResolver viewResolver;
 
-    public void setViewResolver(ViewResolver viewResolver)
+    public void setViewResolver( ViewResolver viewResolver )
     {
         this.viewResolver = viewResolver;
     }
 
     @Override
     @SuppressWarnings("rawtypes")
-    public ModelAndView resolveModelAndView(Method handlerMethod, Class handlerType,
-            Object returnValue, ExtendedModelMap implicitModel, NativeWebRequest webRequest)
+    public ModelAndView resolveModelAndView( Method handlerMethod, Class handlerType,
+            Object returnValue, ExtendedModelMap implicitModel, NativeWebRequest webRequest )
     {
         try
         {

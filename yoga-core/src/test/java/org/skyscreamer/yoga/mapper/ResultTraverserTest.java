@@ -1,13 +1,6 @@
 package org.skyscreamer.yoga.mapper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.yoga.annotations.ExtraField;
@@ -24,6 +17,8 @@ import org.skyscreamer.yoga.test.DummyServletRequest;
 import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.data.BasicTestDataNode;
 import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
+
+import java.util.*;
 
 public class ResultTraverserTest
 {
@@ -67,13 +62,13 @@ public class ResultTraverserTest
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( 0, objectTree.get( "id" ) );
-        Assert.assertEquals( sort(Arrays.asList( "id", "name", "other", "someValue", "randomStrings" )),
-                sort((List<String>)objectTree.get( "definition" )) );
+        Assert.assertEquals( sort( Arrays.asList( "id", "name", "other", "someValue", "randomStrings" ) ),
+                sort( (List<String>) objectTree.get( "definition" ) ) );
         Assert.assertEquals( "/basic-leaf/0.map", objectTree.get( "href" ) );
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private <T extends Comparable> List<T> sort(List<T> list)
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private <T extends Comparable> List<T> sort( List<T> list )
     {
         Collections.sort( list );
         return list;
@@ -174,7 +169,7 @@ public class ResultTraverserTest
     public void testLotsOfData()
     {
         ArrayList<BasicTestDataLeaf> input = new ArrayList<BasicTestDataLeaf>();
-        for (int i = 0; i < MAX_RESULTS + 1; i++)
+        for ( int i = 0; i < MAX_RESULTS + 1; i++ )
         {
             input.add( new BasicTestDataLeaf() );
         }

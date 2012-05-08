@@ -1,14 +1,13 @@
 package org.skyscreamer.yoga.demo.resteasy.resources;
 
-import java.lang.reflect.ParameterizedType;
+import org.skyscreamer.yoga.demo.dao.GenericDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
-
-import org.skyscreamer.yoga.demo.dao.GenericDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.lang.reflect.ParameterizedType;
 
 /**
  * Created by IntelliJ IDEA. User: corby
@@ -22,7 +21,7 @@ public abstract class AbstractController<T>
 
     @GET
     @Path("/{id}")
-    public T get(@PathParam("id") long id, @QueryParam("selector") String selectorString)
+    public T get( @PathParam("id") long id, @QueryParam("selector") String selectorString )
     {
         return _genericDao.find( _entityClass, id );
     }

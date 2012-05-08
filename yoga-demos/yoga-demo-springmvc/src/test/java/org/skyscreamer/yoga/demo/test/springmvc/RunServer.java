@@ -15,12 +15,12 @@ public class RunServer
         this( 8082 );
     }
 
-    public RunServer(int port)
+    public RunServer( int port )
     {
         server = new Server( port );
     }
 
-    public static void main(String[] args) throws Exception
+    public static void main( String[] args ) throws Exception
     {
         RunServer runServer = new RunServer( 8081 );
         runServer.run();
@@ -28,7 +28,7 @@ public class RunServer
 
     public static void startServer() throws Exception
     {
-        if (instance == null)
+        if ( instance == null )
         {
             instance = new RunServer( 8082 );
             instance.run( false );
@@ -40,7 +40,7 @@ public class RunServer
         run( true );
     }
 
-    public void run(boolean join) throws Exception
+    public void run( boolean join ) throws Exception
     {
         WebAppContext context = new WebAppContext();
 
@@ -51,7 +51,7 @@ public class RunServer
         server.setHandler( context );
 
         server.start();
-        if (join)
+        if ( join )
         {
             server.join();
         }

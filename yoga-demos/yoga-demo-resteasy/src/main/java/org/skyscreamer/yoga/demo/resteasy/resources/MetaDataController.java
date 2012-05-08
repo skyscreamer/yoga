@@ -1,15 +1,15 @@
 package org.skyscreamer.yoga.demo.resteasy.resources;
 
+import org.skyscreamer.yoga.metadata.MetaDataService;
+import org.skyscreamer.yoga.metadata.TypeMetaData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
-
-import org.skyscreamer.yoga.metadata.MetaDataService;
-import org.skyscreamer.yoga.metadata.TypeMetaData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
 @Controller
 @Path("/metadata/")
@@ -19,9 +19,7 @@ public class MetaDataController
     MetaDataService metaDataService;
 
     @GET
-    @Path("/{type}")
-    public TypeMetaData getTypeMetaData(@PathParam("type") String type,
-            @Context HttpServletRequest request)
+    public TypeMetaData getTypeMetaData( @PathParam("type") String type, @Context HttpServletRequest request )
     {
         String uri = request.getRequestURI();
         String parts[] = uri.split( "\\." );

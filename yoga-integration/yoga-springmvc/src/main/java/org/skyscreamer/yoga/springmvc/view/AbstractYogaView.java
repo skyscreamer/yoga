@@ -28,19 +28,19 @@ public abstract class AbstractYogaView implements View
     @Autowired
     protected SelectorParser selectorParser;
 
-    public void setResultTraverser(ResultTraverser resultTraverser)
+    public void setResultTraverser( ResultTraverser resultTraverser )
     {
         this.resultTraverser = resultTraverser;
     }
 
-    public void setSelectorParser(SelectorParser selectorParser)
+    public void setSelectorParser( SelectorParser selectorParser )
     {
         this.selectorParser = selectorParser;
     }
-    
+
     @Override
-    public void render(Map<String, ?> model, HttpServletRequest request,
-            HttpServletResponse response) throws Exception
+    public void render( Map<String, ?> model, HttpServletRequest request,
+            HttpServletResponse response ) throws Exception
     {
         response.setContentType( getContentType() );
         YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response );
@@ -49,13 +49,13 @@ public abstract class AbstractYogaView implements View
         render( selector, value, context );
     }
 
-    public Selector getSelector(HttpServletRequest request) throws ParseSelectorException
+    public Selector getSelector( HttpServletRequest request ) throws ParseSelectorException
     {
         String selectorString = request.getParameter( "selector" );
         return selectorParser.parseSelector( selectorString );
     }
 
-    public abstract void render(Selector selector, Object value, YogaRequestContext context)
+    public abstract void render( Selector selector, Object value, YogaRequestContext context )
             throws Exception;
 
     public abstract String getHrefSuffix();

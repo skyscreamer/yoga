@@ -37,7 +37,7 @@ public class Album
         return id;
     }
 
-    public void setId(long id)
+    public void setId( long id )
     {
         this.id = id;
     }
@@ -48,7 +48,7 @@ public class Album
         return title;
     }
 
-    public void setTitle(String title)
+    public void setTitle( String title )
     {
         this.title = title;
     }
@@ -58,7 +58,7 @@ public class Album
         return artist;
     }
 
-    public void setArtist(Artist artist)
+    public void setArtist( Artist artist )
     {
         this.artist = artist;
     }
@@ -69,7 +69,7 @@ public class Album
         return year;
     }
 
-    public void setYear(int year)
+    public void setYear( int year )
     {
         this.year = year;
     }
@@ -79,7 +79,7 @@ public class Album
         return songs;
     }
 
-    public void setSongs(List<Song> songs)
+    public void setSongs( List<Song> songs )
     {
         this.songs = songs;
     }

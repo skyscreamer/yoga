@@ -13,7 +13,7 @@ public class PropertyMetaData
         return name;
     }
 
-    public void setName(String name)
+    public void setName( String name )
     {
         this.name = name;
     }
@@ -24,7 +24,7 @@ public class PropertyMetaData
         return type;
     }
 
-    public void setType(String type)
+    public void setType( String type )
     {
         this.type = type;
     }
@@ -35,7 +35,7 @@ public class PropertyMetaData
         return isCore;
     }
 
-    public void setIsCore(boolean isCore)
+    public void setIsCore( boolean isCore )
     {
         this.isCore = isCore;
     }
@@ -46,7 +46,7 @@ public class PropertyMetaData
         return href;
     }
 
-    public void setHref(String href)
+    public void setHref( String href )
     {
         this.href = href;
     }

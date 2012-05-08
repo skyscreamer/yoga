@@ -24,7 +24,7 @@ public class FieldSelector implements Selector
     }
 
     @Override
-    public boolean containsField(PropertyDescriptor property, FieldPopulator fieldPopulator)
+    public boolean containsField( PropertyDescriptor property, FieldPopulator fieldPopulator )
     {
         String propertyName = property.getName();
         if (containsField( propertyName ))
@@ -39,7 +39,7 @@ public class FieldSelector implements Selector
         return supportedFields != null && supportedFields.contains( propertyName );
     }
 
-    public boolean containsField(String field)
+    public boolean containsField( String field )
     {
         return _fields.containsKey( field );
     }

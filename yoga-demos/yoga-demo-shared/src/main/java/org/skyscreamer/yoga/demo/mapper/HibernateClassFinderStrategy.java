@@ -5,7 +5,7 @@ import org.skyscreamer.yoga.util.ClassFinderStrategy;
 
 public class HibernateClassFinderStrategy implements ClassFinderStrategy
 {
-    public Class<?> findClass(Object instance)
+    public Class<?> findClass( Object instance )
     {
         return Hibernate.getClass( instance );
     }

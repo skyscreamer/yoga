@@ -31,8 +31,7 @@ public class MetaDataController
     }
 
     @RequestMapping("/{type}")
-    public TypeMetaData getTypeMetaData(@PathVariable("type") String type,
-            HttpServletRequest request)
+    public TypeMetaData getTypeMetaData( @PathVariable("type") String type, HttpServletRequest request )
     {
         String uri = request.getRequestURI();
         String parts[] = uri.split( "\\." );

@@ -1,9 +1,9 @@
 package org.skyscreamer.yoga.test.data;
 
-import java.util.List;
-
 import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;
+
+import java.util.List;
 
 @URITemplate("/basic-leaf/{id}")
 public class BasicTestDataLeaf
@@ -19,7 +19,7 @@ public class BasicTestDataLeaf
         return randomStrings;
     }
 
-    public void setRandomStrings(List<String> randomStrings)
+    public void setRandomStrings( List<String> randomStrings )
     {
         this.randomStrings = randomStrings;
     }
@@ -30,7 +30,7 @@ public class BasicTestDataLeaf
         return id;
     }
 
-    public void setId(int id)
+    public void setId( int id )
     {
         this.id = id;
     }
@@ -41,7 +41,7 @@ public class BasicTestDataLeaf
         return name;
     }
 
-    public void setName(String name)
+    public void setName( String name )
     {
         this.name = name;
     }
@@ -51,7 +51,7 @@ public class BasicTestDataLeaf
         return other;
     }
 
-    public void setOther(String other)
+    public void setOther( String other )
     {
         this.other = other;
     }
