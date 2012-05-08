@@ -14,8 +14,8 @@
         <li><a class="intro" href="./">Introduction</a></li>
         <li><a class="demo" href="demo.html">Demo</a></li>
         <li><a class="selector" href="selector.html">Selectors</a></li>
-        <li><a class="nextsteps" href="#nextsteps">Next Steps</a></li>
-        <li><a class="contrib" href="#contrib">Contribute</a></li>
+        <li><a class="download" href="https://github.com/skyscreamer/yoga/downloads">Download</a></li>
+        <li><a class="contrib" href="https://github.com/skyscreamer/yoga">Contribute</a></li>
         <li><a class="wiki" href="https://github.com/skyscreamer/yoga/wiki">Wiki</a></li>
     </ul>
 </nav>
@@ -31,8 +31,17 @@
         <li>APIs that are browseable (<a href="http://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a>)</li>
     </ul>
 
+    <p><br/>The current version of Yoga is 0.9.0.</p>
+
+    <h2>REST Selector Styles</h2>
+    <p>Yoga supports two styles of REST field selector:</p>
+    <ul>
+        <li><a href="https://developers.google.com/gdata/docs/2.0/basics#PartialResponse">GData</a></li>
+        <li><a href="https://developer.linkedin.com/documents/field-selectors">LinkedIn</a></li>
+    </ul>
+
     <h2>Supported Frameworks</h2>
-    <p>Yoga currently extends REST APIs built on:</p>
+    <p>Yoga can extend APIs built on:</p>
     <ul>
         <li><a href="http://blog.springsource.org/2009/03/08/rest-in-spring-3-mvc/">Spring MVC</a></li>
         <li><a href="http://www.jboss.org/resteasy">RESTEasy</a></li>
@@ -40,30 +49,12 @@
 </section>
 
 <section>
-    <a name="nextsteps"></a>
-    <h2>Next Steps</h2>
-    <ul>
-        <li>
-            Create an aliasing system to allow dynamic aliasing of selector-based queries into more RESTful
-            calls. (e.g. The last call could become "/users/favoriteArtists/2.json".)  The raw selector framework
-            can be disabled in production to ensure that queries are approved and configured for response caching.
-        </li>
-        <li>
-            Add security hooks.  Allow field level security to limit the data that is accessible by the framework.
-            This would also lend itself to enterprise SOA architectures where data needs to be more
-            tightly controlled.
-        </li>
-    </ul>
-</section>
-
-<section>
-    <a name="contrib"></a>
-    <h2>Contribute</h2>
+    <a name="contact"></a>
+    <h2>Contact</h2>
     <p>
         This is open source so if you want to help out whether by submitting code, design, suggestions, feedback,
-        or feature requests, we appreciate whatever you can contribute.  You can contact us at
-        <a href="mailto:yoga-dev@skyscreamer.org">yoga-dev@skyscreamer.org</a>.  We'll have proper mailing lists and
-        issue tracking available shortly.
+        or feature requests, we appreciate whatever you can contribute.  Contact us at
+        <a href="mailto:yoga-dev@skyscreamer.org">yoga-dev@skyscreamer.org</a> with questions or ideas.
     </p>
 </section>
 </body>

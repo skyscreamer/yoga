@@ -98,7 +98,7 @@ body {
             nav .selector {
                 background: #757575;
             }
-            nav .nextsteps {
+            nav .download {
                 background: #929090;
             }
             nav .contrib {
@@ -144,7 +144,7 @@ section {
     }
         section blockquote a {
             font: 12px "Courier New", Courier, monospace;
-            color: #666;
+            color: #000;
         }
     section .demo {
         background: #d1d1ff;
