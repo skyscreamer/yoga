@@ -7,6 +7,7 @@ import org.skyscreamer.yoga.populator.FieldPopulator;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
+import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 
 public class YogaInstanceContextFactory
 {
@@ -14,14 +15,13 @@ public class YogaInstanceContextFactory
 
     private FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry();
 
-    protected ClassFinderStrategy _classFinderStrategy;
-
+    protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public YogaInstanceContext createEntityContext( Object instance, Selector fieldSelector,
             HierarchicalModel model, YogaRequestContext context )
     {
-        Class<?> type = findClass( instance );
+        Class<?> type = _classFinderStrategy.findClass( instance );
 
         HierarchicalModel entityModel = model;
         if ( _maxEntities > -1 )
@@ -44,11 +44,6 @@ public class YogaInstanceContextFactory
         return entityContext;
     }
 
-    public int getMaxEntities()
-    {
-        return _maxEntities;
-    }
-
     public void setMaxEntities( int _maxEntities )
     {
         this._maxEntities = _maxEntities;
@@ -57,11 +52,6 @@ public class YogaInstanceContextFactory
     public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
     {
         _fieldPopulatorRegistry = fieldPopulatorRegistry;
-    }
-
-    public Class<?> findClass( Object instance )
-    {
-        return _classFinderStrategy.findClass( instance );
     }
 
     public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )

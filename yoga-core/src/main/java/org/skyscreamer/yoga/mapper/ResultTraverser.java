@@ -36,7 +36,7 @@ public class ResultTraverser
         }
     }
 
-    public void traverse( YogaInstanceContext<?> entityContext )
+    private void traverse( YogaInstanceContext<?> entityContext )
     {
         Class<?> instanceType = entityContext.getInstanceType();
         if ( Iterable.class.isAssignableFrom( instanceType ) )

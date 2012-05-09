@@ -17,7 +17,7 @@ public abstract class SelectorParser
     protected AliasSelectorResolver _aliasSelectorResolver;
     protected boolean _disableExplicitSelectors = false;
 
-    public abstract Selector parse( String selectorExpression ) throws ParseSelectorException;
+    protected abstract Selector parse( String selectorExpression ) throws ParseSelectorException;
 
     public Selector parseSelector( String selectorExpression ) throws ParseSelectorException
     {
