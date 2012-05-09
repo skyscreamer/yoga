@@ -74,7 +74,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         Assert.assertEquals( carter.getId(), _objectTree.get( "id" ) );
         Assert.assertEquals( carter.getName(), _objectTree.get( "name" ) );
 
-        List<Map<String,Object>> favoriteArtists = getList( "favoriteArtists" );
+        List<Map<String,Object>> favoriteArtists = getList( _objectTree, "favoriteArtists" );
         Assert.assertEquals( 2, favoriteArtists.size() );
         Map<String,Object> neutralMap = findItem( favoriteArtists, "name", "Neutral Milk Hotel" );
         Assert.assertEquals( DataGenerator.neutralMilkHotel().getId(), neutralMap.get( "id" ) );

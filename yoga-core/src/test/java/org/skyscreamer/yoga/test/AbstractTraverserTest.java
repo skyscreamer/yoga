@@ -8,6 +8,7 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.selector.AliasSelectorResolver;
 import org.skyscreamer.yoga.selector.LinkedInSelectorParser;
 import org.skyscreamer.yoga.selector.ParseSelectorException;
 import org.skyscreamer.yoga.selector.SelectorParser;
@@ -22,10 +23,12 @@ import java.util.Map;
  */
 public abstract class AbstractTraverserTest
 {
-    protected SelectorParser _selectorParser = new LinkedInSelectorParser();
-    protected MapHierarchicalModel _model = new MapHierarchicalModel();
     protected YogaRequestContext _simpleContext = new YogaRequestContext( "map", new DummyHttpServletResponse() );
+    protected MapHierarchicalModel _model = new MapHierarchicalModel();
     protected Map<String, Object> _objectTree;
+
+    protected Class<? extends SelectorParser> _selectorParserClass = LinkedInSelectorParser.class;
+    protected AliasSelectorResolver _aliasSelectorResolver;
 
     protected ResultTraverser traverserNoEnrichers()
     {
@@ -44,12 +47,23 @@ public abstract class AbstractTraverserTest
     {
         try
         {
-            traverser.traverse( instance, _selectorParser.parseSelector( selectorString ), _model, context );
+            SelectorParser selectorParser = _selectorParserClass.newInstance();
+            selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );
+
+            traverser.traverse( instance, selectorParser.parseSelector( selectorString ), _model, context );
             _objectTree = _model.getObjectTree();
         }
         catch ( ParseSelectorException e )
         {
             Assert.fail( "Could not parse selector string " + selectorString );
+        }
+        catch ( InstantiationException e )
+        {
+            Assert.fail( "Could not instantiate " + _selectorParserClass );
+        }
+        catch ( IllegalAccessException e )
+        {
+            Assert.fail( "Could not instantiate " + _selectorParserClass );
         }
     }
 
@@ -61,12 +75,12 @@ public abstract class AbstractTraverserTest
     }
 
     @SuppressWarnings( "unchecked" )
-    protected List<Map<String, Object>> getList( String s )
+    protected List<Map<String, Object>> getList( Map<String,Object> map, String s )
     {
-        return (List<Map<String, Object>>) _objectTree.get( s );
+        return (List<Map<String, Object>>) map.get( s );
     }
 
-    protected Map<String, Object> findItem( List<Map<String, Object>> list, String key, String value )
+    protected Map<String, Object> findItem( List<Map<String, Object>> list, String key, Object value )
     {
         for ( Map<String, Object> item : list )
         {
@@ -76,5 +90,15 @@ public abstract class AbstractTraverserTest
             }
         }
         return null;
+    }
+
+    public void setSelectorParserClass( Class<? extends SelectorParser> selectorParserClass )
+    {
+        _selectorParserClass = selectorParserClass;
+    }
+
+    public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )
+    {
+        _aliasSelectorResolver = aliasSelectorResolver;
     }
 }
