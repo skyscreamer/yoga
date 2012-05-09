@@ -7,7 +7,7 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.test.DummyHttpServletResponse;
-import org.skyscreamer.yoga.test.DummyServletRequest;
+import org.skyscreamer.yoga.test.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.data.BasicTestDataNode;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 public class NavigationLinksEnricherTest
 {
     NavigationLinksEnricher enricher = new NavigationLinksEnricher();
-    static YogaRequestContext requestContext = new YogaRequestContext( "map", new DummyServletRequest(), new DummyHttpServletResponse() );
+    static YogaRequestContext requestContext = new YogaRequestContext( "map", new DummyHttpServletRequest(), new DummyHttpServletResponse() );
 
     @Test
     public void testBasic()

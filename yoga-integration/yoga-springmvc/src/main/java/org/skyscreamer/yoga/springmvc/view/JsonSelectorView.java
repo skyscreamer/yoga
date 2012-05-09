@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.springmvc.view;
 
-import java.io.Writer;
+import javax.servlet.ServletOutputStream;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
@@ -16,8 +16,8 @@ public class JsonSelectorView extends AbstractYogaView
     {
         HierarchicalModel<?> model = getModel( value );
         resultTraverser.traverse( value, selector, model, requestContext );
-        Writer writer = requestContext.getResponse().getWriter();
-        getObjectMapper().writeValue( writer, model.getUnderlyingModel() );
+        ServletOutputStream outputStream = requestContext.getResponse().getOutputStream();
+        getObjectMapper().writeValue( outputStream, model.getUnderlyingModel() );
     }
 
     protected HierarchicalModel<?> getModel(Object value)

@@ -5,16 +5,16 @@ import org.skyscreamer.yoga.populator.FieldPopulator;
 import java.beans.PropertyDescriptor;
 import java.util.*;
 
-public class CombinedSelector implements Selector
+public class CompositeSelector implements Selector
 {
     Collection<Selector> _selectors = new ArrayList<Selector>();
 
-    public CombinedSelector( Selector... selectors )
+    public CompositeSelector( Selector... selectors )
     {
         this( Arrays.asList( selectors ) );
     }
 
-    public CombinedSelector( Iterable<Selector> selectors )
+    public CompositeSelector( Iterable<Selector> selectors )
     {
         for ( Selector selector : selectors )
         {
@@ -32,7 +32,7 @@ public class CombinedSelector implements Selector
         {
             children.add( s.getField( fieldName ) );
         }
-        return new CombinedSelector( children );
+        return new CompositeSelector( children );
     }
 
     @Override

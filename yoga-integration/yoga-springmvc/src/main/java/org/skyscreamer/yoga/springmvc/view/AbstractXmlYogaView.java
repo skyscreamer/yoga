@@ -1,6 +1,8 @@
 package org.skyscreamer.yoga.springmvc.view;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+
+import javax.servlet.ServletOutputStream;
 
 import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;
@@ -20,9 +22,9 @@ public abstract class AbstractXmlYogaView extends AbstractYogaView
     {
         DOMDocument domDocument = new DOMDocument();
         domDocument.setRootElement( rootElement );
-        PrintWriter writer = context.getResponse().getWriter();
-        domDocument.write( writer );
-        writer.flush();
+        ServletOutputStream outputStream = context.getResponse().getOutputStream();
+        domDocument.write( new OutputStreamWriter( outputStream ) );
+        outputStream.flush();
     }
     
 

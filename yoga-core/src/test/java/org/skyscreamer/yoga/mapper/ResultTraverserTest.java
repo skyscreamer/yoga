@@ -9,14 +9,13 @@ import org.skyscreamer.yoga.model.ListHierarchicalModel;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.populator.FieldPopulatorSupport;
-import org.skyscreamer.yoga.selector.CombinedSelector;
+import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.test.DummyHttpServletResponse;
-import org.skyscreamer.yoga.test.DummyServletRequest;
+import org.skyscreamer.yoga.test.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.data.BasicTestDataNode;
-import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 
 import java.util.*;
 
@@ -31,7 +30,6 @@ public class ResultTraverserTest
     {
         resultTraverser = new ResultTraverser();
         YogaInstanceContextFactory instanceContextFactory = new YogaInstanceContextFactory();
-        instanceContextFactory.setClassFinderStrategy( new DefaultClassFinderStrategy() );
 
         resultTraverser.setInstanceContextFactory( instanceContextFactory );
         instanceContextFactory.setMaxEntities( MAX_RESULTS );
@@ -48,7 +46,7 @@ public class ResultTraverserTest
         } );
         instanceContextFactory.setFieldPopulatorRegistry( registry );
 
-        requestContext = new YogaRequestContext( "map", new DummyServletRequest(), new DummyHttpServletResponse() );
+        requestContext = new YogaRequestContext( "map", new DummyHttpServletRequest(), new DummyHttpServletResponse() );
     }
 
     @SuppressWarnings("unchecked")
@@ -75,7 +73,7 @@ public class ResultTraverserTest
     }
 
     @Test
-    public void testBasicFieldSelctor()
+    public void testBasicFieldSelector()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         input.setOther( "someValue" );
@@ -118,7 +116,7 @@ public class ResultTraverserTest
         FieldSelector fieldSelector = new FieldSelector();
         fieldSelector.addField( "other", new FieldSelector() );
 
-        CombinedSelector selector = new CombinedSelector( fieldSelector, new CoreSelector() );
+        CompositeSelector selector = new CompositeSelector( fieldSelector, new CoreSelector() );
         resultTraverser.traverse( input, selector, model, requestContext );
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
@@ -140,7 +138,7 @@ public class ResultTraverserTest
 
         MapHierarchicalModel model = new MapHierarchicalModel();
 
-        CombinedSelector selector = new CombinedSelector( fieldSelector, new CoreSelector() );
+        CompositeSelector selector = new CompositeSelector( fieldSelector, new CoreSelector() );
         resultTraverser.traverse( input, selector, model, requestContext );
 
         Map<String, Object> objectTree = model.getUnderlyingModel();

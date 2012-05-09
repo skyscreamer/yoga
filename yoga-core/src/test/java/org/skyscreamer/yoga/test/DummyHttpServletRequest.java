@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @SuppressWarnings("rawtypes")
-public class DummyServletRequest implements HttpServletRequest
+public class DummyHttpServletRequest implements HttpServletRequest
 {
 
     @Override
