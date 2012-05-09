@@ -60,8 +60,11 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
             Selector selector = view.getSelector( request );
             YogaRequestContext context = new YogaRequestContext( view.getHrefSuffix(), request, response );
             view.render( selector, t, context );
+        } catch ( RuntimeException e )
+        {
+            throw e;
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
             throw new WebApplicationException( e, Response.Status.BAD_REQUEST );
         }
