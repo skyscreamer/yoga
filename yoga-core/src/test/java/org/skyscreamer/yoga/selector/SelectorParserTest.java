@@ -1,15 +1,43 @@
 package org.skyscreamer.yoga.selector;
 
 import org.junit.Assert;
+import org.junit.Test;
 
-/**
- * Shared test logic for selector tests
- *
- * @author Carter Page <carter@skyscreamer.org>
- */
-public abstract class AbstractSelectorTest
+public class SelectorParserTest
 {
-    protected void testSimpleSelector( Selector selector ) throws Exception
+    @Test
+    public void testGDataSimpleSelector() throws Exception
+    {
+        String selectorExpression = "gender,country";
+        Selector selector = new GDataSelectorParser().parseSelector( selectorExpression );
+        testSimpleSelector( selector );
+    }
+
+    @Test
+    public void testGDataNestedSelectors() throws Exception
+    {
+        String selectorExpression = "gender,favoriteArtists(birthday,discography(year,title)),friends";
+        Selector selector = new GDataSelectorParser().parseSelector( selectorExpression );
+        testNestedSelectors( selector );
+    }
+
+    @Test
+    public void testLinkedInSimpleSelector() throws Exception
+    {
+        String selectorExpression = ":(gender,country)";
+        Selector selector = new LinkedInSelectorParser().parseSelector( selectorExpression );
+        testSimpleSelector( selector );
+    }
+
+    @Test
+    public void testLinkedInNestedSelectors() throws Exception
+    {
+        String selectorExpression = ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)";
+        Selector selector = new LinkedInSelectorParser().parseSelector( selectorExpression );
+        testNestedSelectors( selector );
+    }
+
+    private void testSimpleSelector( Selector selector ) throws Exception
     {
         Assert.assertEquals( selector.getFields().size(), 2 );
         Selector genderField = selector.getField( "gender" );
@@ -21,7 +49,7 @@ public abstract class AbstractSelectorTest
         Assert.assertEquals( countryField.getFields().size(), 0 );
     }
 
-    protected void testNestedSelectors( Selector selector ) throws Exception
+    private void testNestedSelectors( Selector selector ) throws Exception
     {
         Assert.assertEquals( selector.getFields().size(), 3 );
         Selector genderField = selector.getField( "gender" );
