@@ -1,6 +1,7 @@
-package org.skyscreamer.yoga.selector;
+package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.util.ParenthesisUtil;
 
 /**
@@ -72,6 +73,6 @@ public abstract class ParentheticalSelectorParser extends SelectorParser
         {
             throw new IllegalArgumentException( HREF + " is a reserved keyword for selectors" );
         }
-        selector.addField( fieldName, subSelector );
+        selector.register( fieldName, subSelector );
     }
 }

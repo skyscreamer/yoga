@@ -96,7 +96,7 @@ public class UserControllerTest extends AbstractTest
         {
             String message = e.getMessage();
             Assert.assertNotNull( message );
-            Assert.assertTrue( message.contains( "Exceeded" ) );
+            Assert.assertTrue( message.toLowerCase().contains( "exceeded" ) );
             return;
         }
         Assert.fail( "Expected this query to fail with a 500 error caused by an EntityCountExceededException" );

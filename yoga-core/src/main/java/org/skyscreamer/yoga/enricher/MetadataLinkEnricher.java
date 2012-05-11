@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.enricher;
 
-import org.skyscreamer.yoga.mapper.YogaInstanceContext;
+import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.metadata.MetaDataService;
 import org.skyscreamer.yoga.selector.CoreSelector;
 
@@ -14,20 +14,22 @@ public class MetadataLinkEnricher implements Enricher
     }
 
     @Override
-    public void enrich( YogaInstanceContext<?> entityContext )
+    public void enrich( RenderingEvent event )
     {
-        if ( !(entityContext.getFieldSelector() instanceof CoreSelector) )
+        if ( !(event.getSelector() instanceof CoreSelector) )
         {
             return;
         }
 
-        Class<?> type = entityContext.getInstanceType();
-        String urlSuffix = entityContext.getRequestContext().getUrlSuffix();
+        Class<?> type = event.getValueType();
+        String urlSuffix = event.getRequestContext().getUrlSuffix();
         
         String url = metaDataService.getMetadataHref( type, urlSuffix );
 
         if(url != null)
-            entityContext.getModel().createChild( "metadata" ).addSimple( "href", url );
+        {
+            event.getModel().createChildMap( "metadata" ).addProperty( "href", url );
+        }
     }
 
 }

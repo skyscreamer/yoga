@@ -17,7 +17,7 @@ public class XmlTextElementHierarchyModel extends AbstractSimplePropertyHierarch
     }
 
     @Override
-    public void addSimple( Object instance )
+    public void addValue( Object instance )
     {
         element.addText( instance.toString() );
     }

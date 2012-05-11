@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver;
+import org.skyscreamer.yoga.selector.parser.MapSelectorResolver;
 import org.skyscreamer.yoga.test.AbstractTraverserTest;
 import org.skyscreamer.yoga.test.data.DataGenerator;
 import org.skyscreamer.yoga.test.model.Artist;
@@ -63,10 +65,10 @@ public class PropertyResolverTest extends AbstractTraverserTest
         prince.getAlbums().add( DataGenerator.nineteen99() );
         prince.getAlbums().add( DataGenerator.diamondsAndPearls() );
 
-        ResultTraverser traverser = traverserNoEnrichers();
-        doTraverse( corby, "$suggestedAlbums", traverser, _simpleContext );
-        Assert.assertEquals( 3, _objectTree.size() );
-        List<Map<String,Object>> favoriteArtists = getList( _objectTree, "favoriteArtists" );
+        ResultTraverser traverser = new ResultTraverser();
+        Map<String, Object> objectTree = doTraverse( corby, "$suggestedAlbums", traverser, _simpleContext );
+        Assert.assertEquals( 3, objectTree.size() );
+        List<Map<String,Object>> favoriteArtists = getList( objectTree, "favoriteArtists" );
         Assert.assertEquals( 1, favoriteArtists.size() );
         Map<String,Object> princeMap = findItem( favoriteArtists, "name", "Prince" );
 

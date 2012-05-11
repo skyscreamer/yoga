@@ -6,10 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
+import org.skyscreamer.yoga.selector.CompositeSelector;
+import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.SelectorParser;
+import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.View;
 
@@ -28,6 +31,9 @@ public abstract class AbstractYogaView implements View
     @Autowired
     protected SelectorParser selectorParser;
 
+    @Autowired
+    protected RenderingListenerRegistry registry;
+
     public void setResultTraverser( ResultTraverser resultTraverser )
     {
         this.resultTraverser = resultTraverser;
@@ -38,12 +44,18 @@ public abstract class AbstractYogaView implements View
         this.selectorParser = selectorParser;
     }
 
+    public void setRegistry( RenderingListenerRegistry registry )
+    {
+        this.registry = registry;
+    }
+
     @Override
     public void render( Map<String, ?> model, HttpServletRequest request,
             HttpServletResponse response ) throws Exception
     {
         response.setContentType( getContentType() );
-        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response );
+        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response,
+                registry.getListeners() );
         Object value = model.values().iterator().next();
         Selector selector = getSelector( request );
         render( selector, value, context );
@@ -52,7 +64,14 @@ public abstract class AbstractYogaView implements View
     public Selector getSelector( HttpServletRequest request ) throws ParseSelectorException
     {
         String selectorString = request.getParameter( "selector" );
-        return selectorParser.parseSelector( selectorString );
+        CoreSelector coreSelector = new CoreSelector();
+        CompositeSelector composite = new CompositeSelector( coreSelector );
+        selectorParser.parseSelector( selectorString, composite );
+        if (composite.subSelectorCount() == 1)
+        {
+            return coreSelector;
+        }
+        return composite;
     }
 
     public abstract void render( Selector selector, Object value, YogaRequestContext context )

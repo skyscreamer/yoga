@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.selector;
+package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 

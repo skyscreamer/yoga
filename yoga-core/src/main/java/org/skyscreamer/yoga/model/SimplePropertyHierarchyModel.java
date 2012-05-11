@@ -19,8 +19,8 @@ public class SimplePropertyHierarchyModel extends AbstractSimplePropertyHierarch
     }
 
     @Override
-    public void addSimple( Object value )
+    public void addValue( Object value )
     {
-        underlying.addSimple( name, value );
+        underlying.addProperty( name, value );
     }
 }

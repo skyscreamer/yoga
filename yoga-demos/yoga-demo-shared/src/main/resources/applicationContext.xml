@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
     xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/util   http://www.springframework.org/schema/util/spring-util-3.0.xsd
@@ -16,6 +14,7 @@
             expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
+    <!-- DATABASE CONFIG START -->
     <jdbc:embedded-database id="dataSource" type="H2" />
 
     <bean id="sessionFactory"
@@ -35,7 +34,7 @@
     </bean>
 
     <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate"
-        p:cacheQueries="true" p:sessionFactory-ref="sessionFactory"/>
+        p:cacheQueries="true" p:sessionFactory-ref="sessionFactory" />
 
     <!-- This can normally be done via jdbc:init, but we wanted to let hibernate 
         initialize the database -->
@@ -47,51 +46,44 @@
         class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
         p:scripts="classpath:sampledb.sql" depends-on="sessionFactory" />
 
-    <!-- This is for loading large quantities of data for testing data scaling.  Disabled by default. -->
+    <!-- This is for loading large quantities of data for testing data scaling. 
+        Disabled by default. -->
     <bean id="extendedDbInit"
-          class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
-          p:dataSource-ref="dataSource" p:databasePopulator-ref="extendedDbPopulator"
-          depends-on="sessionFactory" />
+        class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
+        p:dataSource-ref="dataSource" p:databasePopulator-ref="extendedDbPopulator"
+        depends-on="sessionFactory" />
 
     <bean id="extendedDbResource" class="org.skyscreamer.yoga.util.GzippedResource">
         <constructor-arg>
             <bean class="org.springframework.core.io.UrlResource">
-                <constructor-arg value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz" />
+                <constructor-arg
+                    value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz" />
             </bean>
         </constructor-arg>
     </bean>
 
     <bean id="extendedDbPopulator"
-          class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
-          p:scripts-ref="extendedDbResource" />
+        class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
+        p:scripts-ref="extendedDbResource" />
 
     <bean id="transactionManager"
         class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
         p:dataSource-ref="dataSource" />
 
-    <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser"
-        p:instanceContextFactory-ref="yogaInstanceContextFactory">
-        <property name="enrichers">
-            <list>
-                <bean class="org.skyscreamer.yoga.enricher.HrefEnricher"/>
-                <bean class="org.skyscreamer.yoga.enricher.SelectorBuilderEnricher"/>
-                <bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher"/>
-                <bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder"/>
-                <bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher" p:metaDataService-ref="metaDataService"/>
-            </list>
-        </property>
-    </bean>
-    
-    <bean id="yogaInstanceContextFactory" class="org.skyscreamer.yoga.mapper.YogaInstanceContextFactory" 
-        p:classFinderStrategy-ref="hibernateClassFinder"
-        p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"
-        p:maxEntities="10000" />
+    <!-- DATABSE CONFIG END -->
 
-    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.LinkedInSelectorParser"
-          p:aliasSelectorResolver-ref="aliasSelectorResolver" p:disableExplicitSelectors="false"/>
 
-    <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.DynamicPropertyResolver"
-          p:propertyFile="classpath:selectorAlias.properties"/>
+    <!-- YOGA CONFIG BEGING -->
+
+    <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser" 
+        p:classFinderStrategy-ref="hibernateClassFinder"/>
+
+    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser"
+        p:aliasSelectorResolver-ref="aliasSelectorResolver"
+        p:disableExplicitSelectors="false" />
+
+    <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"
+        p:propertyFile="classpath:selectorAlias.properties" />
 
     <bean id="hibernateClassFinder"
         class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
@@ -101,6 +93,33 @@
         <constructor-arg>
             <list>
                 <bean class="org.skyscreamer.yoga.demo.dto.UserFieldPopulator" />
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
+        <constructor-arg>
+            <list>
+                <bean class="org.skyscreamer.yoga.limits.CountLimitRenderingListener">
+                    <constructor-arg value="20000" />
+                </bean>
+                <bean id="enricherListenerAdapter"
+                    class="org.skyscreamer.yoga.enricher.RenderingListenerEnricherAdapter">
+                    <constructor-arg>
+                        <list>
+                            <bean class="org.skyscreamer.yoga.enricher.HrefEnricher" />
+                            <bean class="org.skyscreamer.yoga.enricher.SelectorBuilderEnricher" />
+                            <bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher" />
+                            <bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder" />
+                            <bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher"
+                                p:metaDataService-ref="metaDataService" />
+                        </list>
+                    </constructor-arg>
+                </bean>
+                <bean class="org.skyscreamer.yoga.populator.FieldPopulatorRenderingListenerAdapter">
+                    <property name="resultTraverser" ref="resultTraverser" />
+                    <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry" />
+                </bean>
             </list>
         </constructor-arg>
     </bean>
@@ -117,4 +136,6 @@
         </property>
         <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry" />
     </bean>
+
+    <!-- YOGA CONFIG END -->
 </beans>

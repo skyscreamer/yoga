@@ -11,14 +11,14 @@ public class ListHierarchicalModel extends AbstractHierarchicalModel<List<?>>
     List<Object> list = new ArrayList<Object>();
 
     @Override
-    public void addSimple( String name, Object value )
+    public void addProperty( String name, Object value )
     {
         throw new YogaRuntimeException( new IllegalAccessError(
                 "you shouldn't be calling this method for a list" ) );
     }
 
     @Override
-    public void addSimple( Object instance )
+    public void addValue( Object instance )
     {
         list.add( instance );
     }

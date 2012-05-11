@@ -5,26 +5,26 @@ public abstract class AbstractHierarchicalModel<T> implements HierarchicalModel<
 {
 
     @Override
-    public HierarchicalModel<?> createChild( String name )
+    public HierarchicalModel<?> createChildMap( String name )
 
     {
         MapHierarchicalModel child = new MapHierarchicalModel();
-        createSimple( name ).addSimple( child.getUnderlyingModel() );
+        addProperty( name, child.getUnderlyingModel() );
         return child;
     }
     
-    public HierarchicalModel<?> createChild()
+    public HierarchicalModel<?> createChildMap()
     {
         MapHierarchicalModel child = new MapHierarchicalModel();
-        addSimple( child.getUnderlyingModel() );
+        addValue( child.getUnderlyingModel() );
         return child;
     }
 
     @Override
-    public HierarchicalModel<?> createList( String name )
+    public HierarchicalModel<?> createChildList( String name )
     {
         ListHierarchicalModel child = new ListHierarchicalModel();
-        createSimple( name ).addSimple( child.getUnderlyingModel() );
+        addProperty( name, child.getUnderlyingModel() );
         return child;
     }
 

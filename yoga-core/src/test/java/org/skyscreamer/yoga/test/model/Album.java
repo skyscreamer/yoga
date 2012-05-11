@@ -2,6 +2,8 @@ package org.skyscreamer.yoga.test.model;
 
 import java.util.List;
 
+import org.skyscreamer.yoga.annotations.Core;
+
 /**
  * User: corby
  * Date: 5/6/12
@@ -23,6 +25,7 @@ public class Album
         _songs = songs;
     }
 
+    @Core
     public int getId()
     {
         return _id;

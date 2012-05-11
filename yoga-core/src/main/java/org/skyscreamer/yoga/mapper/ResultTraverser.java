@@ -1,142 +1,149 @@
 package org.skyscreamer.yoga.mapper;
 
-import org.skyscreamer.yoga.annotations.ExtraField;
-import org.skyscreamer.yoga.enricher.Enricher;
-import org.skyscreamer.yoga.enricher.HrefEnricher;
-import org.skyscreamer.yoga.enricher.ModelDefinitionBuilder;
-import org.skyscreamer.yoga.enricher.NavigationLinksEnricher;
+import static org.skyscreamer.yoga.util.ObjectUtil.isPrimitive;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.beanutils.PropertyUtils;
+import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
+import org.skyscreamer.yoga.listener.RenderingEvent;
+import org.skyscreamer.yoga.listener.RenderingEventType;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.selector.Selector;
-
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.skyscreamer.yoga.metadata.PropertyUtil.getReadableProperties;
-import static org.skyscreamer.yoga.util.ObjectUtil.isPrimitive;
+import org.skyscreamer.yoga.util.ClassFinderStrategy;
+import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 
 public class ResultTraverser
 {
-    private static final List<Enricher> DEFAULT_ENRICHERS = Arrays.asList( new HrefEnricher(),
-            new ModelDefinitionBuilder(), new NavigationLinksEnricher() );
 
-    private List<Enricher> _enrichers = DEFAULT_ENRICHERS;
+    protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
 
-    private YogaInstanceContextFactory instanceContextFactory;
-
-    public void traverse( Object instance, Selector fieldSelector, HierarchicalModel<?> model,
+    @SuppressWarnings("unchecked")
+    public void traverse( Object instance, Selector selector, HierarchicalModel<?> model,
             YogaRequestContext context )
     {
-        if ( instance == null )
+        if (instance == null)
         {
             return;
         }
 
-        if (Iterable.class.isAssignableFrom( instance.getClass() ))
+        if (instance instanceof Map)
         {
-            for (Object o : (Iterable<?>) instance)
+            traverseMap( (Map<String, Object>) instance, selector, model, context );
+        }
+        else if (instance instanceof Iterable)
+        {
+            traverseIterable( (Iterable<?>) instance, selector, model, context );
+        }
+        else
+        {
+            traversePojo( instance, selector, model, context );
+        }
+    }
 
+    protected void traverseIterable( Iterable<?> instance, Selector selector,
+            HierarchicalModel<?> model, YogaRequestContext context )
+    {
+        for (Object o : instance)
+        {
+            if (isPrimitive( o.getClass() ))
             {
-                if ( isPrimitive( o.getClass() ) )
+                model.addValue( o );
+            }
+            else
+            {
+                traverse( o, selector, model.createChildMap(), context );
+            }
+        }
+        context.emitEvent( new RenderingEvent( RenderingEventType.LIST_CHILD, model, instance,
+                instance.getClass(), context, selector ) );
+    }
+
+    protected void traverseMap( Map<String, Object> map, Selector selector,
+            HierarchicalModel<?> model, YogaRequestContext context )
+    {
+        for (Entry<String, Object> entry : map.entrySet())
+        {
+            if (isPrimitive( entry.getValue().getClass() ))
+            {
+                model.addProperty( entry.getKey(), entry.getValue() );
+            }
+            else
+            {
+                HierarchicalModel<?> childModel = model.createChildMap( entry.getKey() );
+                traverse( entry.getValue(), selector, childModel, context );
+            }
+        }
+        context.emitEvent( new RenderingEvent( RenderingEventType.POJO_CHILD, model, map, map
+                .getClass(), context, selector ) );
+    }
+
+    protected void traversePojo( Object instance, Selector selector, HierarchicalModel<?> model,
+            YogaRequestContext context )
+    {
+        Class<?> instanceType = _classFinderStrategy.findClass( instance );
+        addInstanceFields( instance, instanceType, model, selector, context );
+
+        context.emitEvent( new RenderingEvent( RenderingEventType.POJO_CHILD, model, instance,
+                instanceType, context, selector ) );
+    }
+
+    public void addInstanceFields( Object instance, Class<?> instanceType,
+            HierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext )
+    {
+        Collection<String> fieldNames = selector.getSelectedFieldNames( instanceType );
+
+        for (String fieldName : fieldNames)
+        {
+            if (!PropertyUtils.isReadable( instance, fieldName ))
+            {
+                // this could be either a FieldPopulator value or a mistake by the user
+                continue;
+            }
+            try
+            {
+                Object value = PropertyUtils.getNestedProperty( instance, fieldName );
+                traverseValue( instanceType, model, selector, requestContext, fieldName, value );
+            }
+            catch (Exception e)
+            {
+                throw new YogaRuntimeException( e );
+            }
+        }
+    }
+
+    public void traverseValue( Class<?> parentType, HierarchicalModel<?> parentModel,
+            Selector parentSelector, YogaRequestContext requestContext, String fieldName,
+            Object fieldValue )
+    {
+        if (fieldValue != null)
+        {
+            if (isPrimitive( fieldValue.getClass() ))
+            {
+                parentModel.addProperty( fieldName, fieldValue );
+            }
+            else
+            {
+                Selector childSelector = parentSelector.getSelector( parentType, fieldName );
+                if (Iterable.class.isAssignableFrom( fieldValue.getClass() ))
                 {
-                    model.addSimple( o );
+                    traverseIterable( (Iterable<?>) fieldValue, childSelector,
+                            parentModel.createChildList( fieldName ), requestContext );
                 }
                 else
                 {
-                    HierarchicalModel<?> childModel = model.createChild();
-                    traverse( o, fieldSelector, childModel, context );
+                    traverse( fieldValue, childSelector, parentModel.createChildMap( fieldName ),
+                            requestContext );
                 }
             }
-        }
-        else
-        {
-            YogaInstanceContext<?> entityContext = instanceContextFactory
-                .createEntityContext( instance, fieldSelector, model, context );
-            
-            for (Enricher enricher : _enrichers)
-            {
-                enricher.enrich( entityContext );
-            }
-
-            addInstanceFields( entityContext );
-            addPopulatorExtraFields( entityContext );
-        }
-    }
-
-    protected void addInstanceFields(YogaInstanceContext<?> entityContext)
-    {
-        List<PropertyDescriptor> readableProperties = getReadableProperties( entityContext
-                .getInstanceType() );
-
-        for ( PropertyDescriptor property : readableProperties )
-        {
-            if ( entityContext.containsInstanceField( property ) )
-            {
-                String propertyName = property.getName();
-                Object fieldValue = entityContext.getInstanceFieldValue( propertyName );
-                addChild( propertyName, fieldValue, entityContext );
-            }
-        }
-    }
-
-    protected void addPopulatorExtraFields( YogaInstanceContext<?> entityContext )
-    {
-        List<Method> populatorExtraFieldMethods = entityContext.getPopulatorExtraFieldMethods();
-
-        for ( Method method : populatorExtraFieldMethods )
-        {
-            String propertyName = method.getAnnotation( ExtraField.class ).value();
-            Object fieldValue = entityContext.getPopulatorFieldValue( method );
-            addChild( propertyName, fieldValue, entityContext );
-        }
-    }
-
-    protected void addChild(String fieldName, Object fieldValue,
-            YogaInstanceContext<?> parentContext)
-    {
-        if ( fieldValue == null )
-        {
-            return;
-        }
-
-        HierarchicalModel<?> model = parentContext.getModel();
-
-        if ( isPrimitive( fieldValue.getClass() ) )
-        {
-            model.addSimple( fieldName, fieldValue );
-        }
-        else
-        {
-            HierarchicalModel<?> childModel = getChildModel( fieldName, fieldValue, model );
-            Selector childSelector = parentContext.getFieldSelector().getField( fieldName );
-            traverse( fieldValue, childSelector, childModel, parentContext.getRequestContext() );
-        }
-    }
-
-
-    protected HierarchicalModel<?> getChildModel(String fieldName, Object fieldValue,
-            HierarchicalModel<?> model)
-    {
-        if (Iterable.class.isAssignableFrom( fieldValue.getClass() ))
-        {
-            return model.createList( fieldName );
-        }
-        else
-        {
-            return model.createChild( fieldName );
         }
     }
 
     // GETTERS / SETTERS
-
-    public void setEnrichers( List<Enricher> enrichers )
+    public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
-        this._enrichers = enrichers;
-    }
-
-    public void setInstanceContextFactory( YogaInstanceContextFactory instanceContextFactory )
-    {
-        this.instanceContextFactory = instanceContextFactory;
+        this._classFinderStrategy = classFinderStrategy;
     }
 }

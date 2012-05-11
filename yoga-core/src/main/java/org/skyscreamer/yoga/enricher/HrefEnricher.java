@@ -1,13 +1,15 @@
 package org.skyscreamer.yoga.enricher;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
-import org.skyscreamer.yoga.mapper.YogaInstanceContext;
+import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.populator.FieldPopulator;
+import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.populator.ValueReader;
-import org.skyscreamer.yoga.selector.SelectorParser;
+import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
 
 public class HrefEnricher implements Enricher
@@ -16,53 +18,57 @@ public class HrefEnricher implements Enricher
     private URICreator _uriCreator = new URICreator();
 
     @Override
-    public void enrich( YogaInstanceContext<?> entityContext )
+    public void enrich( RenderingEvent event )
     {
-        String urlTemplate = determineTemplate(
-                entityContext.getInstanceType(),
-                entityContext.getPopulator() );
+        YogaRequestContext requestContext = event.getRequestContext();
+        Class<?> valueType = event.getValueType();
+        String urlSuffix = requestContext.getUrlSuffix();
+        HierarchicalModel<?> model = event.getModel();
+        HttpServletResponse response = requestContext.getResponse();
+
+        addUrl( event.getValue(), valueType, urlSuffix, model, response );
+    }
+
+    public void addUrl( Object value, Class<?> valueType, String urlSuffix,
+            HierarchicalModel<?> model, HttpServletResponse response )
+    {
+        String urlTemplate = determineTemplate( valueType );
 
         if ( urlTemplate != null )
         {
-            YogaRequestContext requestContext = entityContext.getRequestContext();
-            String urlSuffix = requestContext.getUrlSuffix();
             if ( urlSuffix != null )
             {
                 urlTemplate += "." + urlSuffix;
             }
-            String url = getUrl( urlTemplate, entityContext );
-            entityContext.getModel().addSimple( SelectorParser.HREF, url );
+            String url = getUrl( urlTemplate, value, valueType, response );
+            model.addProperty( SelectorParser.HREF, url );
         }
     }
 
-    protected String determineTemplate( Class<?> instanceType, FieldPopulator populator )
+    protected String determineTemplate( Class<?> instanceType )
     {
         if ( instanceType.isAnnotationPresent( URITemplate.class ) )
         {
             return instanceType.getAnnotation( URITemplate.class ).value();
         }
-        else if ( populator != null && populator.getUriTemplate() != null )
-        {
-            return populator.getUriTemplate();
-        }
         return null;
     }
 
-    protected String getUrl( String uriTemplate, final YogaInstanceContext<?> entityContext )
+    public String getUrl( String uriTemplate, final Object value, final Class<?> valueType, HttpServletResponse response )
     {
-        return _uriCreator.getHref( uriTemplate, entityContext.getRequestContext().getResponse(), new ValueReader()
+        return _uriCreator.getHref( uriTemplate, response, new ValueReader()
         {
             @Override
             public Object getValue( String property )
             {
                 try
                 {
-                    return PropertyUtils.getNestedProperty( entityContext.getInstance(), property );
+                    return PropertyUtils.getNestedProperty( value, property );
                 }
                 catch ( Exception e )
                 {
                     throw new YogaRuntimeException( "Could not invoke getter for property " + property
-                            + " on class " + entityContext.getInstanceType().getName(), e );
+                            + " on class " + valueType.getName(), e );
                 }
             }
         } );

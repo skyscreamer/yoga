@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.enricher;
 
-import org.skyscreamer.yoga.mapper.YogaInstanceContext;
+import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.selector.CoreSelector;
 
 /**
@@ -13,16 +13,17 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
     private String suffix = "yoga";
 
     @Override
-    public void enrich( YogaInstanceContext<?> entityContext )
+    public void enrich( RenderingEvent event )
     {
-        if ( entityContext.getFieldSelector() instanceof CoreSelector )
+        if ( event.getSelector() instanceof CoreSelector )
         {
-            String href = determineTemplate( entityContext.getInstanceType(), entityContext.getPopulator() );
+            String href = determineTemplate( event.getValueType() );
 
             if ( href != null )
             {
                 href += "." + suffix;
-                entityContext.getModel().addSimple( FIELD_NAME, getUrl( href, entityContext) );
+                String url = getUrl( href, event.getValue(), event.getValueType(), event.getRequestContext().getResponse() );
+                event.getModel().addProperty( FIELD_NAME, url );
             }
             return;
         }

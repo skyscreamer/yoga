@@ -14,10 +14,11 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyWriter;
 
+import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.SelectorParser;
+import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.springmvc.view.AbstractYogaView;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,8 +30,11 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     @Autowired
     protected SelectorParser _selectorParser;
 
+    @Autowired
+    protected RenderingListenerRegistry _registry;
+
     @Context
-    HttpServletRequest request;
+    HttpServletRequest _request;
 
     @Context
     HttpServletResponse response;
@@ -57,8 +61,8 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
             AbstractYogaView view = getView();
             view.setResultTraverser( _resultTraverser );
             view.setSelectorParser( _selectorParser );
-            Selector selector = view.getSelector( request );
-            YogaRequestContext context = new YogaRequestContext( view.getHrefSuffix(), request, response );
+            Selector selector = view.getSelector( _request );
+            YogaRequestContext context = new YogaRequestContext( view.getHrefSuffix(), _request, response, _registry.getListeners() );
             view.render( selector, t, context );
         } catch ( RuntimeException e )
         {

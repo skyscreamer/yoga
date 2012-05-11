@@ -21,7 +21,7 @@ public class XmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public void addSimple( String name, Object result )
+    public void addProperty( String name, Object result )
     {
         if ( name.equals( "href" ) )
         {
@@ -34,13 +34,13 @@ public class XmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public HierarchicalModel<Element> createChild( String name )
+    public HierarchicalModel<Element> createChildMap( String name )
     {
         return new XmlHierarchyModel( element.addElement( name ) );
     }
 
     @Override
-    public HierarchicalModel<Element> createChild()
+    public HierarchicalModel<Element> createChildMap()
     {
         if (defaultName != null)
         {
@@ -53,7 +53,7 @@ public class XmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public HierarchicalModel<Element> createList( String name )
+    public HierarchicalModel<Element> createChildList( String name )
     {
         return new XmlHierarchyModel( element, name );
     }
@@ -65,11 +65,11 @@ public class XmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public void addSimple( Object instance )
+    public void addValue( Object instance )
     {
         if (defaultName != null)
         {
-            addSimple( defaultName, instance );
+            addProperty( defaultName, instance );
         }
         else
         {

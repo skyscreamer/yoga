@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.selector;
+package org.skyscreamer.yoga.selector.parser;
 
 import java.util.Map;
 

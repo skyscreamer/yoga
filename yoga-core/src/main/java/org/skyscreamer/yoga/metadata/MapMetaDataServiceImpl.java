@@ -1,11 +1,6 @@
 package org.skyscreamer.yoga.metadata;
 
-import org.skyscreamer.yoga.annotations.Core;
-import org.skyscreamer.yoga.annotations.ExtraField;
-import org.skyscreamer.yoga.populator.FieldPopulator;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
-import org.skyscreamer.yoga.util.NameUtil;
-import org.skyscreamer.yoga.util.ObjectUtil;
+import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -16,7 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
+import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.annotations.ExtraField;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.util.NameUtil;
+import org.skyscreamer.yoga.util.ObjectUtil;
 
 public class MapMetaDataServiceImpl implements MetaDataService
 {
@@ -122,7 +121,7 @@ public class MapMetaDataServiceImpl implements MetaDataService
 
     protected void addPopulatorFields( Class<?> type, String suffix, TypeMetaData result )
     {
-        FieldPopulator fieldPopulator = null;
+        Object fieldPopulator = null;
         if ( _fieldPopulatorRegistry != null )
         {
             fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( type );

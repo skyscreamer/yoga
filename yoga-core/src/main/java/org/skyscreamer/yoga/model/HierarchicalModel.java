@@ -3,15 +3,15 @@ package org.skyscreamer.yoga.model;
 public interface HierarchicalModel<T>
 {
 
-    void addSimple( String name, Object result );
+    void addProperty( String name, Object result );
 
-    void addSimple( Object instance );
+    void addValue( Object instance );
 
-    HierarchicalModel<?> createChild( String name );
+    HierarchicalModel<?> createChildMap( String name );
 
-    HierarchicalModel<?> createChild();
+    HierarchicalModel<?> createChildMap();
 
-    HierarchicalModel<?> createList( String name );
+    HierarchicalModel<?> createChildList( String name );
 
     HierarchicalModel<?> createSimple( String name );
 

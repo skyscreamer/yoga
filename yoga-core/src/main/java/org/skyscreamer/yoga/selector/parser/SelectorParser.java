@@ -1,6 +1,9 @@
-package org.skyscreamer.yoga.selector;
+package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+import org.skyscreamer.yoga.selector.CompositeSelector;
+import org.skyscreamer.yoga.selector.FieldSelector;
+import org.skyscreamer.yoga.selector.Selector;
 
 /**
  * A SelectorParser takes a string selector argument and translates it into a
@@ -19,13 +22,20 @@ public abstract class SelectorParser
     protected AliasSelectorResolver _aliasSelectorResolver;
     protected boolean _disableExplicitSelectors = false;
 
-    protected abstract Selector parse( String selectorExpression ) throws ParseSelectorException;
+    protected abstract FieldSelector parse( String selectorExpression ) throws ParseSelectorException;
 
     public Selector parseSelector( String selectorExpression ) throws ParseSelectorException
     {
+        CompositeSelector parent = new CompositeSelector();
+        parseSelector( selectorExpression, parent );
+        return parent;
+    }
+
+    public void parseSelector( String selectorExpression, CompositeSelector parent ) throws ParseSelectorException
+    {
         if ( selectorExpression == null )
         {
-            return new CoreSelector();
+            return;
         }
 
         if ( _disableExplicitSelectors && !selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
@@ -38,12 +48,14 @@ public abstract class SelectorParser
             selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
         }
 
-        Selector selector = new CoreSelector();
         if ( selectorExpression != null )
         {
-            selector = new CompositeSelector( selector, parse( selectorExpression ) );
+            FieldSelector fieldSelector = parse( selectorExpression );
+            if(fieldSelector != null && !fieldSelector.getSelectors( null ).isEmpty() )
+            {
+                parent.add( fieldSelector );
+            }
         }
-        return selector;
     }
 
     public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )

@@ -15,7 +15,7 @@ public class XhtmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public void addSimple( String name, Object result )
+    public void addProperty( String name, Object result )
     {
         String elementName = childName == null ? name : childName;
         if ( elementName.equals( "href" ) )
@@ -35,27 +35,27 @@ public class XhtmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public HierarchicalModel<Element> createChild( String property )
+    public HierarchicalModel<Element> createChildMap( String property )
     {
         return new XhtmlHierarchyModel( element.addElement( "div" )
                 .addAttribute( "class", property ) );
     }
 
     @Override
-    public HierarchicalModel<Element> createChild()
+    public HierarchicalModel<Element> createChildMap()
     {
         return new XhtmlHierarchyModel( element.addElement( "div" ) );
     }
 
     @Override
-    public HierarchicalModel<Element> createList( String property )
+    public HierarchicalModel<Element> createChildList( String property )
     {
         Element div = element.addElement( "div" ).addAttribute( "class", property );
         return new XhtmlHierarchyModel( div );
     }
 
     @Override
-    public void addSimple( Object instance )
+    public void addValue( Object instance )
     {
         if ( childName != null )
             element.addElement( childName ).setText( instance.toString() );
