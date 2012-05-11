@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.test.data;
+package org.skyscreamer.yoga.test.model.basic;
 
 import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;

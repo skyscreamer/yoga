@@ -3,14 +3,14 @@ package org.skyscreamer.yoga.mapper;
 import static org.skyscreamer.yoga.util.ObjectUtil.isPrimitive;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.listener.RenderingEventType;
 import org.skyscreamer.yoga.model.HierarchicalModel;
+import org.skyscreamer.yoga.model.ListHierarchicalModel;
+import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
@@ -20,7 +20,6 @@ public class ResultTraverser
 
     protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
 
-    @SuppressWarnings("unchecked")
     public void traverse( Object instance, Selector selector, HierarchicalModel<?> model,
             YogaRequestContext context )
     {
@@ -29,22 +28,26 @@ public class ResultTraverser
             return;
         }
 
-        if (instance instanceof Map)
+//        if (instance instanceof Map)
+//        {
+//            traverseMap( (Map<String, Object>) instance, selector, (MapHierarchicalModel<?>) model,
+//                    context );
+//        }
+//        else 
+        
+        if (instance instanceof Iterable)
         {
-            traverseMap( (Map<String, Object>) instance, selector, model, context );
-        }
-        else if (instance instanceof Iterable)
-        {
-            traverseIterable( (Iterable<?>) instance, selector, model, context );
+            traverseIterable( (Iterable<?>) instance, selector, (ListHierarchicalModel<?>) model,
+                    context );
         }
         else
         {
-            traversePojo( instance, selector, model, context );
+            traversePojo( instance, selector, (MapHierarchicalModel<?>) model, context );
         }
     }
 
     protected void traverseIterable( Iterable<?> instance, Selector selector,
-            HierarchicalModel<?> model, YogaRequestContext context )
+            ListHierarchicalModel<?> model, YogaRequestContext context )
     {
         for (Object o : instance)
         {
@@ -61,11 +64,16 @@ public class ResultTraverser
                 instance.getClass(), context, selector ) );
     }
 
+    /* TODO: Figure this one out... all of our selectors are pojo based 
     protected void traverseMap( Map<String, Object> map, Selector selector,
-            HierarchicalModel<?> model, YogaRequestContext context )
+            MapHierarchicalModel<?> model, YogaRequestContext context )
     {
         for (Entry<String, Object> entry : map.entrySet())
         {
+            if (!selector.containsField( entry.getKey() ))
+            {
+                continue;
+            }
             if (isPrimitive( entry.getValue().getClass() ))
             {
                 model.addProperty( entry.getKey(), entry.getValue() );
@@ -73,14 +81,15 @@ public class ResultTraverser
             else
             {
                 HierarchicalModel<?> childModel = model.createChildMap( entry.getKey() );
-                traverse( entry.getValue(), selector, childModel, context );
+                traverse( entry.getValue(), selector.getChildSelector( entry.getKey() ), childModel, context );
             }
         }
         context.emitEvent( new RenderingEvent( RenderingEventType.POJO_CHILD, model, map, map
                 .getClass(), context, selector ) );
     }
+    */
 
-    protected void traversePojo( Object instance, Selector selector, HierarchicalModel<?> model,
+    protected void traversePojo( Object instance, Selector selector, MapHierarchicalModel<?> model,
             YogaRequestContext context )
     {
         Class<?> instanceType = _classFinderStrategy.findClass( instance );
@@ -91,7 +100,7 @@ public class ResultTraverser
     }
 
     public void addInstanceFields( Object instance, Class<?> instanceType,
-            HierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext )
+            MapHierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext )
     {
         Collection<String> fieldNames = selector.getSelectedFieldNames( instanceType );
 
@@ -99,7 +108,8 @@ public class ResultTraverser
         {
             if (!PropertyUtils.isReadable( instance, fieldName ))
             {
-                // this could be either a FieldPopulator value or a mistake by the user
+                // this could be either a FieldPopulator value or a mistake by
+                // the user
                 continue;
             }
             try
@@ -114,7 +124,7 @@ public class ResultTraverser
         }
     }
 
-    public void traverseValue( Class<?> parentType, HierarchicalModel<?> parentModel,
+    public void traverseValue( Class<?> parentType, MapHierarchicalModel<?> parentModel,
             Selector parentSelector, YogaRequestContext requestContext, String fieldName,
             Object fieldValue )
     {
@@ -126,7 +136,7 @@ public class ResultTraverser
             }
             else
             {
-                Selector childSelector = parentSelector.getSelector( parentType, fieldName );
+                Selector childSelector = parentSelector.getChildSelector( parentType, fieldName );
                 if (Iterable.class.isAssignableFrom( fieldValue.getClass() ))
                 {
                     traverseIterable( (Iterable<?>) fieldValue, childSelector,
@@ -134,7 +144,7 @@ public class ResultTraverser
                 }
                 else
                 {
-                    traverse( fieldValue, childSelector, parentModel.createChildMap( fieldName ),
+                    traversePojo( fieldValue, childSelector, parentModel.createChildMap( fieldName ),
                             requestContext );
                 }
             }

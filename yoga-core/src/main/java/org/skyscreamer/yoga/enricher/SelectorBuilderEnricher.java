@@ -1,7 +1,7 @@
 package org.skyscreamer.yoga.enricher;
 
 import org.skyscreamer.yoga.listener.RenderingEvent;
-import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
 /**
  * Created by IntelliJ IDEA. User: cpage Date: 12/10/11 Time: 3:59 PM
@@ -15,7 +15,7 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
     @Override
     public void enrich( RenderingEvent event )
     {
-        if ( event.getSelector() instanceof CoreSelector )
+        if (!event.getSelector().isInfluencedExternally())
         {
             String href = determineTemplate( event.getValueType() );
 
@@ -23,7 +23,7 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
             {
                 href += "." + suffix;
                 String url = getUrl( href, event.getValue(), event.getValueType(), event.getRequestContext().getResponse() );
-                event.getModel().addProperty( FIELD_NAME, url );
+                ((MapHierarchicalModel<?>)event.getModel() ).addProperty( FIELD_NAME, url );
             }
             return;
         }

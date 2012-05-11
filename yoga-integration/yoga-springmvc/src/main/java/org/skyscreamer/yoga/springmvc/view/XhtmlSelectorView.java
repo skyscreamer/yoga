@@ -6,7 +6,7 @@ import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
-import org.skyscreamer.yoga.model.XhtmlHierarchyModel;
+import org.skyscreamer.yoga.model.XhtmlHierarchyModelImpl;
 import org.skyscreamer.yoga.selector.Selector;
 
 public class XhtmlSelectorView extends AbstractXmlYogaView
@@ -28,7 +28,7 @@ public class XhtmlSelectorView extends AbstractXmlYogaView
         Element topDiv = rootElement.addElement( "body" ).addElement( "div" )
                 .addAttribute( "class", getClassName( value ) );
 
-        return new XhtmlHierarchyModel( topDiv );
+        return new XhtmlHierarchyModelImpl( topDiv );
     }
 
     protected void initHead( Element rootElement )

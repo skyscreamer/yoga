@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.test;
+package org.skyscreamer.yoga.test.util;
 
 import java.util.List;
 import java.util.Map;
@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
@@ -56,7 +56,7 @@ public abstract class AbstractTraverserTest
     public Map<String, Object> doTraverse( Object instance, ResultTraverser traverser, YogaRequestContext context,
             Selector selector )
     {
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         traverser.traverse( instance, selector, model, context );
         return model.getUnderlyingModel();
     }

@@ -46,22 +46,14 @@ public class CompositeSelector implements Selector
     }
 
     @Override
-    public Selector getSelector( Class<?> instanceType, String fieldName )
+    public Selector getChildSelector( Class<?> instanceType, String fieldName )
     {
         CompositeSelector child = new CompositeSelector();
         for (Selector selector : _selectors)
         {
-            child.add( selector.getSelector( instanceType, fieldName ) );
+            child.add( selector.getChildSelector( instanceType, fieldName ) );
         }
-        switch (child._selectors.size())
-        {
-            case 0:
-                return null;
-            case 1:
-                return child._selectors.get( 0 );
-            default:
-                return child;
-        }
+        return child;
     }
 
     @Override
@@ -119,5 +111,18 @@ public class CompositeSelector implements Selector
     public int subSelectorCount()
     {
         return _selectors.size();
+    }
+
+    @Override
+    public boolean isInfluencedExternally()
+    {
+        for (Selector selector : _selectors)
+        {
+            if (selector.isInfluencedExternally())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

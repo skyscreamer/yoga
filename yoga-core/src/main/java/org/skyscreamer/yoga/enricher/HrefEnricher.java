@@ -7,10 +7,10 @@ import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.model.HierarchicalModel;
-import org.skyscreamer.yoga.populator.ValueReader;
+import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
+import org.skyscreamer.yoga.util.ValueReader;
 
 public class HrefEnricher implements Enricher
 {
@@ -23,14 +23,14 @@ public class HrefEnricher implements Enricher
         YogaRequestContext requestContext = event.getRequestContext();
         Class<?> valueType = event.getValueType();
         String urlSuffix = requestContext.getUrlSuffix();
-        HierarchicalModel<?> model = event.getModel();
+        MapHierarchicalModel<?> model = (MapHierarchicalModel<?>) event.getModel();
         HttpServletResponse response = requestContext.getResponse();
 
         addUrl( event.getValue(), valueType, urlSuffix, model, response );
     }
 
     public void addUrl( Object value, Class<?> valueType, String urlSuffix,
-            HierarchicalModel<?> model, HttpServletResponse response )
+            MapHierarchicalModel<?> model, HttpServletResponse response )
     {
         String urlTemplate = determineTemplate( valueType );
 

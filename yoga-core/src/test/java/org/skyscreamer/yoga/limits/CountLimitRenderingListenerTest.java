@@ -7,11 +7,11 @@ import org.junit.Test;
 import org.skyscreamer.yoga.exceptions.EntityCountExceededException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.model.ListHierarchicalModel;
+import org.skyscreamer.yoga.model.ObjectListHierarchicalModelImpl;
 import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.test.DummyHttpServletRequest;
-import org.skyscreamer.yoga.test.DummyHttpServletResponse;
-import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
+import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
+import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
+import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 
 public class CountLimitRenderingListenerTest
 {
@@ -35,7 +35,7 @@ public class CountLimitRenderingListenerTest
         {
             input.add( new BasicTestDataLeaf() );
         }
-        ListHierarchicalModel model = new ListHierarchicalModel();
+        ObjectListHierarchicalModelImpl model = new ObjectListHierarchicalModelImpl();
         resultTraverser.traverse( input, new CoreSelector(), model, requestContext );
     }
 }

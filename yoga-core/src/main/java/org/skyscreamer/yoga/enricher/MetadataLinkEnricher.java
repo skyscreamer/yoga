@@ -2,7 +2,7 @@ package org.skyscreamer.yoga.enricher;
 
 import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.metadata.MetaDataService;
-import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
 public class MetadataLinkEnricher implements Enricher
 {
@@ -16,19 +16,19 @@ public class MetadataLinkEnricher implements Enricher
     @Override
     public void enrich( RenderingEvent event )
     {
-        if ( !(event.getSelector() instanceof CoreSelector) )
+        if (event.getSelector().isInfluencedExternally())
         {
             return;
         }
 
         Class<?> type = event.getValueType();
         String urlSuffix = event.getRequestContext().getUrlSuffix();
-        
+
         String url = metaDataService.getMetadataHref( type, urlSuffix );
 
-        if(url != null)
+        if (url != null)
         {
-            event.getModel().createChildMap( "metadata" ).addProperty( "href", url );
+           ( (MapHierarchicalModel<?>) event.getModel() ).createChildMap( "metadata" ).addProperty( "href", url );
         }
     }
 

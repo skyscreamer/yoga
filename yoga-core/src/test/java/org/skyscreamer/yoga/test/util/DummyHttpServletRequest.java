@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.test;
+package org.skyscreamer.yoga.test.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

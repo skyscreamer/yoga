@@ -1,9 +1,9 @@
-package org.skyscreamer.yoga.test.data;
+package org.skyscreamer.yoga.test.model.basic;
 
-import org.skyscreamer.yoga.test.model.Album;
-import org.skyscreamer.yoga.test.model.Artist;
-import org.skyscreamer.yoga.test.model.Song;
-import org.skyscreamer.yoga.test.model.User;
+import org.skyscreamer.yoga.test.model.extended.Album;
+import org.skyscreamer.yoga.test.model.extended.Artist;
+import org.skyscreamer.yoga.test.model.extended.Song;
+import org.skyscreamer.yoga.test.model.extended.User;
 
 import java.util.ArrayList;
 import java.util.HashSet;

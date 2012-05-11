@@ -3,13 +3,13 @@ package org.skyscreamer.yoga.model;
 import org.dom4j.Element;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
-public class XhtmlHierarchyModel implements HierarchicalModel<Element>
+public class XhtmlHierarchyModelImpl implements MapHierarchicalModel<Element>, ListHierarchicalModel<Element>
 {
     Element element;
     String childName = null;
     Element a = null;
 
-    public XhtmlHierarchyModel( Element element )
+    public XhtmlHierarchyModelImpl( Element element )
     {
         this.element = element;
     }
@@ -35,23 +35,23 @@ public class XhtmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public HierarchicalModel<Element> createChildMap( String property )
+    public MapHierarchicalModel<Element> createChildMap( String property )
     {
-        return new XhtmlHierarchyModel( element.addElement( "div" )
+        return new XhtmlHierarchyModelImpl( element.addElement( "div" )
                 .addAttribute( "class", property ) );
     }
 
     @Override
-    public HierarchicalModel<Element> createChildMap()
+    public MapHierarchicalModel<Element> createChildMap()
     {
-        return new XhtmlHierarchyModel( element.addElement( "div" ) );
+        return new XhtmlHierarchyModelImpl( element.addElement( "div" ) );
     }
 
     @Override
-    public HierarchicalModel<Element> createChildList( String property )
+    public ListHierarchicalModel<Element> createChildList( String property )
     {
         Element div = element.addElement( "div" ).addAttribute( "class", property );
-        return new XhtmlHierarchyModel( div );
+        return new XhtmlHierarchyModelImpl( div );
     }
 
     @Override
@@ -61,12 +61,6 @@ public class XhtmlHierarchyModel implements HierarchicalModel<Element>
             element.addElement( childName ).setText( instance.toString() );
         else
             throw new YogaRuntimeException( "childName was never set" );
-    }
-
-    @Override
-    public HierarchicalModel<?> createSimple( String property )
-    {
-        return new XmlTextElementHierarchyModel( element.addElement( property ) );
     }
 
     @Override

@@ -3,17 +3,17 @@ package org.skyscreamer.yoga.model;
 import org.dom4j.Element;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
-public class XmlHierarchyModel implements HierarchicalModel<Element>
+public class XmlHierarchyModelImpl implements MapHierarchicalModel<Element>, ListHierarchicalModel<Element>
 {
     protected Element element;
     protected String defaultName;
 
-    public XmlHierarchyModel( Element element )
+    public XmlHierarchyModelImpl( Element element )
     {
         this.element = element;
     }
 
-    public XmlHierarchyModel(Element element, String defaultName)
+    public XmlHierarchyModelImpl(Element element, String defaultName)
     {
         super();
         this.element = element;
@@ -34,17 +34,17 @@ public class XmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public HierarchicalModel<Element> createChildMap( String name )
+    public MapHierarchicalModel<Element> createChildMap( String name )
     {
-        return new XmlHierarchyModel( element.addElement( name ) );
+        return new XmlHierarchyModelImpl( element.addElement( name ) );
     }
 
     @Override
-    public HierarchicalModel<Element> createChildMap()
+    public MapHierarchicalModel<Element> createChildMap()
     {
         if (defaultName != null)
         {
-            return new XmlHierarchyModel( element.addElement( defaultName ) );
+            return new XmlHierarchyModelImpl( element.addElement( defaultName ) );
         }
         else
         {
@@ -53,15 +53,9 @@ public class XmlHierarchyModel implements HierarchicalModel<Element>
     }
 
     @Override
-    public HierarchicalModel<Element> createChildList( String name )
+    public ListHierarchicalModel<Element> createChildList( String name )
     {
-        return new XmlHierarchyModel( element, name );
-    }
-
-    @Override
-    public HierarchicalModel<?> createSimple( String property )
-    {
-        return new XmlTextElementHierarchyModel( element.addElement( property ) );
+        return new XmlHierarchyModelImpl( element, name );
     }
 
     @Override

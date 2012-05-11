@@ -13,12 +13,6 @@ public class MapSelector implements Selector
     protected Map<Class<?>, Set<String>> descriptors = new HashMap<Class<?>, Set<String>>();
 
     @Override
-    public Selector getSelector( Class<?> instanceType, String fieldName )
-    {
-        return this;
-    }
-
-    @Override
     public boolean containsField( Class<?> instanceType, String property )
     {
         Set<String> fieldCollection = getFieldCollection( instanceType );
@@ -46,10 +40,16 @@ public class MapSelector implements Selector
         {
             for (String field : fields)
             {
-                result.put( field, this );
+                result.put( field, getChildSelector( instanceType, field ) );
             }
         }
         return result;
+    }
+
+    @Override
+    public Selector getChildSelector( Class<?> instanceType, String fieldName )
+    {
+        return this;
     }
 
     public void register( Class<?> instanceType, String... properties )
@@ -66,5 +66,11 @@ public class MapSelector implements Selector
     public Set<String> getAllPossibleFields( Class<?> instanceType )
     {
         return getSelectedFieldNames( instanceType );
+    }
+
+    @Override
+    public boolean isInfluencedExternally()
+    {
+        return false;
     }
 }

@@ -10,10 +10,10 @@ import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver;
 import org.skyscreamer.yoga.selector.parser.MapSelectorResolver;
-import org.skyscreamer.yoga.test.AbstractTraverserTest;
-import org.skyscreamer.yoga.test.data.DataGenerator;
-import org.skyscreamer.yoga.test.model.Artist;
-import org.skyscreamer.yoga.test.model.User;
+import org.skyscreamer.yoga.test.model.basic.DataGenerator;
+import org.skyscreamer.yoga.test.model.extended.Artist;
+import org.skyscreamer.yoga.test.model.extended.User;
+import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
 import org.springframework.core.io.ClassPathResource;
 
 /**

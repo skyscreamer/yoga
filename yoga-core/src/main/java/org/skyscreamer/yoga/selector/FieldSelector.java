@@ -10,7 +10,7 @@ public class FieldSelector implements Selector
     protected Map<String, Selector> subSelectors = new HashMap<String, Selector>();
 
     @Override
-    public Selector getSelector( Class<?> instanceType, String fieldName )
+    public Selector getChildSelector( Class<?> instanceType, String fieldName )
     {
         return getSelector( fieldName );
     }
@@ -63,6 +63,12 @@ public class FieldSelector implements Selector
     public Set<String> getAllPossibleFields( Class<?> instanceType )
     {
         return getFieldNames();
+    }
+    
+    @Override
+    public boolean isInfluencedExternally()
+    {
+        return true;
     }
 
 }

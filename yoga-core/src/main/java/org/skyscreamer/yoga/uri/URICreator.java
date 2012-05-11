@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.uri;
 
-import org.skyscreamer.yoga.populator.ValueReader;
+import org.skyscreamer.yoga.util.ValueReader;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;

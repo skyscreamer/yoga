@@ -8,12 +8,12 @@ import org.junit.Test;
 import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.listener.RenderingEventType;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.test.DummyHttpServletRequest;
-import org.skyscreamer.yoga.test.DummyHttpServletResponse;
-import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
-import org.skyscreamer.yoga.test.data.BasicTestDataNode;
+import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
+import org.skyscreamer.yoga.test.model.basic.BasicTestDataNode;
+import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
+import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 
 public class NavigationLinksEnricherTest
 {
@@ -24,7 +24,7 @@ public class NavigationLinksEnricherTest
     public void testBasic()
     {
         BasicTestDataLeaf leaf = new BasicTestDataLeaf();
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         RenderingEvent event = new RenderingEvent( RenderingEventType.POJO_CHILD, model, leaf,
                 leaf.getClass(), requestContext, new CoreSelector() );
         new NavigationLinksEnricher().enrich( event );
@@ -45,7 +45,7 @@ public class NavigationLinksEnricherTest
     {
         BasicTestDataNode node = new BasicTestDataNode();
         node.setId( "foo" );
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         RenderingEvent event = new RenderingEvent( RenderingEventType.POJO_CHILD, model, node,
                 node.getClass(), requestContext, new CoreSelector() );
         new NavigationLinksEnricher().enrich( event );

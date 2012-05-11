@@ -9,7 +9,7 @@ import org.skyscreamer.yoga.listener.RenderingEventType;
 import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.model.HierarchicalModel;
+import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.Selector;
 
 public class FieldPopulatorRenderingListenerAdapter implements RenderingListener
@@ -47,7 +47,7 @@ public class FieldPopulatorRenderingListenerAdapter implements RenderingListener
             return;
         }
 
-        HierarchicalModel<?> model = event.getModel();
+        MapHierarchicalModel<?> model = (MapHierarchicalModel<?>) event.getModel();
         Selector selector = event.getSelector();
         YogaRequestContext requestContext = event.getRequestContext();
         Object pojoInstance = event.getValue();

@@ -10,8 +10,8 @@ import java.util.List;
 import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
+import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
-import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 public class ModelDefinitionBuilder implements Enricher
@@ -27,7 +27,7 @@ public class ModelDefinitionBuilder implements Enricher
     @Override
     public void enrich( RenderingEvent event )
     {
-        if (!(event.getSelector() instanceof CoreSelector))
+        if (event.getSelector().isInfluencedExternally())
         {
             return;
         }
@@ -52,7 +52,7 @@ public class ModelDefinitionBuilder implements Enricher
                 }
             }
         }
-        event.getModel().addProperty( SelectorParser.DEFINITION, definition );
+        ( ( MapHierarchicalModel<?>) event.getModel()).addProperty( SelectorParser.DEFINITION, definition );
     }
 
 }

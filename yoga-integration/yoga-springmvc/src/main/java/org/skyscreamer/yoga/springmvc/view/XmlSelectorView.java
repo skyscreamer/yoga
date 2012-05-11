@@ -6,7 +6,7 @@ import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
-import org.skyscreamer.yoga.model.XmlHierarchyModel;
+import org.skyscreamer.yoga.model.XmlHierarchyModelImpl;
 import org.skyscreamer.yoga.selector.Selector;
 
 public class XmlSelectorView extends AbstractXmlYogaView
@@ -26,12 +26,12 @@ public class XmlSelectorView extends AbstractXmlYogaView
         {
             String name = getClassName( ((Iterable<?>) value).iterator().next() );
             DOMElement root = new DOMElement( "result" );
-            return new XmlHierarchyModel( root, name );
+            return new XmlHierarchyModelImpl( root, name );
         }
         else
         {
             DOMElement root = new DOMElement( getClassName( value ) );
-            return new XmlHierarchyModel( root );
+            return new XmlHierarchyModelImpl( root );
         }
     }
 

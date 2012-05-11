@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.test.model;
+package org.skyscreamer.yoga.test.model.extended;
 
 import org.skyscreamer.yoga.annotations.Core;
 

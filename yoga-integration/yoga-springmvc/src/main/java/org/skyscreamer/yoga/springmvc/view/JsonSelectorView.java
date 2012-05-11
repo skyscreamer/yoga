@@ -5,8 +5,8 @@ import javax.servlet.ServletOutputStream;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
-import org.skyscreamer.yoga.model.ListHierarchicalModel;
-import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.model.ObjectListHierarchicalModelImpl;
+import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.selector.Selector;
 
 public class JsonSelectorView extends AbstractYogaView
@@ -24,11 +24,11 @@ public class JsonSelectorView extends AbstractYogaView
     {
         if (value instanceof Iterable<?>)
         {
-            return new ListHierarchicalModel();
+            return new ObjectListHierarchicalModelImpl();
         }
         else
         {
-            return new MapHierarchicalModel();
+            return new ObjectMapHierarchicalModelImpl();
         }
 
     }

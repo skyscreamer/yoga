@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.populator;
+package org.skyscreamer.yoga.util;
 
 public interface ValueReader
 {

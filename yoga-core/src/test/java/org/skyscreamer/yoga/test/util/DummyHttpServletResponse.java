@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.test;
+package org.skyscreamer.yoga.test.util;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;

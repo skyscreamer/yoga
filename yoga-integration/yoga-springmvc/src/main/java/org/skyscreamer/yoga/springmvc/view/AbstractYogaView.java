@@ -67,10 +67,6 @@ public abstract class AbstractYogaView implements View
         CoreSelector coreSelector = new CoreSelector();
         CompositeSelector composite = new CompositeSelector( coreSelector );
         selectorParser.parseSelector( selectorString, composite );
-        if (composite.subSelectorCount() == 1)
-        {
-            return coreSelector;
-        }
         return composite;
     }
 

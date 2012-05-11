@@ -42,11 +42,11 @@ public class SelectorParserTest
     private void testSimpleSelector( Selector selector ) throws Exception
     {
         Assert.assertEquals( selector.getSelectors( null ).size(), 2 );
-        Selector genderField = selector.getSelector( null, "gender" );
+        Selector genderField = selector.getChildSelector( null, "gender" );
         Assert.assertNotNull( genderField );
         Assert.assertEquals( genderField.getSelectors( null ).size(), 0 );
 
-        Selector countryField = selector.getSelector( null, "country" );
+        Selector countryField = selector.getChildSelector( null, "country" );
         Assert.assertNotNull( countryField );
         Assert.assertEquals( countryField.getSelectors( null ).size(), 0 );
     }
@@ -54,32 +54,32 @@ public class SelectorParserTest
     private void testNestedSelectors( Selector selector ) throws Exception
     {
         Assert.assertEquals( selector.getSelectors( null ).size(), 3 );
-        Selector genderField = selector.getSelector( null, "gender" );
+        Selector genderField = selector.getChildSelector( null, "gender" );
         Assert.assertNotNull( genderField );
         Assert.assertEquals( genderField.getSelectors( null ).size(), 0 );
 
-        Selector favoriteArtistsField = selector.getSelector( null, "favoriteArtists" );
+        Selector favoriteArtistsField = selector.getChildSelector( null, "favoriteArtists" );
         Assert.assertNotNull( favoriteArtistsField );
         Assert.assertEquals( favoriteArtistsField.getSelectors( null ).size(), 2 );
 
-        Selector birthdayField = favoriteArtistsField.getSelector( null, "birthday" );
+        Selector birthdayField = favoriteArtistsField.getChildSelector( null, "birthday" );
         Assert.assertNotNull( birthdayField );
         Assert.assertEquals( birthdayField.getSelectors( null ).size(), 0 );
 
-        Selector discographyField = favoriteArtistsField.getSelector( null, "discography" );
+        Selector discographyField = favoriteArtistsField.getChildSelector( null, "discography" );
         Assert.assertNotNull( discographyField );
         Assert.assertEquals( discographyField.getSelectors( null ).size(), 2 );
 
-        Selector yearField = discographyField.getSelector( null, "year" );
+        Selector yearField = discographyField.getChildSelector( null, "year" );
         Assert.assertNotNull( yearField );
         Assert.assertEquals( yearField.getSelectors( null ).size(), 0 );
 
-        Selector titleField = discographyField.getSelector( null, "title" );
+        Selector titleField = discographyField.getChildSelector( null, "title" );
         Assert.assertNotNull( titleField );
         Assert.assertEquals( titleField.getSelectors( null ).size(), 0 );
 
         Assert.assertEquals( selector.getSelectors( null ).size(), 3 );
-        Selector friendsField = selector.getSelector( null, "friends" );
+        Selector friendsField = selector.getChildSelector( null, "friends" );
         Assert.assertNotNull( friendsField );
         Assert.assertEquals( friendsField.getSelectors( null ).size(), 0 );
     }

@@ -10,16 +10,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.listener.RenderingListener;
-import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.populator.FieldPopulatorRenderingListenerAdapter;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
-import org.skyscreamer.yoga.test.DummyHttpServletRequest;
-import org.skyscreamer.yoga.test.DummyHttpServletResponse;
-import org.skyscreamer.yoga.test.data.BasicTestDataLeaf;
-import org.skyscreamer.yoga.test.data.BasicTestDataNode;
+import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
+import org.skyscreamer.yoga.test.model.basic.BasicTestDataNode;
+import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
+import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 
 public class ResultTraverserTest
 {
@@ -54,7 +54,7 @@ public class ResultTraverserTest
     public void testBasicCoreSelector()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
         resultTraverser.traverse( input, new CoreSelector(), model, requestContext );
 
@@ -67,7 +67,7 @@ public class ResultTraverserTest
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         input.setOther( "someValue" );
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
         FieldSelector selector = new FieldSelector();
         selector.register( "other", new FieldSelector() );
@@ -84,7 +84,7 @@ public class ResultTraverserTest
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         List<String> list = Arrays.asList( "someValue", "aSecondValue" );
         input.setRandomStrings( list );
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
         FieldSelector selector = new FieldSelector();
         selector.register( "randomStrings", new FieldSelector() );
@@ -100,7 +100,7 @@ public class ResultTraverserTest
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         input.setOther( "someValue" );
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
         FieldSelector fieldSelector = new FieldSelector();
         fieldSelector.register( "other", new FieldSelector() );
@@ -125,7 +125,7 @@ public class ResultTraverserTest
         fieldSelector.register( "leaf", new FieldSelector() );
         CompositeSelector selector = new CompositeSelector( fieldSelector, new CoreSelector() );
 
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
         resultTraverser.traverse( input, selector, model, requestContext );
 
@@ -140,7 +140,7 @@ public class ResultTraverserTest
     public void testPopulator()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
-        MapHierarchicalModel model = new MapHierarchicalModel();
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         FieldSelector fieldSelector = new FieldSelector();
         fieldSelector.register( "someValue", new FieldSelector() );
         resultTraverser.traverse( input, fieldSelector, model, requestContext );
