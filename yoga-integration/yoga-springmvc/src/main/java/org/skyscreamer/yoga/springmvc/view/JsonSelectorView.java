@@ -1,50 +1,41 @@
 package org.skyscreamer.yoga.springmvc.view;
 
+import javax.servlet.ServletOutputStream;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.model.HierarchicalModel;
+import org.skyscreamer.yoga.model.ObjectListHierarchicalModelImpl;
+import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.selector.Selector;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class JsonSelectorView extends AbstractYogaView
 {
     @Override
-    public void render( OutputStream outputStream, Selector selector, Object value, HttpServletResponse response ) throws IOException
+    public void render(Selector selector, Object value, YogaRequestContext requestContext) throws Exception
     {
-        Object viewData;
-        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), response );
-        if ( value instanceof Iterable<?> )
+        HierarchicalModel<?> model = getModel( value );
+        resultTraverser.traverse( value, selector, model, requestContext );
+        ServletOutputStream outputStream = requestContext.getResponse().getOutputStream();
+        getObjectMapper().writeValue( outputStream, model.getUnderlyingModel() );
+    }
+
+    protected HierarchicalModel<?> getModel(Object value)
+    {
+        if (value instanceof Iterable<?>)
         {
-            List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-            for ( Object instance : (Iterable<?>) value )
-            {
-                list.add( getSingleResult( instance, selector, context ) );
-            }
-            viewData = list;
+            return new ObjectListHierarchicalModelImpl();
         }
         else
         {
-            viewData = getSingleResult( value, selector, context );
+            return new ObjectMapHierarchicalModelImpl();
         }
-        getObjectMapper().writeValue( outputStream, viewData );
+
     }
 
     protected ObjectMapper getObjectMapper()
     {
         return new ObjectMapper();
-    }
-
-    protected Map<String, Object> getSingleResult( Object value, Selector selector, YogaRequestContext context )
-    {
-        MapHierarchicalModel model = new MapHierarchicalModel();
-        resultTraverser.traverse( value, selector, model, context );
-        return model.getObjectTree();
     }
 
     @Override

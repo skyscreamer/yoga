@@ -1,53 +1,74 @@
 package org.skyscreamer.yoga.selector;
 
-import org.skyscreamer.yoga.populator.FieldPopulator;
-
-import java.beans.PropertyDescriptor;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class FieldSelector implements Selector
 {
-    private Map<String, Selector> _fields = new HashMap<String, Selector>();
+    protected Map<String, Selector> subSelectors = new HashMap<String, Selector>();
 
-    public Map<String, Selector> getFields()
+    @Override
+    public Selector getChildSelector( Class<?> instanceType, String fieldName )
     {
-        return _fields;
+        return getSelector( fieldName );
+    }
+
+    public Selector getSelector( String fieldName )
+    {
+        return subSelectors.get( fieldName );
     }
 
     @Override
-    public Selector getField( String field )
+    public boolean containsField( Class<?> instanceType, String property )
     {
-        return _fields.get( field );
+        return containsField( property );
     }
 
+    public boolean containsField( String property )
+    {
+        return subSelectors.containsKey( property );
+    }
+
+    
     @Override
-    public boolean containsField( PropertyDescriptor property, FieldPopulator fieldPopulator )
+    public Set<String> getSelectedFieldNames( Class<?> instanceType )
     {
-        String propertyName = property.getName();
-        return containsField( propertyName )
-                || (fieldPopulator != null && fieldPopulator.getSupportedFields() != null && fieldPopulator
-                .getSupportedFields().contains( propertyName ));
-    }
-
-    public boolean containsField( String field )
-    {
-        return _fields.containsKey( field );
-    }
-
-    public String toString()
-    {
-        return _fields.toString();
+        return getFieldNames();
     }
 
     public Set<String> getFieldNames()
     {
-        return _fields.keySet();
+        return Collections.unmodifiableSet( subSelectors.keySet() );
     }
 
-    public void addField( String key, Selector selector )
+    @Override
+    public Map<String, Selector> getSelectors( Class<?> instanceType )
     {
-        _fields.put( key, selector );
+        return getFields();
     }
+
+    public Map<String, Selector> getFields()
+    {
+        return subSelectors;
+    }
+
+    public void register( String fieldName, FieldSelector subSelector )
+    {
+        subSelectors.put( fieldName, subSelector );
+    }
+
+    @Override
+    public Set<String> getAllPossibleFields( Class<?> instanceType )
+    {
+        return getFieldNames();
+    }
+    
+    @Override
+    public boolean isInfluencedExternally()
+    {
+        return true;
+    }
+
 }

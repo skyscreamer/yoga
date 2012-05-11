@@ -1,22 +1,14 @@
 package org.skyscreamer.yoga.populator;
 
-import org.skyscreamer.yoga.annotations.ExtraField;
-import org.skyscreamer.yoga.mapper.YogaInstanceContext;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.skyscreamer.yoga.annotations.ExtraField;
+
 public class FieldPopulatorUtil
 {
-
-    public static List<Method> getPopulatorExtraFieldMethods( YogaInstanceContext<?> entityContext )
-    {
-        return getPopulatorExtraFieldMethods( entityContext.getPopulator(),
-                entityContext.getInstanceType() );
-    }
-
-    public static List<Method> getPopulatorExtraFieldMethods( FieldPopulator populator, Class<?> instanceType )
+    public static List<Method> getPopulatorExtraFieldMethods( Object populator, Class<?> instanceType )
     {
         List<Method> result = new ArrayList<Method>();
         if ( populator != null )

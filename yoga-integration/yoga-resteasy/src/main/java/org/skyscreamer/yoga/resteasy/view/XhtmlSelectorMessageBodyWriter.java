@@ -14,8 +14,6 @@ public class XhtmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyW
     @Override
     protected AbstractYogaView getView()
     {
-        XhtmlSelectorView view = new XhtmlSelectorView();
-        view.setResultTraverser( resultTraverser );
-        return view;
+        return new XhtmlSelectorView();
     }
 }

@@ -1,14 +1,13 @@
 package org.skyscreamer.yoga.enricher;
 
-import org.skyscreamer.yoga.mapper.YogaInstanceContext;
-import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.metadata.PropertyUtil;
-import org.skyscreamer.yoga.model.HierarchicalModel;
-import org.skyscreamer.yoga.populator.FieldPopulator;
-import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.Selector;
+import java.util.Set;
+import java.util.TreeSet;
 
-import java.beans.PropertyDescriptor;
+import javax.servlet.http.HttpServletResponse;
+
+import org.skyscreamer.yoga.listener.RenderingEvent;
+import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.selector.Selector;
 
 public class NavigationLinksEnricher implements Enricher
 {
@@ -21,35 +20,32 @@ public class NavigationLinksEnricher implements Enricher
     }
 
     @Override
-    public void enrich( YogaInstanceContext<?> entityContext )
+    public void enrich( RenderingEvent event )
     {
-        Selector fieldSelector = entityContext.getFieldSelector();
-        if ( !(fieldSelector instanceof CoreSelector) )
+        Selector selector = event.getSelector();
+        if (selector.isInfluencedExternally())
         {
             return;
         }
 
-        Class<?> instanceType = entityContext.getInstanceType();
-        YogaRequestContext requestContext = entityContext.getRequestContext();
-        FieldPopulator populator = entityContext.getPopulator();
+        Class<?> instanceType = event.getValueType();
+        Object instance = event.getValue();
 
-        HierarchicalModel navigationLinks = entityContext.getModel().createChild( "navigationLinks" );
-        for ( PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ) )
+        HttpServletResponse response = event.getRequestContext().getResponse();
+        String urlSuffix = event.getRequestContext().getUrlSuffix();
+
+        MapHierarchicalModel<?> navigationLinks = ((MapHierarchicalModel<?>) event.getModel())
+                .createChildMap( "navigationLinks" );
+        Set<String> fieldNames = new TreeSet<String>( selector.getAllPossibleFields( instanceType ) );
+        fieldNames.removeAll( selector.getSelectedFieldNames( instanceType ) );
+
+        for (String fieldName : fieldNames)
         {
-            if ( fieldSelector.containsField( property, populator ) )
-                continue;
-
-            HierarchicalModel navModel = navigationLinks.createChild( property.getName() );
-            navModel.addSimple( "name", property.getName() );
-            String hrefSuffixAndSelector = requestContext.getUrlSuffix() + "?selector=:("
-                    + property.getName() + ")";
-            YogaInstanceContext<?> clone = entityContext.clone();
-            YogaRequestContext childRequestContext = new YogaRequestContext( hrefSuffixAndSelector,
-                    requestContext.getResponse() );
-            clone.setRequestContext( childRequestContext );
-            clone.setModel( navModel );
-            hrefEnricher.enrich( clone );
+            MapHierarchicalModel<?> navModel = navigationLinks.createChildMap( fieldName );
+            String hrefSuffixAndSelector = String
+                    .format( "%s?selector=:(%s)", urlSuffix, fieldName );
+            hrefEnricher.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel, response );
+            navModel.addProperty( "name", fieldName );
         }
     }
-
 }

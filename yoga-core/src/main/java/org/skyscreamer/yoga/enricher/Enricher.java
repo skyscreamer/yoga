@@ -1,8 +1,8 @@
 package org.skyscreamer.yoga.enricher;
 
-import org.skyscreamer.yoga.mapper.YogaInstanceContext;
+import org.skyscreamer.yoga.listener.RenderingEvent;
 
 public interface Enricher
 {
-    void enrich( YogaInstanceContext<?> entityContext );
+    void enrich( RenderingEvent event );
 }

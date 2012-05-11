@@ -12,7 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 
 @Controller
-@Path("/metadata/{type}")
+@Path("/metadata/")
 public class MetaDataController
 {
     @Autowired

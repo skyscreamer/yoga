@@ -2,6 +2,8 @@ package org.skyscreamer.yoga.selector;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
+import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
 
 public class SelectorParserTest
 {
@@ -39,46 +41,46 @@ public class SelectorParserTest
 
     private void testSimpleSelector( Selector selector ) throws Exception
     {
-        Assert.assertEquals( selector.getFields().size(), 2 );
-        Selector genderField = selector.getField( "gender" );
+        Assert.assertEquals( selector.getSelectors( null ).size(), 2 );
+        Selector genderField = selector.getChildSelector( null, "gender" );
         Assert.assertNotNull( genderField );
-        Assert.assertEquals( genderField.getFields().size(), 0 );
+        Assert.assertEquals( genderField.getSelectors( null ).size(), 0 );
 
-        Selector countryField = selector.getField( "country" );
+        Selector countryField = selector.getChildSelector( null, "country" );
         Assert.assertNotNull( countryField );
-        Assert.assertEquals( countryField.getFields().size(), 0 );
+        Assert.assertEquals( countryField.getSelectors( null ).size(), 0 );
     }
 
     private void testNestedSelectors( Selector selector ) throws Exception
     {
-        Assert.assertEquals( selector.getFields().size(), 3 );
-        Selector genderField = selector.getField( "gender" );
+        Assert.assertEquals( selector.getSelectors( null ).size(), 3 );
+        Selector genderField = selector.getChildSelector( null, "gender" );
         Assert.assertNotNull( genderField );
-        Assert.assertEquals( genderField.getFields().size(), 0 );
+        Assert.assertEquals( genderField.getSelectors( null ).size(), 0 );
 
-        Selector favoriteArtistsField = selector.getField( "favoriteArtists" );
+        Selector favoriteArtistsField = selector.getChildSelector( null, "favoriteArtists" );
         Assert.assertNotNull( favoriteArtistsField );
-        Assert.assertEquals( favoriteArtistsField.getFields().size(), 2 );
+        Assert.assertEquals( favoriteArtistsField.getSelectors( null ).size(), 2 );
 
-        Selector birthdayField = favoriteArtistsField.getField( "birthday" );
+        Selector birthdayField = favoriteArtistsField.getChildSelector( null, "birthday" );
         Assert.assertNotNull( birthdayField );
-        Assert.assertEquals( birthdayField.getFields().size(), 0 );
+        Assert.assertEquals( birthdayField.getSelectors( null ).size(), 0 );
 
-        Selector discographyField = favoriteArtistsField.getField( "discography" );
+        Selector discographyField = favoriteArtistsField.getChildSelector( null, "discography" );
         Assert.assertNotNull( discographyField );
-        Assert.assertEquals( discographyField.getFields().size(), 2 );
+        Assert.assertEquals( discographyField.getSelectors( null ).size(), 2 );
 
-        Selector yearField = discographyField.getField( "year" );
+        Selector yearField = discographyField.getChildSelector( null, "year" );
         Assert.assertNotNull( yearField );
-        Assert.assertEquals( yearField.getFields().size(), 0 );
+        Assert.assertEquals( yearField.getSelectors( null ).size(), 0 );
 
-        Selector titleField = discographyField.getField( "title" );
+        Selector titleField = discographyField.getChildSelector( null, "title" );
         Assert.assertNotNull( titleField );
-        Assert.assertEquals( titleField.getFields().size(), 0 );
+        Assert.assertEquals( titleField.getSelectors( null ).size(), 0 );
 
-        Assert.assertEquals( selector.getFields().size(), 3 );
-        Selector friendsField = selector.getField( "friends" );
+        Assert.assertEquals( selector.getSelectors( null ).size(), 3 );
+        Selector friendsField = selector.getChildSelector( null, "friends" );
         Assert.assertNotNull( friendsField );
-        Assert.assertEquals( friendsField.getFields().size(), 0 );
+        Assert.assertEquals( friendsField.getSelectors( null ).size(), 0 );
     }
 }

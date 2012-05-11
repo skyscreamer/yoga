@@ -5,5 +5,5 @@ package org.skyscreamer.yoga.populator;
  */
 public interface FieldPopulatorRegistry
 {
-    FieldPopulator getFieldPopulator( Class<?> clazz );
+    Object getFieldPopulator( Class<?> clazz );
 }

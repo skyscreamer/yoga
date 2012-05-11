@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.demo.model;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;
 
@@ -11,18 +13,22 @@ import java.util.List;
  */
 @Entity
 @URITemplate("/album/{id}")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Album
 {
     @Id
     @GeneratedValue
     private long id;
     private String title;
+    private int year;
+
     @ManyToOne
     @JoinColumn(name = "artistId")
     private Artist artist;
-    private int year;
+
     @OneToMany(mappedBy = "album")
     @OrderBy("id")
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     private List<Song> songs;
 
     @Core

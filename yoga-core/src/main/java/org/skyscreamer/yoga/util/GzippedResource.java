@@ -2,11 +2,13 @@ package org.skyscreamer.yoga.util;
 
 import org.springframework.core.io.Resource;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -26,7 +28,14 @@ public class GzippedResource implements Resource
     @Override
     public InputStream getInputStream() throws IOException
     {
-        return new GZIPInputStream( _resource.getInputStream() );
+        try
+        {
+            return new GZIPInputStream( _resource.getInputStream() );
+        }
+        catch (UnknownHostException e)
+        {
+            return new ByteArrayInputStream( new byte[0] );
+        }
     }
 
     // Delegate Methods

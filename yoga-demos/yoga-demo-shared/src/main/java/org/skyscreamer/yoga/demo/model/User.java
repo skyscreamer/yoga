@@ -1,17 +1,26 @@
 package org.skyscreamer.yoga.demo.model;
 
-import org.skyscreamer.yoga.annotations.Core;
-import org.skyscreamer.yoga.annotations.URITemplate;
-
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.annotations.URITemplate;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page Date: 4/11/11 Time: 4:47 PM
  */
 @Entity
 @URITemplate("/user/{id}")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class User
 {
     @Id
@@ -21,10 +30,12 @@ public class User
 
     @ManyToMany
     @JoinTable(name = "friend", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "friendid"))
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     private Set<User> friends = new HashSet<User>();
 
     @ManyToMany
     @JoinTable(name = "fan", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "artistid"))
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     private Set<Artist> favoriteArtists = new HashSet<Artist>();
 
     public boolean getIsFriend()

@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.util;
 
-import org.skyscreamer.yoga.selector.ParseSelectorException;
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 
 /**
  * Utility for finding nested parentheses
@@ -24,8 +24,12 @@ public class ParenthesisUtil
      * @param selector String to analyze for the matching selector
      * @param index    Index of the opening parenthesis to match
      * @return Index of matching closing parenthesis
+<<<<<<< HEAD
+     * @throws org.skyscreamer.yoga.exceptions.ParseSelectorException
+=======
      * @throws org.skyscreamer.yoga.selector.ParseSelectorException
      *
+>>>>>>> upstream/master
      */
     public static int getMatchingParenthesisIndex( CharSequence selector, int index ) throws ParseSelectorException
     {

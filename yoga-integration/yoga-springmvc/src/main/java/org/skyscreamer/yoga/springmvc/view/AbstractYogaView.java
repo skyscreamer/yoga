@@ -1,26 +1,26 @@
 package org.skyscreamer.yoga.springmvc.view;
 
-import org.dom4j.dom.DOMDocument;
-import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.selector.ParseSelectorException;
-import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.SelectorParser;
-import org.skyscreamer.yoga.util.ClassFinderStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.View;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Map;
+
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.mapper.YogaRequestContext;
+import org.skyscreamer.yoga.selector.CompositeSelector;
+import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.parser.SelectorParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.View;
 
 /**
  * This MessageConvert gets the selector from the request. Children do the
  * interesting output. NOTE: you have to put in a
  * org.skyscreamer.yoga.springmvc.view.RequestHolder in your web.xml file
- *
+ * 
  * @author Solomon Duskis
  */
 public abstract class AbstractYogaView implements View
@@ -29,38 +29,49 @@ public abstract class AbstractYogaView implements View
     protected ResultTraverser resultTraverser;
 
     @Autowired
-    protected SelectorParser _selectorParser;
+    protected SelectorParser selectorParser;
 
     @Autowired
-    protected ClassFinderStrategy _classFinderStrategy;
+    protected RenderingListenerRegistry registry;
 
     public void setResultTraverser( ResultTraverser resultTraverser )
     {
         this.resultTraverser = resultTraverser;
     }
 
+    public void setSelectorParser( SelectorParser selectorParser )
+    {
+        this.selectorParser = selectorParser;
+    }
+
+    public void setRegistry( RenderingListenerRegistry registry )
+    {
+        this.registry = registry;
+    }
+
     @Override
-    public void render( Map<String, ?> model, HttpServletRequest request, HttpServletResponse response )
-            throws Exception
+    public void render( Map<String, ?> model, HttpServletRequest request,
+            HttpServletResponse response ) throws Exception
     {
         response.setContentType( getContentType() );
-        render( response.getOutputStream(), getSelector( request ), model.values().iterator().next(), response );
+        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response,
+                registry.getListeners() );
+        Object value = model.values().iterator().next();
+        Selector selector = getSelector( request );
+        render( selector, value, context );
     }
 
-    protected Selector getSelector( HttpServletRequest request ) throws ParseSelectorException
+    public Selector getSelector( HttpServletRequest request ) throws ParseSelectorException
     {
         String selectorString = request.getParameter( "selector" );
-        return _selectorParser.parseSelector( selectorString );
+        CoreSelector coreSelector = new CoreSelector();
+        CompositeSelector composite = new CompositeSelector( coreSelector );
+        selectorParser.parseSelector( selectorString, composite );
+        return composite;
     }
 
-    protected static void write( OutputStream output, DOMDocument domDocument ) throws IOException
-    {
-        OutputStreamWriter out = new OutputStreamWriter( output );
-        domDocument.write( out );
-        out.flush();
-    }
-
-    public abstract void render( OutputStream outputStream, Selector selector, Object value, HttpServletResponse response ) throws IOException;
+    public abstract void render( Selector selector, Object value, YogaRequestContext context )
+            throws Exception;
 
     public abstract String getHrefSuffix();
 }

@@ -1,49 +1,54 @@
 package org.skyscreamer.yoga.selector;
 
-import org.skyscreamer.yoga.annotations.Core;
-import org.skyscreamer.yoga.populator.FieldPopulator;
-
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
-public class CoreSelector implements Selector
+import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.metadata.PropertyUtil;
+
+public class CoreSelector extends MapSelector
 {
     @Override
-    public Selector getField( String fieldName )
+    protected Set<String> getFieldCollection( Class<?> instanceType )
     {
-        return this;
-    }
-
-    @Override
-    public boolean containsField( PropertyDescriptor property, FieldPopulator fieldPopulator )
-    {
-        Method readMethod = property.getReadMethod();
-        boolean isCore = readMethod.isAnnotationPresent( Core.class );
-        if ( !isCore && fieldPopulator != null )
+        Set<String> fields = descriptors.get( instanceType );
+        if (fields == null)
         {
-            isCore = fieldPopulator.getCoreFields().contains( property.getName() );
+            descriptors.put( instanceType, fields = createFields( instanceType ) );
         }
-        return isCore;
+        return fields;
     }
 
-    @Override
-    public boolean containsField( String property )
+    private Set<String> createFields( Class<?> instanceType )
     {
-        return false;
+        Set<String> response = new TreeSet<String>();
+        List<PropertyDescriptor> readableProperties = PropertyUtil.getReadableProperties( instanceType );
+
+        for (PropertyDescriptor property : readableProperties)
+        {
+            Method readMethod = property.getReadMethod();
+            if (readMethod.isAnnotationPresent( Core.class ))
+            {
+                response.add( property.getName() );
+            }
+        }
+        return response;
+    }
+    
+    @Override
+    public Set<String> getAllPossibleFields( Class<?> instanceType )
+    {
+        Set<String> response = new TreeSet<String>();
+        List<PropertyDescriptor> readableProperties = PropertyUtil.getReadableProperties( instanceType );
+
+        for (PropertyDescriptor property : readableProperties)
+        {
+            response.add( property.getName() );
+        }
+        return response;
     }
 
-    @Override
-    public Set<String> getFieldNames()
-    {
-        return Collections.emptySet();
-    }
-
-    @Override
-    public Map<String, Selector> getFields()
-    {
-        return Collections.emptyMap();
-    }
 }
