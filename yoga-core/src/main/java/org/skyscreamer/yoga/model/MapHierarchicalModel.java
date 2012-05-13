@@ -1,46 +1,12 @@
 package org.skyscreamer.yoga.model;
 
-import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class MapHierarchicalModel extends AbstractHierarchicalModel
+public interface MapHierarchicalModel<T> extends HierarchicalModel<T>
 {
-    final Map<String, Object> _objectTree;
 
-    public MapHierarchicalModel()
-    {
-        _objectTree = new HashMap<String, Object>();
-    }
+    void addProperty( String name, Object result );
 
-    public MapHierarchicalModel( Map<String, Object> objectTree )
-    {
-        _objectTree = objectTree;
-    }
+    MapHierarchicalModel<?> createChildMap( String name );
 
-    @Override
-    public void addSimple( String name, Object value )
-    {
-        _objectTree.put( name, value );
-    }
+    ListHierarchicalModel<?> createChildList( String name );
 
-    @Override
-    public HierarchicalModel createSimple( String name )
-    {
-        return new SimplePropertyHierarchyModel( name, this );
-    }
-
-    @Override
-    public void addSimple( Object instance )
-    {
-        throw new YogaRuntimeException( new IllegalAccessException(
-                "addSimple with a single value is not supported" ) );
-    }
-
-
-    public Map<String, Object> getObjectTree()
-    {
-        return _objectTree;
-    }
 }

@@ -1,48 +1,38 @@
 package org.skyscreamer.yoga.springmvc.view;
 
-import org.dom4j.dom.DOMDocument;
+import java.io.IOException;
+
+import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
-import org.skyscreamer.yoga.model.XmlHierarchyModel;
+import org.skyscreamer.yoga.model.XmlHierarchyModelImpl;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.util.NameUtil;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-
-public class XmlSelectorView extends AbstractYogaView
+public class XmlSelectorView extends AbstractXmlYogaView
 {
     @Override
-    public void render( OutputStream outputStream, Selector selector, Object value, HttpServletResponse response ) throws IOException
+    public void render( Selector selector, Object value, YogaRequestContext context )
+            throws IOException
     {
-        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), response );
+        HierarchicalModel<Element> model = getModel( value );
+        resultTraverser.traverse( value, selector, model, context );
+        write( context, model.getUnderlyingModel() );
+    }
 
-        DOMDocument domDocument = new DOMDocument();
-        if ( value instanceof Iterable )
+    protected HierarchicalModel<Element> getModel( Object value )
+    {
+        if (value instanceof Iterable)
         {
-            DOMElement root = createDocument( domDocument, "result" );
-            HierarchicalModel model = new XmlHierarchyModel( root );
-            for ( Object child : (Iterable<?>) value )
-            {
-                resultTraverser.traverse( child, selector, model, context );
-            }
+            String name = getClassName( ((Iterable<?>) value).iterator().next() );
+            DOMElement root = new DOMElement( "result" );
+            return new XmlHierarchyModelImpl( root, name );
         }
         else
         {
-            String name = NameUtil.getName( _classFinderStrategy.findClass( value ) );
-            DOMElement root = createDocument( domDocument, name );
-            resultTraverser.traverse( value, selector, new XmlHierarchyModel( root ), context );
+            DOMElement root = new DOMElement( getClassName( value ) );
+            return new XmlHierarchyModelImpl( root );
         }
-        write( outputStream, domDocument );
-    }
-
-    public DOMElement createDocument( DOMDocument domDocument, String name )
-    {
-        DOMElement root = new DOMElement( name );
-        domDocument.setRootElement( root );
-        return root;
     }
 
     @Override

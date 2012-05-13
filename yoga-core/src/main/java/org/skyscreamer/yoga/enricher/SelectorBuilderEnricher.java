@@ -1,7 +1,7 @@
 package org.skyscreamer.yoga.enricher;
 
-import org.skyscreamer.yoga.mapper.YogaInstanceContext;
-import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.listener.RenderingEvent;
+import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
 /**
  * Created by IntelliJ IDEA. User: cpage Date: 12/10/11 Time: 3:59 PM
@@ -13,16 +13,17 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
     private String suffix = "yoga";
 
     @Override
-    public void enrich( YogaInstanceContext<?> entityContext )
+    public void enrich( RenderingEvent event )
     {
-        if ( entityContext.getFieldSelector() instanceof CoreSelector )
+        if (!event.getSelector().isInfluencedExternally())
         {
-            String href = determineTemplate( entityContext.getInstanceType(), entityContext.getPopulator() );
+            String href = determineTemplate( event.getValueType() );
 
             if ( href != null )
             {
                 href += "." + suffix;
-                entityContext.getModel().addSimple( FIELD_NAME, getUrl( entityContext.getRequestContext().getResponse(), href, entityContext.getInstance() ) );
+                String url = getUrl( href, event.getValue(), event.getValueType(), event.getRequestContext().getResponse() );
+                ((MapHierarchicalModel<?>)event.getModel() ).addProperty( FIELD_NAME, url );
             }
             return;
         }

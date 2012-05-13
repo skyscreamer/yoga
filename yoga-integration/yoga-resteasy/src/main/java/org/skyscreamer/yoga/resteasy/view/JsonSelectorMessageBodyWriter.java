@@ -14,8 +14,6 @@ public class JsonSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWr
     @Override
     protected AbstractYogaView getView()
     {
-        JsonSelectorView view = new JsonSelectorView();
-        view.setResultTraverser( resultTraverser );
-        return view;
+        return new JsonSelectorView();
     }
 }

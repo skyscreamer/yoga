@@ -1,5 +1,10 @@
 package org.skyscreamer.yoga.springmvc.view;
 
+import java.lang.reflect.Method;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -7,10 +12,6 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.mvc.annotation.ModelAndViewResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
-import java.util.Locale;
 
 public class YogaModelAndViewResolver implements ModelAndViewResolver
 {
@@ -23,7 +24,8 @@ public class YogaModelAndViewResolver implements ModelAndViewResolver
 
     @Override
     @SuppressWarnings("rawtypes")
-    public ModelAndView resolveModelAndView( Method handlerMethod, Class handlerType, Object returnValue, ExtendedModelMap implicitModel, NativeWebRequest webRequest )
+    public ModelAndView resolveModelAndView( Method handlerMethod, Class handlerType,
+            Object returnValue, ExtendedModelMap implicitModel, NativeWebRequest webRequest )
     {
         try
         {
@@ -32,7 +34,7 @@ public class YogaModelAndViewResolver implements ModelAndViewResolver
             View view = viewResolver.resolveViewName( "yoga", locale );
             return new ModelAndView( view, "value", returnValue );
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             throw new RuntimeException( "could not process request", e );
         }
