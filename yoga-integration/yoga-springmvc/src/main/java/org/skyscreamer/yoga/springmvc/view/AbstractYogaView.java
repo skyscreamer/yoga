@@ -50,8 +50,8 @@ public abstract class AbstractYogaView implements View
     }
 
     @Override
-    public void render( Map<String, ?> model, HttpServletRequest request,
-            HttpServletResponse response ) throws Exception
+    public void render( Map<String, ?> model, HttpServletRequest request, HttpServletResponse response )
+            throws Exception
     {
         response.setContentType( getContentType() );
         YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response,
@@ -64,7 +64,7 @@ public abstract class AbstractYogaView implements View
     public Selector getSelector( HttpServletRequest request ) throws ParseSelectorException
     {
         String selectorString = request.getParameter( "selector" );
-        CoreSelector coreSelector = new CoreSelector();
+        CoreSelector coreSelector = new CoreSelector( resultTraverser.getFieldPopulatorRegistry() );
         CompositeSelector composite = new CompositeSelector( coreSelector );
         selectorParser.parseSelector( selectorString, composite );
         return composite;

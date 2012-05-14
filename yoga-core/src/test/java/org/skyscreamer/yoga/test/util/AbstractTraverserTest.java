@@ -1,19 +1,22 @@
 package org.skyscreamer.yoga.test.util;
 
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: corby Date: 5/7/12
@@ -31,9 +34,10 @@ public abstract class AbstractTraverserTest
     {
         try
         {
-            SelectorParser selectorParser = _selectorParserClass.newInstance();
+            Constructor<? extends SelectorParser> constructor = _selectorParserClass.getConstructor( FieldPopulatorRegistry.class );
+            SelectorParser selectorParser = constructor.newInstance( traverser.getFieldPopulatorRegistry() );
             selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );
-            CompositeSelector selector = new CompositeSelector( new CoreSelector() );
+            CompositeSelector selector = new CompositeSelector( new CoreSelector( traverser.getFieldPopulatorRegistry() ) );
             selectorParser.parseSelector( selectorString, selector );
 
             return doTraverse( instance, traverser, context, selector );
@@ -50,10 +54,18 @@ public abstract class AbstractTraverserTest
         {
             Assert.fail( "Could not instantiate " + _selectorParserClass );
         }
+        catch ( NoSuchMethodException e )
+        {
+            Assert.fail( "Could not instantiate " + _selectorParserClass );
+        }
+        catch ( InvocationTargetException e )
+        {
+            Assert.fail( "Could not instantiate " + _selectorParserClass );
+        }
         return null;
     }
 
-    public Map<String, Object> doTraverse( Object instance, ResultTraverser traverser, YogaRequestContext context,
+    private Map<String, Object> doTraverse( Object instance, ResultTraverser traverser, YogaRequestContext context,
             Selector selector )
     {
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();

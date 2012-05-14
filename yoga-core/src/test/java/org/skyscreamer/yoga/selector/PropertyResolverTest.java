@@ -1,9 +1,5 @@
 package org.skyscreamer.yoga.selector;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
@@ -15,6 +11,10 @@ import org.skyscreamer.yoga.test.model.extended.Artist;
 import org.skyscreamer.yoga.test.model.extended.User;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
 import org.springframework.core.io.ClassPathResource;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: corby

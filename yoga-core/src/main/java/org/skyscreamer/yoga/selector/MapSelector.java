@@ -1,14 +1,8 @@
 package org.skyscreamer.yoga.selector;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
-public class MapSelector implements Selector
+public abstract class MapSelector implements Selector
 {
     protected Map<Class<?>, Set<String>> descriptors = new HashMap<Class<?>, Set<String>>();
 
@@ -50,16 +44,6 @@ public class MapSelector implements Selector
     public Selector getChildSelector( Class<?> instanceType, String fieldName )
     {
         return this;
-    }
-
-    public void register( Class<?> instanceType, String... properties )
-    {
-        Set<String> fieldCollection = getFieldCollection( instanceType );
-        if (fieldCollection == null)
-        {
-            descriptors.put( instanceType, fieldCollection = new TreeSet<String>() );
-        }
-        fieldCollection.addAll( Arrays.asList( properties ) );
     }
 
     @Override

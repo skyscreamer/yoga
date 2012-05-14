@@ -1,7 +1,5 @@
 package org.skyscreamer.yoga.limits;
 
-import java.util.ArrayList;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.yoga.exceptions.EntityCountExceededException;
@@ -12,6 +10,8 @@ import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
+
+import java.util.ArrayList;
 
 public class CountLimitRenderingListenerTest
 {
@@ -36,6 +36,6 @@ public class CountLimitRenderingListenerTest
             input.add( new BasicTestDataLeaf() );
         }
         ObjectListHierarchicalModelImpl model = new ObjectListHierarchicalModelImpl();
-        resultTraverser.traverse( input, new CoreSelector(), model, requestContext );
+        resultTraverser.traverse( input, new CoreSelector( resultTraverser.getFieldPopulatorRegistry() ), model, requestContext );
     }
 }
