@@ -1,7 +1,5 @@
 package org.skyscreamer.yoga.demo.dto;
 
-import java.util.List;
-
 import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.annotations.PopulationExtension;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
@@ -10,9 +8,8 @@ import org.skyscreamer.yoga.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by IntelliJ IDEA. User: corby
- */
+import java.util.List;
+
 @Service
 @PopulationExtension(User.class)
 public class UserFieldPopulator

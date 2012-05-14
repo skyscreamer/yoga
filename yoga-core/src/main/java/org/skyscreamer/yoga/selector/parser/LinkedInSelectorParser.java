@@ -1,6 +1,7 @@
 package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.util.ParenthesisUtil;
 
@@ -19,13 +20,18 @@ import org.skyscreamer.yoga.util.ParenthesisUtil;
  */
 public class LinkedInSelectorParser extends ParentheticalSelectorParser
 {
+    public LinkedInSelectorParser( FieldPopulatorRegistry fieldPopulatorRegistry )
+    {
+        super( fieldPopulatorRegistry );
+    }
+
     private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
 
     protected FieldSelector parse( String selectorExpression ) throws ParseSelectorException
     {
         if (selectorExpression.equals( ":" ))
         {
-            return new FieldSelector();
+            return new FieldSelector( _fieldPopulatorRegistry );
         }
 
         if (!selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ))

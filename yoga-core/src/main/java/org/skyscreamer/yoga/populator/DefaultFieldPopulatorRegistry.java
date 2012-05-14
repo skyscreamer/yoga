@@ -1,11 +1,10 @@
 package org.skyscreamer.yoga.populator;
 
-import java.util.Arrays;
+import org.skyscreamer.yoga.annotations.PopulationExtension;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.skyscreamer.yoga.annotations.PopulationExtension;
 
 /**
  * Created by IntelliJ IDEA. User: corby
@@ -16,20 +15,19 @@ public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
 
     public DefaultFieldPopulatorRegistry()
     {
-
     }
 
     public DefaultFieldPopulatorRegistry( Object... fieldPopulators )
     {
-        register( Arrays.asList( fieldPopulators ) );
+        register( fieldPopulators );
     }
 
     public DefaultFieldPopulatorRegistry( List<Object> fieldPopulators )
     {
-        register( fieldPopulators );
+        register( fieldPopulators.toArray() );
     }
 
-    public void register( List<Object> fieldPopulators )
+    public void register( Object... fieldPopulators )
     {
         for ( Object fieldPopulator : fieldPopulators )
         {
@@ -42,7 +40,7 @@ public class DefaultFieldPopulatorRegistry implements FieldPopulatorRegistry
                 if ( type != null )
                 {
                     register( type, fieldPopulator );
-                    break;
+                    continue;
                 }
             }
 

@@ -1,13 +1,19 @@
 package org.skyscreamer.yoga.selector;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class FieldSelector implements Selector
 {
     protected Map<String, Selector> subSelectors = new HashMap<String, Selector>();
+    protected FieldPopulatorRegistry _fieldPopulatorRegistry;
+
+    public FieldSelector( FieldPopulatorRegistry fieldPopulatorRegistry )
+    {
+        _fieldPopulatorRegistry = fieldPopulatorRegistry;
+    }
 
     @Override
     public Selector getChildSelector( Class<?> instanceType, String fieldName )
@@ -32,15 +38,38 @@ public class FieldSelector implements Selector
     }
 
     
-    @Override
+    @SuppressWarnings( "unchecked" )
     public Set<String> getSelectedFieldNames( Class<?> instanceType )
     {
-        return getFieldNames();
+        Set<String> fieldNames = getFieldNames();
+        Object fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
+        if ( fieldPopulator != null )
+        {
+            try
+            {
+                Method method = fieldPopulator.getClass().getMethod( "getSupportedFields" );
+                List<String> supportedFields = (List<String>) method.invoke( fieldPopulator );
+                Iterator<String> iter = fieldNames.iterator();
+                while ( iter.hasNext() )
+                {
+                    String fieldName = iter.next();
+                    if ( !supportedFields.contains( fieldName ) )
+                    {
+                        iter.remove();
+                    }
+                }
+            }
+            catch ( Exception e )
+            {
+                // getSupportedFields not implemented on FieldPopulator
+            }
+        }
+        return fieldNames;
     }
 
     public Set<String> getFieldNames()
     {
-        return Collections.unmodifiableSet( subSelectors.keySet() );
+        return subSelectors.keySet();
     }
 
     @Override

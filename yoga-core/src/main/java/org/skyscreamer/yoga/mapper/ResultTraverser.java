@@ -11,14 +11,16 @@ import org.skyscreamer.yoga.listener.RenderingEventType;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.ListHierarchicalModel;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 
 public class ResultTraverser
 {
-
     protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
+    protected FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry();
 
     public void traverse( Object instance, Selector selector, HierarchicalModel<?> model,
             YogaRequestContext context )
@@ -155,5 +157,15 @@ public class ResultTraverser
     public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
         this._classFinderStrategy = classFinderStrategy;
+    }
+
+    public FieldPopulatorRegistry getFieldPopulatorRegistry()
+    {
+        return _fieldPopulatorRegistry;
+    }
+
+    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
+    {
+        _fieldPopulatorRegistry = fieldPopulatorRegistry;
     }
 }
