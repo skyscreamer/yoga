@@ -1,6 +1,7 @@
 package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.util.ParenthesisUtil;
 
@@ -14,9 +15,16 @@ import org.skyscreamer.yoga.util.ParenthesisUtil;
  */
 public abstract class ParentheticalSelectorParser extends SelectorParser
 {
+    protected FieldPopulatorRegistry _fieldPopulatorRegistry;
+
+    protected ParentheticalSelectorParser( FieldPopulatorRegistry fieldPopulatorRegistry )
+    {
+        _fieldPopulatorRegistry = fieldPopulatorRegistry;
+    }
+
     protected FieldSelector parseParentheticalSelector( String rawSelectorExpression, String openParenthesis ) throws ParseSelectorException
     {
-        FieldSelector selector = new FieldSelector();
+        FieldSelector selector = new FieldSelector( _fieldPopulatorRegistry );
         StringBuilder stringBuilder = new StringBuilder( rawSelectorExpression );
         while (stringBuilder.length() > 0)
         {
@@ -31,7 +39,7 @@ public abstract class ParentheticalSelectorParser extends SelectorParser
         int index = 0;
         boolean done = false;
         StringBuilder fieldNameBuilder = new StringBuilder();
-        FieldSelector subSelector = new FieldSelector();
+        FieldSelector subSelector = new FieldSelector( _fieldPopulatorRegistry );
 
         while (!done)
         {

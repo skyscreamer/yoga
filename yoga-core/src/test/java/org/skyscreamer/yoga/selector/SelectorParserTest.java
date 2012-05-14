@@ -2,6 +2,7 @@ package org.skyscreamer.yoga.selector;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
 
@@ -11,7 +12,7 @@ public class SelectorParserTest
     public void testGDataSimpleSelector() throws Exception
     {
         String selectorExpression = "gender,country";
-        Selector selector = new GDataSelectorParser().parseSelector( selectorExpression );
+        Selector selector = new GDataSelectorParser( new DefaultFieldPopulatorRegistry() ).parseSelector( selectorExpression );
         testSimpleSelector( selector );
     }
 
@@ -19,7 +20,7 @@ public class SelectorParserTest
     public void testGDataNestedSelectors() throws Exception
     {
         String selectorExpression = "gender,favoriteArtists(birthday,discography(year,title)),friends";
-        Selector selector = new GDataSelectorParser().parseSelector( selectorExpression );
+        Selector selector = new GDataSelectorParser( new DefaultFieldPopulatorRegistry() ).parseSelector( selectorExpression );
         testNestedSelectors( selector );
     }
 
@@ -27,7 +28,7 @@ public class SelectorParserTest
     public void testLinkedInSimpleSelector() throws Exception
     {
         String selectorExpression = ":(gender,country)";
-        Selector selector = new LinkedInSelectorParser().parseSelector( selectorExpression );
+        Selector selector = new LinkedInSelectorParser( new DefaultFieldPopulatorRegistry() ).parseSelector( selectorExpression );
         testSimpleSelector( selector );
     }
 
@@ -35,7 +36,7 @@ public class SelectorParserTest
     public void testLinkedInNestedSelectors() throws Exception
     {
         String selectorExpression = ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)";
-        Selector selector = new LinkedInSelectorParser().parseSelector( selectorExpression );
+        Selector selector = new LinkedInSelectorParser( new DefaultFieldPopulatorRegistry() ).parseSelector( selectorExpression );
         testNestedSelectors( selector );
     }
 

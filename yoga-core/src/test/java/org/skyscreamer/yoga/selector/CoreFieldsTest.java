@@ -1,31 +1,28 @@
 package org.skyscreamer.yoga.selector;
 
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
-import org.skyscreamer.yoga.populator.FieldPopulatorRenderingListenerAdapter;
 import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Album;
+import org.skyscreamer.yoga.test.model.extended.AlbumFieldPopulator;
 import org.skyscreamer.yoga.test.model.extended.User;
+import org.skyscreamer.yoga.test.model.extended.UserFieldPopulatorWithArtistCoreField;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
-import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
-import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: corby Date: 5/6/12
  */
 public class CoreFieldsTest extends AbstractTraverserTest
 {
-    @Test
     // The User object has a @Core annotation on the ID and Name fields. Pass in
     // an empty selector and a null selector,
     // and verify that only the ID and Name fields are returned.
+    @Test
     public void testCoreAnnotations() throws ParseSelectorException
     {
         User solomon = DataGenerator.solomon();
@@ -37,17 +34,16 @@ public class CoreFieldsTest extends AbstractTraverserTest
         Assert.assertEquals( solomon.getName(), objectTree.get( "name" ) );
     }
 
-    @Test
     // Use an AlbumFieldPopulator that defines ID and Title as core fields. Pass
     // in an empty selector and a null
     // selector, and verify that only the ID and Title fields are returned.
+    @Test
     public void testNullCorePopulatorFields()
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        MapSelector selector = new MapSelector();
-        selector.register( Album.class, "id", "title" );
-        Map<String, Object> objectTree = doTraverse( funeral, traverser, _simpleContext, selector );
+        traverser.getFieldPopulatorRegistry().register( new AlbumFieldPopulator() );
+        Map<String, Object> objectTree = doTraverse( funeral, null, traverser, _simpleContext );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
         Assert.assertEquals( funeral.getTitle(), objectTree.get( "title" ) );
@@ -63,9 +59,8 @@ public class CoreFieldsTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        MapSelector selector = new MapSelector();
-        selector.register( Album.class, "id", "title" );
-        Map<String, Object> objectTree = doTraverse( funeral, traverser, _simpleContext, selector );
+        traverser.getFieldPopulatorRegistry().register( new AlbumFieldPopulator() );
+        Map<String, Object> objectTree = doTraverse( funeral, ":", traverser, _simpleContext );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
         Assert.assertEquals( funeral.getTitle(), objectTree.get( "title" ) );
@@ -83,11 +78,10 @@ public class CoreFieldsTest extends AbstractTraverserTest
         carter.getFavoriteArtists().add( DataGenerator.neutralMilkHotel() );
         carter.getFavoriteArtists().add( DataGenerator.arcadeFire() );
         ResultTraverser traverser = new ResultTraverser();
-        MapSelector selector = new MapSelector();
-        selector.register( User.class, "id", "favoriteArtists" );
+        traverser.getFieldPopulatorRegistry().register( new UserFieldPopulatorWithArtistCoreField() );
 
-        Map<String, Object> objectTree = doTraverse( carter, traverser, _simpleContext, new CompositeSelector( selector, new CoreSelector() ) );
-        Assert.assertTrue( objectTree.size() >= 2 );
+        Map<String, Object> objectTree = doTraverse( carter, ":", traverser, _simpleContext );
+        Assert.assertEquals( 3, objectTree.size() );
         Assert.assertEquals( carter.getId(), objectTree.get( "id" ) );
         Assert.assertEquals( carter.getName(), objectTree.get( "name" ) );
 
@@ -98,14 +92,5 @@ public class CoreFieldsTest extends AbstractTraverserTest
         Assert.assertEquals( DataGenerator.neutralMilkHotel().getId(), neutralMap.get( "id" ) );
         Map<String, Object> arcadeMap = findItem( favoriteArtists, "name", "Arcade Fire" );
         Assert.assertEquals( DataGenerator.arcadeFire().getId(), arcadeMap.get( "id" ) );
-    }
-
-    public YogaRequestContext getContextForPopulator( Object populator )
-    {
-        FieldPopulatorRenderingListenerAdapter listener = new FieldPopulatorRenderingListenerAdapter();
-        listener.setFieldPopulatorRegistry( new DefaultFieldPopulatorRegistry( populator ) );
-        YogaRequestContext context = new YogaRequestContext( "map", new DummyHttpServletRequest(),
-                new DummyHttpServletResponse(), listener );
-        return context;
     }
 }

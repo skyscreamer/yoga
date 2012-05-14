@@ -14,34 +14,27 @@ import org.skyscreamer.yoga.selector.Selector;
 
 public class FieldPopulatorRenderingListenerAdapter implements RenderingListener
 {
-
-    private FieldPopulatorRegistry _fieldPopulatorRegistry;
     private ResultTraverser _resultTraverser;
 
     public FieldPopulatorRenderingListenerAdapter()
     {
-        this._fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry() ;
     }
 
-
-    public FieldPopulatorRenderingListenerAdapter( FieldPopulatorRegistry _fieldPopulatorRegistry,
-            ResultTraverser _resultTraverser )
+    public FieldPopulatorRenderingListenerAdapter( ResultTraverser resultTraverser )
     {
-        super();
-        this._fieldPopulatorRegistry = _fieldPopulatorRegistry;
-        this._resultTraverser = _resultTraverser;
+        this._resultTraverser = resultTraverser;
     }
-
 
     @Override
     public void eventOccurred( RenderingEvent event )
     {
-        if (event.getType() != RenderingEventType.POJO_CHILD || _fieldPopulatorRegistry == null)
+        FieldPopulatorRegistry fieldPopulatorRegistry = _resultTraverser.getFieldPopulatorRegistry();
+        if (event.getType() != RenderingEventType.POJO_CHILD || fieldPopulatorRegistry == null)
         {
             return;
         }
         Class<?> instanceType = event.getValueType();
-        Object populator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
+        Object populator = fieldPopulatorRegistry.getFieldPopulator( instanceType );
         if (populator == null)
         {
             return;
@@ -52,7 +45,7 @@ public class FieldPopulatorRenderingListenerAdapter implements RenderingListener
         YogaRequestContext requestContext = event.getRequestContext();
         Object pojoInstance = event.getValue();
 
-        if (populator != null && selector != null)
+        if (selector != null)
         {
             for (Method method : populator.getClass().getDeclaredMethods())
             {
@@ -103,19 +96,8 @@ public class FieldPopulatorRenderingListenerAdapter implements RenderingListener
         }
     }
 
-    public void setFieldPopulatorRegistry( FieldPopulatorRegistry _fieldPopulatorRegistry )
-    {
-        this._fieldPopulatorRegistry = _fieldPopulatorRegistry;
-    }
-
     public void setResultTraverser( ResultTraverser resultTraverser )
     {
         this._resultTraverser = resultTraverser;
     }
-    
-    public FieldPopulatorRegistry getFieldPopulatorRegistry()
-    {
-        return _fieldPopulatorRegistry;
-    }
-
 }

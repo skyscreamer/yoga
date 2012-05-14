@@ -6,4 +6,6 @@ package org.skyscreamer.yoga.populator;
 public interface FieldPopulatorRegistry
 {
     Object getFieldPopulator( Class<?> clazz );
+
+    void register( Object... fieldPopulators );
 }

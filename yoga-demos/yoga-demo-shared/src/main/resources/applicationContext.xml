@@ -2,9 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
     xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
-                        http://www.springframework.org/schema/util   http://www.springframework.org/schema/util/spring-util-3.0.xsd
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
                         http://www.springframework.org/schema/jdbc    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
@@ -76,20 +74,20 @@
     <!-- YOGA CONFIG BEGING -->
 
     <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser" 
-        p:classFinderStrategy-ref="hibernateClassFinder"/>
+        p:classFinderStrategy-ref="hibernateClassFinder" p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
 
-    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser"
-        p:aliasSelectorResolver-ref="aliasSelectorResolver"
-        p:disableExplicitSelectors="false" />
+    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
+        <constructor-arg ref="fieldPopulatorRegistry"/>
+        <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
+        <property name="disableExplicitSelectors" value="false"/>
+    </bean>
 
     <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"
         p:propertyFile="classpath:selectorAlias.properties" />
 
-    <bean id="hibernateClassFinder"
-        class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
+    <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
 
-    <bean id="fieldPopulatorRegistry"
-        class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">
+    <bean id="fieldPopulatorRegistry" class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">
         <constructor-arg>
             <list>
                 <bean class="org.skyscreamer.yoga.demo.dto.UserFieldPopulator" />
@@ -110,16 +108,15 @@
                             <bean class="org.skyscreamer.yoga.enricher.HrefEnricher" />
                             <bean class="org.skyscreamer.yoga.enricher.SelectorBuilderEnricher" />
                             <bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher" />
-                            <bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder" />
+                            <bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder"
+                                p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
                             <bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher"
                                 p:metaDataService-ref="metaDataService" />
                         </list>
                     </constructor-arg>
                 </bean>
-                <bean class="org.skyscreamer.yoga.populator.FieldPopulatorRenderingListenerAdapter">
-                    <property name="resultTraverser" ref="resultTraverser" />
-                    <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry" />
-                </bean>
+                <bean class="org.skyscreamer.yoga.populator.FieldPopulatorRenderingListenerAdapter"
+                      p:resultTraverser-ref="resultTraverser"/>
             </list>
         </constructor-arg>
     </bean>
