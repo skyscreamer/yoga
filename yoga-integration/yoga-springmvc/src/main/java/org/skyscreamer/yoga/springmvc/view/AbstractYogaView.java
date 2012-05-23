@@ -55,7 +55,7 @@ public abstract class AbstractYogaView implements View
     {
         response.setContentType( getContentType() );
         YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response,
-                registry.getListeners() );
+                resultTraverser.getFieldPopulatorRegistry(), registry.getListeners() );
         Object value = model.values().iterator().next();
         Selector selector = getSelector( request );
         render( selector, value, context );

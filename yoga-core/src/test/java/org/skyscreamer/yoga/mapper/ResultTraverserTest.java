@@ -32,7 +32,7 @@ public class ResultTraverserTest
 
         RenderingListener listener = new FieldPopulatorRenderingListenerAdapter( resultTraverser );
         requestContext = new YogaRequestContext( "map", new DummyHttpServletRequest(),
-                new DummyHttpServletResponse(), listener );
+                new DummyHttpServletResponse(), resultTraverser.getFieldPopulatorRegistry(), listener );
     }
 
     @Test
