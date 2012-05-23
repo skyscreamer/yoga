@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.annotations.CoreFields;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 
@@ -48,19 +49,25 @@ public class CoreSelector extends MapSelector
         {
             try
             {
-                Method method = fieldPopulator.getClass().getMethod( "getCoreFields" );
-                List<String> coreFields = (List<String>) method.invoke( fieldPopulator );
-                for ( String coreField : coreFields )
+                for ( Method method : fieldPopulator.getClass().getMethods() )
                 {
-                    if ( PropertyUtil.propertiesInclude( readableProperties, coreField ) )
+                    if ( method.isAnnotationPresent( CoreFields.class ) )
                     {
-                        response.add( coreField );
+                        List<String> coreFields = (List<String>) method.invoke( fieldPopulator );
+                        for ( String coreField : coreFields )
+                        {
+                            if ( PropertyUtil.propertiesInclude( readableProperties, coreField ) )
+                            {
+                                response.add( coreField );
+                            }
+                        }
+                        break;
                     }
                 }
             }
             catch ( Exception e )
             {
-                // getCoreFields not implemented on FieldPopulator
+                // @CoreFields not found on method of return type List<String>
             }
         }
         return response;

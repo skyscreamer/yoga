@@ -19,6 +19,7 @@ public class SupportedFieldsTest extends AbstractTraverserTest
     // Year is a visible property on the Album object, but the AlbumFieldPopulator enumerates supported fields,
     // which exclude year. Year should not be returned, even if it is named in the selector
     @Test
+    @SuppressWarnings( "unchecked" )
     public void testSelectUnsupportedField()
     {
         Album chasingProphecy = DataGenerator.chasingProphecy();
@@ -32,6 +33,4 @@ public class SupportedFieldsTest extends AbstractTraverserTest
         Map<String,Object> eighthDay = (Map<String, Object>) objectTree.get( "artist" );
         Assert.assertEquals( DataGenerator.eigthDay().getName(), eighthDay.get( "name" ) );
     }
-
-
 }
