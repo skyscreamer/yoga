@@ -23,8 +23,8 @@ public class CountLimitRenderingListenerTest
     public static void setup()
     {
         resultTraverser = new ResultTraverser();
-        requestContext = new YogaRequestContext( "map", new DummyHttpServletRequest(),
-                new DummyHttpServletResponse(), new CountLimitRenderingListener( MAX_RESULTS ) );
+        requestContext = new YogaRequestContext( "map", new DummyHttpServletRequest(), new DummyHttpServletResponse(),
+                resultTraverser.getFieldPopulatorRegistry(), new CountLimitRenderingListener( MAX_RESULTS ) );
     }
 
     @Test(expected = EntityCountExceededException.class)

@@ -1,6 +1,7 @@
 package org.skyscreamer.yoga.test.model.extended;
 
 import org.skyscreamer.yoga.annotations.Core;
+import org.skyscreamer.yoga.annotations.URITemplate;
 
 import java.util.Set;
 
@@ -8,6 +9,7 @@ import java.util.Set;
  * User: corby
  * Date: 5/6/12
  */
+@URITemplate( "/user/{id}" )
 public class User
 {
     private int _id;

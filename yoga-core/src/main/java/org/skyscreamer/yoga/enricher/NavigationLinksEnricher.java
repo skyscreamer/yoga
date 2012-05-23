@@ -31,7 +31,6 @@ public class NavigationLinksEnricher implements Enricher
         Class<?> instanceType = event.getValueType();
         Object instance = event.getValue();
 
-        HttpServletResponse response = event.getRequestContext().getResponse();
         String urlSuffix = event.getRequestContext().getUrlSuffix();
 
         MapHierarchicalModel<?> navigationLinks = ((MapHierarchicalModel<?>) event.getModel())
@@ -44,7 +43,7 @@ public class NavigationLinksEnricher implements Enricher
             MapHierarchicalModel<?> navModel = navigationLinks.createChildMap( fieldName );
             String hrefSuffixAndSelector = String
                     .format( "%s?selector=:(%s)", urlSuffix, fieldName );
-            hrefEnricher.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel, response );
+            hrefEnricher.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel, event.getRequestContext() );
             navModel.addProperty( "name", fieldName );
         }
     }
