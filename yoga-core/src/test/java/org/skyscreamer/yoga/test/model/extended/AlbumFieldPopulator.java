@@ -21,4 +21,9 @@ public class AlbumFieldPopulator
     {
         return Arrays.asList( "artist", "songs" );
     }
+
+    public String getURITemplate()
+    {
+        return "/album/{id}";
+    }
 }

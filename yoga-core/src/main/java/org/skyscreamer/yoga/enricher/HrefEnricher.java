@@ -1,7 +1,5 @@
 package org.skyscreamer.yoga.enricher;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
@@ -11,6 +9,9 @@ import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
 import org.skyscreamer.yoga.util.ValueReader;
+
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 
 public class HrefEnricher implements Enricher
 {
@@ -22,17 +23,15 @@ public class HrefEnricher implements Enricher
     {
         YogaRequestContext requestContext = event.getRequestContext();
         Class<?> valueType = event.getValueType();
-        String urlSuffix = requestContext.getUrlSuffix();
         MapHierarchicalModel<?> model = (MapHierarchicalModel<?>) event.getModel();
-        HttpServletResponse response = requestContext.getResponse();
 
-        addUrl( event.getValue(), valueType, urlSuffix, model, response );
+        addUrl( event.getValue(), valueType, requestContext.getUrlSuffix(), model, requestContext );
     }
 
-    public void addUrl( Object value, Class<?> valueType, String urlSuffix,
-            MapHierarchicalModel<?> model, HttpServletResponse response )
+    public void addUrl( Object value, Class<?> valueType, String urlSuffix, MapHierarchicalModel<?> model,
+            YogaRequestContext context )
     {
-        String urlTemplate = determineTemplate( valueType );
+        String urlTemplate = determineTemplate( valueType, context );
 
         if ( urlTemplate != null )
         {
@@ -40,18 +39,33 @@ public class HrefEnricher implements Enricher
             {
                 urlTemplate += "." + urlSuffix;
             }
-            String url = getUrl( urlTemplate, value, valueType, response );
+            String url = getUrl( urlTemplate, value, valueType, context.getResponse() );
             model.addProperty( SelectorParser.HREF, url );
         }
     }
 
-    protected String determineTemplate( Class<?> instanceType )
+    protected String determineTemplate( Class<?> instanceType, YogaRequestContext context )
     {
-        if ( instanceType.isAnnotationPresent( URITemplate.class ) )
+        String result = null;
+        Object fieldPopulator = context.getFieldPopulatorRegistry().getFieldPopulator( instanceType );
+        if ( fieldPopulator != null )
         {
-            return instanceType.getAnnotation( URITemplate.class ).value();
+            try
+            {
+                Method method = fieldPopulator.getClass().getMethod( "getURITemplate" );
+                result = (String) method.invoke( fieldPopulator );
+            }
+            catch ( Exception e )
+            {
+                // getCoreFields not implemented on FieldPopulator
+            }
         }
-        return null;
+
+        if ( result == null && instanceType.isAnnotationPresent( URITemplate.class ) )
+        {
+            result = instanceType.getAnnotation( URITemplate.class ).value();
+        }
+        return result;
     }
 
     public String getUrl( String uriTemplate, final Object value, final Class<?> valueType, HttpServletResponse response )
@@ -73,5 +87,4 @@ public class HrefEnricher implements Enricher
             }
         } );
     }
-
 }
