@@ -14,6 +14,7 @@ import java.util.Map;
  * User: corby
  * Date: 5/14/12
  */
+@SuppressWarnings("unchecked")
 public class SupportedFieldsTest extends AbstractTraverserTest
 {
     // Year is a visible property on the Album object, but the AlbumFieldPopulator enumerates supported fields,

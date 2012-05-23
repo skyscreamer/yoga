@@ -16,7 +16,7 @@
 
     <modules>
         <module>yoga-springmvc</module>
-        <module>yoga-resteasy</module>
+        <module>yoga-jaxrs</module>
     </modules>
 
 </project>

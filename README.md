@@ -6,7 +6,7 @@ Yoga enables client-defined relational queries and out-of-the-box HATEOAS on **y
 * Simplified SOA development (esp. across multiple teams)
 * Browsable APIs
 
-This demo shows how aggregation can accelerate a service with multiple nested calls: http://yoga-demo-springmvc.cloudfoundry.com/#demo
+This demo shows how aggregation can accelerate a service with multiple nested calls: http://yoga.skyscreamer.org/demo.html
 
 ## Supported Frameworks ##
  + RESTEasy

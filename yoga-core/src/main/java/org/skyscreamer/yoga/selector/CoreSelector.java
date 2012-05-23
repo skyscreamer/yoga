@@ -31,6 +31,7 @@ public class CoreSelector extends MapSelector
         return fields;
     }
 
+    @SuppressWarnings("unchecked")
     private Set<String> createFields( Class<?> instanceType )
     {
         Set<String> response = new TreeSet<String>();

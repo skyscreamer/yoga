@@ -1,21 +1,26 @@
 package org.skyscreamer.yoga.demo.test;
 
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONArray;
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
+
+import java.util.Collections;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
+import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
-import java.util.Collections;
-import java.util.Map;
-
 /**
  * Created by IntelliJ IDEA. User: Carter Page
  */
-public class UserControllerTest extends AbstractTest
+public class UserControllerTest
 {
+    @Test
     public void testGetUser() throws Exception
     {
         JSONObject data = getJSONObject( "/user/2", null );
@@ -26,6 +31,7 @@ public class UserControllerTest extends AbstractTest
         JSONAssert.assertEquals( expected, data, false );
     }
 
+    @Test
     public void testGetNonExistentUser() throws Exception
     {
         try
@@ -39,12 +45,14 @@ public class UserControllerTest extends AbstractTest
         }
     }
 
+    @Test
     public void testGetUsers() throws Exception
     {
         JSONArray data = getJSONArray( "/user", null );
         Assert.assertEquals( 1003, data.length() );
     }
 
+    @Test
     public void testGetUserWithSelector() throws Exception
     {
         Map<String, String> params = Collections.singletonMap( "selector", ":(isFriend)" );
@@ -53,6 +61,7 @@ public class UserControllerTest extends AbstractTest
         JSONAssert.assertEquals( expected, data, false );
     }
 
+    @Test
     public void testGetUserWithFriends() throws Exception
     {
         Map<String, String> params = Collections.singletonMap( "selector", ":(friends)" );
@@ -63,6 +72,7 @@ public class UserControllerTest extends AbstractTest
         JSONAssert.assertEquals( expected, data, false );
     }
 
+    @Test
     public void testDeepDiveSelector() throws Exception
     {
         Map<String, String> params = Collections.singletonMap( "selector", ":(isFriend,friends:(favoriteArtists:(albums:(songs))))" );
@@ -76,6 +86,7 @@ public class UserControllerTest extends AbstractTest
         JSONAssert.assertEquals( expected, data, false );
     }
 
+    @Test
     public void testRecommendedAlbums() throws Exception
     {
         Map<String, String> params = Collections.singletonMap( "selector", ":(recommendedAlbums)" );
@@ -85,6 +96,7 @@ public class UserControllerTest extends AbstractTest
     }
 
     // This should retrieve a LOT of data and throw EntityCountExceededException
+    @Test
     public void testGetTooMuchData() throws Exception
     {
         Map<String, String> params = Collections.singletonMap( "selector", ":(friends:(favoriteArtists))" );
