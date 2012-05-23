@@ -18,7 +18,7 @@ import java.util.Map;
 public class NavigationLinksEnricherTest
 {
     static YogaRequestContext requestContext = new YogaRequestContext( "map",
-            new DummyHttpServletRequest(), new DummyHttpServletResponse() );
+            new DummyHttpServletRequest(), new DummyHttpServletResponse(), new DefaultFieldPopulatorRegistry() );
 
     @Test
     public void testBasic()
