@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.springframework.util.CollectionUtils;
-
 public class CompositeSelector implements Selector
 {
     private List<Selector> _selectors = new ArrayList<Selector>();
@@ -74,7 +72,7 @@ public class CompositeSelector implements Selector
         for (Selector selector : _selectors)
         {
             Set<String> subSelectorFieldNames = selector.getSelectedFieldNames( instanceType );
-            if (!CollectionUtils.isEmpty( subSelectorFieldNames ))
+            if ( subSelectorFieldNames != null )
             {
                 fieldNames.addAll( subSelectorFieldNames );
             }
@@ -89,7 +87,7 @@ public class CompositeSelector implements Selector
         for (Selector selector : _selectors)
         {
             Map<String, Selector> subSelectorFields = selector.getSelectors( instanceType );
-            if (!CollectionUtils.isEmpty( subSelectorFields ))
+            if ( subSelectorFields != null )
             {
                 fields.putAll( subSelectorFields );
             }

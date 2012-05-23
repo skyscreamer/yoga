@@ -51,13 +51,9 @@
         p:dataSource-ref="dataSource" p:databasePopulator-ref="extendedDbPopulator"
         depends-on="sessionFactory" />
 
-    <bean id="extendedDbResource" class="org.skyscreamer.yoga.util.GzippedResource">
-        <constructor-arg>
-            <bean class="org.springframework.core.io.UrlResource">
-                <constructor-arg
-                    value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz" />
-            </bean>
-        </constructor-arg>
+    <bean id="extendedDbResource" class="org.skyscreamer.yoga.demo.util.GzippedResource">
+      <constructor-arg
+          value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz" />
     </bean>
 
     <bean id="extendedDbPopulator"
@@ -133,6 +129,22 @@
         </property>
         <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry" />
     </bean>
+
+    <bean name="abstract.view" abstract="true"
+        p:registry-ref="renderingListenerRegistry"
+        p:resultTraverser-ref="resultTraverser"
+        p:selectorParser-ref="selectorParser" />
+
+    <bean name="abstract.xml.view" abstract="true"
+        parent="abstract.view"
+        p:classFinderStrategy-ref="hibernateClassFinder" />
+
+    <bean name="xml.view" parent="abstract.xml.view"
+         class="org.skyscreamer.yoga.view.XmlSelectorView" />
+    <bean name="xhtml.view" parent="abstract.xml.view"
+         class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
+    <bean name="json.view" parent="abstract.view"
+         class="org.skyscreamer.yoga.view.JsonSelectorView" />
 
     <!-- YOGA CONFIG END -->
 </beans>

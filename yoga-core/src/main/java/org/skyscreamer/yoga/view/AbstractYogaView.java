@@ -1,6 +1,4 @@
-package org.skyscreamer.yoga.springmvc.view;
-
-import java.util.Map;
+package org.skyscreamer.yoga.view;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +11,6 @@ import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.View;
 
 /**
  * This MessageConvert gets the selector from the request. Children do the
@@ -23,15 +19,12 @@ import org.springframework.web.servlet.View;
  * 
  * @author Solomon Duskis
  */
-public abstract class AbstractYogaView implements View
+public abstract class AbstractYogaView
 {
-    @Autowired
     protected ResultTraverser resultTraverser;
 
-    @Autowired
     protected SelectorParser selectorParser;
 
-    @Autowired
     protected RenderingListenerRegistry registry;
 
     public void setResultTraverser( ResultTraverser resultTraverser )
@@ -49,17 +42,17 @@ public abstract class AbstractYogaView implements View
         this.registry = registry;
     }
 
-    @Override
-    public void render( Map<String, ?> model, HttpServletRequest request, HttpServletResponse response )
+    public void render( HttpServletRequest request, HttpServletResponse response, Object value )
             throws Exception
     {
         response.setContentType( getContentType() );
         YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response,
                 registry.getListeners() );
-        Object value = model.values().iterator().next();
         Selector selector = getSelector( request );
         render( selector, value, context );
     }
+
+    public abstract String getContentType();
 
     public Selector getSelector( HttpServletRequest request ) throws ParseSelectorException
     {

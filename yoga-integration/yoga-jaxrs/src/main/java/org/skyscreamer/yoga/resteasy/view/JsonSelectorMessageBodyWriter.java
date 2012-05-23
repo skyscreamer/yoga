@@ -1,11 +1,11 @@
 package org.skyscreamer.yoga.resteasy.view;
 
-import org.skyscreamer.yoga.springmvc.view.AbstractYogaView;
-import org.skyscreamer.yoga.springmvc.view.JsonSelectorView;
-
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
+
+import org.skyscreamer.yoga.view.AbstractYogaView;
+import org.skyscreamer.yoga.view.JsonSelectorView;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON)

@@ -1,5 +1,11 @@
 package org.skyscreamer.yoga.selector;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
@@ -10,11 +16,6 @@ import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Artist;
 import org.skyscreamer.yoga.test.model.extended.User;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
-import org.springframework.core.io.ClassPathResource;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: corby
@@ -38,23 +39,22 @@ public class PropertyResolverTest extends AbstractTraverserTest
     @Test
     // Set up a DynamicPropertyResolver with the Properties file selectorAlias.properties, and ensure it
     // resolves the selector correctly.
-    public void testDynamicPropertyResolver()
+    public void testDynamicPropertyResolver() throws IOException
     {
         DynamicPropertyResolver dynamicPropertyResolver = new DynamicPropertyResolver();
-        ClassPathResource resource = new ClassPathResource( "selectorAlias.properties" );
-        dynamicPropertyResolver.setPropertyFile( resource );
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream( "selectorAlias.properties" );
+        dynamicPropertyResolver.setPropertyFile( is );
         setAliasSelectorResolver( dynamicPropertyResolver );
 
         doTestResolver();
     }
 
     @Test (expected=ParseSelectorException.class)
-    public void testBadDynamicPropertyResolver() throws ParseSelectorException
+    public void testBadDynamicPropertyResolver() throws ParseSelectorException, IOException
     {
         DynamicPropertyResolver dynamicPropertyResolver = new DynamicPropertyResolver();
-        ClassPathResource resource = new ClassPathResource( "garbage" );
-        dynamicPropertyResolver.setPropertyFile( resource );
-        dynamicPropertyResolver.resolveSelector( "$suggestedAlbums" );
+        dynamicPropertyResolver.setPropertyFile( new BadInputStream() );
+        dynamicPropertyResolver.resolveSelector( "" );
     }
 
     private void doTestResolver()

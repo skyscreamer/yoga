@@ -19,18 +19,14 @@ import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
-import org.skyscreamer.yoga.springmvc.view.AbstractYogaView;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.skyscreamer.yoga.view.AbstractYogaView;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
 {
-    @Autowired
     protected ResultTraverser _resultTraverser;
 
-    @Autowired
     protected SelectorParser _selectorParser;
 
-    @Autowired
     protected RenderingListenerRegistry _registry;
 
     @Context

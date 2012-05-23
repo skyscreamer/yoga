@@ -1,5 +1,9 @@
 package org.skyscreamer.yoga.test.util;
 
+import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
@@ -12,11 +16,6 @@ import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: corby Date: 5/7/12
@@ -46,19 +45,7 @@ public abstract class AbstractTraverserTest
         {
             Assert.fail( "Could not parse selector string " + selectorString );
         }
-        catch (InstantiationException e)
-        {
-            Assert.fail( "Could not instantiate " + _selectorParserClass );
-        }
-        catch (IllegalAccessException e)
-        {
-            Assert.fail( "Could not instantiate " + _selectorParserClass );
-        }
-        catch ( NoSuchMethodException e )
-        {
-            Assert.fail( "Could not instantiate " + _selectorParserClass );
-        }
-        catch ( InvocationTargetException e )
+        catch (Exception e)
         {
             Assert.fail( "Could not instantiate " + _selectorParserClass );
         }

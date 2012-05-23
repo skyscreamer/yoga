@@ -23,13 +23,12 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
             {
                 href += "." + suffix;
                 String url = getUrl( href, event.getValue(), event.getValueType(), event.getRequestContext().getResponse() );
-                ((MapHierarchicalModel<?>)event.getModel() ).addProperty( FIELD_NAME, url );
+                ( ( MapHierarchicalModel<?> ) event.getModel() ).addProperty( FIELD_NAME, url );
             }
             return;
         }
     }
 
-    // Spring injection points
     public void setSuffix( String suffix )
     {
         this.suffix = suffix;
