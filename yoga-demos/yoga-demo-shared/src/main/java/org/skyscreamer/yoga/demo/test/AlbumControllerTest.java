@@ -1,16 +1,18 @@
 package org.skyscreamer.yoga.demo.test;
 
-import org.json.JSONObject;
-import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
 
 import java.util.Collections;
 import java.util.Map;
 
+import org.json.JSONObject;
+import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+
 /**
  * Created by IntelliJ IDEA. User: Carter Page Date: 4/19/11 Time: 6:17 PM
  */
-public class AlbumControllerTest extends AbstractTest
+public class AlbumControllerTest
 {
 
     @Test

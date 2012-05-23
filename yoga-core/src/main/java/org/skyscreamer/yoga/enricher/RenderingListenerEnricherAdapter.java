@@ -28,14 +28,12 @@ public class RenderingListenerEnricherAdapter implements RenderingListener
     @Override
     public void eventOccurred( RenderingEvent event )
     {
-        if (event.getType() != RenderingEventType.POJO_CHILD)
+        if (event.getType() == RenderingEventType.POJO_CHILD)
         {
-            return;
-        }
-
-        for (Enricher enricher : _enrichers)
-        {
-            enricher.enrich( event );
+            for (Enricher enricher : _enrichers)
+            {
+                enricher.enrich( event );
+            }
         }
     }
 

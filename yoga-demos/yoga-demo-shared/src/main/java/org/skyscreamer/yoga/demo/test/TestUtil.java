@@ -13,21 +13,21 @@ import java.util.Map.Entry;
 /**
  * Created by IntelliJ IDEA. User: Carter Page Date: 4/19/11 Time: 6:18 PM
  */
-public abstract class AbstractTest
+public final class TestUtil
 {
     protected final Log _log = LogFactory.getLog( getClass() );
 
-    protected JSONObject getJSONObject( String url, Map<String, String> params ) throws JSONException
+    public static JSONObject getJSONObject( String url, Map<String, String> params ) throws JSONException
     {
         return new JSONObject( getContent( url, params ) );
     }
 
-    protected JSONArray getJSONArray( String url, Map<String, String> params ) throws JSONException
+    public static  JSONArray getJSONArray( String url, Map<String, String> params ) throws JSONException
     {
         return new JSONArray( getContent( url, params ) );
     }
 
-    private String getContent( String url, Map<String, String> params )
+    public static  String getContent( String url, Map<String, String> params )
     {
         RestTemplate restTemplate = new RestTemplate();
         StringBuilder sb = new StringBuilder( "http://localhost:8082" ).append( url ).append( ".json" );
@@ -35,7 +35,7 @@ public abstract class AbstractTest
         return restTemplate.getForObject( sb.toString(), String.class );
     }
 
-    private void addParams( Map<String, String> params, StringBuilder sb )
+    public static void addParams( Map<String, String> params, StringBuilder sb )
     {
         if ( params == null )
             return;
