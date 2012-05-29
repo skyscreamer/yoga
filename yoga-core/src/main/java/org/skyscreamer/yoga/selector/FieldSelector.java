@@ -1,5 +1,6 @@
 package org.skyscreamer.yoga.selector;
 
+import org.skyscreamer.yoga.annotations.SupportedFields;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 
 import java.lang.reflect.Method;
@@ -47,21 +48,26 @@ public class FieldSelector implements Selector
         {
             try
             {
-                Method method = fieldPopulator.getClass().getMethod( "getSupportedFields" );
-                List<String> supportedFields = (List<String>) method.invoke( fieldPopulator );
-                Iterator<String> iter = fieldNames.iterator();
-                while ( iter.hasNext() )
+                for ( Method method : fieldPopulator.getClass().getMethods() )
                 {
-                    String fieldName = iter.next();
-                    if ( !supportedFields.contains( fieldName ) )
+                    if ( method.isAnnotationPresent( SupportedFields.class ) )
                     {
-                        iter.remove();
+                        List<String> supportedFields = (List<String>) method.invoke( fieldPopulator );
+                        Iterator<String> iter = fieldNames.iterator();
+                        while ( iter.hasNext() )
+                        {
+                            String fieldName = iter.next();
+                            if ( !supportedFields.contains( fieldName ) )
+                            {
+                                iter.remove();
+                            }
+                        }
                     }
                 }
             }
             catch ( Exception e )
             {
-                // getSupportedFields not implemented on FieldPopulator
+                // @SupportedFields not found on method of return type List<String>
             }
         }
         return fieldNames;

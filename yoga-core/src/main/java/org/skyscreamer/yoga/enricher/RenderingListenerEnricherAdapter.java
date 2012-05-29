@@ -9,7 +9,6 @@ import org.skyscreamer.yoga.listener.RenderingListener;
 
 public class RenderingListenerEnricherAdapter implements RenderingListener
 {
-
     private static final List<Enricher> DEFAULT_ENRICHERS = Arrays.asList( new HrefEnricher(),
             new ModelDefinitionBuilder(), new NavigationLinksEnricher() );
 

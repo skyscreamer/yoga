@@ -3,8 +3,6 @@ package org.skyscreamer.yoga.enricher;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.Selector;
@@ -31,7 +29,6 @@ public class NavigationLinksEnricher implements Enricher
         Class<?> instanceType = event.getValueType();
         Object instance = event.getValue();
 
-        HttpServletResponse response = event.getRequestContext().getResponse();
         String urlSuffix = event.getRequestContext().getUrlSuffix();
 
         MapHierarchicalModel<?> navigationLinks = ((MapHierarchicalModel<?>) event.getModel())
@@ -44,7 +41,7 @@ public class NavigationLinksEnricher implements Enricher
             MapHierarchicalModel<?> navModel = navigationLinks.createChildMap( fieldName );
             String hrefSuffixAndSelector = String
                     .format( "%s?selector=:(%s)", urlSuffix, fieldName );
-            hrefEnricher.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel, response );
+            hrefEnricher.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel, event.getRequestContext() );
             navModel.addProperty( "name", fieldName );
         }
     }

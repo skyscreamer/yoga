@@ -17,17 +17,25 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.view.AbstractYogaView;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
 {
+    @Autowired
     protected ResultTraverser _resultTraverser;
 
+    @Autowired
     protected SelectorParser _selectorParser;
 
-    protected RenderingListenerRegistry _registry;
+    @Autowired
+    protected RenderingListenerRegistry _renderingListenerRegistry;
+
+    @Autowired
+    private FieldPopulatorRegistry _fieldPopulatorRegistry;
 
     @Context
     HttpServletRequest _request;
@@ -48,9 +56,9 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     }
 
     @Override
-    public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations,
+    public void writeTo( Object t, Class<?> type, Type genericType, Annotation[] annotations,
             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            OutputStream entityStream) throws IOException, WebApplicationException
+            OutputStream entityStream ) throws IOException, WebApplicationException
     {
         try
         {
@@ -58,9 +66,11 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
             view.setResultTraverser( _resultTraverser );
             view.setSelectorParser( _selectorParser );
             Selector selector = view.getSelector( _request );
-            YogaRequestContext context = new YogaRequestContext( view.getHrefSuffix(), _request, response, _registry.getListeners() );
+            YogaRequestContext context = new YogaRequestContext( view.getHrefSuffix(), _request, response,
+                    _fieldPopulatorRegistry, _renderingListenerRegistry.getListeners() );
             view.render( selector, t, context );
-        } catch ( RuntimeException e )
+        }
+        catch ( RuntimeException e )
         {
             throw e;
         }
@@ -71,5 +81,4 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     }
 
     protected abstract AbstractYogaView getView();
-
 }

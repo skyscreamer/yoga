@@ -66,7 +66,7 @@ public class PropertyResolverTest extends AbstractTraverserTest
         prince.getAlbums().add( DataGenerator.diamondsAndPearls() );
 
         ResultTraverser traverser = new ResultTraverser();
-        Map<String, Object> objectTree = doTraverse( corby, "$suggestedAlbums", traverser, _simpleContext );
+        Map<String, Object> objectTree = doTraverse( corby, "$suggestedAlbums", traverser );
         Assert.assertEquals( 3, objectTree.size() );
         List<Map<String,Object>> favoriteArtists = getList( objectTree, "favoriteArtists" );
         Assert.assertEquals( 1, favoriteArtists.size() );

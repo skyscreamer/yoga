@@ -70,7 +70,8 @@
     <!-- YOGA CONFIG BEGING -->
 
     <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser" 
-        p:classFinderStrategy-ref="hibernateClassFinder" p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
+        p:classFinderStrategy-ref="hibernateClassFinder" 
+        p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
         <constructor-arg ref="fieldPopulatorRegistry"/>
@@ -135,16 +136,12 @@
         p:resultTraverser-ref="resultTraverser"
         p:selectorParser-ref="selectorParser" />
 
-    <bean name="abstract.xml.view" abstract="true"
-        parent="abstract.view"
+    <bean name="abstract.xml.view" abstract="true" parent="abstract.view"
         p:classFinderStrategy-ref="hibernateClassFinder" />
 
-    <bean name="xml.view" parent="abstract.xml.view"
-         class="org.skyscreamer.yoga.view.XmlSelectorView" />
-    <bean name="xhtml.view" parent="abstract.xml.view"
-         class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
-    <bean name="json.view" parent="abstract.view"
-         class="org.skyscreamer.yoga.view.JsonSelectorView" />
+    <bean name="xml.view" parent="abstract.xml.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
+    <bean name="xhtml.view" parent="abstract.xml.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
+    <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
 
     <!-- YOGA CONFIG END -->
 </beans>

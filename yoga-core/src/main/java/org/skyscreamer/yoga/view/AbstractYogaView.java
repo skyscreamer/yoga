@@ -47,12 +47,10 @@ public abstract class AbstractYogaView
     {
         response.setContentType( getContentType() );
         YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response,
-                registry.getListeners() );
+                resultTraverser.getFieldPopulatorRegistry(), registry.getListeners() );
         Selector selector = getSelector( request );
         render( selector, value, context );
     }
-
-    public abstract String getContentType();
 
     public Selector getSelector( HttpServletRequest request ) throws ParseSelectorException
     {
@@ -62,6 +60,8 @@ public abstract class AbstractYogaView
         selectorParser.parseSelector( selectorString, composite );
         return composite;
     }
+
+    public abstract String getContentType();
 
     public abstract void render( Selector selector, Object value, YogaRequestContext context )
             throws Exception;

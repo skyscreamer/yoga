@@ -28,7 +28,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         User solomon = DataGenerator.solomon();
         ResultTraverser traverser = new ResultTraverser();
 
-        Map<String, Object> objectTree = doTraverse( solomon, ":", traverser, _simpleContext );
+        Map<String, Object> objectTree = doTraverse( solomon, ":", traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( solomon.getId(), objectTree.get( "id" ) );
         Assert.assertEquals( solomon.getName(), objectTree.get( "name" ) );
@@ -43,7 +43,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
         traverser.getFieldPopulatorRegistry().register( new AlbumFieldPopulator() );
-        Map<String, Object> objectTree = doTraverse( funeral, null, traverser, _simpleContext );
+        Map<String, Object> objectTree = doTraverse( funeral, null, traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
         Assert.assertEquals( funeral.getTitle(), objectTree.get( "title" ) );
@@ -60,7 +60,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
         traverser.getFieldPopulatorRegistry().register( new AlbumFieldPopulator() );
-        Map<String, Object> objectTree = doTraverse( funeral, ":", traverser, _simpleContext );
+        Map<String, Object> objectTree = doTraverse( funeral, ":", traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
         Assert.assertEquals( funeral.getTitle(), objectTree.get( "title" ) );
@@ -80,7 +80,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         ResultTraverser traverser = new ResultTraverser();
         traverser.getFieldPopulatorRegistry().register( new UserFieldPopulatorWithArtistCoreField() );
 
-        Map<String, Object> objectTree = doTraverse( carter, ":", traverser, _simpleContext );
+        Map<String, Object> objectTree = doTraverse( carter, ":", traverser );
         Assert.assertEquals( 3, objectTree.size() );
         Assert.assertEquals( carter.getId(), objectTree.get( "id" ) );
         Assert.assertEquals( carter.getName(), objectTree.get( "name" ) );

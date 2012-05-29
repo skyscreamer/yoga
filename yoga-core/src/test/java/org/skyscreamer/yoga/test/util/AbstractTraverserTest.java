@@ -22,11 +22,15 @@ import org.skyscreamer.yoga.selector.parser.SelectorParser;
  */
 public abstract class AbstractTraverserTest
 {
-    protected YogaRequestContext _simpleContext = new YogaRequestContext( "map",
-            new DummyHttpServletRequest(), new DummyHttpServletResponse() );
-
     protected Class<? extends SelectorParser> _selectorParserClass = LinkedInSelectorParser.class;
     protected AliasSelectorResolver _aliasSelectorResolver;
+
+    protected Map<String, Object> doTraverse( Object instance, String selectorString, ResultTraverser traverser )
+    {
+        YogaRequestContext context = new YogaRequestContext( "test",
+                new DummyHttpServletRequest(), new DummyHttpServletResponse(), traverser.getFieldPopulatorRegistry() );
+        return doTraverse( instance, selectorString, traverser, context );
+    }
 
     protected Map<String, Object> doTraverse( Object instance, String selectorString, ResultTraverser traverser,
             YogaRequestContext context )
@@ -39,7 +43,7 @@ public abstract class AbstractTraverserTest
             CompositeSelector selector = new CompositeSelector( new CoreSelector( traverser.getFieldPopulatorRegistry() ) );
             selectorParser.parseSelector( selectorString, selector );
 
-            return doTraverse( instance, traverser, context, selector );
+            return doTraverse( instance, traverser, selector, context );
         }
         catch (ParseSelectorException e)
         {
@@ -52,8 +56,8 @@ public abstract class AbstractTraverserTest
         return null;
     }
 
-    private Map<String, Object> doTraverse( Object instance, ResultTraverser traverser, YogaRequestContext context,
-            Selector selector )
+    private Map<String, Object> doTraverse( Object instance, ResultTraverser traverser, Selector selector,
+            YogaRequestContext context )
     {
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         traverser.traverse( instance, selector, model, context );

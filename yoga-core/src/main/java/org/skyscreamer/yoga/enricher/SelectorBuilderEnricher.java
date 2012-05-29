@@ -17,7 +17,7 @@ public class SelectorBuilderEnricher extends HrefEnricher implements Enricher
     {
         if (!event.getSelector().isInfluencedExternally())
         {
-            String href = determineTemplate( event.getValueType() );
+            String href = determineTemplate( event.getValueType(), event.getRequestContext() );
 
             if ( href != null )
             {

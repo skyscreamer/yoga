@@ -26,7 +26,7 @@ public class SupportedFieldsTest extends AbstractTraverserTest
         ResultTraverser traverser = new ResultTraverser();
         traverser.getFieldPopulatorRegistry().register( new AlbumFieldPopulator() );
 
-        Map<String,Object> objectTree = doTraverse( chasingProphecy, ":(id,title,year,artist)", traverser, _simpleContext );
+        Map<String,Object> objectTree = doTraverse( chasingProphecy, ":(id,title,year,artist)", traverser );
         Assert.assertEquals( 3, objectTree.size() );
         Assert.assertEquals( chasingProphecy.getId(), objectTree.get( "id" ) );
         Assert.assertEquals( chasingProphecy.getTitle(), objectTree.get( "title" ) );
