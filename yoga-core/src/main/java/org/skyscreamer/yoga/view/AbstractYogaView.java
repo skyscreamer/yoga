@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.view;
 
+import java.io.OutputStream;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,63 +9,63 @@ import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.selector.CompositeSelector;
-import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.selector.MapSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 /**
  * This MessageConvert gets the selector from the request. Children do the
- * interesting output. NOTE: you have to put in a
- * org.skyscreamer.yoga.springmvc.view.RequestHolder in your web.xml file
+ * interesting output. 
  * 
  * @author Solomon Duskis
  */
 public abstract class AbstractYogaView
 {
-    protected ResultTraverser resultTraverser;
+    protected ResultTraverser _resultTraverser;
 
-    protected SelectorParser selectorParser;
+    protected SelectorParser _selectorParser;
 
-    protected RenderingListenerRegistry registry;
+    protected RenderingListenerRegistry _registry;
+
+    protected MapSelector _selector;
 
     public void setResultTraverser( ResultTraverser resultTraverser )
     {
-        this.resultTraverser = resultTraverser;
+        this._resultTraverser = resultTraverser;
     }
 
     public void setSelectorParser( SelectorParser selectorParser )
     {
-        this.selectorParser = selectorParser;
+        this._selectorParser = selectorParser;
     }
 
     public void setRegistry( RenderingListenerRegistry registry )
     {
-        this.registry = registry;
+        this._registry = registry;
     }
 
-    public void render( HttpServletRequest request, HttpServletResponse response, Object value )
+    public void setSelector( MapSelector selector )
+    {
+        this._selector = selector;
+    }
+
+    public final void render( HttpServletRequest request, HttpServletResponse response, Object value, OutputStream os )
             throws Exception
     {
-        response.setContentType( getContentType() );
-        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response,
-                resultTraverser.getFieldPopulatorRegistry(), registry.getListeners() );
+        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), request, response, _registry.getListeners() );
         Selector selector = getSelector( request );
-        render( selector, value, context );
+        render1( selector, value, context, os );
     }
 
     public Selector getSelector( HttpServletRequest request ) throws ParseSelectorException
     {
         String selectorString = request.getParameter( "selector" );
-        CoreSelector coreSelector = new CoreSelector( resultTraverser.getFieldPopulatorRegistry() );
-        CompositeSelector composite = new CompositeSelector( coreSelector );
-        selectorParser.parseSelector( selectorString, composite );
-        return composite;
+        return _selectorParser.parseSelector( selectorString, _selector );
     }
 
     public abstract String getContentType();
 
-    public abstract void render( Selector selector, Object value, YogaRequestContext context )
+    protected abstract void render1( Selector selector, Object value, YogaRequestContext context, OutputStream os )
             throws Exception;
 
     public abstract String getHrefSuffix();

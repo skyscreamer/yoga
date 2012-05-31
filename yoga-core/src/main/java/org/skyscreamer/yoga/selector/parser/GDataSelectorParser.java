@@ -26,4 +26,5 @@ public class GDataSelectorParser extends ParentheticalSelectorParser
     {
         return parseParentheticalSelector( selectorExpression, "(" );
     }
+
 }

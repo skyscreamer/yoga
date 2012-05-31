@@ -28,7 +28,8 @@ public class YogaSpringView implements View
     public void render( Map<String, ?> model, HttpServletRequest request, HttpServletResponse response )
             throws Exception
     {
-        yogaView.render( request, response, model.values().iterator().next() );
+        response.setContentType( getContentType() );
+        yogaView.render( request, response, model.values().iterator().next(), response.getOutputStream() );
     }
 
     @Override

@@ -1,8 +1,7 @@
 package org.skyscreamer.yoga.view;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-
-import javax.servlet.ServletOutputStream;
 
 import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;
@@ -16,11 +15,10 @@ public abstract class AbstractXmlYogaView extends AbstractYogaView
 
     protected ClassFinderStrategy _classFinderStrategy;
 
-    public void write(YogaRequestContext context, Element rootElement) throws IOException
+    public void write(YogaRequestContext context, Element rootElement, OutputStream outputStream) throws IOException
     {
         DOMDocument domDocument = new DOMDocument();
         domDocument.setRootElement( rootElement );
-        ServletOutputStream outputStream = context.getResponse().getOutputStream();
         domDocument.write( new OutputStreamWriter( outputStream ) );
         outputStream.flush();
     }

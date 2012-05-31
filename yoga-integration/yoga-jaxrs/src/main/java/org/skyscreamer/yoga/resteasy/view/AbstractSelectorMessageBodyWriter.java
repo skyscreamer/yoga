@@ -16,9 +16,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
-import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.MapSelector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.view.AbstractYogaView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,22 +33,22 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     protected RenderingListenerRegistry _renderingListenerRegistry;
 
     @Autowired
-    private FieldPopulatorRegistry _fieldPopulatorRegistry;
-
+    protected MapSelector _selector;
+    
     @Context
     HttpServletRequest _request;
 
     @Context
-    HttpServletResponse response;
+    HttpServletResponse _response;
 
     @Override
-    public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4)
+    public long getSize( Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4 )
     {
         return -1;
     }
 
     @Override
-    public boolean isWriteable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3)
+    public boolean isWriteable( Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3 )
     {
         return true;
     }
@@ -65,16 +63,15 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
             AbstractYogaView view = getView();
             view.setResultTraverser( _resultTraverser );
             view.setSelectorParser( _selectorParser );
-            Selector selector = view.getSelector( _request );
-            YogaRequestContext context = new YogaRequestContext( view.getHrefSuffix(), _request, response,
-                    _fieldPopulatorRegistry, _renderingListenerRegistry.getListeners() );
-            view.render( selector, t, context );
+            view.setSelector( _selector );
+            view.setRegistry( _renderingListenerRegistry );
+            view.render( _request, _response, t, entityStream );
         }
-        catch ( RuntimeException e )
+        catch (RuntimeException e)
         {
             throw e;
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             throw new WebApplicationException( e, Response.Status.BAD_REQUEST );
         }

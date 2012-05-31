@@ -1,11 +1,16 @@
 package org.skyscreamer.yoga.mapper;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import junit.framework.Assert;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
-import org.skyscreamer.yoga.populator.FieldPopulatorRenderingListenerAdapter;
+import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
@@ -15,24 +20,20 @@ import org.skyscreamer.yoga.test.model.basic.LeafPopulator;
 import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 public class ResultTraverserTest
 {
-    static ResultTraverser resultTraverser;
+    static ResultTraverser resultTraverser = new ResultTraverser();
+    static FieldPopulatorRegistry registry = new DefaultFieldPopulatorRegistry();
     static YogaRequestContext requestContext;
+    static CoreSelector coreSelector;
 
     @BeforeClass
     public static void setup()
     {
-        resultTraverser = new ResultTraverser();
-        resultTraverser.getFieldPopulatorRegistry().register( new LeafPopulator() );
-
-        RenderingListener listener = new FieldPopulatorRenderingListenerAdapter( resultTraverser );
+        registry.register( new LeafPopulator() );
+        coreSelector = new CoreSelector( registry );
         requestContext = new YogaRequestContext( "map", new DummyHttpServletRequest(),
-                new DummyHttpServletResponse(), resultTraverser.getFieldPopulatorRegistry(), listener );
+                new DummyHttpServletResponse() );
     }
 
     @Test
@@ -41,7 +42,7 @@ public class ResultTraverserTest
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
-        resultTraverser.traverse( input, new CoreSelector( resultTraverser.getFieldPopulatorRegistry() ), model, requestContext );
+        resultTraverser.traverse( input, coreSelector, model, requestContext );
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( 0, objectTree.get( "id" ) );
@@ -54,10 +55,10 @@ public class ResultTraverserTest
         input.setOther( "someValue" );
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
-        FieldSelector selector = new FieldSelector( resultTraverser.getFieldPopulatorRegistry() );
-        selector.register( "other", new FieldSelector( resultTraverser.getFieldPopulatorRegistry() ) );
+        FieldSelector selector = new FieldSelector( registry );
+        selector.register( "other", new FieldSelector( registry ) );
 
-        resultTraverser.traverse( input, selector, model, requestContext );
+        resultTraverser.traverse( input, new CompositeSelector( coreSelector, selector ), model, requestContext );
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( "someValue", objectTree.get( "other" ) );
@@ -71,10 +72,10 @@ public class ResultTraverserTest
         input.setRandomStrings( list );
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
-        FieldSelector selector = new FieldSelector( resultTraverser.getFieldPopulatorRegistry() );
-        selector.register( "randomStrings", new FieldSelector( resultTraverser.getFieldPopulatorRegistry() ) );
+        FieldSelector selector = new FieldSelector( registry );
+        selector.register( "randomStrings", new FieldSelector( registry ) );
 
-        resultTraverser.traverse( input, selector, model, requestContext );
+        resultTraverser.traverse( input, new CompositeSelector( coreSelector, selector ), model, requestContext );
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( list, objectTree.get( "randomStrings" ) );
@@ -87,11 +88,10 @@ public class ResultTraverserTest
         input.setOther( "someValue" );
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
-        FieldSelector fieldSelector = new FieldSelector( resultTraverser.getFieldPopulatorRegistry() );
-        fieldSelector.register( "other", new FieldSelector( resultTraverser.getFieldPopulatorRegistry() ) );
+        FieldSelector fieldSelector = new FieldSelector( registry );
+        fieldSelector.register( "other", new FieldSelector( registry ) );
 
-        CompositeSelector selector = new CompositeSelector( fieldSelector,
-                new CoreSelector( resultTraverser.getFieldPopulatorRegistry() ) );
+        CompositeSelector selector = new CompositeSelector( coreSelector, fieldSelector );
         resultTraverser.traverse( input, selector, model, requestContext );
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
@@ -107,10 +107,9 @@ public class ResultTraverserTest
         input.setLeaf( new BasicTestDataLeaf() );
         input.setId( "fooId" );
 
-        FieldSelector fieldSelector = new FieldSelector( resultTraverser.getFieldPopulatorRegistry() );
-        fieldSelector.register( "leaf", new FieldSelector( resultTraverser.getFieldPopulatorRegistry() ) );
-        CompositeSelector selector = new CompositeSelector( fieldSelector,
-                new CoreSelector( resultTraverser.getFieldPopulatorRegistry() ) );
+        FieldSelector fieldSelector = new FieldSelector( registry );
+        fieldSelector.register( "leaf", new FieldSelector( registry ) );
+        CompositeSelector selector = new CompositeSelector( coreSelector, fieldSelector );
 
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
 
@@ -128,9 +127,9 @@ public class ResultTraverserTest
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
-        FieldSelector fieldSelector = new FieldSelector( resultTraverser.getFieldPopulatorRegistry() );
-        fieldSelector.register( "someValue", new FieldSelector( resultTraverser.getFieldPopulatorRegistry() ) );
-        resultTraverser.traverse( input, fieldSelector, model, requestContext );
+        FieldSelector fieldSelector = new FieldSelector( registry );
+        fieldSelector.register( "someValue", new FieldSelector( registry ) );
+        resultTraverser.traverse( input, new CompositeSelector( coreSelector, fieldSelector ), model, requestContext );
         Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( "someValue", objectTree.get( "someValue" ) );
     }

@@ -1,10 +1,12 @@
 package org.skyscreamer.yoga.enricher;
 
 import org.skyscreamer.yoga.listener.RenderingEvent;
+import org.skyscreamer.yoga.listener.RenderingEventType;
+import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.metadata.MetaDataService;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
-public class MetadataLinkEnricher implements Enricher
+public class MetadataLinkEnricher implements RenderingListener
 {
     private MetaDataService metaDataService;
 
@@ -14,9 +16,9 @@ public class MetadataLinkEnricher implements Enricher
     }
 
     @Override
-    public void enrich( RenderingEvent event )
+    public void eventOccurred( RenderingEvent event )
     {
-        if (event.getSelector().isInfluencedExternally())
+        if (event.getType() != RenderingEventType.POJO_CHILD || event.getSelector().isInfluencedExternally())
         {
             return;
         }

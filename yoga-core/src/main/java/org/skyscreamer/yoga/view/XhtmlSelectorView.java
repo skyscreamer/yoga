@@ -1,6 +1,7 @@
 package org.skyscreamer.yoga.view;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
@@ -13,14 +14,14 @@ public class XhtmlSelectorView extends AbstractXmlYogaView
 {
 
     @Override
-    public void render( Selector selector, Object value, YogaRequestContext context )
+    public void render1( Selector selector, Object value, YogaRequestContext context, OutputStream os )
             throws IOException
     {
         Element rootElement = new DOMElement( "html" );
         initHead( rootElement );
         HierarchicalModel<Element> model = getModel( value, rootElement );
-        resultTraverser.traverse( value, selector, model, context );
-        write( context, rootElement );
+        _resultTraverser.traverse( value, selector, model, context );
+        write( context, rootElement, os );
     }
 
     protected HierarchicalModel<Element> getModel( Object value, Element rootElement )

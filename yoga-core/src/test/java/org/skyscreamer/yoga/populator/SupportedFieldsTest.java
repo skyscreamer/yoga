@@ -24,7 +24,7 @@ public class SupportedFieldsTest extends AbstractTraverserTest
     {
         Album chasingProphecy = DataGenerator.chasingProphecy();
         ResultTraverser traverser = new ResultTraverser();
-        traverser.getFieldPopulatorRegistry().register( new AlbumFieldPopulator() );
+        populatorRegistry.register( new AlbumFieldPopulator() );
 
         Map<String,Object> objectTree = doTraverse( chasingProphecy, ":(id,title,year,artist)", traverser );
         Assert.assertEquals( 3, objectTree.size() );
