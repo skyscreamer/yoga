@@ -3,14 +3,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
     <script type="text/javascript" src="/js/selector.js"></script>
     <script type="text/javascript" src="http://static.jstree.com/v.1.0pre/jquery.jstree.js"></script>
-
-    <!--<link rel="stylesheet" href="http://jquery.bassistance.de/treeview/jquery.treeview.css" type="text/css" />-->
-    <!--<script type="text/javascript" src="http://jquery.bassistance.de/treeview/jquery.treeview.js"></script>-->
-    <!--<script>-->
-        <!--$(document).ready(function(){-->
-            <!--$("#example").treeview();-->
-        <!--});-->
-    <!--</script>-->
+    <link rel="stylesheet" href="/css/selectorBuilder.css" type="text/css" />
     <script type="text/javascript">
         var jsonPath = getJsonPath();
         var rootMetadataPath = getMetadataPath(jsonPath);
@@ -60,7 +53,7 @@
             $.ajax({
                 url: jsonPath + selector,
                 success: function(data) {
-                    $('#data_preview').html(JSON.stringify(data, null, '\t'));
+                    $('#data_preview').html(JSON.stringify(data, null, '    '));
                     var end = new Date().getTime();
                     $('#load_time').html(end - start);
                 }
@@ -121,6 +114,7 @@
                     } )
                 .jstree({
                     "plugins" : [ "themes", "json_data", "ui" ],
+                    "themes" : { "theme" : "default", "dots" : false, "icons" : false },
                     "core" : { "html_titles" : true },
                     "ui" : { "select_multiple_modifier": "on", "selected_parent_close": "deselect" },
                     "json_data" : {
@@ -149,23 +143,29 @@
     </script>
 </head>
 <body>
-
-<table border="1">
-    <tr><td colspan="2">
-        <div style="background-color: #eeeeee; border: 1px solid #000000;"><span id="json_path"></span><span style="color: #cc0000;" id="generated_selector"></span></div>
-    </td></tr>
-    <tr><td valign="top">
-        <div id="entity_name"></div>
-        <div id="selector_builder" class="demo" style="min-height:100px;"></div>
-    </td>
-    <td>
-        <pre id="data_preview"></pre>
-    </td></tr>
-    <tr><td colspan="2">Load time: <span id="load_time" style="font-weight: bold;"></span> ms</td></tr>
-    <tr><td colspan="2">Note: By default <i>navigationLinks</i> are disabled when a selector is added.
-        They are provided to assist in browser navigation of the API data and should be unnecessary during directed programmatic access.
-    </td></tr>
-</table>
-
+    <div id="container">
+        <div id="header">
+            <h1>Yoga Selector Builder</h1>
+            <p>Click on elements on the left-hand side below to add or remove them from the selector.  View the resulting output on the right.</p>
+        </div>
+        <div id="top_bar">
+            <div id="url_bar"><span id="json_path"></span><span id="generated_selector"></span></div>
+            <div id="load_time_bar"><span id="load_time"></span>&nbsp;ms</div>
+        </div>
+        <div id="selector_canvas">
+            <div id="selector_builder_wrapper">
+                <div id="entity_name"></div>
+                <div id="selector_builder" class="demo"></div>
+            </div>
+            <div id="selector_data_preview">
+                <pre id="data_preview"></pre>
+            </div>
+        </div>
+        <div id="footer">
+            <b>Note:</b> By default <i>definition</i>,
+            <i>navigationLinks</i>, <i>selectorBuilder</i>, and <i>metadata</i>
+            are disabled when a selector is added.
+        </div>
+    </div>
 </body>
 </html>
