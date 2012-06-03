@@ -1,0 +1,39 @@
+body {
+    font-family: "Lucida Grande", Verdana, Tahoma, sans-serif;
+    font-size: 14px;
+    line-height: 15px;
+    color: #444;
+    padding: 30px 30px 30px;
+    margin: 0 auto;
+    width: 896px;
+    -webkit-text-size-adjust: 100%; /* Stops Mobile Safari from auto-adjusting font-sizes */
+}
+
+h1 {
+    clear: both;
+    color: #5252CC;
+    font-size: 43px;
+    line-height: 60px;
+}
+
+#container { width: 800px; }
+#header { }
+
+#top_bar { padding: 5px; height: 40px; }
+#url_bar { padding: 4px; background-color: #ffffff; float: left; width: 694px; border: 1px solid #666666; }
+#json_path {}
+#generated_selector { color: #66f; }
+#load_time_bar { float: left; width: 75px; margin: 5px 0 0 5px; text-align: right; }
+
+#selector_canvas { padding: 5px; height: 400px; }
+#selector_builder_wrapper { background-color: #ffffff; float: left; width: 245px; height:400px; overflow: auto; }
+#entity_name { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+#selector_builder { background:#ffffff; }
+#selector_builder .jstree-clicked { background: #77f; border: #66f; color: #fffff3; }
+#selector_builder .isCore a { color: #999; font-style: italic; }
+#selector_builder .jstree-hovered { background: #efefff; color: #000; }
+#selector_data_preview { background-color: #fffff3; border: 2px solid #66f; float: left; width: 541px; height:400px; overflow: auto; }
+#data_preview { }
+
+#footer { border-top: 2px solid #66f; margin-top: 10px; padding: 5px; }
+
