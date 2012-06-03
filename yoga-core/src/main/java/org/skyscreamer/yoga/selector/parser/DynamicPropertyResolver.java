@@ -1,10 +1,10 @@
 package org.skyscreamer.yoga.selector.parser;
 
-import org.skyscreamer.yoga.exceptions.ParseSelectorException;
-import org.springframework.core.io.Resource;
-
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 
 /**
  * Created by IntelliJ IDEA. User: corby
@@ -14,7 +14,7 @@ public class DynamicPropertyResolver implements AliasSelectorResolver
     private int _reloadIntervalSeconds = 0;
     private long _nextReloadTime = 0;
     private Properties _properties = new Properties();
-    private Resource _propertyFile;
+    private InputStream _propertyFile;
 
     public String resolveSelector( String aliasSelectorExpression ) throws ParseSelectorException
     {
@@ -25,13 +25,12 @@ public class DynamicPropertyResolver implements AliasSelectorResolver
             {
                 try
                 {
-                    _properties.load( _propertyFile.getInputStream() );
+                    _properties.load( _propertyFile );
                     _nextReloadTime = milliseconds + (_reloadIntervalSeconds * 1000);
                 }
                 catch ( IOException e )
                 {
-                    throw new ParseSelectorException( "Could not load property file "
-                            + _propertyFile.getFilename() );
+                    throw new ParseSelectorException( "Could not load property file" );
                 }
             }
         }
@@ -50,7 +49,7 @@ public class DynamicPropertyResolver implements AliasSelectorResolver
         _reloadIntervalSeconds = reloadIntervalSeconds;
     }
 
-    public void setPropertyFile( Resource propertyFile )
+    public void setPropertyFile( InputStream propertyFile )
     {
         _propertyFile = propertyFile;
     }

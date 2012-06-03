@@ -1,8 +1,7 @@
 package org.skyscreamer.yoga.enricher;
 
-import org.skyscreamer.yoga.listener.RenderingEvent;
+import org.skyscreamer.yoga.listener.RenderingListener;
 
-public interface Enricher
+public interface Enricher extends RenderingListener
 {
-    void enrich( RenderingEvent event );
 }

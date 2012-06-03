@@ -3,6 +3,7 @@ package org.skyscreamer.yoga.selector.parser;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
+import org.skyscreamer.yoga.selector.MapSelector;
 import org.skyscreamer.yoga.selector.Selector;
 
 /**
@@ -24,18 +25,11 @@ public abstract class SelectorParser
 
     protected abstract FieldSelector parse( String selectorExpression ) throws ParseSelectorException;
 
-    public Selector parseSelector( String selectorExpression ) throws ParseSelectorException
-    {
-        CompositeSelector parent = new CompositeSelector();
-        parseSelector( selectorExpression, parent );
-        return parent;
-    }
-
-    public void parseSelector( String selectorExpression, CompositeSelector parent ) throws ParseSelectorException
+    public FieldSelector parseSelector( String selectorExpression ) throws ParseSelectorException
     {
         if ( selectorExpression == null )
         {
-            return;
+            return null;
         }
 
         if ( _disableExplicitSelectors && !selectorExpression.startsWith( ALIAS_SELECTOR_PREFIX ) )
@@ -48,13 +42,28 @@ public abstract class SelectorParser
             selectorExpression = _aliasSelectorResolver.resolveSelector( selectorExpression );
         }
 
-        if ( selectorExpression != null )
+        FieldSelector fieldSelector = parse( selectorExpression );
+        if(fieldSelector != null && !fieldSelector.getAllPossibleFields( null ).isEmpty() )
         {
-            FieldSelector fieldSelector = parse( selectorExpression );
-            if(fieldSelector != null && !fieldSelector.getSelectors( null ).isEmpty() )
-            {
-                parent.add( fieldSelector );
-            }
+            return fieldSelector;
+        }
+        else
+        {
+            return null;
+        }        
+    }
+
+    public Selector parseSelector( String selectorExpression, MapSelector mapSelector ) throws ParseSelectorException
+    {
+        FieldSelector fieldSelector = parseSelector( selectorExpression );
+
+        if(fieldSelector != null)
+        {
+            return new CompositeSelector( mapSelector, fieldSelector );
+        }
+        else
+        {
+            return mapSelector;
         }
     }
 

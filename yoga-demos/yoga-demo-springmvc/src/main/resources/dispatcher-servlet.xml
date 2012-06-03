@@ -20,20 +20,23 @@
         </property>
     </bean>
 
+    <bean name="abstract.springView" abstract="true"
+        class="org.skyscreamer.yoga.springmvc.view.YogaSpringView" />
+
     <bean name="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
           p:order="1" p:ignoreAcceptHeader="true">
         <property name="mediaTypes">
             <map>
-                <entry key="xml" value="application/xml"/>
+                <entry key="json"  value="application/json"/>
+                <entry key="xml"   value="application/xml"/>
                 <entry key="xhtml" value="text/html"/>
-                <entry key="json" value="application/json"/>
             </map>
         </property>
         <property name="defaultViews">
             <list>
-                <bean class="org.skyscreamer.yoga.springmvc.view.XmlSelectorView"/>
-                <bean class="org.skyscreamer.yoga.springmvc.view.XhtmlSelectorView"/>
-                <bean class="org.skyscreamer.yoga.springmvc.view.JsonSelectorView"/>
+                <bean parent="abstract.springView" p:yogaView-ref="json.view"/>
+                <bean parent="abstract.springView" p:yogaView-ref="xml.view"/>
+                <bean parent="abstract.springView" p:yogaView-ref="xhtml.view"/>
             </list>
         </property>
     </bean>

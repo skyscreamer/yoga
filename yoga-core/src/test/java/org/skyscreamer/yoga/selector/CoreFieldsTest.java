@@ -42,7 +42,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        traverser.getFieldPopulatorRegistry().register( new AlbumFieldPopulator() );
+        populatorRegistry.register( new AlbumFieldPopulator() );
         Map<String, Object> objectTree = doTraverse( funeral, null, traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
@@ -59,7 +59,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        traverser.getFieldPopulatorRegistry().register( new AlbumFieldPopulator() );
+        populatorRegistry.register( new AlbumFieldPopulator() );
         Map<String, Object> objectTree = doTraverse( funeral, ":", traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
@@ -78,12 +78,11 @@ public class CoreFieldsTest extends AbstractTraverserTest
         carter.getFavoriteArtists().add( DataGenerator.neutralMilkHotel() );
         carter.getFavoriteArtists().add( DataGenerator.arcadeFire() );
         ResultTraverser traverser = new ResultTraverser();
-        traverser.getFieldPopulatorRegistry().register( new UserFieldPopulatorWithArtistCoreField() );
+        populatorRegistry.register( new UserFieldPopulatorWithArtistCoreField() );
 
         Map<String, Object> objectTree = doTraverse( carter, ":", traverser );
-        Assert.assertEquals( 3, objectTree.size() );
+        Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( carter.getId(), objectTree.get( "id" ) );
-        Assert.assertEquals( carter.getName(), objectTree.get( "name" ) );
 
         List<Map<String, Object>> favoriteArtists = getList( objectTree, "favoriteArtists" );
         Assert.assertNotNull( favoriteArtists );

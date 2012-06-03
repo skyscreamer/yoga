@@ -4,8 +4,11 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 import org.skyscreamer.yoga.listener.RenderingEvent;
+import org.skyscreamer.yoga.listener.RenderingEventType;
+import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
 import org.skyscreamer.yoga.util.ValueReader;
@@ -13,14 +16,33 @@ import org.skyscreamer.yoga.util.ValueReader;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
-public class HrefEnricher implements Enricher
+public class HrefEnricher implements RenderingListener
 {
 
     private URICreator _uriCreator = new URICreator();
+    private FieldPopulatorRegistry _fieldPopulatorRegistry = null;
+
+    public HrefEnricher()
+    {
+    }
+
+    public HrefEnricher( FieldPopulatorRegistry _fieldPopulatorRegistry )
+    {
+        this._fieldPopulatorRegistry = _fieldPopulatorRegistry;
+    }
+
+    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
+    {
+        this._fieldPopulatorRegistry = fieldPopulatorRegistry;
+    }
 
     @Override
-    public void enrich( RenderingEvent event )
+    public void eventOccurred( RenderingEvent event )
     {
+        if (event.getType() != RenderingEventType.POJO_CHILD)
+        {
+            return;
+        }
         YogaRequestContext requestContext = event.getRequestContext();
         Class<?> valueType = event.getValueType();
         MapHierarchicalModel<?> model = (MapHierarchicalModel<?>) event.getModel();
@@ -28,14 +50,14 @@ public class HrefEnricher implements Enricher
         addUrl( event.getValue(), valueType, requestContext.getUrlSuffix(), model, requestContext );
     }
 
-    public void addUrl( Object value, Class<?> valueType, String urlSuffix, MapHierarchicalModel<?> model,
-            YogaRequestContext context )
+    public void addUrl( Object value, Class<?> valueType, String urlSuffix,
+            MapHierarchicalModel<?> model, YogaRequestContext context )
     {
         String urlTemplate = determineTemplate( valueType, context );
 
-        if ( urlTemplate != null )
+        if (urlTemplate != null)
         {
-            if ( urlSuffix != null )
+            if (urlSuffix != null)
             {
                 urlTemplate += "." + urlSuffix;
             }
@@ -46,29 +68,30 @@ public class HrefEnricher implements Enricher
 
     protected String determineTemplate( Class<?> instanceType, YogaRequestContext context )
     {
-        String result = null;
-        Object fieldPopulator = context.getFieldPopulatorRegistry().getFieldPopulator( instanceType );
-        if ( fieldPopulator != null )
+        Object fieldPopulator = _fieldPopulatorRegistry == null ? null : _fieldPopulatorRegistry
+                .getFieldPopulator( instanceType );
+        if (fieldPopulator != null)
         {
             try
             {
                 Method method = fieldPopulator.getClass().getMethod( "getURITemplate" );
-                result = (String) method.invoke( fieldPopulator );
+                return (String) method.invoke( fieldPopulator );
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
                 // getCoreFields not implemented on FieldPopulator
             }
         }
 
-        if ( result == null && instanceType.isAnnotationPresent( URITemplate.class ) )
+        if (instanceType.isAnnotationPresent( URITemplate.class ))
         {
-            result = instanceType.getAnnotation( URITemplate.class ).value();
+            return instanceType.getAnnotation( URITemplate.class ).value();
         }
-        return result;
+        return null;
     }
 
-    public String getUrl( String uriTemplate, final Object value, final Class<?> valueType, HttpServletResponse response )
+    public String getUrl( String uriTemplate, final Object value, final Class<?> valueType,
+            HttpServletResponse response )
     {
         return _uriCreator.getHref( uriTemplate, response, new ValueReader()
         {
@@ -79,10 +102,10 @@ public class HrefEnricher implements Enricher
                 {
                     return PropertyUtils.getNestedProperty( value, property );
                 }
-                catch ( Exception e )
+                catch (Exception e)
                 {
-                    throw new YogaRuntimeException( "Could not invoke getter for property " + property
-                            + " on class " + valueType.getName(), e );
+                    throw new YogaRuntimeException( "Could not invoke getter for property "
+                            + property + " on class " + valueType.getName(), e );
                 }
             }
         } );
