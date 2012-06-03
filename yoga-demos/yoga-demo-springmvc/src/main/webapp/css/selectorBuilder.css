@@ -25,11 +25,14 @@ h1 {
 #generated_selector { color: #66f; }
 #load_time_bar { float: left; width: 75px; margin: 5px 0 0 5px; text-align: right; }
 
-#selector_canvas { padding: 5px; height: 600px; }
-#selector_builder_wrapper { background-color: #ffffff; float: left; width: 245px; height:600px; overflow: auto; }
+#selector_canvas { padding: 5px; height: 400px; }
+#selector_builder_wrapper { background-color: #ffffff; float: left; width: 245px; height:400px; overflow: auto; }
 #entity_name { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
 #selector_builder { background:#ffffff; }
-#selector_data_preview { background-color: #fffff3; border: 2px solid #66f; float: left; width: 541px; height:600px; overflow: auto; }
+#selector_builder .jstree-clicked { background: #77f; border: #66f; color: #fffff3; }
+#selector_builder .isCore a { color: #999; font-style: italic; }
+#selector_builder .jstree-hovered { background: #efefff; color: #000; }
+#selector_data_preview { background-color: #fffff3; border: 2px solid #66f; float: left; width: 541px; height:400px; overflow: auto; }
 #data_preview { }
 
 #footer { border-top: 2px solid #66f; margin-top: 10px; padding: 5px; }

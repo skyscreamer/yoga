@@ -78,6 +78,7 @@
                 node.attr = new Object();
                 node.attr.id = parentId ? parentId + "." + prop.name : prop.name;
                 if (prop.isCore) {
+                    node.attr.class = "isCore";
                     node.attr.is_core = true;
                 }
                 if (prop.href && prop.href.length > 0) {
@@ -146,7 +147,9 @@
     <div id="container">
         <div id="header">
             <h1>Yoga Selector Builder</h1>
-            <p>Click on elements on the left-hand side below to add or remove them from the selector.  View the resulting output on the right.</p>
+            <p>Click on elements on the left-hand side below to add or remove them from the selector.
+                The selector will be built in the address bar and can be copied into your client application.
+                View the resulting output on the right.</p>
         </div>
         <div id="top_bar">
             <div id="url_bar"><span id="json_path"></span><span id="generated_selector"></span></div>
