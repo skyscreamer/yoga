@@ -55,7 +55,17 @@
                 success: function(data) {
                     $('#data_preview').html(JSON.stringify(data, null, '    '));
                     var end = new Date().getTime();
-                    $('#load_time').html(end - start);
+                    var totalTime = end - start;
+                    $('#load_time').html(totalTime);
+                    if (totalTime >= 1000) {
+                        $('#load_time_bar').removeClass("warnTime").addClass("errTime");
+                    }
+                    else if (totalTime >= 500) {
+                        $('#load_time_bar').removeClass("errTime").addClass("warnTime");
+                    }
+                    else {
+                        $('#load_time_bar').removeClass("warnTime errTime");
+                    }
                 }
             });
         }
@@ -146,10 +156,11 @@
 <body>
     <div id="container">
         <div id="header">
-            <h1>Yoga Selector Builder</h1>
-            <p>Click on elements on the left-hand side below to add or remove them from the selector.
-                The selector will be built in the address bar and can be copied into your client application.
-                View the resulting output on the right.</p>
+            <div id="header_title"><h1>Yoga Selector Builder</h1></div>
+            <p>Click on elements on the left-hand side below to add or remove them from the selector
+                in the address bar.
+                View the resulting output in the preview pane on the right.
+                Default fields are italicized and cannot be added to the selector.</p>
         </div>
         <div id="top_bar">
             <div id="url_bar"><span id="json_path"></span><span id="generated_selector"></span></div>
