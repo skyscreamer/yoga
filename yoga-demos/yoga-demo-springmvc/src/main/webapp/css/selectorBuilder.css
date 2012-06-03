@@ -17,13 +17,16 @@ h1 {
 }
 
 #container { width: 800px; }
-#header { }
+#header_title { border-bottom: 2px solid #66f; }
+#header_title h1 { margin-bottom: 0px; }
 
 #top_bar { padding: 5px; height: 40px; }
 #url_bar { padding: 4px; background-color: #ffffff; float: left; width: 694px; border: 1px solid #666666; }
 #json_path {}
 #generated_selector { color: #66f; }
 #load_time_bar { float: left; width: 75px; margin: 5px 0 0 5px; text-align: right; }
+#load_time_bar.errTime { background-color: #f00; color: #fff; padding: 2px; }
+#load_time_bar.warnTime { background-color: #ffa500; color: #fff; padding: 2px; }
 
 #selector_canvas { padding: 5px; height: 400px; }
 #selector_builder_wrapper { background-color: #ffffff; float: left; width: 245px; height:400px; overflow: auto; }
