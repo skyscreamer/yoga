@@ -9,12 +9,14 @@ import java.util.List;
 
 import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.listener.RenderingEvent;
+import org.skyscreamer.yoga.listener.RenderingEventType;
+import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
-public class ModelDefinitionBuilder implements Enricher
+public class ModelDefinitionBuilder implements RenderingListener
 {
 
     private FieldPopulatorRegistry fieldPopulatorRegistry;
@@ -25,9 +27,9 @@ public class ModelDefinitionBuilder implements Enricher
     }
 
     @Override
-    public void enrich( RenderingEvent event )
+    public void eventOccurred( RenderingEvent event )
     {
-        if (event.getSelector().isInfluencedExternally())
+        if (event.getType() != RenderingEventType.POJO_CHILD || event.getSelector().isInfluencedExternally())
         {
             return;
         }

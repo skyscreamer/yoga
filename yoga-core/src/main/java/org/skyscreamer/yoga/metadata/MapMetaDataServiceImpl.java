@@ -1,19 +1,17 @@
 package org.skyscreamer.yoga.metadata;
 
-import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
-
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import org.skyscreamer.yoga.annotations.Core;
-import org.skyscreamer.yoga.annotations.ExtraField;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.util.NameUtil;
 import org.skyscreamer.yoga.util.ObjectUtil;
 
@@ -24,18 +22,18 @@ public class MapMetaDataServiceImpl implements MetaDataService
     private Map<Class<?>, String> _typeToStringMap = new HashMap<Class<?>, String>();
 
     private String rootMetaDataUrl;
-    private FieldPopulatorRegistry _fieldPopulatorRegistry;
+    private CoreSelector _coreSelector;
 
-    public FieldPopulatorRegistry getFieldPopulatorRegistry()
+    public void setCoreSelector( CoreSelector coreSelector )
     {
-        return _fieldPopulatorRegistry;
+        this._coreSelector = coreSelector;
     }
 
-    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
+    public CoreSelector getCoreSelector()
     {
-        _fieldPopulatorRegistry = fieldPopulatorRegistry;
+        return _coreSelector;
     }
-
+    
     public String getRootMetaDataUrl()
     {
         return rootMetaDataUrl;
@@ -103,71 +101,48 @@ public class MapMetaDataServiceImpl implements MetaDataService
         TypeMetaData result = new TypeMetaData();
         result.setName( NameUtil.getFormalName( type ) );
         addCoreFields( type, suffix, result );
-        addPopulatorFields( type, suffix, result );
         return result;
     }
 
     protected void addCoreFields( Class<?> type, String suffix, TypeMetaData result )
     {
-        for ( PropertyDescriptor property : PropertyUtil.getReadableProperties( type ) )
+        Collection<Property> allFields = _coreSelector.getAllPossibleFields( type );
+        Set<String> coreFieldName = new HashSet<String>();
+
+        for (Property property : _coreSelector.getSelectedFields( type, null ))
+        {
+            coreFieldName.add( property.name() );
+        }
+
+        for ( Property property : allFields )
         {
             Method readMethod = property.getReadMethod();
-            String name = property.getName();
-            boolean core = readMethod.isAnnotationPresent( Core.class );
+            Class<?> propertyType = readMethod.getReturnType();
+            PropertyMetaData propertyMetaData = new PropertyMetaData();
 
-            addField( suffix, result, readMethod, name, core );
+            propertyMetaData.setName( property.name() );
+            propertyMetaData.setIsCore( coreFieldName.contains( property.name() ) );
+
+            if ( ObjectUtil.isPrimitive( propertyType ) )
+            {
+                propertyMetaData.setType( propertyType == String.class ? "String" : propertyType
+                        .getName() );
+            }
+            else if ( Iterable.class.isAssignableFrom( propertyType ) || propertyType.isArray() )
+            {
+                Class<?> collectionValueType = getCollectionType( readMethod, propertyType );
+                String typeName = NameUtil.getFormalName( collectionValueType ) + "[]";
+                propertyMetaData.setType( typeName );
+                addHref( propertyMetaData, collectionValueType, suffix );
+            }
+            else
+            {
+                propertyMetaData.setType( NameUtil.getFormalName( propertyType ) );
+                addHref( propertyMetaData, propertyType, suffix );
+            }
+
+            result.getPropertyMetaData().add( propertyMetaData );
         }
-    }
-
-    protected void addPopulatorFields( Class<?> type, String suffix, TypeMetaData result )
-    {
-        Object fieldPopulator = null;
-        if ( _fieldPopulatorRegistry != null )
-        {
-            fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( type );
-        }
-
-        if ( fieldPopulator == null )
-        {
-            return;
-        }
-
-        for ( Method method : getPopulatorExtraFieldMethods( fieldPopulator, type ) )
-        {
-            String name = method.getAnnotation( ExtraField.class ).value();
-            addField( suffix, result, method, name, false );
-        }
-    }
-
-    protected PropertyMetaData addField( String suffix, TypeMetaData result, Method readMethod,
-            String name, boolean core )
-    {
-        Class<?> propertyType = readMethod.getReturnType();
-        PropertyMetaData propertyMetaData = new PropertyMetaData();
-        result.getPropertyMetaData().add( propertyMetaData );
-
-        propertyMetaData.setName( name );
-        propertyMetaData.setIsCore( core );
-
-        if ( ObjectUtil.isPrimitive( propertyType ) )
-        {
-            propertyMetaData.setType( propertyType == String.class ? "String" : propertyType
-                    .getName() );
-        }
-        else if ( Iterable.class.isAssignableFrom( propertyType ) || propertyType.isArray() )
-        {
-            Class<?> collectionValueType = getCollectionType( readMethod, propertyType );
-            String typeName = NameUtil.getFormalName( collectionValueType ) + "[]";
-            propertyMetaData.setType( typeName );
-            addHref( propertyMetaData, collectionValueType, suffix );
-        }
-        else
-        {
-            propertyMetaData.setType( NameUtil.getFormalName( propertyType ) );
-            addHref( propertyMetaData, propertyType, suffix );
-        }
-
-        return propertyMetaData;
     }
 
     protected Class<?> getCollectionType( Method readMethod, Class<?> propertyType )

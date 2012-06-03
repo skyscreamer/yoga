@@ -1,14 +1,14 @@
 package org.skyscreamer.yoga.demo.resteasy.resources;
 
-import org.jboss.resteasy.core.ResourceMethodRegistry;
-import org.skyscreamer.yoga.demo.dao.GenericDao;
-import org.skyscreamer.yoga.util.NameUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.annotation.PostConstruct;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+
+import org.jboss.resteasy.core.ResourceMethodRegistry;
+import org.skyscreamer.yoga.demo.dao.GenericDao;
+import org.skyscreamer.yoga.util.NameUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ControllerSubscriber<T>
 {

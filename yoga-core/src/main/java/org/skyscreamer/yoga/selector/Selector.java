@@ -1,21 +1,17 @@
 package org.skyscreamer.yoga.selector;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.Collection;
 
 public interface Selector
 {
 
+    Collection<Property> getSelectedFields( Class<?> instanceType, Object instance );
+
+    Collection<Property> getAllPossibleFields( Class<?> instanceType );
+
     boolean containsField( Class<?> instanceType, String property );
-
-    Set<String> getSelectedFieldNames( Class<?> instanceType );
-
-    Set<String> getAllPossibleFields( Class<?> instanceType );
 
     boolean isInfluencedExternally();
 
     Selector getChildSelector( Class<?> instanceType, String fieldName );
-
-    Map<String, Selector> getSelectors( Class<?> instanceType );
-
 }

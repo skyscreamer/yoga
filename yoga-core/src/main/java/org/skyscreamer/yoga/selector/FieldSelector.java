@@ -1,14 +1,20 @@
 package org.skyscreamer.yoga.selector;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.skyscreamer.yoga.annotations.SupportedFields;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 
-import java.lang.reflect.Method;
-import java.util.*;
-
 public class FieldSelector implements Selector
 {
-    protected Map<String, Selector> subSelectors = new HashMap<String, Selector>();
+    protected Map<String, FieldSelector> subSelectors = new HashMap<String, FieldSelector>();
     protected FieldPopulatorRegistry _fieldPopulatorRegistry;
 
     public FieldSelector( FieldPopulatorRegistry fieldPopulatorRegistry )
@@ -17,12 +23,12 @@ public class FieldSelector implements Selector
     }
 
     @Override
-    public Selector getChildSelector( Class<?> instanceType, String fieldName )
+    public FieldSelector getChildSelector( Class<?> instanceType, String fieldName )
     {
         return getSelector( fieldName );
     }
 
-    public Selector getSelector( String fieldName )
+    public FieldSelector getSelector( String fieldName )
     {
         return subSelectors.get( fieldName );
     }
@@ -38,26 +44,42 @@ public class FieldSelector implements Selector
         return subSelectors.containsKey( property );
     }
 
-    
-    @SuppressWarnings( "unchecked" )
-    public Set<String> getSelectedFieldNames( Class<?> instanceType )
+    public int getFieldCount()
+    {
+        return subSelectors.size();
+    }
+
+    @Override
+    public Collection<Property> getSelectedFields( Class<?> instanceType, Object instance )
     {
         Set<String> fieldNames = getFieldNames();
+        removeNonSupportedFields( instanceType, fieldNames );
+        Collection<Property> selected = new ArrayList<Property>();
+        for (String name : fieldNames)
+        {
+            selected.add( new NamedProperty( name ) );
+        }
+        return selected;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void removeNonSupportedFields( Class<?> instanceType, Set<String> fieldNames )
+    {
         Object fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
-        if ( fieldPopulator != null )
+        if (fieldPopulator != null)
         {
             try
             {
-                for ( Method method : fieldPopulator.getClass().getMethods() )
+                for (Method method : fieldPopulator.getClass().getMethods())
                 {
-                    if ( method.isAnnotationPresent( SupportedFields.class ) )
+                    if (method.isAnnotationPresent( SupportedFields.class ))
                     {
-                        List<String> supportedFields = (List<String>) method.invoke( fieldPopulator );
-                        Iterator<String> iter = fieldNames.iterator();
-                        while ( iter.hasNext() )
+                        List<String> supportedFields = (List<String>) method
+                                .invoke( fieldPopulator );
+                        for (Iterator<String> iter = fieldNames.iterator(); iter.hasNext();)
                         {
                             String fieldName = iter.next();
-                            if ( !supportedFields.contains( fieldName ) )
+                            if (!supportedFields.contains( fieldName ))
                             {
                                 iter.remove();
                             }
@@ -65,12 +87,12 @@ public class FieldSelector implements Selector
                     }
                 }
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
-                // @SupportedFields not found on method of return type List<String>
+                // @SupportedFields not found on method of return type
+                // List<String>
             }
         }
-        return fieldNames;
     }
 
     public Set<String> getFieldNames()
@@ -78,13 +100,7 @@ public class FieldSelector implements Selector
         return subSelectors.keySet();
     }
 
-    @Override
-    public Map<String, Selector> getSelectors( Class<?> instanceType )
-    {
-        return getFields();
-    }
-
-    public Map<String, Selector> getFields()
+    public Map<String, FieldSelector> getFields()
     {
         return subSelectors;
     }
@@ -95,15 +111,19 @@ public class FieldSelector implements Selector
     }
 
     @Override
-    public Set<String> getAllPossibleFields( Class<?> instanceType )
+    public Collection<Property> getAllPossibleFields( Class<?> instanceType )
     {
-        return getFieldNames();
+        Collection<Property> allFields = new ArrayList<Property>();
+        for (String name : getFieldNames())
+        {
+            allFields.add( new NamedProperty( name ) );
+        }
+        return allFields;
     }
-    
+
     @Override
     public boolean isInfluencedExternally()
     {
         return true;
     }
-
 }
