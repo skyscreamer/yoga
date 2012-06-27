@@ -1,128 +1,86 @@
 package org.skyscreamer.yoga.selector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
-
-import org.springframework.util.CollectionUtils;
 
 public class CompositeSelector implements Selector
 {
-    private List<Selector> _selectors = new ArrayList<Selector>();
 
-    private CompositeSelector()
-    {
-    }
+    private MapSelector mapSelector;
+    private FieldSelector fieldSelector;
 
-    public CompositeSelector( Selector... selectors )
+    public CompositeSelector( MapSelector mapSelector, FieldSelector fieldSelector )
     {
-        this( Arrays.asList( selectors ) );
-    }
-
-    public CompositeSelector( Iterable<Selector> selectors )
-    {
-        for (Selector selector : selectors)
-        {
-            add( selector );
-        }
-    }
-
-    public void add( Selector selector )
-    {
-        if (selector != null)
-        {
-            this._selectors.add( selector );
-        }
-    }
-
-    @Override
-    public String toString()
-    {
-        return getClass().getName() + ": " + _selectors;
+        this.mapSelector = mapSelector;
+        this.fieldSelector = fieldSelector;
     }
 
     @Override
     public Selector getChildSelector( Class<?> instanceType, String fieldName )
     {
-        CompositeSelector child = new CompositeSelector();
-        for (Selector selector : _selectors)
+        FieldSelector fieldSelectorChild = (FieldSelector) fieldSelector.getChildSelector(
+                instanceType, fieldName );
+        MapSelector mapSelectorChild = (MapSelector) mapSelector.getChildSelector( instanceType,
+                fieldName );
+        if (fieldSelectorChild == null)
         {
-            child.add( selector.getChildSelector( instanceType, fieldName ) );
+            return mapSelectorChild;
         }
-        return child;
+        else
+        {
+            return new CompositeSelector( mapSelectorChild, fieldSelectorChild );
+        }
     }
 
     @Override
     public boolean containsField( Class<?> instanceType, String property )
     {
-        for (Selector selector : _selectors)
-        {
-            if (selector.containsField( instanceType, property ))
-                return true;
-        }
-        return false;
+        return mapSelector.containsField( instanceType, property )
+                || fieldSelector.containsField( instanceType, property );
     }
 
     @Override
-    public Set<String> getSelectedFieldNames( Class<?> instanceType )
+    public Collection<Property> getSelectedFields( Class<?> instanceType, Object instance )
     {
-        Set<String> fieldNames = new TreeSet<String>();
-        for (Selector selector : _selectors)
+        Map<String, Property> response = new TreeMap<String, Property>();
+        
+        Collection<Property> selectedFields = mapSelector.getSelectedFields( instanceType, instance );
+        for (Property property : selectedFields)
         {
-            Set<String> subSelectorFieldNames = selector.getSelectedFieldNames( instanceType );
-            if (!CollectionUtils.isEmpty( subSelectorFieldNames ))
+            response.put( property.name(), property );
+        }
+
+        Collection<Property> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType, instance );
+
+        Collection<Property> allMapFields = mapSelector.getAllPossibleFields( instanceType );
+
+        for (Property property : fieldSelectorChildren)
+        {
+            if (!response.containsKey( property.name() ))
             {
-                fieldNames.addAll( subSelectorFieldNames );
+                for (Property mapProp : allMapFields)
+                {
+                    if (mapProp.name().equals( property.name() ))
+                    {
+                        response.put( mapProp.name(), mapProp );
+                    }
+                }
             }
         }
-        return fieldNames;
+
+        return response.values();
     }
 
     @Override
-    public Map<String, Selector> getSelectors( Class<?> instanceType )
+    public Collection<Property> getAllPossibleFields( Class<?> instanceType )
     {
-        Map<String, Selector> fields = new TreeMap<String, Selector>();
-        for (Selector selector : _selectors)
-        {
-            Map<String, Selector> subSelectorFields = selector.getSelectors( instanceType );
-            if (!CollectionUtils.isEmpty( subSelectorFields ))
-            {
-                fields.putAll( subSelectorFields );
-            }
-        }
-        return fields;
-    }
-
-    @Override
-    public Set<String> getAllPossibleFields( Class<?> instanceType )
-    {
-        TreeSet<String> allFields = new TreeSet<String>();
-        for (Selector selector : _selectors)
-        {
-            allFields.addAll( selector.getAllPossibleFields( instanceType ) );
-        }
-        return allFields;
-    }
-
-    public int subSelectorCount()
-    {
-        return _selectors.size();
+        return mapSelector.getAllPossibleFields( instanceType );
     }
 
     @Override
     public boolean isInfluencedExternally()
     {
-        for (Selector selector : _selectors)
-        {
-            if (selector.isInfluencedExternally())
-            {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 public class NavigationLinksEnricherTest
 {
     static YogaRequestContext requestContext = new YogaRequestContext( "map",
-            new DummyHttpServletRequest(), new DummyHttpServletResponse(), new DefaultFieldPopulatorRegistry() );
+            new DummyHttpServletRequest(), new DummyHttpServletResponse() );
 
     @Test
     public void testBasic()
@@ -26,8 +26,9 @@ public class NavigationLinksEnricherTest
         BasicTestDataLeaf leaf = new BasicTestDataLeaf();
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         RenderingEvent event = new RenderingEvent( RenderingEventType.POJO_CHILD, model, leaf,
-                leaf.getClass(), requestContext, new CoreSelector( new DefaultFieldPopulatorRegistry() ) );
-        new NavigationLinksEnricher().enrich( event );
+                leaf.getClass(), requestContext, new CoreSelector(
+                        new DefaultFieldPopulatorRegistry() ) );
+        new NavigationLinksEnricher().eventOccurred( event );
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
 
@@ -47,8 +48,9 @@ public class NavigationLinksEnricherTest
         node.setId( "foo" );
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         RenderingEvent event = new RenderingEvent( RenderingEventType.POJO_CHILD, model, node,
-                node.getClass(), requestContext, new CoreSelector( new DefaultFieldPopulatorRegistry() ) );
-        new NavigationLinksEnricher().enrich( event );
+                node.getClass(), requestContext, new CoreSelector(
+                        new DefaultFieldPopulatorRegistry() ) );
+        new NavigationLinksEnricher().eventOccurred( event );
         System.out.println( model.getUnderlyingModel() );
     }
 

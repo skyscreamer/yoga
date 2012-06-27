@@ -51,13 +51,9 @@
         p:dataSource-ref="dataSource" p:databasePopulator-ref="extendedDbPopulator"
         depends-on="sessionFactory" />
 
-    <bean id="extendedDbResource" class="org.skyscreamer.yoga.util.GzippedResource">
-        <constructor-arg>
-            <bean class="org.springframework.core.io.UrlResource">
-                <constructor-arg
-                    value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz" />
-            </bean>
-        </constructor-arg>
+    <bean id="extendedDbResource" class="org.skyscreamer.yoga.demo.util.GzippedResource">
+      <constructor-arg
+          value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz" />
     </bean>
 
     <bean id="extendedDbPopulator"
@@ -74,7 +70,7 @@
     <!-- YOGA CONFIG BEGING -->
 
     <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser" 
-        p:classFinderStrategy-ref="hibernateClassFinder" p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
+        p:classFinderStrategy-ref="hibernateClassFinder" />
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
         <constructor-arg ref="fieldPopulatorRegistry"/>
@@ -95,28 +91,23 @@
         </constructor-arg>
     </bean>
 
+    <bean id="hrefEnricher" class="org.skyscreamer.yoga.enricher.HrefEnricher"
+        p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry" />
+
     <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
         <constructor-arg>
             <list>
                 <bean class="org.skyscreamer.yoga.limits.CountLimitRenderingListener">
-                    <constructor-arg value="20000" />
+                    <constructor-arg value="2000" />
                 </bean>
-                <bean id="enricherListenerAdapter"
-                    class="org.skyscreamer.yoga.enricher.RenderingListenerEnricherAdapter">
-                    <constructor-arg>
-                        <list>
-                            <bean class="org.skyscreamer.yoga.enricher.HrefEnricher" />
-                            <bean class="org.skyscreamer.yoga.enricher.SelectorBuilderEnricher" />
-                            <bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher" />
-                            <bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder"
-                                p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
-                            <bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher"
-                                p:metaDataService-ref="metaDataService" />
-                        </list>
-                    </constructor-arg>
-                </bean>
-                <bean class="org.skyscreamer.yoga.populator.FieldPopulatorRenderingListenerAdapter"
-                      p:resultTraverser-ref="resultTraverser"/>
+                <ref bean="hrefEnricher" />
+                <bean class="org.skyscreamer.yoga.enricher.SelectorBuilderEnricher" />
+                <bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher"
+                    p:hrefEnricher-ref="hrefEnricher" />
+                <bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder"
+                    p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
+                <bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher"
+                    p:metaDataService-ref="metaDataService" />
             </list>
         </constructor-arg>
     </bean>
@@ -131,8 +122,24 @@
                 <entry key="user" value="org.skyscreamer.yoga.demo.model.User" />
             </map>
         </property>
-        <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry" />
+        <property name="coreSelector" ref="coreSelector" />
     </bean>
+
+    <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector"
+        p:populatorRegistry-ref="fieldPopulatorRegistry"/>
+
+    <bean name="abstract.view" abstract="true"
+        p:registry-ref="renderingListenerRegistry"
+        p:resultTraverser-ref="resultTraverser"
+        p:selector-ref="coreSelector"
+        p:selectorParser-ref="selectorParser" />
+
+    <bean name="abstract.xml.view" abstract="true" parent="abstract.view"
+        p:classFinderStrategy-ref="hibernateClassFinder" />
+
+    <bean name="xml.view" parent="abstract.xml.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
+    <bean name="xhtml.view" parent="abstract.xml.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
+    <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
 
     <!-- YOGA CONFIG END -->
 </beans>

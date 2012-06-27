@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 @Controller
 @Path("/metadata/")
@@ -18,8 +20,13 @@ public class MetaDataController
     @Autowired
     MetaDataService metaDataService;
 
+    @Context
+    HttpServletRequest request;
+
     @GET
-    public TypeMetaData getTypeMetaData( @PathParam("type") String type, @Context HttpServletRequest request )
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Path("{type}")
+    public TypeMetaData getTypeMetaData( @PathParam("type") String type )
     {
         String uri = request.getRequestURI();
         String parts[] = uri.split( "\\." );

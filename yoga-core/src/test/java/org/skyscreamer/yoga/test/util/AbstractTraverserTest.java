@@ -1,22 +1,21 @@
 package org.skyscreamer.yoga.test.util;
 
+import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
+import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
-import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: corby Date: 5/7/12
@@ -25,11 +24,13 @@ public abstract class AbstractTraverserTest
 {
     protected Class<? extends SelectorParser> _selectorParserClass = LinkedInSelectorParser.class;
     protected AliasSelectorResolver _aliasSelectorResolver;
+    protected FieldPopulatorRegistry populatorRegistry = new DefaultFieldPopulatorRegistry();
+    protected CoreSelector coreSelector = new CoreSelector( populatorRegistry );
 
     protected Map<String, Object> doTraverse( Object instance, String selectorString, ResultTraverser traverser )
     {
         YogaRequestContext context = new YogaRequestContext( "test",
-                new DummyHttpServletRequest(), new DummyHttpServletResponse(), traverser.getFieldPopulatorRegistry() );
+                new DummyHttpServletRequest(), new DummyHttpServletResponse() );
         return doTraverse( instance, selectorString, traverser, context );
     }
 
@@ -39,10 +40,9 @@ public abstract class AbstractTraverserTest
         try
         {
             Constructor<? extends SelectorParser> constructor = _selectorParserClass.getConstructor( FieldPopulatorRegistry.class );
-            SelectorParser selectorParser = constructor.newInstance( traverser.getFieldPopulatorRegistry() );
+            SelectorParser selectorParser = constructor.newInstance( populatorRegistry );
             selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );
-            CompositeSelector selector = new CompositeSelector( new CoreSelector( traverser.getFieldPopulatorRegistry() ) );
-            selectorParser.parseSelector( selectorString, selector );
+            Selector selector = selectorParser.parseSelector( selectorString, coreSelector );
 
             return doTraverse( instance, traverser, selector, context );
         }
@@ -50,19 +50,7 @@ public abstract class AbstractTraverserTest
         {
             Assert.fail( "Could not parse selector string " + selectorString );
         }
-        catch (InstantiationException e)
-        {
-            Assert.fail( "Could not instantiate " + _selectorParserClass );
-        }
-        catch (IllegalAccessException e)
-        {
-            Assert.fail( "Could not instantiate " + _selectorParserClass );
-        }
-        catch ( NoSuchMethodException e )
-        {
-            Assert.fail( "Could not instantiate " + _selectorParserClass );
-        }
-        catch ( InvocationTargetException e )
+        catch (Exception e)
         {
             Assert.fail( "Could not instantiate " + _selectorParserClass );
         }
