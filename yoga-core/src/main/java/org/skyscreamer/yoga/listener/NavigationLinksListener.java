@@ -1,24 +1,20 @@
-package org.skyscreamer.yoga.enricher;
+package org.skyscreamer.yoga.listener;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.skyscreamer.yoga.listener.RenderingEvent;
-import org.skyscreamer.yoga.listener.RenderingEventType;
-import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.selector.Selector;
 
-public class NavigationLinksEnricher implements RenderingListener
+public class NavigationLinksListener implements RenderingListener
 {
+    private HrefListener _hrefListener = new HrefListener();
 
-    private HrefEnricher hrefEnricher = new HrefEnricher();
-
-    public void setHrefEnricher( HrefEnricher hrefEnricher )
+    public void setHrefListener( HrefListener hrefListener )
     {
-        this.hrefEnricher = hrefEnricher;
+        this._hrefListener = hrefListener;
     }
 
     @Override
@@ -45,7 +41,7 @@ public class NavigationLinksEnricher implements RenderingListener
             MapHierarchicalModel<?> navModel = navigationLinks.createChildMap( fieldName );
             String hrefSuffixAndSelector = String
                     .format( "%s?selector=:(%s)", urlSuffix, fieldName );
-            hrefEnricher.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel,
+            _hrefListener.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel,
                     event.getRequestContext() );
             navModel.addProperty( "name", fieldName );
         }

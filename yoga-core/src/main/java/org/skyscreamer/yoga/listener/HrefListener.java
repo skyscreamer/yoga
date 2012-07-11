@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.enricher;
+package org.skyscreamer.yoga.listener;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
@@ -16,17 +16,17 @@ import org.skyscreamer.yoga.util.ValueReader;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
-public class HrefEnricher implements RenderingListener
+public class HrefListener implements RenderingListener
 {
 
     private URICreator _uriCreator = new URICreator();
     private FieldPopulatorRegistry _fieldPopulatorRegistry = null;
 
-    public HrefEnricher()
+    public HrefListener()
     {
     }
 
-    public HrefEnricher( FieldPopulatorRegistry _fieldPopulatorRegistry )
+    public HrefListener( FieldPopulatorRegistry _fieldPopulatorRegistry )
     {
         this._fieldPopulatorRegistry = _fieldPopulatorRegistry;
     }
