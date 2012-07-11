@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.resteasy.view;
+package org.skyscreamer.yoga.jaxrs.view;
 
 import java.io.IOException;
 import java.io.OutputStream;

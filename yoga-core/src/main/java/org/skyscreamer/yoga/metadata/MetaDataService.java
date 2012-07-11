@@ -15,5 +15,4 @@ public interface MetaDataService
     TypeMetaData getMetaData( Class<?> type, String suffix );
 
     String getMetadataHref(Class<?> type, String suffix);
-
 }
