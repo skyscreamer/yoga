@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.enricher;
+package org.skyscreamer.yoga.listener;
 
 import java.util.Map;
 
@@ -18,9 +18,9 @@ import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 /**
  * User: corby Date: 5/14/12
  */
-public class HrefEnricherTest extends AbstractTraverserTest
+public class HrefListenerTest extends AbstractTraverserTest
 {
-    // Put an HrefEnricher in the enricher chain. Traverse a user object where
+    // Put an HrefListener in the listener chain. Traverse a user object where
     // the @URITemplate is defined
     // as "/user/{id}". Verify that the correct URL is appended to the output.
     @Test
@@ -30,7 +30,7 @@ public class HrefEnricherTest extends AbstractTraverserTest
         ResultTraverser traverser = new ResultTraverser();
 
         YogaRequestContext requestContext = new YogaRequestContext( "test",
-                new DummyHttpServletRequest(), new DummyHttpServletResponse(), new HrefEnricher() );
+                new DummyHttpServletRequest(), new DummyHttpServletResponse(), new HrefListener() );
         Map<String, Object> objectTree = doTraverse( solomon, ":", traverser, requestContext );
 
         Assert.assertEquals( "/user/" + solomon.getId() + ".test", objectTree.get( "href" ) );
@@ -38,7 +38,7 @@ public class HrefEnricherTest extends AbstractTraverserTest
 
     // No @URITemplate annotation exists on the Album class, but the
     // AlbumFieldPopulator defines a template.
-    // Put an HrefEnricher in the enricher chain, and verify that the correct
+    // Put an HrefListener in the listener chain, and verify that the correct
     // URL is appended to the output
     @Test
     public void testFieldPopulator()
@@ -48,7 +48,7 @@ public class HrefEnricherTest extends AbstractTraverserTest
         populatorRegistry.register( new AlbumFieldPopulator() );
 
         YogaRequestContext requestContext = new YogaRequestContext( "test",
-                new DummyHttpServletRequest(), new DummyHttpServletResponse(), new HrefEnricher( this.populatorRegistry ) );
+                new DummyHttpServletRequest(), new DummyHttpServletResponse(), new HrefListener( this.populatorRegistry ) );
         Map<String, Object> objectTree = doTraverse( funeral, ":", traverser, requestContext );
 
         Assert.assertEquals( "/album/" + funeral.getId() + ".test", objectTree.get( "href" ) );

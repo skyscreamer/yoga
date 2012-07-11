@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.enricher;
+package org.skyscreamer.yoga.listener;
 
 import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
 
@@ -16,9 +16,8 @@ import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
-public class ModelDefinitionBuilder implements RenderingListener
+public class ModelDefinitionListener implements RenderingListener
 {
-
     private FieldPopulatorRegistry fieldPopulatorRegistry;
 
     public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
@@ -56,5 +55,4 @@ public class ModelDefinitionBuilder implements RenderingListener
         }
         ( ( MapHierarchicalModel<?>) event.getModel()).addProperty( SelectorParser.DEFINITION, definition );
     }
-
 }

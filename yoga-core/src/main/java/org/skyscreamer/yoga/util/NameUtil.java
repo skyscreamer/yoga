@@ -5,8 +5,7 @@ public class NameUtil
     public static String getName( Class<?> type )
     {
         String name = getFormalName( type );
-        return new StringBuilder().append( Character.toLowerCase( name.charAt( 0 ) ) )
-                .append( name.substring( 1 ) ).toString();
+        return String.valueOf( Character.toLowerCase( name.charAt( 0 ) ) ) + name.substring( 1 );
     }
 
     public static String getFormalName( Class<?> type )

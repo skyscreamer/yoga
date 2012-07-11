@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.enricher;
+package org.skyscreamer.yoga.listener;
 
 import org.skyscreamer.yoga.listener.RenderingEvent;
 import org.skyscreamer.yoga.listener.RenderingEventType;
@@ -6,7 +6,7 @@ import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.metadata.MetaDataService;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
-public class MetadataLinkEnricher implements RenderingListener
+public class MetadataLinkListener implements RenderingListener
 {
     private MetaDataService metaDataService;
 
