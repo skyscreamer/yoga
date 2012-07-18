@@ -18,7 +18,7 @@ public class XmlSelectorView extends AbstractXmlYogaView
     {
         HierarchicalModel<Element> model = getModel( value );
         _resultTraverser.traverse( value, selector, model, context );
-        write( context, model.getUnderlyingModel(), os );
+        write( model.getUnderlyingModel(), os );
     }
 
     protected HierarchicalModel<Element> getModel( Object value )

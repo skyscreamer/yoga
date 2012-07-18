@@ -2,7 +2,7 @@ package org.skyscreamer.yoga.metadata;
 
 import java.util.Collection;
 
-public interface MetaDataService
+public interface MetaDataRegistry
 {
     Collection<String> getTypes();
 
@@ -15,5 +15,4 @@ public interface MetaDataService
     TypeMetaData getMetaData( Class<?> type, String suffix );
 
     String getMetadataHref(Class<?> type, String suffix);
-
 }

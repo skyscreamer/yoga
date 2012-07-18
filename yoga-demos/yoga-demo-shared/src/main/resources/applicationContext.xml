@@ -68,10 +68,6 @@
 
 
     <!-- YOGA CONFIG BEGIN -->
-
-    <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser" 
-        p:classFinderStrategy-ref="hibernateClassFinder" />
-
     <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
@@ -97,7 +93,7 @@
     <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
         <constructor-arg>
             <list>
-                <bean class="org.skyscreamer.yoga.limits.CountLimitRenderingListener">
+                <bean class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
                     <constructor-arg value="2000" />
                 </bean>
                 <ref bean="hrefListener" />
@@ -107,12 +103,12 @@
                 <bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"
                     p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
                 <bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"
-                    p:metaDataService-ref="metaDataService" />
+                    p:metaDataRegistry-ref="metaDataService" />
             </list>
         </constructor-arg>
     </bean>
 
-    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.MapMetaDataServiceImpl">
+    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry">
         <property name="rootMetaDataUrl" value="/metadata/" />
         <property name="typeMappings">
             <map>
@@ -130,15 +126,12 @@
 
     <bean name="abstract.view" abstract="true"
         p:registry-ref="renderingListenerRegistry"
-        p:resultTraverser-ref="resultTraverser"
+        p:classFinderStrategy-ref="hibernateClassFinder"
         p:selector-ref="coreSelector"
         p:selectorParser-ref="selectorParser" />
 
-    <bean name="abstract.xml.view" abstract="true" parent="abstract.view"
-        p:classFinderStrategy-ref="hibernateClassFinder" />
-
-    <bean name="xml.view" parent="abstract.xml.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
-    <bean name="xhtml.view" parent="abstract.xml.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
+    <bean name="xml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
+    <bean name="xhtml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
     <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
 
     <!-- YOGA CONFIG END -->

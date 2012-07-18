@@ -1,18 +1,15 @@
 package org.skyscreamer.yoga.listener;
 
-import org.skyscreamer.yoga.listener.RenderingEvent;
-import org.skyscreamer.yoga.listener.RenderingEventType;
-import org.skyscreamer.yoga.listener.RenderingListener;
-import org.skyscreamer.yoga.metadata.MetaDataService;
+import org.skyscreamer.yoga.metadata.MetaDataRegistry;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
 public class MetadataLinkListener implements RenderingListener
 {
-    private MetaDataService metaDataService;
+    private MetaDataRegistry _metaDataRegistry;
 
-    public void setMetaDataService( MetaDataService metaDataService )
+    public void setMetaDataRegistry( MetaDataRegistry metaDataRegistry )
     {
-        this.metaDataService = metaDataService;
+        this._metaDataRegistry = metaDataRegistry;
     }
 
     @Override
@@ -26,7 +23,7 @@ public class MetadataLinkListener implements RenderingListener
         Class<?> type = event.getValueType();
         String urlSuffix = event.getRequestContext().getUrlSuffix();
 
-        String url = metaDataService.getMetadataHref( type, urlSuffix );
+        String url = _metaDataRegistry.getMetadataHref( type, urlSuffix );
 
         if (url != null)
         {
