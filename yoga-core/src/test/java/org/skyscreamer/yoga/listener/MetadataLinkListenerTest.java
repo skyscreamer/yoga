@@ -4,7 +4,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.metadata.MapMetaDataServiceImpl;
+import org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Album;
@@ -30,7 +30,7 @@ public class MetadataLinkListenerTest extends AbstractTraverserTest
         String fileExtension = "test";
         Album signOfTheTimes = DataGenerator.signOfTheTimes();
 
-        MapMetaDataServiceImpl service = new MapMetaDataServiceImpl();
+        DefaultMetaDataRegistry service = new DefaultMetaDataRegistry();
         service.setRootMetaDataUrl( prefixUrl );
         service.setCoreSelector( new CoreSelector( populatorRegistry ) );
 
@@ -39,7 +39,7 @@ public class MetadataLinkListenerTest extends AbstractTraverserTest
         service.setTypeMappings( typeMappings );
 
         MetadataLinkListener metadataLinkListener = new MetadataLinkListener();
-        metadataLinkListener.setMetaDataService( service );
+        metadataLinkListener.setMetaDataRegistry( service );
 
         ResultTraverser traverser = new ResultTraverser();
         YogaRequestContext requestContext = new YogaRequestContext( fileExtension,

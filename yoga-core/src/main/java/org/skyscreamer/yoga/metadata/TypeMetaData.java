@@ -31,5 +31,4 @@ public class TypeMetaData
     {
         this.propertyMetaData = propertyMetaData;
     }
-
 }

@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.skyscreamer.yoga.metadata.MetaDataService;
+import org.skyscreamer.yoga.metadata.MetaDataRegistry;
 import org.skyscreamer.yoga.metadata.TypeMetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MetaDataController
 {
     @Autowired
-    MetaDataService metaDataService;
+    MetaDataRegistry _metaDataRegistry;
 
     @RequestMapping()
     public Map<String, String> getTypes()
     {
         Map<String, String> response = new TreeMap<String, String>();
-        for (String type : metaDataService.getTypes())
+        for (String type : _metaDataRegistry.getTypes())
         {
             response.put( type, "/metadata/" + type );
         }
@@ -35,7 +35,7 @@ public class MetaDataController
     {
         String uri = request.getRequestURI();
         String parts[] = uri.split( "\\." );
-        return metaDataService.getMetaData( type, parts[parts.length - 1] );
+        return _metaDataRegistry.getMetaData( type, parts[parts.length - 1] );
     }
 
 }
