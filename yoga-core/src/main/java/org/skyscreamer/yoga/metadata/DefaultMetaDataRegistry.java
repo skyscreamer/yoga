@@ -15,7 +15,7 @@ import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.util.NameUtil;
 import org.skyscreamer.yoga.util.ObjectUtil;
 
-public class MapMetaDataServiceImpl implements MetaDataService
+public class DefaultMetaDataRegistry implements MetaDataService
 {
 
     private Map<String, Class<?>> _typeMappings;

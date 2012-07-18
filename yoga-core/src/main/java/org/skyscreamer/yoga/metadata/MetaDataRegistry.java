@@ -2,7 +2,7 @@ package org.skyscreamer.yoga.metadata;
 
 import java.util.Collection;
 
-public interface MetaDataService
+public interface MetaDataRegistry
 {
     Collection<String> getTypes();
 
