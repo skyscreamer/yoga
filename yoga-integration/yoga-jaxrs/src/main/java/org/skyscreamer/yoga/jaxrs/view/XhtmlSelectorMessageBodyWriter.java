@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.resteasy.view;
+package org.skyscreamer.yoga.jaxrs.view;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
