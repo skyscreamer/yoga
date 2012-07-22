@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.resteasy.view;
+package org.skyscreamer.yoga.jaxrs.view;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,13 +18,13 @@ import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.MapSelector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
+import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.skyscreamer.yoga.view.AbstractYogaView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
 {
-    @Autowired
-    protected ResultTraverser _resultTraverser;
+    protected ResultTraverser _resultTraverser = new ResultTraverser();
 
     @Autowired
     protected SelectorParser _selectorParser;
@@ -36,11 +36,21 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     protected MapSelector _selector;
     
     @Context
-    HttpServletRequest _request;
+    protected HttpServletRequest _request;
 
     @Context
-    HttpServletResponse _response;
+    protected HttpServletResponse _response;
 
+	protected ClassFinderStrategy _classFinderStrategy;
+
+    @Autowired
+    public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
+    {
+        this._classFinderStrategy = classFinderStrategy;
+        _resultTraverser.setClassFinderStrategy( classFinderStrategy );
+    }
+
+    
     @Override
     public long getSize( Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4 )
     {
@@ -66,6 +76,7 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
             view.setSelector( _selector );
             view.setRegistry( _renderingListenerRegistry );
             view.render( _request, _response, t, entityStream );
+            view.setClassFinderStrategy( _classFinderStrategy );
         }
         catch (RuntimeException e)
         {
