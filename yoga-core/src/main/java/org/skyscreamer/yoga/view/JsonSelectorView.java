@@ -16,8 +16,7 @@ public class JsonSelectorView extends AbstractYogaView
 {
     @Override
     public void render1( Selector selector, Object value, YogaRequestContext requestContext,
-            OutputStream outputStream ) throws IOException, JsonGenerationException,
-            JsonMappingException
+            OutputStream outputStream ) throws IOException
     {
         HierarchicalModel<?> model = getModel( value );
         _resultTraverser.traverse( value, selector, model, requestContext );

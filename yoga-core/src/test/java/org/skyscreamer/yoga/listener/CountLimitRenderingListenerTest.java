@@ -1,8 +1,9 @@
-package org.skyscreamer.yoga.limits;
+package org.skyscreamer.yoga.listener;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.yoga.exceptions.EntityCountExceededException;
+import org.skyscreamer.yoga.listener.CountLimitRenderingListener;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectListHierarchicalModelImpl;

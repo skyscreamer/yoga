@@ -20,16 +20,4 @@ public class PropertyUtil
         }
         return result;
     }
-
-    public static boolean propertiesInclude( List<PropertyDescriptor> propertyDescriptors, String fieldName )
-    {
-        for ( PropertyDescriptor propertyDescriptor : propertyDescriptors )
-        {
-            if ( propertyDescriptor.getName().equals( fieldName ) )
-            {
-                return true;
-            }
-        }
-        return false;
-    }
 }
