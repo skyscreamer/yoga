@@ -67,10 +67,8 @@
     <!-- DATABSE CONFIG END -->
 
 
-    <!-- YOGA CONFIG BEGING -->
-
-    <bean id="resultTraverser" class="org.skyscreamer.yoga.mapper.ResultTraverser" 
-        p:classFinderStrategy-ref="hibernateClassFinder" />
+    <!-- YOGA CONFIG BEGIN -->
+    <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
         <constructor-arg ref="fieldPopulatorRegistry"/>
@@ -81,8 +79,6 @@
     <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"
         p:propertyFile="classpath:selectorAlias.properties" />
 
-    <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
-
     <bean id="fieldPopulatorRegistry" class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">
         <constructor-arg>
             <list>
@@ -91,28 +87,28 @@
         </constructor-arg>
     </bean>
 
-    <bean id="hrefEnricher" class="org.skyscreamer.yoga.enricher.HrefEnricher"
+    <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener"
         p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry" />
 
     <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
         <constructor-arg>
             <list>
-                <bean class="org.skyscreamer.yoga.limits.CountLimitRenderingListener">
+                <bean class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
                     <constructor-arg value="2000" />
                 </bean>
-                <ref bean="hrefEnricher" />
-                <bean class="org.skyscreamer.yoga.enricher.SelectorBuilderEnricher" />
-                <bean class="org.skyscreamer.yoga.enricher.NavigationLinksEnricher"
-                    p:hrefEnricher-ref="hrefEnricher" />
-                <bean class="org.skyscreamer.yoga.enricher.ModelDefinitionBuilder"
+                <ref bean="hrefListener" />
+                <bean class="org.skyscreamer.yoga.listener.SelectorBuilderListener" />
+                <bean class="org.skyscreamer.yoga.listener.NavigationLinksListener"
+                    p:hrefListener-ref="hrefListener" />
+                <bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"
                     p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
-                <bean class="org.skyscreamer.yoga.enricher.MetadataLinkEnricher"
-                    p:metaDataService-ref="metaDataService" />
+                <bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"
+                    p:metaDataRegistry-ref="metaDataService" />
             </list>
         </constructor-arg>
     </bean>
 
-    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.MapMetaDataServiceImpl">
+    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry">
         <property name="rootMetaDataUrl" value="/metadata/" />
         <property name="typeMappings">
             <map>
@@ -130,15 +126,12 @@
 
     <bean name="abstract.view" abstract="true"
         p:registry-ref="renderingListenerRegistry"
-        p:resultTraverser-ref="resultTraverser"
+        p:classFinderStrategy-ref="hibernateClassFinder"
         p:selector-ref="coreSelector"
         p:selectorParser-ref="selectorParser" />
 
-    <bean name="abstract.xml.view" abstract="true" parent="abstract.view"
-        p:classFinderStrategy-ref="hibernateClassFinder" />
-
-    <bean name="xml.view" parent="abstract.xml.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
-    <bean name="xhtml.view" parent="abstract.xml.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
+    <bean name="xml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
+    <bean name="xhtml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
     <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
 
     <!-- YOGA CONFIG END -->

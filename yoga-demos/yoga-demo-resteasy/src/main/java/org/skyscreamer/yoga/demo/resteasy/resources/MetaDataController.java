@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.demo.resteasy.resources;
 
-import org.skyscreamer.yoga.metadata.MetaDataService;
+import org.skyscreamer.yoga.metadata.MetaDataRegistry;
 import org.skyscreamer.yoga.metadata.TypeMetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 public class MetaDataController
 {
     @Autowired
-    MetaDataService metaDataService;
+    MetaDataRegistry _metaDataRegistry;
 
     @Context
     HttpServletRequest request;
@@ -30,7 +30,7 @@ public class MetaDataController
     {
         String uri = request.getRequestURI();
         String parts[] = uri.split( "\\." );
-        return metaDataService.getMetaData( type, parts[parts.length - 1] );
+        return _metaDataRegistry.getMetaData( type, parts[parts.length - 1] );
     }
 
 }

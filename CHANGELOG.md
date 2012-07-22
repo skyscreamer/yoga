@@ -1,6 +1,18 @@
 Changelog
 =========
 
+Version 0.9.1 - 2012-06-29
+--------------------------
+ - Support for JAX-RS
+ - GData-style selectors (in addition to LinkedIn-style)
+ - DoS protection with a configurable throttle that errors out with oversized responses
+ - Added ability to disable explicit selector as additional protection for production deployments
+ - Architecture improved to use event observer patterns for core behavior.  Simplifies and improves extensibility.
+ - Replaced invididual parameters being passed through the stack with ResultTraverserContext
+ - Updated design of demo page and selector builder interface
+ - Improved test infrastructure and coverage
+ - Added @CoreFields and @SupportedFields annotations
+
 Version 0.9.0 - 2012-03-18
 --------------------------
  - Core functionality complete for 1.0 release!  Now we'll add documentation and some polish.

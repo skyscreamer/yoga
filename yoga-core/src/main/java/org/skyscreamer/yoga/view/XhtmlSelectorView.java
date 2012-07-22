@@ -12,7 +12,6 @@ import org.skyscreamer.yoga.selector.Selector;
 
 public class XhtmlSelectorView extends AbstractXmlYogaView
 {
-
     @Override
     public void render1( Selector selector, Object value, YogaRequestContext context, OutputStream os )
             throws IOException
@@ -21,7 +20,7 @@ public class XhtmlSelectorView extends AbstractXmlYogaView
         initHead( rootElement );
         HierarchicalModel<Element> model = getModel( value, rootElement );
         _resultTraverser.traverse( value, selector, model, context );
-        write( context, rootElement, os );
+        write( rootElement, os );
     }
 
     protected HierarchicalModel<Element> getModel( Object value, Element rootElement )

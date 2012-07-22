@@ -12,6 +12,8 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.selector.MapSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
+import org.skyscreamer.yoga.util.ClassFinderStrategy;
+import org.skyscreamer.yoga.util.NameUtil;
 
 /**
  * This MessageConvert gets the selector from the request. Children do the
@@ -21,7 +23,9 @@ import org.skyscreamer.yoga.selector.parser.SelectorParser;
  */
 public abstract class AbstractYogaView
 {
-    protected ResultTraverser _resultTraverser;
+    protected ResultTraverser _resultTraverser = new ResultTraverser();
+
+    protected ClassFinderStrategy _classFinderStrategy;
 
     protected SelectorParser _selectorParser;
 
@@ -49,6 +53,12 @@ public abstract class AbstractYogaView
         this._selector = selector;
     }
 
+    public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
+    {
+        this._classFinderStrategy = classFinderStrategy;
+        _resultTraverser.setClassFinderStrategy( classFinderStrategy );
+    }
+
     public final void render( HttpServletRequest request, HttpServletResponse response, Object value, OutputStream os )
             throws Exception
     {
@@ -61,6 +71,12 @@ public abstract class AbstractYogaView
     {
         String selectorString = request.getParameter( "selector" );
         return _selectorParser.parseSelector( selectorString, _selector );
+    }
+
+    protected String getClassName(Object obj)
+    {
+        Class<?> type = _classFinderStrategy.findClass( obj );
+        return NameUtil.getName( type );
     }
 
     public abstract String getContentType();

@@ -52,7 +52,7 @@ textarea {overflow: auto;}
 
 
 a{
-    color: #6666FF;
+    color: #2F7EBB;
 }
 
 /*		Default Layout: 992px.
@@ -93,7 +93,7 @@ body {
                 background: #3a3a3a;
             }
             nav .demo {
-                background: #6666FF;
+                background: #004477;
             }
             nav .selector {
                 background: #757575;
@@ -103,17 +103,32 @@ body {
             }
             nav .contrib {
                 background: #a6a6a6;
+		background-image:url('http://skyscreamer.org/i/blacktocat.png');
+		background-repeat:no-repeat;
+		background-position:center;
+		background-origin:content-box;
             }
         nav a.active {
             background: #f3444e;
         }
     header { }
         header h1 {
-            clear: both;
-            color: #5252CC;
+	    clear: both;
+            color: #004477;
             font-size: 43px;
             line-height: 60px;
+	    float: left;
+	    width: 70%;
         }
+	header h2 {
+	    padding: 33px 0 0 0;
+	    float: left;
+	    text-align: right;
+	    width: 30%;
+	}
+	header h2 a {
+	    color: #950510;
+	}
         header ul li {
             float: left;
         }
@@ -123,7 +138,7 @@ section {
     padding: 0 20px;
 }
     section h2 {
-        border-bottom:  2px solid #6666FF;
+        border-bottom:  2px solid #2F7EBB;
         font-size: 20px;
         line-height: 21px;
         margin-bottom: 20px;
@@ -134,7 +149,7 @@ section {
     }
     section blockquote,
     section pre {
-        background: #d1d1ff;
+        background: #C6DDEE;
         border: 3px double #aaa;
         padding: 10px;
     }
@@ -147,7 +162,7 @@ section {
             color: #000;
         }
     section .demo {
-        background: #d1d1ff;
+        background: #C6DDEE;
         border: 3px double #aaa;
         float: left;
         margin: 20px 0 20px 0;

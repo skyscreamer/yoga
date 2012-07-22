@@ -1,13 +1,11 @@
-package org.skyscreamer.yoga.enricher;
+package org.skyscreamer.yoga.listener;
 
-import org.skyscreamer.yoga.listener.RenderingEvent;
-import org.skyscreamer.yoga.listener.RenderingEventType;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
 /**
  * Created by IntelliJ IDEA. User: cpage Date: 12/10/11 Time: 3:59 PM
  */
-public class SelectorBuilderEnricher extends HrefEnricher
+public class SelectorBuilderListener extends HrefListener
 {
     public static final String FIELD_NAME = "selectorBuilder";
 
