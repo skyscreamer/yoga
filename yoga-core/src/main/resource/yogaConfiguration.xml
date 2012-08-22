@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- STEP 1. Configure supported views of your data -->
+    <!--                                                                                                       -->
+    <!-- What format will you output your data in response to REST-style queries? Yoga supports rendering your -->
+    <!-- data as a JSON document, an XML Document, or an XHTML document. Comment out views you do not wish to  -->
+    <!-- support. Create your own document format by extending AbstractYogaView, and injecting your            -->
+    <!-- implementation.                                                                                       -->
+    <!--                                                                                                       -->
+    <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
+    <bean name="xml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
+    <bean name="xhtml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
+
+    <bean name="abstract.view" abstract="true">
+        <property name="registry" ref="renderingListenerRegistry"/>
+        <property name="selector" ref="coreSelector"/>
+        <property name="selectorParser" ref="selectorParser"/>
+        <!-- If you declare a custom ClassFinderStrategy (see below), declare it here) -->
+        <!--<property name="classFinderStrategy" ref="hibernateClassFinder"/>-->
+    </bean>
+
+    <!-- STEP 2. Configure your selector parser -->
+    <!--                                                                                                       -->
+    <!-- How will your users specify their selectors? Yoga supports two formats for selectors: the LinkedIn    -->
+    <!-- format and the GData format. Declare your selectorParser to be of type LinkedInSelectorParser or      -->
+    <!-- GDataSelectorParser.                                                                                  -->
+    <!--                                                                                                       -->
+    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
+        <!-- If you use a field populator registry (See STEP 4), inject it in the constructor -->
+        <!-- <constructor-arg ref="fieldPopulatorRegistry"/> -->
+
+        <!-- If you support selector aliases (see STEP 5) -->
+        <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
+        <property name="disableExplicitSelectors" value="false"/>
+    </bean>
+
+    <!-- STEP 3. Configure your rendering listeners -->
+    <!--                                                                                                       -->
+    <!-- Here you define a change of request processors that determnines what behaviors the Yoga framework     -->
+    <!-- supports when it receives a REST-style request. Uncomment these processors to enable them. You can    -->
+    <!-- add your own processors by implementing the RenderingListener interface.                              -->
+    <!--                                                                                                       -->
+    <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
+        <constructor-arg>
+            <list>
+                <!-- The CountLimitRenderingListener limits the number of nodes that can be returned in a response -->
+                <!-- to a single query. This can protect you from large responses, or recursive data graphs of     -->
+                <!-- infinite depth. The constructor value is the maximum number of nodes that may be returned.    -->
+                <!--<bean class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">-->
+                <!--    <constructor-arg value="2000" />-->
+                <!--</bean>-->
+
+                <!-- The SelectorBuilderListener allows you to graphically navigate your response through a web    -->
+                <!-- interface. See https://github.com/skyscreamer/yoga/wiki/Using-the-Selector-Builder-GUI -->
+                <!--<bean class="org.skyscreamer.yoga.listener.SelectorBuilderListener" />-->
+
+                <!-- The HrefListener will render a "href" field with the URI of each resource that is returned in -->
+                <!-- the response, for users that want to navigate directly to the resource. See the documentation -->
+                <!-- of the @URITemplate annotation for how this URI is composed. The HrefListener bean is defined -->
+                <!-- outside of the RenderingListenerRegistry constructor so that it can be injected into other    -->
+                <!-- listeners in the chain.                                                                       -->
+                <!--<ref bean="hrefListener" />-->
+
+                <!-- The NavigationLinksListener will render a "navigationLinks" field that contains the name and  -->
+                <!-- URL for supported fields of the response that are themselves addressable resources. This      -->
+                <!-- provides ease of use for a human who is navigating the data, but it makes the response        -->
+                <!-- highly verbose!                                                                               -->
+                <!--<bean class="org.skyscreamer.yoga.listener.NavigationLinksListener"-->
+                <!--      p:hrefListener-ref="hrefListener" />-->
+
+                <!-- The ModelDefinitionListener will render a "definition" field that enumerates all of the       -->
+                <!-- selectable fields in the resource. This can be useful for a developer who is browsing the     -->
+                <!-- data and composing selectors.                                                                 -->
+                <!--<bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"-->
+                      <!--p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>-->
+
+                <!-- The MetadataLinkListener renders a "metadata" field -->
+                <!--<bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"-->
+                      <!--p:metaDataRegistry-ref="metaDataService" />-->
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener">
+          <!-- If you declared a FieldPopulatorRegistry in Step 4, inject it here -->
+          <!--p:populatorRegistry-ref="fieldPopulatorRegistry"-->
+    </bean>
+
+    <!-- STEP 4. Register your FieldPopulators -->
+    <!--                                                                                                           -->
+    <!-- If you choose to create FieldPopulators that define what data is returned from a Yoga request (instead of -->
+    <!-- using Yoga annotations on your model), register your field populators here. For more info, see            -->
+    <!-- https://github.com/skyscreamer/yoga/wiki/Configuring-Resources-with-FieldPopulators                       -->
+    <!--                                                                                                           -->
+    <!--<bean id="fieldPopulatorRegistry" class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">-->
+        <!--<constructor-arg>-->
+            <!--<list>-->
+                <!--<bean class="com.mycompany.populator.MyFieldPopulator1" />-->
+                <!--<bean class="com.mycompany.populator.MyFieldPopulator2" />-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+
+    <!-- The CoreSelector is a required bean that parses selectors in the request                                  -->
+    <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector">
+          <!-- If you declared a FieldPopulatorRegistry in Step 4, inject it here -->
+          <!--p:populatorRegistry-ref="fieldPopulatorRegistry"-->
+    </bean>
+
+    <!-- STEP 5. Define your Alias Selector Resolver -->
+    <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"
+          p:propertyFile="classpath:selectorAlias.properties" />
+
+    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry"
+          p:coreSelector-ref="coreSelector">
+        <property name="rootMetaDataUrl" value="/metadata/" />
+        <property name="typeMappings">
+            <map>
+                <entry key="album" value="org.skyscreamer.yoga.demo.model.Album" />
+                <entry key="artist" value="org.skyscreamer.yoga.demo.model.Artist" />
+                <entry key="song" value="org.skyscreamer.yoga.demo.model.Song" />
+                <entry key="user" value="org.skyscreamer.yoga.demo.model.User" />
+            </map>
+        </property>
+    </bean>
+
+
+    <!--<bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />-->
+
+</beans>
