@@ -20,11 +20,6 @@ import org.skyscreamer.yoga.util.ParenthesisUtil;
  */
 public class LinkedInSelectorParser extends ParentheticalSelectorParser
 {
-    public LinkedInSelectorParser( FieldPopulatorRegistry fieldPopulatorRegistry )
-    {
-        super( fieldPopulatorRegistry );
-    }
-
     private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
 
     protected FieldSelector parse( String selectorExpression ) throws ParseSelectorException
