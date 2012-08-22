@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.9.2 - 2012-08-22
+--------------------------
+ - Corby's birthday edition!
+ - Updated web design
+ - Move to a listener-style architecture for consistency and better extensibility
+ - Provided a self-documented configuration template: yogaConfiguration.xml
+ - Provided better defaults to simplify out-of-the-box configurations
+
 Version 0.9.1 - 2012-06-29
 --------------------------
  - Support for JAX-RS
