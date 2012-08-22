@@ -12,7 +12,7 @@ public class SelectorParserTest
     public void testGDataSimpleSelector() throws Exception
     {
         String selectorExpression = "gender,country";
-        FieldSelector selector = new GDataSelectorParser( new DefaultFieldPopulatorRegistry() ).parseSelector( selectorExpression );
+        FieldSelector selector = new GDataSelectorParser().parseSelector( selectorExpression );
         testSimpleSelector( selector );
     }
 
@@ -20,7 +20,7 @@ public class SelectorParserTest
     public void testGDataNestedSelectors() throws Exception
     {
         String selectorExpression = "gender,favoriteArtists(birthday,discography(year,title)),friends";
-        FieldSelector selector = new GDataSelectorParser( new DefaultFieldPopulatorRegistry() ).parseSelector( selectorExpression );
+        FieldSelector selector = new GDataSelectorParser().parseSelector( selectorExpression );
         testNestedSelectors( selector );
     }
 
@@ -28,7 +28,7 @@ public class SelectorParserTest
     public void testLinkedInSimpleSelector() throws Exception
     {
         String selectorExpression = ":(gender,country)";
-        FieldSelector selector = new LinkedInSelectorParser( new DefaultFieldPopulatorRegistry() ).parseSelector( selectorExpression );
+        FieldSelector selector = new LinkedInSelectorParser().parseSelector( selectorExpression );
         testSimpleSelector( selector );
     }
 
@@ -36,7 +36,7 @@ public class SelectorParserTest
     public void testLinkedInNestedSelectors() throws Exception
     {
         String selectorExpression = ":(gender,favoriteArtists:(birthday,discography:(year,title)),friends)";
-        FieldSelector selector = new LinkedInSelectorParser( new DefaultFieldPopulatorRegistry() ).parseSelector( selectorExpression );
+        FieldSelector selector = new LinkedInSelectorParser().parseSelector( selectorExpression );
         testNestedSelectors( selector );
     }
 

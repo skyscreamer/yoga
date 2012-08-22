@@ -13,7 +13,7 @@ public abstract class MapSelector implements Selector
     public boolean containsField( Class<?> instanceType, String property )
     {
         Collection<Property> fieldCollection = getFieldCollection( instanceType );
-        return fieldCollection == null ? false : fieldCollection.contains( property );
+        return fieldCollection != null && fieldCollection.contains( property );
     }
 
     protected Collection<Property> getFieldCollection( Class<?> instanceType )

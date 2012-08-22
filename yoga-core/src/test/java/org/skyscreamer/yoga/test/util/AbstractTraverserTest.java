@@ -15,6 +15,7 @@ import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
+import org.skyscreamer.yoga.selector.parser.ParentheticalSelectorParser;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 /**
@@ -22,7 +23,7 @@ import org.skyscreamer.yoga.selector.parser.SelectorParser;
  */
 public abstract class AbstractTraverserTest
 {
-    protected Class<? extends SelectorParser> _selectorParserClass = LinkedInSelectorParser.class;
+    protected Class<? extends ParentheticalSelectorParser> _selectorParserClass = LinkedInSelectorParser.class;
     protected AliasSelectorResolver _aliasSelectorResolver;
     protected FieldPopulatorRegistry populatorRegistry = new DefaultFieldPopulatorRegistry();
     protected CoreSelector coreSelector = new CoreSelector( populatorRegistry );
@@ -39,8 +40,9 @@ public abstract class AbstractTraverserTest
     {
         try
         {
-            Constructor<? extends SelectorParser> constructor = _selectorParserClass.getConstructor( FieldPopulatorRegistry.class );
-            SelectorParser selectorParser = constructor.newInstance( populatorRegistry );
+            Constructor<? extends ParentheticalSelectorParser> constructor = _selectorParserClass.getConstructor();
+            ParentheticalSelectorParser selectorParser = constructor.newInstance();
+            selectorParser.setFieldPopulatorRegistry( populatorRegistry );
             selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );
             Selector selector = selectorParser.parseSelector( selectorString, coreSelector );
 
@@ -83,7 +85,7 @@ public abstract class AbstractTraverserTest
         return null;
     }
 
-    public void setSelectorParserClass( Class<? extends SelectorParser> selectorParserClass )
+    public void setSelectorParserClass( Class<? extends ParentheticalSelectorParser> selectorParserClass )
     {
         _selectorParserClass = selectorParserClass;
     }

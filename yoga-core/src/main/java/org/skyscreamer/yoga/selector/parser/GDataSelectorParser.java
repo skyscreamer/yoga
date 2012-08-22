@@ -16,15 +16,9 @@ import org.skyscreamer.yoga.selector.FieldSelector;
  */
 public class GDataSelectorParser extends ParentheticalSelectorParser
 {
-    public GDataSelectorParser( FieldPopulatorRegistry fieldPopulatorRegistry )
-    {
-        super( fieldPopulatorRegistry );
-    }
-
     @Override
     protected FieldSelector parse( String selectorExpression ) throws ParseSelectorException
     {
         return parseParentheticalSelector( selectorExpression, "(" );
     }
-
 }
