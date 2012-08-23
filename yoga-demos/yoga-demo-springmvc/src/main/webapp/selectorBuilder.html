@@ -100,6 +100,8 @@
             return data;
         }
 
+        var canSelectNodes = true;
+        var selectedParentId = null;
         $(function() {
             $('#json_path').html(jsonPath);
             $('#selector_builder')
@@ -123,6 +125,12 @@
                         if (event.type == 'open_node' && !jstree.is_selected(obj)) { jstree.select_node(obj); }
                         if (event.type == 'close_node' && jstree.is_selected(obj)) { jstree.deselect_node(obj); }
                     } )
+                .bind("before.jstree", function(event, data) {
+                        if (data.func == "select_node" && !canSelectNodes) {
+                            event.stopImmediatePropagation(); // Fix for a race condition by synchronizing folder selection
+                            return false;                     // Thanks to Bojin Li via stackoverflow!
+                        }
+                    })
                 .jstree({
                     "plugins" : [ "themes", "json_data", "ui" ],
                     "themes" : { "theme" : "default", "dots" : false, "icons" : false },
@@ -131,6 +139,12 @@
                     "json_data" : {
                         "ajax" : {
                             "url": function(node) {
+                                canSelectNodes = false;
+                                selectedParentId = '';
+                                if (node && node != -1) {
+                                    selectedParentId = node.attr("id");
+                                }
+
                                 if (node == -1) {
                                     return rootMetadataPath;
                                 }
@@ -139,12 +153,12 @@
                                 }
                             },
                             "success": function(metadata) {
-                                var parent = this._get_node();
-                                var parentId = '';
-                                if (parent && parent != -1) {
-                                    parentId = parent.attr("id");
-                                }
-                                return parseMetaDataNodes(metadata, parentId);
+                                var newNodes = parseMetaDataNodes(metadata, selectedParentId);
+                                canSelectNodes = true;
+                                return newNodes;
+                            },
+                            "error": function() {
+                                canSelectNodes = true;
                             }
                         }
                     }
