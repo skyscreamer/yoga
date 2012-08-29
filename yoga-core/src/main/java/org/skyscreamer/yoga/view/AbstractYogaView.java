@@ -23,10 +23,14 @@ import org.skyscreamer.yoga.util.NameUtil;
  * 
  * @see org.skyscreamer.yoga.jaxrs.view.AbstractSelectorMessageBodyWriter
  * @see org.skyscreamer.yoga.springmvc.view.YogaSpringView
+ * @see org.skyscreamer.yoga.view.JsonSelectorView
+ * @see org.skyscreamer.yoga.view.XmlSelectorView
+ * @see org.skyscreamer.yoga.view.XhtmlSelectorView
  * 
  * @author Solomon Duskis
  */
-public abstract class AbstractYogaView {
+public abstract class AbstractYogaView
+{
 	protected ResultTraverser _resultTraverser = new ResultTraverser();
 
 	protected ClassFinderStrategy _classFinderStrategy;
@@ -37,43 +41,51 @@ public abstract class AbstractYogaView {
 
 	protected MapSelector _selector;
 
-	public void setResultTraverser(ResultTraverser resultTraverser) {
+	public void setResultTraverser(ResultTraverser resultTraverser)
+	{
 		this._resultTraverser = resultTraverser;
 	}
 
-	public void setSelectorParser(SelectorParser selectorParser) {
+	public void setSelectorParser(SelectorParser selectorParser)
+	{
 		this._selectorParser = selectorParser;
 	}
 
-	public void setRegistry(RenderingListenerRegistry registry) {
+	public void setRegistry(RenderingListenerRegistry registry)
+	{
 		this._registry = registry;
 	}
 
-	public void setSelector(MapSelector selector) {
+	public void setSelector(MapSelector selector)
+	{
 		this._selector = selector;
 	}
 
-	public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy) {
+	public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy)
+	{
 		this._classFinderStrategy = classFinderStrategy;
 		_resultTraverser.setClassFinderStrategy(classFinderStrategy);
 	}
 
 	public final void render(HttpServletRequest request,
-			HttpServletResponse response, Object value, OutputStream os)
-			throws Exception {
+	        HttpServletResponse response, Object value, OutputStream os)
+	        throws Exception
+	{
 		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(),
-				request, response, _registry.getListeners());
+		        request, response, _registry.getListeners());
 		Selector selector = getSelector(request);
 		render(selector, value, context, os);
 	}
 
 	protected Selector getSelector(HttpServletRequest request)
-			throws ParseSelectorException {
+	        throws ParseSelectorException
+	{
 		String selectorString = request.getParameter("selector");
 		return _selectorParser.parseSelector(selectorString, _selector);
 	}
 
-	protected String getClassName(Object obj) {
+	protected String getClassName(Object obj)
+	{
 		Class<?> type = _classFinderStrategy.findClass(obj);
 		return NameUtil.getName(type);
 	}
@@ -81,7 +93,7 @@ public abstract class AbstractYogaView {
 	public abstract String getContentType();
 
 	protected abstract void render(Selector selector, Object value,
-			YogaRequestContext context, OutputStream os) throws Exception;
+	        YogaRequestContext context, OutputStream os) throws Exception;
 
 	public abstract String getHrefSuffix();
 }
