@@ -33,9 +33,13 @@
         <!-- If you use a field populator registry (See STEP 4), inject it in the constructor -->
         <!-- <constructor-arg ref="fieldPopulatorRegistry"/> -->
 
-        <!-- If you support selector aliases (see STEP 5) -->
-        <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
-        <property name="disableExplicitSelectors" value="false"/>
+        <!-- If you support selector aliases (see STEP 5), inject your alias selector resolver here. -->
+        <!--<property name="aliasSelectorResolver" ref="aliasSelectorResolver"/> -->
+
+        <!-- If you only want end users to make requests using defined selector aliases, you can disallow the -->
+        <!-- use of explicit (user-defined) selectors here. Only set this to true if you have an alias        -->
+        <!-- selector resolver configured!                                                                    -->
+        <!-- <property name="disableExplicitSelectors" value="true"/> -->
     </bean>
 
     <!-- STEP 3. Configure your rendering listeners -->
@@ -78,7 +82,9 @@
                 <!--<bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"-->
                       <!--p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>-->
 
-                <!-- The MetadataLinkListener renders a "metadata" field -->
+                <!-- The MetadataLinkListener enables the rendering of a complete set of metadata (properties,     -->
+                <!-- types, core field definitions) for a resource type. The response will include a "metadata"    -->
+                <!-- field that has a URL which can be navigated to the metadata detail page.                      -->
                 <!--<bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"-->
                       <!--p:metaDataRegistry-ref="metaDataService" />-->
             </list>
@@ -112,18 +118,23 @@
     </bean>
 
     <!-- STEP 5. Define your Alias Selector Resolver -->
-    <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"
-          p:propertyFile="classpath:selectorAlias.properties" />
+    <!--                                                                                                       -->
+    <!-- If you wish to define selector aliases (see documentation, inject an implementation of the            -->
+    <!-- AliasSelectorResolver interface here. Use one of the selector resolvers bundled with yoga-core,       -->
+    <!-- or provide your own.                                                                                  -->
+    <!--<bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"-->
+          <!--p:propertyFile="classpath:selectorAlias.properties" />-->
 
+    <!-- The metadata service provides complete metadata for a resource that is supported by your Yoga            -->
+    <!-- implementation. This service is required if you register the SelectorBuilderListener or the              -->
+    <!-- MetadataLinkListener in the renderingListenerRegistry.                                                   -->
     <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry"
           p:coreSelector-ref="coreSelector">
         <property name="rootMetaDataUrl" value="/metadata/" />
         <property name="typeMappings">
             <map>
-                <entry key="album" value="org.skyscreamer.yoga.demo.model.Album" />
-                <entry key="artist" value="org.skyscreamer.yoga.demo.model.Artist" />
-                <entry key="song" value="org.skyscreamer.yoga.demo.model.Song" />
-                <entry key="user" value="org.skyscreamer.yoga.demo.model.User" />
+                <!-- Register your model objects that are supported Yoga resources here -->
+                <!--<entry key="order" value="com.mycompany.model.Order" /> -->
             </map>
         </property>
     </bean>
