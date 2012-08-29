@@ -68,7 +68,7 @@
 
 
     <!-- YOGA CONFIG BEGIN -->
-    <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
+    <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.classfinder.HibernateClassFinderStrategy" />
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
         <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry"/>
