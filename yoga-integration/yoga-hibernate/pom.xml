@@ -7,12 +7,12 @@
     <parent>
         <artifactId>yoga-integration</artifactId>
         <groupId>org.skyscreamer</groupId>
-        <version>0.9.2-SNAPSHOT</version>
+        <version>0.9.3-SNAPSHOT</version>
     </parent>
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-hibernate</artifactId>
-    <version>0.9.2-SNAPSHOT</version>
+    <version>0.9.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Yoga Hibernate</name>
