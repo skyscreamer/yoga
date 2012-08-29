@@ -17,6 +17,7 @@
     <modules>
         <module>yoga-springmvc</module>
         <module>yoga-jaxrs</module>
+        <module>yoga-hibernate</module>
     </modules>
 
 </project>
