@@ -3,11 +3,9 @@ package org.skyscreamer.yoga.listener;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
-import org.skyscreamer.yoga.listener.RenderingEvent;
-import org.skyscreamer.yoga.listener.RenderingEventType;
-import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
@@ -20,7 +18,7 @@ public class HrefListener implements RenderingListener
 {
 
     private URICreator _uriCreator = new URICreator();
-    private FieldPopulatorRegistry _fieldPopulatorRegistry = null;
+    private FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry();
 
     public HrefListener()
     {

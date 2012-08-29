@@ -71,7 +71,7 @@
     <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
-        <constructor-arg ref="fieldPopulatorRegistry"/>
+        <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry"/>
         <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
         <property name="disableExplicitSelectors" value="false"/>
     </bean>
@@ -108,7 +108,8 @@
         </constructor-arg>
     </bean>
 
-    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry">
+    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry"
+          p:coreSelector-ref="coreSelector">
         <property name="rootMetaDataUrl" value="/metadata/" />
         <property name="typeMappings">
             <map>
@@ -118,7 +119,6 @@
                 <entry key="user" value="org.skyscreamer.yoga.demo.model.User" />
             </map>
         </property>
-        <property name="coreSelector" ref="coreSelector" />
     </bean>
 
     <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector"

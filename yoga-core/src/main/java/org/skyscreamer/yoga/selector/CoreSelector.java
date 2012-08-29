@@ -12,11 +12,12 @@ import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.CoreFields;
 import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
+import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 
 public class CoreSelector extends MapSelector
 {
-    private FieldPopulatorRegistry _populatorRegistry;
+    private FieldPopulatorRegistry _populatorRegistry = new DefaultFieldPopulatorRegistry();
 
     public CoreSelector( FieldPopulatorRegistry populatorRegistry )
     {
