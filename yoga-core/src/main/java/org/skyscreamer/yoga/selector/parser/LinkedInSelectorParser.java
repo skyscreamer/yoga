@@ -1,7 +1,6 @@
 package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.util.ParenthesisUtil;
 

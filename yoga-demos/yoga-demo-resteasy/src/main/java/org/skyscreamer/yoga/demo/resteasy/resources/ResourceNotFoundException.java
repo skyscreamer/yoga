@@ -1,14 +1,12 @@
 package org.skyscreamer.yoga.demo.resteasy.resources;
 
-import org.hibernate.ObjectNotFoundException;
-import org.springframework.stereotype.Component;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Component
+import org.hibernate.ObjectNotFoundException;
+
 @Provider
 public class ResourceNotFoundException implements ExceptionMapper<ObjectNotFoundException>
 {

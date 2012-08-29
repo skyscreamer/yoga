@@ -13,7 +13,7 @@ import org.skyscreamer.yoga.selector.Selector;
 public class JsonSelectorView extends AbstractYogaView
 {
     @Override
-    public void render1( Selector selector, Object value, YogaRequestContext requestContext,
+    public void render( Selector selector, Object value, YogaRequestContext requestContext,
             OutputStream outputStream ) throws IOException
     {
         HierarchicalModel<?> model = getModel( value );

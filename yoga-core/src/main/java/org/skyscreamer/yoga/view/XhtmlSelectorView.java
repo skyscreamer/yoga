@@ -13,7 +13,7 @@ import org.skyscreamer.yoga.selector.Selector;
 public class XhtmlSelectorView extends AbstractXmlYogaView
 {
     @Override
-    public void render1( Selector selector, Object value, YogaRequestContext context, OutputStream os )
+    public void render( Selector selector, Object value, YogaRequestContext context, OutputStream os )
             throws IOException
     {
         Element rootElement = new DOMElement( "html" );

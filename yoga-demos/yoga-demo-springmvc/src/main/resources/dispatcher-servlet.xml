@@ -8,6 +8,8 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="org.skyscreamer.yoga.demo.test.controller"/>
+    <context:component-scan base-package="org.skyscreamer.yoga.springmvc.controller"/>
+
 
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
 

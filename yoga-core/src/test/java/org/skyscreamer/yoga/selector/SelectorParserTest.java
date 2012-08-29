@@ -2,7 +2,6 @@ package org.skyscreamer.yoga.selector;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
 
