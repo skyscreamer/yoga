@@ -16,7 +16,6 @@ import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
 import org.skyscreamer.yoga.selector.parser.ParentheticalSelectorParser;
-import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 /**
  * User: corby Date: 5/7/12

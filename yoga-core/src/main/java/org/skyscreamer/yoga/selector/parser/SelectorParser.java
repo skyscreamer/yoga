@@ -43,6 +43,7 @@ public abstract class SelectorParser
         }
 
         FieldSelector fieldSelector = parse( selectorExpression );
+        
         if(fieldSelector != null && !fieldSelector.getAllPossibleFields( null ).isEmpty() )
         {
             return fieldSelector;
@@ -55,7 +56,7 @@ public abstract class SelectorParser
 
     public Selector parseSelector( String selectorExpression, MapSelector mapSelector ) throws ParseSelectorException
     {
-        FieldSelector fieldSelector = parseSelector( selectorExpression );
+        Selector fieldSelector = parseSelector( selectorExpression );
 
         if(fieldSelector != null)
         {
