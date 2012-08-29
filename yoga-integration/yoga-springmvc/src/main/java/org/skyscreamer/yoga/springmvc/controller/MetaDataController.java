@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.test.controller;
+package org.skyscreamer.yoga.springmvc.controller;
 
 import java.util.Map;
 import java.util.TreeMap;

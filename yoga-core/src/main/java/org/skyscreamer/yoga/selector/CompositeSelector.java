@@ -6,37 +6,34 @@ import java.util.TreeMap;
 
 public class CompositeSelector implements Selector
 {
+    private Selector coreSelector;
+    private Selector fieldSelector;
 
-    private MapSelector mapSelector;
-    private FieldSelector fieldSelector;
-
-    public CompositeSelector( MapSelector mapSelector, FieldSelector fieldSelector )
+    public CompositeSelector( Selector coreSelector, Selector fieldSelector )
     {
-        this.mapSelector = mapSelector;
+        this.coreSelector = coreSelector;
         this.fieldSelector = fieldSelector;
     }
 
     @Override
     public Selector getChildSelector( Class<?> instanceType, String fieldName )
     {
-        FieldSelector fieldSelectorChild = (FieldSelector) fieldSelector.getChildSelector(
-                instanceType, fieldName );
-        MapSelector mapSelectorChild = (MapSelector) mapSelector.getChildSelector( instanceType,
-                fieldName );
+        Selector fieldSelectorChild = fieldSelector.getChildSelector( instanceType, fieldName );
+        Selector coreSelectorChild = coreSelector.getChildSelector( instanceType, fieldName );
         if (fieldSelectorChild == null)
         {
-            return mapSelectorChild;
+            return coreSelectorChild;
         }
         else
         {
-            return new CompositeSelector( mapSelectorChild, fieldSelectorChild );
+            return new CompositeSelector( coreSelectorChild, fieldSelectorChild );
         }
     }
 
     @Override
     public boolean containsField( Class<?> instanceType, String property )
     {
-        return mapSelector.containsField( instanceType, property )
+        return coreSelector.containsField( instanceType, property )
                 || fieldSelector.containsField( instanceType, property );
     }
 
@@ -45,7 +42,7 @@ public class CompositeSelector implements Selector
     {
         Map<String, Property> response = new TreeMap<String, Property>();
         
-        Collection<Property> selectedFields = mapSelector.getSelectedFields( instanceType, instance );
+        Collection<Property> selectedFields = coreSelector.getSelectedFields( instanceType, instance );
         for (Property property : selectedFields)
         {
             response.put( property.name(), property );
@@ -53,7 +50,7 @@ public class CompositeSelector implements Selector
 
         Collection<Property> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType, instance );
 
-        Collection<Property> allMapFields = mapSelector.getAllPossibleFields( instanceType );
+        Collection<Property> allMapFields = coreSelector.getAllPossibleFields( instanceType );
 
         for (Property property : fieldSelectorChildren)
         {
@@ -75,7 +72,7 @@ public class CompositeSelector implements Selector
     @Override
     public Collection<Property> getAllPossibleFields( Class<?> instanceType )
     {
-        return mapSelector.getAllPossibleFields( instanceType );
+        return coreSelector.getAllPossibleFields( instanceType );
     }
 
     @Override

@@ -3,8 +3,6 @@ package org.skyscreamer.yoga.view;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
@@ -15,7 +13,7 @@ import org.skyscreamer.yoga.selector.Selector;
 public class JsonSelectorView extends AbstractYogaView
 {
     @Override
-    public void render1( Selector selector, Object value, YogaRequestContext requestContext,
+    public void render( Selector selector, Object value, YogaRequestContext requestContext,
             OutputStream outputStream ) throws IOException
     {
         HierarchicalModel<?> model = getModel( value );

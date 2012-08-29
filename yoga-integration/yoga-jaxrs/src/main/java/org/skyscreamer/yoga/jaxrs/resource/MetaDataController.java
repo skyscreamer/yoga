@@ -1,9 +1,4 @@
-package org.skyscreamer.yoga.demo.resteasy.resources;
-
-import org.skyscreamer.yoga.metadata.MetaDataRegistry;
-import org.skyscreamer.yoga.metadata.TypeMetaData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+package org.skyscreamer.yoga.jaxrs.resource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -13,7 +8,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-@Controller
+import org.skyscreamer.yoga.metadata.MetaDataRegistry;
+import org.skyscreamer.yoga.metadata.TypeMetaData;
+import org.springframework.beans.factory.annotation.Autowired;
+
 @Path("/metadata/")
 public class MetaDataController
 {

@@ -47,7 +47,7 @@ public class CoreSelector extends MapSelector
     {
         List<Property> response = new ArrayList<Property>();
         List<PropertyDescriptor> readableProperties = PropertyUtil
-                .getReadableProperties( instanceType );
+        		.getReadableProperties( instanceType );
         Collection<String> allowedCoreFields = getAllowedCoreFields( instanceType );
         if (allowedCoreFields == null)
         {

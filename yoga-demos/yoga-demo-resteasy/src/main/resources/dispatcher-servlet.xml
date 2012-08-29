@@ -8,10 +8,12 @@
 
     <context:annotation-config/>
 
-    <context:component-scan base-package="org.skyscreamer.yoga.demo.resteasy.resources"/>
+    <context:component-scan base-package="org.skyscreamer.yoga.demo.resteasy.resources">
+        <context:include-filter type="annotation" expression="javax.ws.rs.Path"/>
+    </context:component-scan>
     <context:component-scan base-package="org.skyscreamer.yoga.jaxrs" use-default-filters="false">
         <context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider"/>
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+        <context:include-filter type="annotation" expression="javax.ws.rs.Path"/>
     </context:component-scan>
 
     <import resource="classpath:springmvc-resteasy.xml"/>

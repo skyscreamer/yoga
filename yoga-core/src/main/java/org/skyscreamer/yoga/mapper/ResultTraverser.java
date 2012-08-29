@@ -11,6 +11,12 @@ import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 
+/**
+ * ResultTraverser 
+ * @author solomon.duskis
+ *
+ */
+
 public class ResultTraverser
 {
     protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
