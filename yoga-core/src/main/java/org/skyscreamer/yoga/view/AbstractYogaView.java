@@ -1,10 +1,5 @@
 package org.skyscreamer.yoga.view;
 
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
@@ -15,14 +10,16 @@ import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.skyscreamer.yoga.util.NameUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+
 /**
  * This class represents the entry point to yoga. It integrates with view
  * technologies such as Spring Views and JAX-RS MessageBodyWriters. This objects
  * sets up the yoga related context information (listeners, the selector, the
  * suffix) and passes it along to the children to render.
  * 
- * @see org.skyscreamer.yoga.jaxrs.view.AbstractSelectorMessageBodyWriter
- * @see org.skyscreamer.yoga.springmvc.view.YogaSpringView
  * @see org.skyscreamer.yoga.view.JsonSelectorView
  * @see org.skyscreamer.yoga.view.XmlSelectorView
  * @see org.skyscreamer.yoga.view.XhtmlSelectorView
