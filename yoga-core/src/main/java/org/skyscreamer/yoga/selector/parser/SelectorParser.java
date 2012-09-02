@@ -1,6 +1,8 @@
 package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
+import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.selector.MapSelector;
@@ -20,10 +22,15 @@ public abstract class SelectorParser
     public static final String HREF = "href";
     public static final String DEFINITION = "definition";
 
+    protected FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry();
+
     protected AliasSelectorResolver _aliasSelectorResolver;
     protected boolean _disableExplicitSelectors = false;
 
     protected abstract FieldSelector parse( String selectorExpression ) throws ParseSelectorException;
+
+    public abstract String getSelectorJavascriptURL();
+    public abstract Object getSelectorType();
 
     public FieldSelector parseSelector( String selectorExpression ) throws ParseSelectorException
     {
@@ -76,6 +83,11 @@ public abstract class SelectorParser
     public void setDisableExplicitSelectors( boolean disableExplicitSelectors )
     {
         _disableExplicitSelectors = disableExplicitSelectors;
+    }
+
+    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
+    {
+        _fieldPopulatorRegistry = fieldPopulatorRegistry;
     }
 }
 

@@ -15,9 +15,9 @@
             var startTime = (new Date()).getTime();
             $('#demo_status2').html('Running...');
             $('#demo_status2').css('color', '#ee0000');
-            $('#demo_query2').val('user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))');
+            $('#demo_query2').val('user/1.json?selector=friends(favoriteArtists(albums(songs)))');
             setTimeout(function() {
-                $.get('user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))', function(data) {
+                $.get('user/1.json?selector=friends(favoriteArtists(albums(songs)))', function(data) {
                     $('#demo_name2').html(data.name);
                     $(data.friends).each(function(index1) {
                         var friendHtml = '<h4 class="demo_friends_header">' + this.name + '&apos;s Favorite Artists</h4>';
@@ -54,7 +54,7 @@
             $('#demo_status1').css('color', '#ee0000');
             $('#demo_query1').val(queryInput);
             setTimeout(function() {
-                $.get('user/1.json?selector=:(friends)', function(data1) {
+                $.get('user/1.json?selector=friends', function(data1) {
                     $('#demo_name1').html(data1.name);
                     $(data1.friends).each(function(index1) {
                         var friendId = this.id;
@@ -62,7 +62,7 @@
                         queryInput += ' |- user/' + friendId + '.json\n';
                         $('#demo_query1').val(queryInput);
                         setTimeout(function() {
-                            $.get('user/' + friendId + '.json?selector=:(favoriteArtists)', function(data2) {
+                            $.get('user/' + friendId + '.json?selector=favoriteArtists', function(data2) {
                                 var friendHtml = '<div id="demo_friend1_' + friendId + '">'
                                         + '<h4 class="demo_friends_header">' + friendName + '&apos;s Favorite Artists</h4>'
                                         + '</div>';
@@ -75,7 +75,7 @@
                                     queryInput += '\t |- artist/' + artistId + '.json\n';
                                     $('#demo_query1').val(queryInput);
                                     setTimeout(function() {
-                                        $.get('artist/' + artistId + '.json?selector=:(albums)', function(data3) {
+                                        $.get('artist/' + artistId + '.json?selector=albums', function(data3) {
                                             $(data3.albums).each(function(index3) {
                                                 var albumId = this.id;
                                                 var albumHtml = '<li id="demo_album_' + friendId + '_' + artistId + '_' + albumId + '"><b>' + this.title + '</b></li>';
@@ -83,7 +83,7 @@
                                                 queryInput += '\t\t |- album/' + albumId + '.json\n';
                                                 $('#demo_query1').val(queryInput);
                                                 setTimeout(function() {
-                                                    $.get('album/' + albumId + '.json?selector=:(songs)', function(data4) {
+                                                    $.get('album/' + albumId + '.json?selector=songs', function(data4) {
                                                         var songHtml = ': (';
                                                         $(data4.songs).each(function(index4) {
                                                             if (index4 > 0)

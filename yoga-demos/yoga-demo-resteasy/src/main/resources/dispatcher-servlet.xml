@@ -34,5 +34,4 @@
 
     <bean parent="subscriber" p:entityClass="org.skyscreamer.yoga.demo.model.Album"/>
     <bean parent="subscriber" p:entityClass="org.skyscreamer.yoga.demo.model.Song"/>
-    <bean parent="subscriber" p:entityClass="org.skyscreamer.yoga.demo.model.Artist"/>
 </beans>

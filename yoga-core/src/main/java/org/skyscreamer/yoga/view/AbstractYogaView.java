@@ -68,7 +68,7 @@ public abstract class AbstractYogaView
 	        HttpServletResponse response, Object value, OutputStream os)
 	        throws Exception
 	{
-		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(),
+		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(), _selectorParser,
 		        request, response, _registry.getListeners());
 		Selector selector = getSelector(request);
 		render(selector, value, context, os);

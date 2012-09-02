@@ -1,9 +1,9 @@
 <html>
 <head><title>Yoga Selector Builder</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
-    <script type="text/javascript" src="http://yoga.skyscreamer.org/js/selector.js"></script>
+    <script type="text/javascript" src="${selectorJavascriptURL}"></script>
     <script type="text/javascript" src="http://static.jstree.com/v.1.0pre/jquery.jstree.js"></script>
-    <link rel="stylesheet" href="http://yoga.skyscreamer.org/css/selectorBuilder.css" type="text/css" />
+    <link rel="stylesheet" href="/css/selectorBuilder.css" type="text/css" />
     <script type="text/javascript">
         var jsonPath = getJsonPath();
         var rootMetadataPath = getMetadataPath(jsonPath);
@@ -190,9 +190,10 @@
             </div>
         </div>
         <div id="footer">
-            <b>Note:</b> By default <i>definition</i>,
-            <i>navigationLinks</i>, <i>selectorBuilder</i>, and <i>metadata</i>
-            are disabled when a selector is added.
+            <p>Configured selector type: <span class="selectorType">${selectorType}</span></p>
+            <p><b>Note:</b> By default <i>definition</i>,
+                <i>navigationLinks</i>, <i>selectorBuilder</i>, and <i>metadata</i>
+                are disabled when a selector is added.</p>
         </div>
     </div>
 </body>

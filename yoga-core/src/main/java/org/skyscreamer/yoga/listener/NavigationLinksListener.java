@@ -1,12 +1,14 @@
 package org.skyscreamer.yoga.listener;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
+import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class NavigationLinksListener implements RenderingListener
 {
@@ -39,8 +41,17 @@ public class NavigationLinksListener implements RenderingListener
         {
             String fieldName = field.name();
             MapHierarchicalModel<?> navModel = navigationLinks.createChildMap( fieldName );
-            String hrefSuffixAndSelector = String
-                    .format( "%s?selector=:(%s)", urlSuffix, fieldName );
+            String format;
+            if (event.getRequestContext().getSelectorParser() instanceof LinkedInSelectorParser) {
+                format = "%s?selector=:(%s)";
+            }
+            else if (event.getRequestContext().getSelectorParser() instanceof GDataSelectorParser) {
+                format = "%s?selector=%s";
+            }
+            else {
+                throw new IllegalStateException("Unknown selector type: " + event.getRequestContext().getSelectorParser().getClass().getName());
+            }
+            String hrefSuffixAndSelector = String.format( format, urlSuffix, fieldName );
             _hrefListener.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel,
                     event.getRequestContext() );
             navModel.addProperty( "name", fieldName );

@@ -6,6 +6,7 @@ import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry;
 import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Album;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
@@ -43,9 +44,9 @@ public class MetadataLinkListenerTest extends AbstractTraverserTest
         metadataLinkListener.setMetaDataRegistry( service );
 
         ResultTraverser traverser = new ResultTraverser();
-        YogaRequestContext requestContext = new YogaRequestContext( fileExtension,
+        YogaRequestContext requestContext = new YogaRequestContext( fileExtension, new GDataSelectorParser(),
                 new DummyHttpServletRequest(), new DummyHttpServletResponse(), metadataLinkListener );
-        Map<String, Object> objectTree = doTraverse( signOfTheTimes, ":", traverser, requestContext );
+        Map<String, Object> objectTree = doTraverse( signOfTheTimes, "", traverser, requestContext );
 
         Map<String,String> metadataMap = (Map<String,String>) objectTree.get( "metadata" );
         String metadataHref = prefixUrl + "album." + fileExtension;

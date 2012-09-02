@@ -1,8 +1,6 @@
 package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.util.ParenthesisUtil;
 
@@ -16,8 +14,6 @@ import org.skyscreamer.yoga.util.ParenthesisUtil;
  */
 public abstract class ParentheticalSelectorParser extends SelectorParser
 {
-    protected FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry();
-
     protected FieldSelector parseParentheticalSelector( String rawSelectorExpression, String openParenthesis ) throws ParseSelectorException
     {
         FieldSelector selector = new FieldSelector( _fieldPopulatorRegistry );
@@ -78,10 +74,5 @@ public abstract class ParentheticalSelectorParser extends SelectorParser
             throw new IllegalArgumentException( HREF + " is a reserved keyword for selectors" );
         }
         selector.register( fieldName, subSelector );
-    }
-
-    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
-    {
-        _fieldPopulatorRegistry = fieldPopulatorRegistry;
     }
 }

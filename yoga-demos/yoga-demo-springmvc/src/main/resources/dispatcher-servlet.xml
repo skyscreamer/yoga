@@ -30,7 +30,7 @@
         <property name="mediaTypes">
             <map>
                 <entry key="json"  value="application/json"/>
-                <entry key="xml"   value="application/xml"/>
+                <!--<entry key="xml"   value="application/xml"/>-->
                 <!--<entry key="xhtml" value="text/html"/>-->
                 <entry key="yoga" value="text/html" />
             </map>
