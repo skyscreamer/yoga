@@ -3,7 +3,7 @@
 <head>
     <title>Yoga - QUnit Tests</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
-    <script type="text/javascript" src="js/selector.js"></script>
+    <script type="text/javascript" src="js/gdata-selector.js"></script>
 
     <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen"/>
     <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
@@ -16,7 +16,7 @@
         test("one node selector", function() {
             var selector = new Selector();
             selector.toggle("node1")
-            equal( selector.getQuery(), ":(node1)" );
+            equal( selector.getQuery(), "node1" );
         });
 
         test("on/off selector", function() {
@@ -31,14 +31,14 @@
             selector.toggle("node1")
             selector.toggle("node2")
             selector.toggle("node3")
-            equal( selector.getQuery(), ":(node1,node2,node3)" );
+            equal( selector.getQuery(), "node1,node2,node3" );
         });
 
         test("simple nested selector", function() {
             var selector = new Selector();
             selector.toggle("node1")
             selector.toggle("node1.subnode1")
-            equal( selector.getQuery(), ":(node1:(subnode1))" );
+            equal( selector.getQuery(), "node1(subnode1)" );
         });
 
         test("complex nested selector", function() {
@@ -56,7 +56,7 @@
             selector.toggle("node3.subnode2")
             selector.toggle("node3")
             selector.toggle("node3")
-            equal( selector.getQuery(), ":(node1:(subnode1,subnode2),node2:(subnode2,subnode1),node3)" );
+            equal( selector.getQuery(), "node1(subnode1,subnode2),node2(subnode2,subnode1),node3" );
         });
 
         test("deep nested selector", function() {
@@ -66,7 +66,7 @@
             selector.toggle("node1.node2.node3")
             selector.toggle("node1.node2.node3.node4")
             selector.toggle("node1.node2.node3.node4.node5")
-            equal( selector.getQuery(), ":(node1:(node2:(node3:(node4:(node5)))))" );
+            equal( selector.getQuery(), "node1(node2(node3(node4(node5))))" );
         });
 
     </script>

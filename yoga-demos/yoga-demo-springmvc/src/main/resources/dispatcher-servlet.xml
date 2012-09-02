@@ -30,15 +30,17 @@
         <property name="mediaTypes">
             <map>
                 <entry key="json"  value="application/json"/>
-                <entry key="xml"   value="application/xml"/>
-                <entry key="xhtml" value="text/html"/>
+                <!--<entry key="xml"   value="application/xml"/>-->
+                <!--<entry key="xhtml" value="text/html"/>-->
+                <entry key="yoga" value="text/html" />
             </map>
         </property>
         <property name="defaultViews">
             <list>
                 <bean parent="abstract.springView" p:yogaView-ref="json.view"/>
                 <bean parent="abstract.springView" p:yogaView-ref="xml.view"/>
-                <bean parent="abstract.springView" p:yogaView-ref="xhtml.view"/>
+                <!--<bean parent="abstract.springView" p:yogaView-ref="xhtml.view"/>-->
+                <bean parent="abstract.springView" p:yogaView-ref="builder.view"/>
             </list>
         </property>
     </bean>

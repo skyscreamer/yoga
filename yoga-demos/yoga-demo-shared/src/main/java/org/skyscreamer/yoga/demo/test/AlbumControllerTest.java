@@ -1,13 +1,13 @@
 package org.skyscreamer.yoga.demo.test;
 
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
+import org.json.JSONObject;
+import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.Collections;
 import java.util.Map;
 
-import org.json.JSONObject;
-import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page Date: 4/19/11 Time: 6:17 PM
@@ -20,15 +20,15 @@ public class AlbumControllerTest
     {
         JSONObject data = getJSONObject( "/album/1", null );
         String expected = "{id:1,title:\"Funeral\",year:\"2004\","
-                + "navigationLinks:{artist:{name:\"artist\",href:\"/album/1.json?selector=:(artist)\"},"
-                + "songs:{name:\"songs\",href:\"/album/1.json?selector=:(songs)\"}}}";
+                + "navigationLinks:{artist:{name:\"artist\",href:\"/album/1.json?selector=artist\"},"
+                + "songs:{name:\"songs\",href:\"/album/1.json?selector=songs\"}}}";
         JSONAssert.assertEquals( expected, data, false );
     }
 
     @Test
     public void testGetArtist() throws Exception
     {
-        Map<String, String> params = Collections.singletonMap( "selector", ":(artist)" );
+        Map<String, String> params = Collections.singletonMap( "selector", "artist" );
         JSONObject data = getJSONObject( "/album/1", params );
         String expected = "{artist:{name:\"Arcade Fire\"}}";
         JSONAssert.assertEquals( expected, data, false );
@@ -45,7 +45,7 @@ public class AlbumControllerTest
     @Test
     public void testGetSongs() throws Exception
     {
-        Map<String, String> params = Collections.singletonMap( "selector", ":(songs)" );
+        Map<String, String> params = Collections.singletonMap( "selector", "songs" );
         JSONObject data = getJSONObject( "/album/1", params );
         String expected = "{songs:[{title:\"Neighborhood #1 (Tunnels)\"},{title:\"Wake Up\"},{title:\"Haiti\"}]}";
         JSONAssert.assertEquals( expected, data, false );

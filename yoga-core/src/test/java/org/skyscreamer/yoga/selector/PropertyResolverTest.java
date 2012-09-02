@@ -1,11 +1,5 @@
 package org.skyscreamer.yoga.selector;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
@@ -16,6 +10,12 @@ import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Artist;
 import org.skyscreamer.yoga.test.model.extended.User;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: corby
@@ -28,7 +28,7 @@ public class PropertyResolverTest extends AbstractTraverserTest
     public void testMapSelectorResolver()
     {
         Map<String,String> definedSelectors = new HashMap<String, String>();
-        definedSelectors.put( "$suggestedAlbums", ":(favoriteArtists:(albums:(title,songs:(id,title))))" );
+        definedSelectors.put( "$suggestedAlbums", "favoriteArtists(albums(title,songs(id,title)))" );
         MapSelectorResolver mapSelectorResolver = new MapSelectorResolver();
         mapSelectorResolver.setDefinedSelectors( definedSelectors );
         setAliasSelectorResolver( mapSelectorResolver );

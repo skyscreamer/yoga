@@ -6,6 +6,7 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class NavigationLinksListenerTest
 {
-    static YogaRequestContext requestContext = new YogaRequestContext( "map",
+    static YogaRequestContext requestContext = new YogaRequestContext( "map", new GDataSelectorParser(),
             new DummyHttpServletRequest(), new DummyHttpServletResponse() );
 
     @Test
@@ -35,7 +36,7 @@ public class NavigationLinksListenerTest
         Map<String, Object> otherMap = getMap( navLinks, "other" );
         Assert.assertNotNull( otherMap );
 
-        Assert.assertEquals( "/basic-leaf/0.map?selector=:(other)", otherMap.get( "href" ) );
+        Assert.assertEquals( "/basic-leaf/0.map?selector=other", otherMap.get( "href" ) );
     }
 
     @SuppressWarnings("unchecked")

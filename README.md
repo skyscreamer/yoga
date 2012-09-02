@@ -24,11 +24,11 @@ If I only have two dozen friends on this site, I'm already making 25 queries usi
 
 With Yoga, you can do it in one call:
 
-    GET /user/1.json?selector=:(friends:(favoriteArtists))
+    GET /user/1.json?selector=friends(favoriteArtists)
 
 In a more complicated example, let's say I want to compile a play list of songs from my friend's favorite artists.  This could involve thousands of queries in strict RESTful navigation, but it can still be aggregated as a single query:
 
-    GET /user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))
+    GET /user/1.json?selector=friends(favoriteArtists(albums(songs)))
 
 The other option is to program custom controller methods, but the point here is to avoid that, since there's a cost to that and specific client requirements frequently change.
 

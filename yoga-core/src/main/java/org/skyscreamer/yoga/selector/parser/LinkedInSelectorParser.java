@@ -19,7 +19,22 @@ import org.skyscreamer.yoga.util.ParenthesisUtil;
  */
 public class LinkedInSelectorParser extends ParentheticalSelectorParser
 {
+    public static final String SELECTOR_TYPE = "LinkedIn";
+
+    private static final String LINKEDIN_SELECTOR_JS_URL = "/js/selector.js";
+
     private static final String EXPLICIT_SELECTOR_PREFIX = ":(";
+
+
+    @Override
+    public String getSelectorJavascriptURL() {
+        return LINKEDIN_SELECTOR_JS_URL;
+    }
+
+    @Override
+    public Object getSelectorType() {
+        return SELECTOR_TYPE;
+    }
 
     protected FieldSelector parse( String selectorExpression ) throws ParseSelectorException
     {
