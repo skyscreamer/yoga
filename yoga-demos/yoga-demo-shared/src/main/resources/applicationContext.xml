@@ -70,7 +70,7 @@
     <!-- YOGA CONFIG BEGIN -->
     <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.classfinder.HibernateClassFinderStrategy" />
 
-    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
+    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.GDataSelectorParser">
         <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry"/>
         <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
         <property name="disableExplicitSelectors" value="false"/>
@@ -133,6 +133,7 @@
     <bean name="xml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
     <bean name="xhtml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
     <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
+    <bean name="builder.view" parent="abstract.view" class="org.skyscreamer.yoga.view.SelectorBuilderView" />
 
     <!-- YOGA CONFIG END -->
 </beans>

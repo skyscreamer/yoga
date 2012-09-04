@@ -1,9 +1,5 @@
 package org.skyscreamer.yoga.test.util;
 
-import java.lang.reflect.Constructor;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
@@ -13,9 +9,11 @@ import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
-import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
-import org.skyscreamer.yoga.selector.parser.ParentheticalSelectorParser;
+import org.skyscreamer.yoga.selector.parser.*;
+
+import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: corby Date: 5/7/12
@@ -29,7 +27,7 @@ public abstract class AbstractTraverserTest
 
     protected Map<String, Object> doTraverse( Object instance, String selectorString, ResultTraverser traverser )
     {
-        YogaRequestContext context = new YogaRequestContext( "test",
+        YogaRequestContext context = new YogaRequestContext( "test", new GDataSelectorParser(),
                 new DummyHttpServletRequest(), new DummyHttpServletResponse() );
         return doTraverse( instance, selectorString, traverser, context );
     }
@@ -40,7 +38,7 @@ public abstract class AbstractTraverserTest
         try
         {
             Constructor<? extends ParentheticalSelectorParser> constructor = _selectorParserClass.getConstructor();
-            ParentheticalSelectorParser selectorParser = constructor.newInstance();
+            SelectorParser selectorParser = context.getSelectorParser();
             selectorParser.setFieldPopulatorRegistry( populatorRegistry );
             selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );
             Selector selector = selectorParser.parseSelector( selectorString, coreSelector );

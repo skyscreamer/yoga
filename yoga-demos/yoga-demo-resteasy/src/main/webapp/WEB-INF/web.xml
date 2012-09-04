@@ -23,28 +23,11 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet>
-        <servlet-name>selectorBuilder</servlet-name>
-        <servlet-class>org.skyscreamer.yoga.util.StaticForwardServlet</servlet-class>
-        <init-param>
-            <param-name>path</param-name>
-            <param-value>/selectorBuilder.html</param-value>
-        </init-param>
-    </servlet>
 
     <filter>
         <filter-name>OpenSessionInViewFilter</filter-name>
         <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
     </filter>
-
-    <filter-mapping>
-        <filter-name>OpenSessionInViewFilter</filter-name>
-        <url-pattern>*.xml</url-pattern>
-    </filter-mapping>
-    <servlet-mapping>
-        <servlet-name>dispatcher</servlet-name>
-        <url-pattern>*.xml</url-pattern>
-    </servlet-mapping>
 
     <filter>
 		<filter-name>UrlRewriteFilter</filter-name>
@@ -63,7 +46,16 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>*.json</url-pattern>
     </servlet-mapping>
-    
+
+    <filter-mapping>
+        <filter-name>OpenSessionInViewFilter</filter-name>
+        <url-pattern>*.xml</url-pattern>
+    </filter-mapping>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>*.xml</url-pattern>
+    </servlet-mapping>
+
     <filter-mapping>
         <filter-name>OpenSessionInViewFilter</filter-name>
         <url-pattern>*.xhtml</url-pattern>
@@ -73,8 +65,12 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
+    <filter-mapping>
+        <filter-name>OpenSessionInViewFilter</filter-name>
+        <url-pattern>*.yoga</url-pattern>
+    </filter-mapping>
     <servlet-mapping>
-        <servlet-name>selectorBuilder</servlet-name>
+        <servlet-name>dispatcher</servlet-name>
         <url-pattern>*.yoga</url-pattern>
     </servlet-mapping>
 

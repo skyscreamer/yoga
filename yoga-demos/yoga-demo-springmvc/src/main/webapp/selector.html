@@ -55,7 +55,7 @@
             display list of the user's favorite artists on the same profile page.  We add the selector
             as a parameter, like this:</p>
         <blockquote>
-            <a href="user/2.json?selector=:(favoriteArtists)">/user/2.json?selector=:(favoriteArtists)</a>
+            <a href="user/2.json?selector=favoriteArtists">/user/2.json?selector=favoriteArtists</a>
         </blockquote>
     </div>
 
@@ -63,7 +63,7 @@
         <p>To take this yet a step further, grab the discography for those artists to display some album
             information on the same screen:</p>
         <blockquote>
-            <a href="user/2.json?selector=:(favoriteArtists:(albums))">/user/2.json?selector=:(favoriteArtists:(albums))</a>
+            <a href="user/2.json?selector=favoriteArtists(albums)">/user/2.json?selector=favoriteArtists(albums)</a>
         </blockquote>
     </div>
 
@@ -71,16 +71,16 @@
         <p>Or maybe you want to emphasize the social-graph focused, and you want to find other people who like the same
             bands:</p>
         <blockquote>
-            <a href="user/2.json?selector=:(favoriteArtists:(fans))">/user/2.json?selector=:(favoriteArtists:(fans))</a>
+            <a href="user/2.json?selector=favoriteArtists(fans)">/user/2.json?selector=favoriteArtists(fans)</a>
         </blockquote>
         <p>Note that the circular reference does not continue to loop, since a selector has not been added to "fans".</p>
     </div>
 
     <div class="example">
-        <p>This approach also works with calls that return collections of resources. Here we retrieve a list of all users
-            in the database, and their favorite artists.</p>
+        <p>This approach also works with calls that return collections of resources. Here we retrieve a list of all artists
+            in the database, and their albums.</p>
         <blockquote>
-            <a href="user.json?selector=:(favoriteArtists)">/user.json?selector=:(favoriteArtists)</a>
+            <a href="artist.json?selector=albums">/artist.json?selector=albums</a>
         </blockquote>
     </div>
 
@@ -90,7 +90,7 @@
             It returns a list of all the songs by a user's friends' favorite artists:
         </p>
         <blockquote>
-            <a href="user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))">/user/1.json?selector=:(friends:(favoriteArtists:(albums:(songs))))</a>
+            <a href="user/1.json?selector=friends(favoriteArtists(albums(songs)))">/user/1.json?selector=friends(favoriteArtists(albums(songs)))</a>
         </blockquote>
     </div>
 

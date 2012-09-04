@@ -1,16 +1,16 @@
 package org.skyscreamer.yoga.demo.test;
 
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONArray;
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
-
-import java.util.Collections;
-import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+
+import java.util.Collections;
+import java.util.Map;
+
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONArray;
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page
@@ -52,7 +52,7 @@ public class UserControllerTest
     @Test
     public void testGetUserWithSelector() throws Exception
     {
-        Map<String, String> params = Collections.singletonMap( "selector", ":(isFriend)" );
+        Map<String, String> params = Collections.singletonMap( "selector", "isFriend" );
         JSONObject data = getJSONObject( "/user/1", params );
         String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:false}";
         JSONAssert.assertEquals( expected, data, false );
@@ -61,7 +61,7 @@ public class UserControllerTest
     @Test
     public void testGetUserWithFriends() throws Exception
     {
-        Map<String, String> params = Collections.singletonMap( "selector", ":(friends)" );
+        Map<String, String> params = Collections.singletonMap( "selector", "friends" );
         JSONObject data = getJSONObject( "/user/1", params );
         String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\"," + "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\"},"
                 + "{id:3,name:\"Solomon Duskis\",href:\"/user/3.json\"}]}";
@@ -72,7 +72,7 @@ public class UserControllerTest
     @Test
     public void testDeepDiveSelector() throws Exception
     {
-        Map<String, String> params = Collections.singletonMap( "selector", ":(isFriend,friends:(favoriteArtists:(albums:(songs))))" );
+        Map<String, String> params = Collections.singletonMap( "selector", "isFriend,friends(favoriteArtists(albums(songs)))" );
         JSONObject data = getJSONObject( "/user/1", params );
         System.out.println( data );
         String expected =
@@ -86,7 +86,7 @@ public class UserControllerTest
     @Test
     public void testRecommendedAlbums() throws Exception
     {
-        Map<String, String> params = Collections.singletonMap( "selector", ":(recommendedAlbums)" );
+        Map<String, String> params = Collections.singletonMap( "selector", "recommendedAlbums" );
         JSONObject data = getJSONObject( "/user/1", params );
         JSONArray recommended = data.getJSONArray( "recommendedAlbums" );
         Assert.assertNotNull( recommended );
@@ -96,7 +96,7 @@ public class UserControllerTest
     @Test
     public void testGetTooMuchData() throws Exception
     {
-        Map<String, String> params = Collections.singletonMap( "selector", ":(friends:(favoriteArtists))" );
+        Map<String, String> params = Collections.singletonMap( "selector", "friends(favoriteArtists)" );
         try
         {
             getJSONObject( "/user", params );

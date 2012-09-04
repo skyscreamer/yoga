@@ -1,11 +1,6 @@
 package org.skyscreamer.yoga.mapper;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
@@ -14,11 +9,16 @@ import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
+import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.model.basic.BasicTestDataNode;
 import org.skyscreamer.yoga.test.model.basic.LeafPopulator;
 import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class ResultTraverserTest
 {
@@ -32,7 +32,7 @@ public class ResultTraverserTest
     {
         registry.register( new LeafPopulator() );
         coreSelector = new CoreSelector( registry );
-        requestContext = new YogaRequestContext( "map", new DummyHttpServletRequest(),
+        requestContext = new YogaRequestContext( "map", new GDataSelectorParser(), new DummyHttpServletRequest(),
                 new DummyHttpServletResponse() );
     }
 
