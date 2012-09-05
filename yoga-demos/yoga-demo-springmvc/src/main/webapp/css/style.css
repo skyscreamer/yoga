@@ -126,7 +126,7 @@ body {
 	    padding: 33px 0 0 0;
 	    float: left;
 	    text-align: right;
-	    width: 100%;
+	    width: 30%;
 	}
 	header h2 a {
 	    color: #950510;
@@ -173,6 +173,10 @@ section {
         section .demo h5 {
             font-size: 13px;
             font-weight: bold;
+        }
+
+        section .demo h2 {
+            width: 100%;
         }
             section .demo .wrapper {
                 display: none;
