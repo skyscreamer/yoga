@@ -41,7 +41,7 @@
                         $('#demo_status2').html('DONE!');
                         $('#demo_status2').css('color', '#76B475');
                         var duration = endTime - startTime;
-                        $('#demo_time2').html('(' + duration + 'ms)');
+                        $('#demo_time2').html('(1 call - ' + duration + 'ms)');
                     });
                 })
             }, simulatedRequestLatency);
@@ -53,8 +53,10 @@
             $('#demo_status1').html('Running...');
             $('#demo_status1').css('color', '#ee0000');
             $('#demo_query1').val(queryInput);
+            var callCount = 0;
             setTimeout(function() {
                 $.get('user/1.json?selector=friends', function(data1) {
+                    ++callCount;
                     $('#demo_name1').html(data1.name);
                     $(data1.friends).each(function(index1) {
                         var friendId = this.id;
@@ -63,6 +65,7 @@
                         $('#demo_query1').val(queryInput);
                         setTimeout(function() {
                             $.get('user/' + friendId + '.json?selector=favoriteArtists', function(data2) {
+                                ++callCount;
                                 var friendHtml = '<div id="demo_friend1_' + friendId + '">'
                                         + '<h4 class="demo_friends_header">' + friendName + '&apos;s Favorite Artists</h4>'
                                         + '</div>';
@@ -76,6 +79,7 @@
                                     $('#demo_query1').val(queryInput);
                                     setTimeout(function() {
                                         $.get('artist/' + artistId + '.json?selector=albums', function(data3) {
+                                            ++callCount;
                                             $(data3.albums).each(function(index3) {
                                                 var albumId = this.id;
                                                 var albumHtml = '<li id="demo_album_' + friendId + '_' + artistId + '_' + albumId + '"><b>' + this.title + '</b></li>';
@@ -84,6 +88,7 @@
                                                 $('#demo_query1').val(queryInput);
                                                 setTimeout(function() {
                                                     $.get('album/' + albumId + '.json?selector=songs', function(data4) {
+                                                        ++callCount;
                                                         var songHtml = ': (';
                                                         $(data4.songs).each(function(index4) {
                                                             if (index4 > 0)
@@ -97,7 +102,7 @@
                                                         $('#demo_status1').html('DONE!');
                                                         $('#demo_status1').css('color', '#76B475');
                                                         var duration = endTime - startTime;
-                                                        $('#demo_time1').html('(' + duration + 'ms)');
+                                                        $('#demo_time1').html('(' + callCount + ' calls - ' + duration + 'ms)');
                                                     })
                                                 }, simulatedRequestLatency);
                                             });
@@ -152,7 +157,7 @@
 <section>
     <a name="race"></a>
     <h2>Race</h2>
-    <p>Yoga versus vanilla REST.  Songs by your friends' favorite artists:</p>
+    <p>Yoga versus vanilla REST.  Retrieving songs by my friends' favorite artists:</p>
 
     <div class="demo demo1">
         <h5>Yoga - <span id="demo_status2">Standby</span> <span id="demo_time2"></span></h5>
