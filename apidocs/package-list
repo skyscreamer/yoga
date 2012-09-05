@@ -1,13 +1,7 @@
 org.skyscreamer.yoga.annotations
-org.skyscreamer.yoga.demo.dao
-org.skyscreamer.yoga.demo.dto
-org.skyscreamer.yoga.demo.mapper
-org.skyscreamer.yoga.demo.model
-org.skyscreamer.yoga.demo.resteasy.resources
-org.skyscreamer.yoga.demo.test
-org.skyscreamer.yoga.demo.test.controller
-org.skyscreamer.yoga.demo.util
+org.skyscreamer.yoga.classfinder
 org.skyscreamer.yoga.exceptions
+org.skyscreamer.yoga.jaxrs.resource
 org.skyscreamer.yoga.jaxrs.view
 org.skyscreamer.yoga.listener
 org.skyscreamer.yoga.mapper
@@ -16,6 +10,7 @@ org.skyscreamer.yoga.model
 org.skyscreamer.yoga.populator
 org.skyscreamer.yoga.selector
 org.skyscreamer.yoga.selector.parser
+org.skyscreamer.yoga.springmvc.controller
 org.skyscreamer.yoga.springmvc.view
 org.skyscreamer.yoga.uri
 org.skyscreamer.yoga.util
