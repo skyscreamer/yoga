@@ -43,13 +43,15 @@ table {
 caption, th {text-align: left;}
 *:focus {outline: none 0;}
 input::-moz-focus-inner, a img,:link img,:visited img {border: 0 none;}
-:link, :visited, :hover, :active {text-decoration: none;}
+a:hover { text-decoration: underline; }
+:link, :visited, :active {text-decoration: none;}
 address, caption, cite, code, dfn, em, strong, th, var {
     font-style: normal;
     font-weight: normal;
 }
 textarea {overflow: auto;}
 
+.bold { font-weight: bold; color: #004477; }
 
 a{
     color: #2F7EBB;
@@ -124,7 +126,7 @@ body {
 	    padding: 33px 0 0 0;
 	    float: left;
 	    text-align: right;
-	    width: 30%;
+	    width: 100%;
 	}
 	header h2 a {
 	    color: #950510;
@@ -155,11 +157,10 @@ section {
     }
     section pre {
         overflow: auto;
-        font: 11px "Courier New", Courier, monospace;
+        font: 11px "Courier", Courier, monospace;
     }
         section blockquote a {
-            font: 12px "Courier New", Courier, monospace;
-            color: #000;
+            font: 12px "Courier", Courier, monospace;
         }
     section .demo {
         background: #C6DDEE;
@@ -175,7 +176,7 @@ section {
         }
             section .demo .wrapper {
                 display: none;
-                font: 12px "Courier New", Courier, monospace;
+                font: 12px "Avant Garde", Verdana, Tahoma, sans-serif;
                 margin: 0;
                 padding: 0;
             }
