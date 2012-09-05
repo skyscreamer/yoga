@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Yoga - RESTful but Flexible - Demo</title>
+    <title>Yoga - RESTful but Flexible - Race</title>
     <meta name="description" content="Enable field selectors and call aggregation on Java-based REST servers." />
     <meta name="keywords" content="yoga,yoga rest,field selector,java rest,java restful,yoga api,rest aggregate,rest open source" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -9,7 +9,7 @@
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
     <script type="text/javascript">
-        var simulatedRequestLatency = 1500;
+        var simulatedRequestLatency = 500;
 
         var yogaRest = function() {
             var startTime = (new Date()).getTime();
@@ -140,22 +140,19 @@
 <nav>
     <ul>
         <li><a class="intro" href="./">Introduction</a></li>
-        <li><a class="demo" href="./demo.html">Demo</a></li>
-        <li><a class="selector" href="selector.html">Selectors</a></li>
+        <li><a class="demo" href="user/1.yoga">Demo</a></li>
+        <li><a class="selector" href="selector.html">Cookbook</a></li>
         <li><a class="download" href="https://github.com/skyscreamer/yoga/downloads">Download</a></li>
         <li><a class="contrib" href="https://github.com/skyscreamer/yoga"> &nbsp; </a></li>
+        <li><a class="race" href=".">Race</a></li>
+        <li><a class="javadoc" href="http://skyscreamer.org/yoga/apidocs/">API Docs</a></li>
         <li><a class="wiki" href="https://github.com/skyscreamer/yoga/wiki">Wiki</a></li>
     </ul>
 </nav>
 <section>
-    <a name="demo"></a>
-    <h2>Demo</h2>
-    <p>Using the last query above, let's show a race between two simulated mobile clients.  They will each try to draw
-        a profile view that shows a user's friends and their favorite artists and corresponding discographies.</p>
-    <p>The client on the left uses the yoga selector to grab the entire necessary dataset in one query.  The client on the right
-        uses traditional object model navigation through multiple requests.  To simulate mobile device latency, each response
-        is delayed by 1.5 seconds.  Other than that, queries are optimized as much as possible, by running them
-        in parallel.</p>
+    <a name="race"></a>
+    <h2>Race</h2>
+    <p>Yoga versus vanilla REST.  Songs by your friends' favorite artists:</p>
 
     <div class="demo demo1">
         <h5>Yoga - <span id="demo_status2">Standby</span> <span id="demo_time2"></span></h5>
@@ -170,7 +167,7 @@
     </div>
 
     <div class="demo demo2">
-        <h5>Traditional Entity Navigation - <span id="demo_status1">Standby</span> <span id="demo_time1"></span></h5>
+        <h5>Plain REST - <span id="demo_status1">Standby</span> <span id="demo_time1"></span></h5>
         <section class="wrapper">
             <header>
                 <h2>Friends' Favs for <span id="demo_name1">&nbsp;</span></h2>
@@ -182,7 +179,7 @@
     </div>
 
     <div style="clear:both">
-        <input class="run" type="button" value="Run the demo!" onclick="this.disabled = true; $('.wrapper').show(); traditionalRest(); yogaRest();"/>
+        <input class="run" type="button" value="Race!" onclick="this.disabled = true; $('.wrapper').show(); traditionalRest(); yogaRest();"/>
     </div>
 </section>
 

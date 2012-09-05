@@ -30,46 +30,53 @@
 <nav>
     <ul>
         <li><a class="intro" href="./">Introduction</a></li>
-        <li><a class="demo" href="demo.html">Demo</a></li>
-        <li><a class="selector" href="selector.html">Selectors</a></li>
+        <li><a class="demo" href="user/1.yoga">Demo</a></li>
+        <li><a class="selector" href="selector.html">Cookbook</a></li>
         <li><a class="download" href="https://github.com/skyscreamer/yoga/downloads">Download</a></li>
         <li><a class="contrib" href="https://github.com/skyscreamer/yoga"> &nbsp; </a></li>
+        <li><a class="race" href="demo.html">Race</a></li>
+        <li><a class="javadoc" href="http://skyscreamer.org/yoga/apidocs/">API Docs</a></li>
         <li><a class="wiki" href="https://github.com/skyscreamer/yoga/wiki">Wiki</a></li>
     </ul>
 </nav>
 <section>
     <a name="selector"></a>
-    <h2>Selectors</h2>
-    <p>The Yoga approach is simple.  On top of your RESTful implementation, you can pass a selector which asks the
-        server to return nested or non-default fields with the response.</p>
+    <h2>Cookbook</h2>
+
+    <p>First, play with the selector builder.  Access the builder by replacing the suffix for any
+        RESTful call with <span class="bold">.yoga</span>.  Try it out:</p>
 
     <div class="example">
-        <p>For instance, here is a traditional REST request that gets the information for a user:</p>
+        <blockquote>
+            <a href="user/1.yoga">/user/1.yoga</a>
+        </blockquote>
+    </div>
+
+    <p>Here's various examples:</p>
+
+    <div class="example">
+        <p>A traditional REST request:</p>
         <blockquote>
             <a href="user/2.json">/user/2.json</a>
         </blockquote>
     </div>
 
     <div class="example">
-        <p>A client developer can create a very simple profile page with this data.  Let's say the designers want to
-            display list of the user's favorite artists on the same profile page.  We add the selector
-            as a parameter, like this:</p>
+        <p>A user and his favorite artists:</p>
         <blockquote>
             <a href="user/2.json?selector=favoriteArtists">/user/2.json?selector=favoriteArtists</a>
         </blockquote>
     </div>
 
     <div class="example">
-        <p>To take this yet a step further, grab the discography for those artists to display some album
-            information on the same screen:</p>
+        <p>Same as above, but also get the artists albums:</p>
         <blockquote>
             <a href="user/2.json?selector=favoriteArtists(albums)">/user/2.json?selector=favoriteArtists(albums)</a>
         </blockquote>
     </div>
 
     <div class="example">
-        <p>Or maybe you want to emphasize the social-graph focused, and you want to find other people who like the same
-            bands:</p>
+        <p>Find other people who like the same bands:</p>
         <blockquote>
             <a href="user/2.json?selector=favoriteArtists(fans)">/user/2.json?selector=favoriteArtists(fans)</a>
         </blockquote>
@@ -77,8 +84,7 @@
     </div>
 
     <div class="example">
-        <p>This approach also works with calls that return collections of resources. Here we retrieve a list of all artists
-            in the database, and their albums.</p>
+        <p>You can also apply a selector to calls that return collections.  All artists and their albums:</p>
         <blockquote>
             <a href="artist.json?selector=albums">/artist.json?selector=albums</a>
         </blockquote>
@@ -86,17 +92,15 @@
 
     <div class="example">
         <p>
-            Finally, here's an example of a deep-dive query that would take hundreds of queries with typical REST calls.
-            It returns a list of all the songs by a user's friends' favorite artists:
+            This would take hundreds of queries with typical REST calls.  Show songs by your friends' favorite artists:
         </p>
         <blockquote>
             <a href="user/1.json?selector=friends(favoriteArtists(albums(songs)))">/user/1.json?selector=friends(favoriteArtists(albums(songs)))</a>
         </blockquote>
     </div>
 
-    <p>As you can see Yoga creates a lot of flexibility for the client.  All of these selectors are completely dynamic.
-        As long as the fields are in the object map, Yoga will find them.  To see more of what you can do,
-        <a href="user/2.yoga">try out our selector builder GUI</a>.
+    <p>Yoga creates a lot of flexibility for the client.  All of these selectors are completely dynamic.
+        <b>As long as the fields are in the object map, Yoga will find them.</b>.
     </p>
 
 </section>

@@ -68,6 +68,9 @@
                         <phase>site</phase>
                     </execution>
                 </executions>
+		<configuration>
+		    <excludePackageNames>org.skyscreamer.yoga.demo</excludePackageNames>
+		</configuration>
             </plugin>
         </plugins>
         <extensions>
