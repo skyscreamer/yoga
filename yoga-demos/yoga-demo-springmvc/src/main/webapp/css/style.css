@@ -53,6 +53,8 @@ textarea {overflow: auto;}
 
 .bold { font-weight: bold; color: #004477; }
 
+.sponsor { height: 60px; padding: 10px 10px 0 0; }
+
 a{
     color: #2F7EBB;
 }
