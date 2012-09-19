@@ -9,7 +9,7 @@
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga</artifactId>
-    <version>0.9.4-SNAPSHOT</version>
+    <version>0.9.3</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/skyscreamer/yoga</url>
