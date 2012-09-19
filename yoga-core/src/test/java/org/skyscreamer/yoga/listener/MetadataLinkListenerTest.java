@@ -26,6 +26,10 @@ public class MetadataLinkListenerTest extends AbstractTraverserTest
 	@Test
     // Add the MetadataLinkListener to the listener chain. The output will render an href to view the metadata
     // for the album object.
+    // "metadata": {
+    //     "href": "/metadata/album.test"
+    //  }
+
     public void testMetadataHref()
     {
         String prefixUrl = "/metadata/";
