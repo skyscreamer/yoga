@@ -51,7 +51,7 @@ public class HrefListener implements RenderingListener
     public void addUrl( Object value, Class<?> valueType, String urlSuffix,
             MapHierarchicalModel<?> model, YogaRequestContext context )
     {
-        String urlTemplate = determineTemplate( valueType, context );
+        String urlTemplate = determineTemplate( valueType );
 
         if (urlTemplate != null)
         {
@@ -64,7 +64,7 @@ public class HrefListener implements RenderingListener
         }
     }
 
-    protected String determineTemplate( Class<?> instanceType, YogaRequestContext context )
+    protected String determineTemplate( Class<?> instanceType )
     {
         Object fieldPopulator = _fieldPopulatorRegistry == null ? null : _fieldPopulatorRegistry
                 .getFieldPopulator( instanceType );
