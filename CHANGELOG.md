@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 0.9.3 - 2012-09-19
+--------------------------
+ - Getting awfully close to a 1.0 state
+ - Fixed selector builder race condition that was causing weird UI behavior
+ - More documentation including 
+ - Reorganized a bunch of the code into more appropriate modules
+ - Added yoga-hibernate integration project
+ - Made a new view (.yoga) that brings up the selector builder
+ - Changed default selector style from LinkedIn to GData
+ - Visual clean up of web site
+
 Version 0.9.2 - 2012-08-22
 --------------------------
  - Corby's birthday edition!
