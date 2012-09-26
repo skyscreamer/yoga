@@ -17,7 +17,6 @@ import org.skyscreamer.yoga.util.ObjectUtil;
 
 public class DefaultMetaDataRegistry implements MetaDataRegistry
 {
-
     private Map<String, Class<?>> _typeMappings;
     private Map<Class<?>, String> _typeToStringMap = new HashMap<Class<?>, String>();
 
@@ -27,16 +26,6 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
     public void setCoreSelector( CoreSelector coreSelector )
     {
         this._coreSelector = coreSelector;
-    }
-
-    public CoreSelector getCoreSelector()
-    {
-        return _coreSelector;
-    }
-    
-    public String getRootMetaDataUrl()
-    {
-        return rootMetaDataUrl;
     }
 
     public void setRootMetaDataUrl( String rootMetaDataUrl )
@@ -60,19 +49,16 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
         return _typeMappings.keySet();
     }
 
-    @Override
-    public Class<?> getTypeForName( String name )
+    private Class<?> getTypeForName( String name )
     {
         return _typeMappings.get( name );
     }
 
     /**
      * given a type, get a name. This takes subclassing into consideration. For
-     * now, this will return the first subclass match to the type, not the
-     * closest
+     * now, this will return the first subclass match to the type, not the closest
      */
-    @Override
-    public String getNameForType( Class<?> type )
+    private String getNameForType( Class<?> type )
     {
         if ( _typeToStringMap.containsKey( type ) )
         {
@@ -95,16 +81,15 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
         return getMetaData( getTypeForName( name ), suffix );
     }
 
-    @Override
-    public TypeMetaData getMetaData( Class<?> type, String suffix )
+    private TypeMetaData getMetaData( Class<?> type, String suffix )
     {
         TypeMetaData result = new TypeMetaData();
         result.setName( NameUtil.getFormalName( type ) );
-        addCoreFields( type, suffix, result );
+        addFields( type, suffix, result );
         return result;
     }
 
-    protected void addCoreFields( Class<?> type, String suffix, TypeMetaData result )
+    protected void addFields( Class<?> type, String suffix, TypeMetaData result )
     {
         Collection<Property> allFields = _coreSelector.getAllPossibleFields( type );
         Set<String> coreFieldName = new HashSet<String>();
@@ -170,7 +155,7 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
         String nameForType = getNameForType( propertyType );
         if ( nameForType != null )
         {
-            return getRootMetaDataUrl() + nameForType + "." + suffix;
+            return rootMetaDataUrl + nameForType + "." + suffix;
         }
         else
         {
@@ -186,5 +171,4 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
             propertyMetaData.setHref( href );
         }
     }
-
 }

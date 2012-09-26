@@ -21,8 +21,8 @@ import java.util.Map;
 public class HrefListenerTest extends AbstractTraverserTest
 {
     // Put an HrefListener in the listener chain. Traverse a user object where
-    // the @URITemplate is defined
-    // as "/user/{id}". Verify that the correct URL is appended to the output.
+    // the @URITemplate is defined as "/user/{id}". Verify that the correct URL
+    // is appended to the output.
     @Test
     public void testAnnotatedModel()
     {

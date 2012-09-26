@@ -29,7 +29,7 @@
     <!-- format and the GData format. Declare your selectorParser to be of type LinkedInSelectorParser or      -->
     <!-- GDataSelectorParser.                                                                                  -->
     <!--                                                                                                       -->
-    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser">
+    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.GDataSelectorParser">
         <!-- If you use a field populator registry (See STEP 4), inject it in the constructor -->
         <!-- <constructor-arg ref="fieldPopulatorRegistry"/> -->
 
@@ -82,9 +82,10 @@
                 <!--<bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"-->
                       <!--p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>-->
 
-                <!-- The MetadataLinkListener enables the rendering of a complete set of metadata (properties,     -->
-                <!-- types, core field definitions) for a resource type. The response will include a "metadata"    -->
-                <!-- field that has a URL which can be navigated to the metadata detail page.                      -->
+                <!-- The MetadataLinkListener renders a "metadata" field that includes an href link to view        -->
+                <!-- the complete metadata for the resource. In order for the href link to work, you must deploy   -->
+                <!-- org.skyscreamer.yoga.springmvc.controller.MetaDataController as a supported controller in     -->
+                <!-- your web application -->
                 <!--<bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"-->
                       <!--p:metaDataRegistry-ref="metaDataService" />-->
             </list>
@@ -126,8 +127,8 @@
           <!--p:propertyFile="classpath:selectorAlias.properties" />-->
 
     <!-- The metadata service provides complete metadata for a resource that is supported by your Yoga            -->
-    <!-- implementation. This service is required if you register the SelectorBuilderListener or the              -->
-    <!-- MetadataLinkListener in the renderingListenerRegistry.                                                   -->
+    <!-- implementation. This service is required if you register the MetadataLinkListener in the                 -->
+    <!-- renderingListenerRegistry, and/or if you deploy the MetadaController in your web application.            -->
     <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry"
           p:coreSelector-ref="coreSelector">
         <property name="rootMetaDataUrl" value="/metadata/" />
@@ -139,7 +140,7 @@
         </property>
     </bean>
 
-
+    <!-- If you want the Yoga framework to directly access fields of your Hibernate-persisted objects, configure -->
+    <!-- the HibernateClassFinderStrategy here, and inject it into your supported views.                         -->
     <!--<bean id="hibernateClassFinder" class="org.skyscreamer.yoga.demo.mapper.HibernateClassFinderStrategy" />-->
-
 </beans>

@@ -19,7 +19,7 @@ public class SelectorBuilderListener extends HrefListener
         {
             return;
         }
-        String href = determineTemplate( event.getValueType(), event.getRequestContext() );
+        String href = determineTemplate( event.getValueType() );
 
         if ( href != null )
         {
