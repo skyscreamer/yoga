@@ -74,7 +74,7 @@ public class FieldSelector implements Selector
                 {
                     if (method.isAnnotationPresent( SupportedFields.class ))
                     {
-                        List<String> supportedFields = (List<String>) method
+                        Collection<String> supportedFields = (Collection<String>) method
                                 .invoke( fieldPopulator );
                         for (Iterator<String> iter = fieldNames.iterator(); iter.hasNext();)
                         {
@@ -90,7 +90,7 @@ public class FieldSelector implements Selector
             catch (Exception e)
             {
                 // @SupportedFields not found on method of return type
-                // List<String>
+                // Collection<String>
             }
         }
     }
