@@ -123,7 +123,7 @@ public class ResultTraverserTest
     }
 
     @Test
-    public void testPopulator()
+    public void testConfiguration()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();

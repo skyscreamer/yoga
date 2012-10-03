@@ -11,15 +11,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserConfiguration extends YogaEntityConfiguration
+public class UserConfiguration extends YogaEntityConfiguration<User>
 {
     @Autowired
     GenericDao _genericDao;
-
-    @Override
-    public Class getEntityClass() {
-        return User.class;
-    }
 
     @ExtraField("recommendedAlbums")
     public List<Album> getRecommendedAlbums(User user)

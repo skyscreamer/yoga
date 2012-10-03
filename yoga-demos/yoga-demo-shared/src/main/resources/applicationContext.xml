@@ -122,7 +122,7 @@
     </bean>
 
     <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector"
-        p:populatorRegistry-ref="entityConfigurationRegistry"/>
+        p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>
 
     <bean name="abstract.view" abstract="true"
         p:registry-ref="renderingListenerRegistry"

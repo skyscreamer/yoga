@@ -28,7 +28,7 @@ public class CoreSelector extends MapSelector
     {
     }
 
-    public void setPopulatorRegistry( EntityConfigurationRegistry entityConfigurationRegistry )
+    public void setEntityConfigurationRegistry( EntityConfigurationRegistry entityConfigurationRegistry )
     {
         _entityConfigurationRegistry = entityConfigurationRegistry;
     }
@@ -96,7 +96,7 @@ public class CoreSelector extends MapSelector
         }
 
         // Add @ExtraField methods from the YogaEntityConfiguration, if one exists
-        YogaEntityConfiguration entityConfiguration = _entityConfigurationRegistry == null ? null
+        YogaEntityConfiguration<?> entityConfiguration = _entityConfigurationRegistry == null ? null
                 : _entityConfigurationRegistry.getEntityConfiguration(instanceType);
         if (entityConfiguration != null)
         {

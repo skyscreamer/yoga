@@ -41,7 +41,7 @@ public class HrefListenerTest extends AbstractTraverserTest
     // Put an HrefListener in the listener chain, and verify that the correct
     // URL is appended to the output
     @Test
-    public void testFieldPopulator()
+    public void testEntityConfiguration()
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();

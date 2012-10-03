@@ -1,8 +1,10 @@
 package org.skyscreamer.yoga.configuration;
 
 import org.skyscreamer.yoga.annotations.ExtraField;
+import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,13 +16,27 @@ import java.util.List;
  * @see SimpleYogaEntityConfiguration
  * @see org.skyscreamer.yoga.annotations.Core
  */
-public abstract class YogaEntityConfiguration {
+public abstract class YogaEntityConfiguration<T> {
+    private volatile Class _instanceClass = null;
+
     /**
      * Identifies the class supported by this configuration.
      *
      * @return A class object for the entity being configured
      */
-    public abstract Class getEntityClass();
+    public Class<T> getEntityClass() {
+        if (_instanceClass == null) {
+            try {
+                _instanceClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            }
+            catch (ClassCastException e) {
+                throw new YogaRuntimeException("Unable to initialize class " + getClass().getName() + " because " +
+                        "entity class could not be determined.  Either specify it in the generic type when extending " +
+                        "YogaEntityConfiguration, or explicitly override getEntityClass() with the correct value.");
+            }
+        }
+        return _instanceClass;
+    }
 
     /**
      * Returns a collection of core fields for an entity.  Core fields are returned by default, and do not require a

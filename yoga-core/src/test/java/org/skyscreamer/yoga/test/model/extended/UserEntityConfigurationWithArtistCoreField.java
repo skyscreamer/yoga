@@ -9,13 +9,8 @@ import java.util.List;
  * User: corby
  * Date: 5/13/12
  */
-public class UserFieldPopulatorWithArtistCoreField extends YogaEntityConfiguration
+public class UserEntityConfigurationWithArtistCoreField extends YogaEntityConfiguration<User>
 {
-    @Override
-    public Class getEntityClass() {
-        return User.class;
-    }
-
     @Override
     public List<String> getCoreFields()
     {

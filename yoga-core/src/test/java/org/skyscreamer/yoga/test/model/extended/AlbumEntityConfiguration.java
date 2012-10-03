@@ -10,13 +10,8 @@ import java.util.List;
  * User: corby
  * Date: 5/13/12
  */
-public class AlbumEntityConfiguration extends YogaEntityConfiguration
+public class AlbumEntityConfiguration extends YogaEntityConfiguration<Album>
 {
-    @Override
-    public Class getEntityClass() {
-        return Album.class;
-    }
-
     @Override
     public List<String> getCoreFields()
     {

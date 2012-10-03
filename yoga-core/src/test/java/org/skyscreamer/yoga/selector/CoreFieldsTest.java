@@ -8,7 +8,7 @@ import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Album;
 import org.skyscreamer.yoga.test.model.extended.AlbumEntityConfiguration;
 import org.skyscreamer.yoga.test.model.extended.User;
-import org.skyscreamer.yoga.test.model.extended.UserFieldPopulatorWithArtistCoreField;
+import org.skyscreamer.yoga.test.model.extended.UserEntityConfigurationWithArtistCoreField;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
 
 import java.util.List;
@@ -38,11 +38,11 @@ public class CoreFieldsTest extends AbstractTraverserTest
     // in an empty selector and a null
     // selector, and verify that only the ID and Title fields are returned.
     @Test
-    public void testNullCorePopulatorFields()
+    public void testNullCoreEntityConfigurationFields()
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        _entityConfigurationRegistry.register( new AlbumEntityConfiguration() );
+        _entityConfigurationRegistry.register(new AlbumEntityConfiguration());
         Map<String, Object> objectTree = doTraverse( funeral, null, traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
@@ -55,7 +55,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
      * Title fields are returned.
      */
     @Test
-    public void testEmptyCorePopulatorFields()
+    public void testEmptyCoreEntityConfigurationFields()
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
@@ -67,9 +67,9 @@ public class CoreFieldsTest extends AbstractTraverserTest
     }
 
     /**
-     * Use a UserFieldPopulator that defines a complex type (List of Artists) as
+     * Use a UserConfiguration that defines a complex type (List of Artists) as
      * a core field. Also, ensure that core fields defined by both the
-     * FieldPopulator and the annotations are returned.
+     * YogaEntityConfiguration and the annotations are returned.
      */
     @Test
     public void testComplexCoreFields()
@@ -78,7 +78,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         carter.getFavoriteArtists().add( DataGenerator.neutralMilkHotel() );
         carter.getFavoriteArtists().add( DataGenerator.arcadeFire() );
         ResultTraverser traverser = new ResultTraverser();
-        _entityConfigurationRegistry.register( new UserFieldPopulatorWithArtistCoreField() );
+        _entityConfigurationRegistry.register( new UserEntityConfigurationWithArtistCoreField() );
 
         Map<String, Object> objectTree = doTraverse( carter, ":", traverser );
         Assert.assertEquals( 2, objectTree.size() );
