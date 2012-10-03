@@ -5,7 +5,8 @@ import java.util.Map;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 
 /**
- * Created by IntelliJ IDEA. User: corby
+ * An implementation of {@link AliasSelectorResolver} that uses an injected Map to translate the alias. The key of each
+ * map entry is the alias, and the value is the fully-formed selector expression.
  */
 public class MapSelectorResolver implements AliasSelectorResolver
 {
@@ -22,6 +23,11 @@ public class MapSelectorResolver implements AliasSelectorResolver
         return result;
     }
 
+    /**
+     * Injects the map that will be used to resolve selector expressions
+     *
+     * @param definedSelectors Your map of aliases
+     */
     public void setDefinedSelectors( Map<String, String> definedSelectors )
     {
         _definedSelectors = definedSelectors;
