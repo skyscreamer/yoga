@@ -43,7 +43,8 @@
     <a name="intro"></a>
     <h2>Introduction</h2>
 
-    <p>Yoga provides GData- and LinkedIn-style data selectors for REST APIs.</p>
+    <p>Yoga provides <a href="https://developers.google.com/gdata/docs/2.0/basics#PartialResponse">GData</a>- and
+        <a href="https://developer.linkedin.com/documents/field-selectors">LinkedIn</a>-style data selectors for REST APIs.</p>
 
     <ul>
         <li>Choose data fields at call-time</li>
@@ -55,19 +56,40 @@
 
     <p><br/>The current version of Yoga is <span class="bold">0.9.3</span>.</p>
 
-    <h2>REST Selector Styles</h2>
-    <p>Yoga supports two styles of REST field selector:</p>
-    <ul>
-        <li><a href="https://developers.google.com/gdata/docs/2.0/basics#PartialResponse">GData</a></li>
-        <li><a href="https://developer.linkedin.com/documents/field-selectors">LinkedIn</a></li>
-    </ul>
-
     <h2>Supported Frameworks</h2>
     <p>Yoga can extend APIs built on:</p>
     <ul>
         <li><a href="http://blog.springsource.org/2009/03/08/rest-in-spring-3-mvc/">Spring MVC</a></li>
         <li><a href="http://www.jboss.org/resteasy">RESTEasy</a></li>
     </ul>
+</section>
+
+<section>
+    <a name="pom"></a>
+    <h2>Maven</h2>
+    <pre>
+        &lt;dependency>
+            &lt;groupId>org.skyscreamer&lt;/groupId>
+            &lt;artifactId>yoga&lt;/artifactId>
+            &lt;version>0.9.3&lt;/version>
+        &lt;/dependency>
+    </pre>
+
+    <p>And pick <span class="bold">one</span> of the integration packages:</p>
+
+    <pre>
+        &lt;dependency>
+            &lt;groupId>org.skyscreamer&lt;/groupId>
+            &lt;artifactId>yoga-springmvc&lt;/artifactId>
+            &lt;version>0.9.3&lt;/version>
+        &lt;/dependency>
+
+        &lt;dependency>
+            &lt;groupId>org.skyscreamer&lt;/groupId>
+            &lt;artifactId>yoga-jaxrs&lt;/artifactId>
+            &lt;version>0.9.3&lt;/version>
+        &lt;/dependency>
+    </pre>
 </section>
 
 <section>

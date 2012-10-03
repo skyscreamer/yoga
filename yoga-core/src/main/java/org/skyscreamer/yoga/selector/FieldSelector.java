@@ -5,21 +5,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.skyscreamer.yoga.annotations.SupportedFields;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 
 public class FieldSelector implements Selector
 {
     protected Map<String, FieldSelector> subSelectors = new HashMap<String, FieldSelector>();
-    protected FieldPopulatorRegistry _fieldPopulatorRegistry;
+    protected EntityConfigurationRegistry _entityConfigurationRegistry;
 
-    public FieldSelector( FieldPopulatorRegistry fieldPopulatorRegistry )
+    public FieldSelector( EntityConfigurationRegistry entityConfigurationRegistry)
     {
-        _fieldPopulatorRegistry = fieldPopulatorRegistry;
+        _entityConfigurationRegistry = entityConfigurationRegistry;
     }
 
     @Override
@@ -65,32 +64,15 @@ public class FieldSelector implements Selector
     @SuppressWarnings("unchecked")
     public void removeNonSupportedFields( Class<?> instanceType, Set<String> fieldNames )
     {
-        Object fieldPopulator = _fieldPopulatorRegistry.getFieldPopulator( instanceType );
-        if (fieldPopulator != null)
+        YogaEntityConfiguration entityConfiguration = _entityConfigurationRegistry.getEntityConfiguration( instanceType );
+        if (entityConfiguration != null && entityConfiguration.getSelectableFields() != null)
         {
-            try
+            for (Iterator<String> iter = fieldNames.iterator(); iter.hasNext();)
             {
-                for (Method method : fieldPopulator.getClass().getMethods())
-                {
-                    if (method.isAnnotationPresent( SupportedFields.class ))
-                    {
-                        Collection<String> supportedFields = (Collection<String>) method
-                                .invoke( fieldPopulator );
-                        for (Iterator<String> iter = fieldNames.iterator(); iter.hasNext();)
-                        {
-                            String fieldName = iter.next();
-                            if (!supportedFields.contains( fieldName ))
-                            {
-                                iter.remove();
-                            }
-                        }
-                    }
+                String fieldName = iter.next();
+                if (!entityConfiguration.getSelectableFields().contains(fieldName)) {
+                    iter.remove();
                 }
-            }
-            catch (Exception e)
-            {
-                // @SupportedFields not found on method of return type
-                // Collection<String>
             }
         }
     }

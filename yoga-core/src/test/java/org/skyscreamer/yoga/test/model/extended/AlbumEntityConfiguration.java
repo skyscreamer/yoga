@@ -1,8 +1,7 @@
 package org.skyscreamer.yoga.test.model.extended;
 
-import org.skyscreamer.yoga.annotations.CoreFields;
-import org.skyscreamer.yoga.annotations.PopulationExtension;
-import org.skyscreamer.yoga.annotations.SupportedFields;
+import org.skyscreamer.yoga.annotations.ExtraField;
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,21 +10,26 @@ import java.util.List;
  * User: corby
  * Date: 5/13/12
  */
-@PopulationExtension(Album.class)
-public class AlbumFieldPopulator
+public class AlbumEntityConfiguration extends YogaEntityConfiguration
 {
-    @CoreFields
+    @Override
+    public Class getEntityClass() {
+        return Album.class;
+    }
+
+    @Override
     public List<String> getCoreFields()
     {
         return Arrays.asList( "id", "title" );
     }
 
-    @SupportedFields
-    public List<String> getSupportedFields()
+    @Override
+    public List<String> getSelectableFields()
     {
         return Arrays.asList( "artist", "songs" );
     }
 
+    @Override
     public String getURITemplate()
     {
         return "/album/{id}";

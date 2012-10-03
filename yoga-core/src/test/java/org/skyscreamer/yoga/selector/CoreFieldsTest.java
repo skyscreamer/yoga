@@ -6,7 +6,7 @@ import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Album;
-import org.skyscreamer.yoga.test.model.extended.AlbumFieldPopulator;
+import org.skyscreamer.yoga.test.model.extended.AlbumEntityConfiguration;
 import org.skyscreamer.yoga.test.model.extended.User;
 import org.skyscreamer.yoga.test.model.extended.UserFieldPopulatorWithArtistCoreField;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
@@ -34,7 +34,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         Assert.assertEquals( solomon.getName(), objectTree.get( "name" ) );
     }
 
-    // Use an AlbumFieldPopulator that defines ID and Title as core fields. Pass
+    // Use an AlbumEntityConfiguration that defines ID and Title as core fields. Pass
     // in an empty selector and a null
     // selector, and verify that only the ID and Title fields are returned.
     @Test
@@ -42,7 +42,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        populatorRegistry.register( new AlbumFieldPopulator() );
+        _entityConfigurationRegistry.register( new AlbumEntityConfiguration() );
         Map<String, Object> objectTree = doTraverse( funeral, null, traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
@@ -50,7 +50,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
     }
 
     /**
-     * Use an AlbumFieldPopulator that defines ID and Title as core fields. Pass
+     * Use an AlbumEntityConfiguration that defines ID and Title as core fields. Pass
      * in an empty selector and a null selector, and verify that only the ID and
      * Title fields are returned.
      */
@@ -59,7 +59,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        populatorRegistry.register( new AlbumFieldPopulator() );
+        _entityConfigurationRegistry.register( new AlbumEntityConfiguration() );
         Map<String, Object> objectTree = doTraverse( funeral, ":", traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
@@ -78,7 +78,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         carter.getFavoriteArtists().add( DataGenerator.neutralMilkHotel() );
         carter.getFavoriteArtists().add( DataGenerator.arcadeFire() );
         ResultTraverser traverser = new ResultTraverser();
-        populatorRegistry.register( new UserFieldPopulatorWithArtistCoreField() );
+        _entityConfigurationRegistry.register( new UserFieldPopulatorWithArtistCoreField() );
 
         Map<String, Object> objectTree = doTraverse( carter, ":", traverser );
         Assert.assertEquals( 2, objectTree.size() );

@@ -2,11 +2,12 @@ package org.skyscreamer.yoga.listener;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
+import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
 import org.skyscreamer.yoga.util.ValueReader;
@@ -18,20 +19,20 @@ public class HrefListener implements RenderingListener
 {
 
     private URICreator _uriCreator = new URICreator();
-    private FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry();
+    private EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
 
     public HrefListener()
     {
     }
 
-    public HrefListener( FieldPopulatorRegistry _fieldPopulatorRegistry )
+    public HrefListener( EntityConfigurationRegistry _entityConfigurationRegistry)
     {
-        this._fieldPopulatorRegistry = _fieldPopulatorRegistry;
+        this._entityConfigurationRegistry = _entityConfigurationRegistry;
     }
 
-    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
+    public void setEntityConfigurationRegistry( EntityConfigurationRegistry entityConfigurationRegistry)
     {
-        this._fieldPopulatorRegistry = fieldPopulatorRegistry;
+        this._entityConfigurationRegistry = entityConfigurationRegistry;
     }
 
     @Override
@@ -66,26 +67,23 @@ public class HrefListener implements RenderingListener
 
     protected String determineTemplate( Class<?> instanceType )
     {
-        Object fieldPopulator = _fieldPopulatorRegistry == null ? null : _fieldPopulatorRegistry
-                .getFieldPopulator( instanceType );
-        if (fieldPopulator != null)
+        String uriTemplate = null;
+
+        YogaEntityConfiguration entityConfiguration = _entityConfigurationRegistry == null ? null
+                : _entityConfigurationRegistry.getEntityConfiguration( instanceType );
+
+        // YogaEntityConfiguration trumps annotation
+        if (entityConfiguration != null && entityConfiguration.getURITemplate() != null)
         {
-            try
-            {
-                Method method = fieldPopulator.getClass().getMethod( "getURITemplate" );
-                return (String) method.invoke( fieldPopulator );
-            }
-            catch (Exception e)
-            {
-                // getCoreFields not implemented on FieldPopulator
-            }
+            uriTemplate = entityConfiguration.getURITemplate();
+        }
+        // Annotation based config
+        else if (instanceType.isAnnotationPresent( URITemplate.class ))
+        {
+            uriTemplate = instanceType.getAnnotation( URITemplate.class ).value();
         }
 
-        if (instanceType.isAnnotationPresent( URITemplate.class ))
-        {
-            return instanceType.getAnnotation( URITemplate.class ).value();
-        }
-        return null;
+        return uriTemplate;
     }
 
     public String getUrl( String uriTemplate, final Object value, final Class<?> valueType,

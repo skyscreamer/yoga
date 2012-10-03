@@ -9,28 +9,28 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.skyscreamer.yoga.annotations.Core;
-import org.skyscreamer.yoga.annotations.CoreFields;
 import org.skyscreamer.yoga.annotations.ExtraField;
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 
 public class CoreSelector extends MapSelector
 {
-    private FieldPopulatorRegistry _populatorRegistry = new DefaultFieldPopulatorRegistry();
+    private EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
 
-    public CoreSelector( FieldPopulatorRegistry populatorRegistry )
+    public CoreSelector( EntityConfigurationRegistry entityConfigurationRegistry )
     {
-        _populatorRegistry = populatorRegistry;
+        _entityConfigurationRegistry = entityConfigurationRegistry;
     }
 
     public CoreSelector()
     {
     }
 
-    public void setPopulatorRegistry( FieldPopulatorRegistry populatorRegistry )
+    public void setPopulatorRegistry( EntityConfigurationRegistry entityConfigurationRegistry )
     {
-        this._populatorRegistry = populatorRegistry;
+        _entityConfigurationRegistry = entityConfigurationRegistry;
     }
     
     @Override
@@ -77,56 +77,36 @@ public class CoreSelector extends MapSelector
     @SuppressWarnings("unchecked")
     protected Collection<String> getAllowedCoreFields( Class<?> instanceType )
     {
-        Object populator = _populatorRegistry == null ? null : _populatorRegistry
-                .getFieldPopulator( instanceType );
-        if (populator != null)
-        {
-            for (Method method : populator.getClass().getMethods())
-            {
-                try
-                {
-                    if (method.isAnnotationPresent( CoreFields.class ))
-                    {
-                        return (Collection<String>) method.invoke( populator );
-                    }
-                }
-                catch (Exception e)
-                {
-                    // @CoreFields not found on method of return type
-                    // List<String>
-                }
-            }
-        }
-        return null;
+        YogaEntityConfiguration entityConfiguration = _entityConfigurationRegistry == null ? null
+                : _entityConfigurationRegistry.getEntityConfiguration(instanceType);
+        return entityConfiguration != null ? entityConfiguration.getCoreFields() : null;
     }
 
     @Override
     public Collection<Property> getAllPossibleFields( Class<?> instanceType )
     {
         Map<String, Property> response = new TreeMap<String, Property>();
+
+        // Get the getters
         List<PropertyDescriptor> readableProperties = PropertyUtil
                 .getReadableProperties( instanceType );
-
         for (PropertyDescriptor property : readableProperties)
         {
             response.put( property.getName(), new PojoProperty( property ) );
         }
 
-        Object populator = _populatorRegistry == null ? null : _populatorRegistry
-                .getFieldPopulator( instanceType );
-        if (populator != null)
+        // Add @ExtraField methods from the YogaEntityConfiguration, if one exists
+        YogaEntityConfiguration entityConfiguration = _entityConfigurationRegistry == null ? null
+                : _entityConfigurationRegistry.getEntityConfiguration(instanceType);
+        if (entityConfiguration != null)
         {
-            for (Method method : populator.getClass().getMethods())
+            for (Method method : entityConfiguration.getExtraFieldMethods())
             {
-                Class<?>[] parameterTypes = method.getParameterTypes();
-                int paramLength = parameterTypes.length;
-                if (method.isAnnotationPresent( ExtraField.class ) && paramLength < 2)
-                {
-                    String name = method.getAnnotation( ExtraField.class ).value();
-                    response.put(name, new ExtraFieldProperty( name, populator, method ) );
-                }
+                String name = method.getAnnotation( ExtraField.class ).value();
+                response.put(name, new ExtraFieldProperty( name, entityConfiguration, method ) );
             }
         }
+
         return response.values();
     }
 }

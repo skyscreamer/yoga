@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.populator;
+package org.skyscreamer.yoga.configuration;
 
 import org.junit.Assert;
 import org.junit.Test;

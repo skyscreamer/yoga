@@ -16,7 +16,7 @@ public abstract class ParentheticalSelectorParser extends SelectorParser
 {
     protected FieldSelector parseParentheticalSelector( String rawSelectorExpression, String openParenthesis ) throws ParseSelectorException
     {
-        FieldSelector selector = new FieldSelector( _fieldPopulatorRegistry );
+        FieldSelector selector = new FieldSelector(_entityConfigurationRegistry);
         StringBuilder stringBuilder = new StringBuilder( rawSelectorExpression );
         while (stringBuilder.length() > 0)
         {
@@ -31,7 +31,7 @@ public abstract class ParentheticalSelectorParser extends SelectorParser
         int index = 0;
         boolean done = false;
         StringBuilder fieldNameBuilder = new StringBuilder();
-        FieldSelector subSelector = new FieldSelector( _fieldPopulatorRegistry );
+        FieldSelector subSelector = new FieldSelector(_entityConfigurationRegistry);
 
         while (!done)
         {

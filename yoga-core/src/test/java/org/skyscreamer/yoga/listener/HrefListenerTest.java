@@ -7,7 +7,7 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Album;
-import org.skyscreamer.yoga.test.model.extended.AlbumFieldPopulator;
+import org.skyscreamer.yoga.test.model.extended.AlbumEntityConfiguration;
 import org.skyscreamer.yoga.test.model.extended.User;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
 import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
@@ -37,7 +37,7 @@ public class HrefListenerTest extends AbstractTraverserTest
     }
 
     // No @URITemplate annotation exists on the Album class, but the
-    // AlbumFieldPopulator defines a template.
+    // AlbumEntityConfiguration defines a template.
     // Put an HrefListener in the listener chain, and verify that the correct
     // URL is appended to the output
     @Test
@@ -45,10 +45,11 @@ public class HrefListenerTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        populatorRegistry.register( new AlbumFieldPopulator() );
+        _entityConfigurationRegistry.register( new AlbumEntityConfiguration() );
 
         YogaRequestContext requestContext = new YogaRequestContext( "test", new GDataSelectorParser(),
-                new DummyHttpServletRequest(), new DummyHttpServletResponse(), new HrefListener( this.populatorRegistry ) );
+                new DummyHttpServletRequest(), new DummyHttpServletResponse(),
+                    new HrefListener( _entityConfigurationRegistry ) );
         Map<String, Object> objectTree = doTraverse( funeral, ":", traverser, requestContext );
 
         Assert.assertEquals( "/album/" + funeral.getId() + ".test", objectTree.get( "href" ) );
