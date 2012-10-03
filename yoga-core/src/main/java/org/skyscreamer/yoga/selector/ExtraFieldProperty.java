@@ -1,20 +1,22 @@
 package org.skyscreamer.yoga.selector;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
 public class ExtraFieldProperty implements Property
 {
 
     private String name;
-    private Object populator;
+    private YogaEntityConfiguration entityConfiguration;
     private Method method;
 
-    public ExtraFieldProperty( String name, Object populator, Method method )
+    public ExtraFieldProperty( String name, YogaEntityConfiguration entityConfiguration, Method method )
     {
         this.name = name;
-        this.populator = populator;
+        this.entityConfiguration = entityConfiguration;
         this.method = method;
     }
 
@@ -33,37 +35,29 @@ public class ExtraFieldProperty implements Property
     @Override
     public Object getValue( Object instance )
     {
-        return getPopulatorFieldValue( method, populator, instance );
+        try {
+            return getEntityConfigurationValue( method, entityConfiguration, instance );
+        } catch (Exception e) {
+            throw new YogaRuntimeException( "Could not invoke " + method + " on " + entityConfiguration.getClass().getName(), e );
+        }
     }
 
-    protected Object getPopulatorFieldValue( Method method, Object populator, Object instance )
+    protected Object getEntityConfigurationValue( Method method, YogaEntityConfiguration entityConfiguration, Object instance )
+            throws InvocationTargetException, IllegalAccessException
     {
         switch (method.getParameterTypes().length)
         {
             case 0:
-                return retrievePopulatorFieldValue( method, populator );
+                return method.invoke(entityConfiguration);
 
             case 1:
-                return retrievePopulatorFieldValue( method, populator, instance );
+                return method.invoke(entityConfiguration, instance);
 
             default:
                 throw new YogaRuntimeException(
                         String.format(
-                                "A Field Populator method can only have 0 or 1 parameters.  Method %s has %d",
+                                "An @ExtraField method can only have 0 or 1 parameters.  Method %s has %d",
                                 method.toString(), method.getParameterTypes().length ) );
         }
     }
-
-    protected Object retrievePopulatorFieldValue( Method method, Object populator, Object... args )
-    {
-        try
-        {
-            return method.invoke( populator, args );
-        }
-        catch (Exception e)
-        {
-            throw new YogaRuntimeException( "Could not invoke " + method, e );
-        }
-    }
-
 }

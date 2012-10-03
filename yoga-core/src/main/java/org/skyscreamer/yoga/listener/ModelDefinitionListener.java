@@ -1,25 +1,22 @@
 package org.skyscreamer.yoga.listener;
 
-import static org.skyscreamer.yoga.populator.FieldPopulatorUtil.getPopulatorExtraFieldMethods;
-
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.skyscreamer.yoga.annotations.ExtraField;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 public class ModelDefinitionListener implements RenderingListener
 {
-    private FieldPopulatorRegistry fieldPopulatorRegistry;
+    private EntityConfigurationRegistry _entityConfigurationRegistry;
 
-    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
+    public void setEntityConfigurationRegistry(EntityConfigurationRegistry entityConfigurationRegistry)
     {
-        this.fieldPopulatorRegistry = fieldPopulatorRegistry;
+        _entityConfigurationRegistry = entityConfigurationRegistry;
     }
 
     @Override
@@ -38,16 +35,13 @@ public class ModelDefinitionListener implements RenderingListener
             definition.add( property.getName() );
         }
 
-        if (fieldPopulatorRegistry != null)
+        if (_entityConfigurationRegistry != null)
         {
-            Object populator = fieldPopulatorRegistry.getFieldPopulator( instanceType );
-            if (populator != null)
+            YogaEntityConfiguration entityConfiguration =
+                    _entityConfigurationRegistry.getEntityConfiguration(instanceType);
+            if (entityConfiguration != null)
             {
-                for (Method method : getPopulatorExtraFieldMethods( populator, instanceType ))
-                {
-                    ExtraField extraField = method.getAnnotation( ExtraField.class );
-                    definition.add( extraField.value() );
-                }
+                definition.addAll(entityConfiguration.getExtraFieldNames());
             }
         }
         ( ( MapHierarchicalModel<?>) event.getModel()).addProperty( SelectorParser.DEFINITION, definition );

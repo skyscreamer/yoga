@@ -38,7 +38,7 @@ public class MetadataLinkListenerTest extends AbstractTraverserTest
 
         DefaultMetaDataRegistry service = new DefaultMetaDataRegistry();
         service.setRootMetaDataUrl( prefixUrl );
-        service.setCoreSelector( new CoreSelector( populatorRegistry ) );
+        service.setCoreSelector( new CoreSelector( _entityConfigurationRegistry ) );
 
         Map<String,Class<?>> typeMappings = new HashMap<String, Class<?>>();
         typeMappings.put( "album", Album.class );

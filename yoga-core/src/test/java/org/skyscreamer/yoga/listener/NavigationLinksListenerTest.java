@@ -2,9 +2,9 @@ package org.skyscreamer.yoga.listener;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
@@ -25,7 +25,7 @@ public class NavigationLinksListenerTest
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         RenderingEvent event = new RenderingEvent( RenderingEventType.POJO_CHILD, model, leaf,
                 leaf.getClass(), requestContext, new CoreSelector(
-                        new DefaultFieldPopulatorRegistry() ) );
+                        new DefaultEntityConfigurationRegistry() ) );
         new NavigationLinksListener().eventOccurred( event );
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
