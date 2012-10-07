@@ -1,7 +1,7 @@
 package org.skyscreamer.yoga.demo.dto;
 
 import org.skyscreamer.yoga.annotations.ExtraField;
-import org.skyscreamer.yoga.annotations.PopulationExtension;
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.demo.model.Album;
 import org.skyscreamer.yoga.demo.model.User;
@@ -11,14 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@PopulationExtension(User.class)
-public class UserFieldPopulator
+public class UserConfiguration extends YogaEntityConfiguration<User>
 {
     @Autowired
     GenericDao _genericDao;
 
     @ExtraField("recommendedAlbums")
-    public List<Album> getRecommendedAlbums()
+    public List<Album> getRecommendedAlbums(User user)
     {
         return _genericDao.findAll( Album.class );
     }

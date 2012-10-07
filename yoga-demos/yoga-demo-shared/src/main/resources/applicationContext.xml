@@ -71,7 +71,7 @@
     <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.classfinder.HibernateClassFinderStrategy" />
 
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.GDataSelectorParser">
-        <property name="fieldPopulatorRegistry" ref="fieldPopulatorRegistry"/>
+        <property name="entityConfigurationRegistry" ref="entityConfigurationRegistry"/>
         <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
         <property name="disableExplicitSelectors" value="false"/>
     </bean>
@@ -79,16 +79,16 @@
     <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"
         p:propertyFile="classpath:selectorAlias.properties" />
 
-    <bean id="fieldPopulatorRegistry" class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">
+    <bean id="entityConfigurationRegistry" class="org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry">
         <constructor-arg>
             <list>
-                <bean class="org.skyscreamer.yoga.demo.dto.UserFieldPopulator" />
+                <bean class="org.skyscreamer.yoga.demo.dto.UserConfiguration" />
             </list>
         </constructor-arg>
     </bean>
 
     <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener"
-        p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry" />
+        p:entityConfigurationRegistry-ref="entityConfigurationRegistry" />
 
     <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
         <constructor-arg>
@@ -101,7 +101,7 @@
                 <bean class="org.skyscreamer.yoga.listener.NavigationLinksListener"
                     p:hrefListener-ref="hrefListener" />
                 <bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"
-                    p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>
+                    p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>
                 <bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"
                     p:metaDataRegistry-ref="metaDataService" />
             </list>
@@ -122,7 +122,7 @@
     </bean>
 
     <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector"
-        p:populatorRegistry-ref="fieldPopulatorRegistry"/>
+        p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>
 
     <bean name="abstract.view" abstract="true"
         p:registry-ref="renderingListenerRegistry"

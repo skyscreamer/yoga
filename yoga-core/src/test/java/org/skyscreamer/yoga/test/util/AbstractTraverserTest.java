@@ -1,12 +1,12 @@
 package org.skyscreamer.yoga.test.util;
 
 import org.junit.Assert;
+import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.*;
@@ -22,8 +22,8 @@ public abstract class AbstractTraverserTest
 {
     protected Class<? extends ParentheticalSelectorParser> _selectorParserClass = LinkedInSelectorParser.class;
     protected AliasSelectorResolver _aliasSelectorResolver;
-    protected FieldPopulatorRegistry populatorRegistry = new DefaultFieldPopulatorRegistry();
-    protected CoreSelector coreSelector = new CoreSelector( populatorRegistry );
+    protected EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
+    protected CoreSelector coreSelector = new CoreSelector( _entityConfigurationRegistry );
 
     protected Map<String, Object> doTraverse( Object instance, String selectorString, ResultTraverser traverser )
     {
@@ -39,7 +39,7 @@ public abstract class AbstractTraverserTest
         {
             Constructor<? extends ParentheticalSelectorParser> constructor = _selectorParserClass.getConstructor();
             SelectorParser selectorParser = context.getSelectorParser();
-            selectorParser.setFieldPopulatorRegistry( populatorRegistry );
+            selectorParser.setEntityConfigurationRegistry( _entityConfigurationRegistry );
             selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );
             Selector selector = selectorParser.parseSelector( selectorString, coreSelector );
 

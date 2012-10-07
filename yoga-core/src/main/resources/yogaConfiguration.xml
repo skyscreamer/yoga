@@ -30,8 +30,8 @@
     <!-- GDataSelectorParser.                                                                                  -->
     <!--                                                                                                       -->
     <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.GDataSelectorParser">
-        <!-- If you use a field populator registry (See STEP 4), inject it in the constructor -->
-        <!-- <constructor-arg ref="fieldPopulatorRegistry"/> -->
+        <!-- If you use a field configuration registry (See STEP 4), inject it in the constructor -->
+        <!-- <constructor-arg ref="entityConfigurationRegistry"/> -->
 
         <!-- If you support selector aliases (see STEP 5), inject your alias selector resolver here. -->
         <!--<property name="aliasSelectorResolver" ref="aliasSelectorResolver"/> -->
@@ -80,7 +80,7 @@
                 <!-- selectable fields in the resource. This can be useful for a developer who is browsing the     -->
                 <!-- data and composing selectors.                                                                 -->
                 <!--<bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"-->
-                      <!--p:fieldPopulatorRegistry-ref="fieldPopulatorRegistry"/>-->
+                      <!--p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>-->
 
                 <!-- The MetadataLinkListener renders a "metadata" field that includes an href link to view        -->
                 <!-- the complete metadata for the resource. In order for the href link to work, you must deploy   -->
@@ -93,29 +93,29 @@
     </bean>
 
     <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener">
-          <!-- If you declared a FieldPopulatorRegistry in Step 4, inject it here -->
-          <!--p:populatorRegistry-ref="fieldPopulatorRegistry"-->
+          <!-- If you declared a EntityConfigurationRegistry in Step 4, inject it here -->
+          <!--p:entityConfiguration-ref="entityConfigurationRegistry"-->
     </bean>
 
-    <!-- STEP 4. Register your FieldPopulators -->
+    <!-- STEP 4. Register your YogaEntityConfigurations -->
     <!--                                                                                                           -->
-    <!-- If you choose to create FieldPopulators that define what data is returned from a Yoga request (instead of -->
-    <!-- using Yoga annotations on your model), register your field populators here. For more info, see            -->
-    <!-- https://github.com/skyscreamer/yoga/wiki/Configuring-Resources-with-FieldPopulators                       -->
+    <!-- If you choose to create YogaEntityConfigurations that define what data is returned from a Yoga request    -->
+    <!-- (instead of, or in addition to, using Yoga annotations on your model), register your them here. For more  -->
+    <!-- info, see https://github.com/skyscreamer/yoga/wiki/Configuring-Resources-with-YogaEntityConfigurations    -->
     <!--                                                                                                           -->
-    <!--<bean id="fieldPopulatorRegistry" class="org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry">-->
+    <!--<bean id="entityConfigurationRegistry" class="org.skyscreamer.yoga.configurationtion.DefaultEntityConfigurationRegistry">-->
         <!--<constructor-arg>-->
             <!--<list>-->
-                <!--<bean class="com.mycompany.populator.MyFieldPopulator1" />-->
-                <!--<bean class="com.mycompany.populator.MyFieldPopulator2" />-->
+                <!--<bean class="com.mycompany.configuration.MyEntityConfiguration1" />-->
+                <!--<bean class="com.mycompany.configuration.MyEntityConfiguration2" />-->
             <!--</list>-->
         <!--</constructor-arg>-->
     <!--</bean>-->
 
     <!-- The CoreSelector is a required bean that parses selectors in the request                                  -->
     <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector">
-          <!-- If you declared a FieldPopulatorRegistry in Step 4, inject it here -->
-          <!--p:populatorRegistry-ref="fieldPopulatorRegistry"-->
+          <!-- If you declared a EntityConfigurationRegistry in Step 4, inject it here -->
+          <!--p:entityConfiguration-ref="entityConfigurationRegistry"-->
     </bean>
 
     <!-- STEP 5. Define your Alias Selector Resolver -->

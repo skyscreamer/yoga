@@ -1,8 +1,8 @@
 package org.skyscreamer.yoga.selector.parser;
 
+import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
-import org.skyscreamer.yoga.populator.DefaultFieldPopulatorRegistry;
-import org.skyscreamer.yoga.populator.FieldPopulatorRegistry;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
 import org.skyscreamer.yoga.selector.MapSelector;
@@ -22,7 +22,7 @@ public abstract class SelectorParser
     public static final String HREF = "href";
     public static final String DEFINITION = "definition";
 
-    protected FieldPopulatorRegistry _fieldPopulatorRegistry = new DefaultFieldPopulatorRegistry();
+    protected EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
 
     protected AliasSelectorResolver _aliasSelectorResolver;
     protected boolean _disableExplicitSelectors = false;
@@ -85,9 +85,9 @@ public abstract class SelectorParser
         _disableExplicitSelectors = disableExplicitSelectors;
     }
 
-    public void setFieldPopulatorRegistry( FieldPopulatorRegistry fieldPopulatorRegistry )
+    public void setEntityConfigurationRegistry( EntityConfigurationRegistry entityConfigurationRegistry)
     {
-        _fieldPopulatorRegistry = fieldPopulatorRegistry;
+        _entityConfigurationRegistry = entityConfigurationRegistry;
     }
 }
 
