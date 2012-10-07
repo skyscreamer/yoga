@@ -8,7 +8,6 @@ public class RenderingEvent
 {
     private RenderingEventType type;
     private HierarchicalModel<?> model;
-    private String key;
     private Object value;
     private Class<?> valueType;
     private YogaRequestContext requestContext;
@@ -26,19 +25,6 @@ public class RenderingEvent
         this.selector = selector;
     }
 
-    public RenderingEvent( RenderingEventType type, HierarchicalModel<?> model, String key,
-            Object value, Class<?> valueType, YogaRequestContext requestContext, Selector selector )
-    {
-        super();
-        this.type = type;
-        this.model = model;
-        this.key = key;
-        this.value = value;
-        this.valueType = valueType;
-        this.requestContext = requestContext;
-        this.selector = selector;
-    }
-
     public RenderingEventType getType()
     {
         return type;
@@ -47,11 +33,6 @@ public class RenderingEvent
     public HierarchicalModel<?> getModel()
     {
         return model;
-    }
-
-    public String getKey()
-    {
-        return key;
     }
 
     public Object getValue()
