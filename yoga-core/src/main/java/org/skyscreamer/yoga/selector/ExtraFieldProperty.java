@@ -10,10 +10,10 @@ public class ExtraFieldProperty implements Property
 {
 
     private String name;
-    private YogaEntityConfiguration entityConfiguration;
+    private YogaEntityConfiguration<?> entityConfiguration;
     private Method method;
 
-    public ExtraFieldProperty( String name, YogaEntityConfiguration entityConfiguration, Method method )
+    public ExtraFieldProperty( String name, YogaEntityConfiguration<?> entityConfiguration, Method method )
     {
         this.name = name;
         this.entityConfiguration = entityConfiguration;
@@ -42,7 +42,7 @@ public class ExtraFieldProperty implements Property
         }
     }
 
-    protected Object getEntityConfigurationValue( Method method, YogaEntityConfiguration entityConfiguration, Object instance )
+    protected Object getEntityConfigurationValue( Method method, YogaEntityConfiguration<?> entityConfiguration, Object instance )
             throws InvocationTargetException, IllegalAccessException
     {
         switch (method.getParameterTypes().length)

@@ -17,13 +17,14 @@ import java.util.List;
  * @see org.skyscreamer.yoga.annotations.Core
  */
 public abstract class YogaEntityConfiguration<T> {
-    private volatile Class _instanceClass = null;
+    private volatile Class<T> _instanceClass = null;
 
     /**
      * Identifies the class supported by this configuration.
      *
      * @return A class object for the entity being configured
      */
+    @SuppressWarnings("unchecked")
     public Class<T> getEntityClass() {
         if (_instanceClass == null) {
             try {

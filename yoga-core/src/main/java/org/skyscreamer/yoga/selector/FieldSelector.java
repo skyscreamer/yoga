@@ -1,6 +1,5 @@
 package org.skyscreamer.yoga.selector;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,10 +60,9 @@ public class FieldSelector implements Selector
         return selected;
     }
 
-    @SuppressWarnings("unchecked")
-    public void removeNonSupportedFields( Class<?> instanceType, Set<String> fieldNames )
+    public <T> void removeNonSupportedFields( Class<T> instanceType, Set<String> fieldNames )
     {
-        YogaEntityConfiguration entityConfiguration = _entityConfigurationRegistry.getEntityConfiguration( instanceType );
+        YogaEntityConfiguration<T> entityConfiguration = _entityConfigurationRegistry.getEntityConfiguration( instanceType );
         if (entityConfiguration != null && entityConfiguration.getSelectableFields() != null)
         {
             for (Iterator<String> iter = fieldNames.iterator(); iter.hasNext();)

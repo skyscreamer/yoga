@@ -74,10 +74,9 @@ public class CoreSelector extends MapSelector
         return response;
     }
 
-    @SuppressWarnings("unchecked")
-    protected Collection<String> getAllowedCoreFields( Class<?> instanceType )
+    protected <T> Collection<String> getAllowedCoreFields( Class<T> instanceType )
     {
-        YogaEntityConfiguration entityConfiguration = _entityConfigurationRegistry == null ? null
+        YogaEntityConfiguration<T> entityConfiguration = _entityConfigurationRegistry == null ? null
                 : _entityConfigurationRegistry.getEntityConfiguration(instanceType);
         return entityConfiguration != null ? entityConfiguration.getCoreFields() : null;
     }
