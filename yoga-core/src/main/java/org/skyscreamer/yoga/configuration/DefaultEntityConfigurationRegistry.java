@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class DefaultEntityConfigurationRegistry implements EntityConfigurationRegistry
 {
-    protected Map<Class<?>, YogaEntityConfiguration> _registry = new HashMap<Class<?>, YogaEntityConfiguration>();
+    protected Map<Class<?>, YogaEntityConfiguration<?>> _registry = new HashMap<Class<?>, YogaEntityConfiguration<?>>();
 
     /**
      * A default constructor.
@@ -25,7 +25,7 @@ public class DefaultEntityConfigurationRegistry implements EntityConfigurationRe
      * Constructs a registry and initializes it with an array of initial configurations.
      * @param entityConfigurations Initial configurations to register
      */
-    public DefaultEntityConfigurationRegistry(YogaEntityConfiguration... entityConfigurations)
+    public DefaultEntityConfigurationRegistry(YogaEntityConfiguration<?>... entityConfigurations)
     {
         register( entityConfigurations );
     }
@@ -34,7 +34,7 @@ public class DefaultEntityConfigurationRegistry implements EntityConfigurationRe
      * Constructs a registry and initializes it with an list of initial configurations.
      * @param entityConfigurations Initial configurations to register
      */
-    public DefaultEntityConfigurationRegistry(List<YogaEntityConfiguration> entityConfigurations)
+    public DefaultEntityConfigurationRegistry(List<YogaEntityConfiguration<?>> entityConfigurations)
     {
         register( entityConfigurations.toArray(new YogaEntityConfiguration[0]) );
     }
@@ -43,9 +43,9 @@ public class DefaultEntityConfigurationRegistry implements EntityConfigurationRe
      * {@inheritDoc}
      */
     @Override
-    public void register( YogaEntityConfiguration... entityConfigurations )
+    public void register( YogaEntityConfiguration<?>... entityConfigurations )
     {
-        for ( YogaEntityConfiguration entityConfiguration : entityConfigurations )
+        for ( YogaEntityConfiguration<?> entityConfiguration : entityConfigurations )
         {
             Class<?> type = entityConfiguration.getEntityClass();
             if ( type == null )
@@ -60,9 +60,10 @@ public class DefaultEntityConfigurationRegistry implements EntityConfigurationRe
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public YogaEntityConfiguration getEntityConfiguration( Class<?> clazz )
+    public <T> YogaEntityConfiguration<T> getEntityConfiguration( Class<T> clazz )
     {
-        return _registry.get( clazz );
+        return (YogaEntityConfiguration<T>) _registry.get( clazz );
     }
 }

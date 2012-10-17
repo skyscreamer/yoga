@@ -1,19 +1,18 @@
 package org.skyscreamer.yoga.listener;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
-import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
 import org.skyscreamer.yoga.util.ValueReader;
-
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 
 public class HrefListener implements RenderingListener
 {
@@ -69,7 +68,7 @@ public class HrefListener implements RenderingListener
     {
         String uriTemplate = null;
 
-        YogaEntityConfiguration entityConfiguration = _entityConfigurationRegistry == null ? null
+        YogaEntityConfiguration<?> entityConfiguration = _entityConfigurationRegistry == null ? null
                 : _entityConfigurationRegistry.getEntityConfiguration( instanceType );
 
         // YogaEntityConfiguration trumps annotation

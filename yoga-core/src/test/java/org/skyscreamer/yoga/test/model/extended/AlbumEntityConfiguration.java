@@ -1,10 +1,9 @@
 package org.skyscreamer.yoga.test.model.extended;
 
-import org.skyscreamer.yoga.annotations.ExtraField;
-import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
-
 import java.util.Arrays;
 import java.util.List;
+
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 
 /**
  * User: corby

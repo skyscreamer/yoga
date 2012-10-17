@@ -1,19 +1,22 @@
 package org.skyscreamer.yoga.test.util;
 
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
-import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.parser.*;
-
-import java.lang.reflect.Constructor;
-import java.util.List;
-import java.util.Map;
+import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
+import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
+import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
+import org.skyscreamer.yoga.selector.parser.ParentheticalSelectorParser;
+import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 /**
  * User: corby Date: 5/7/12
@@ -37,7 +40,6 @@ public abstract class AbstractTraverserTest
     {
         try
         {
-            Constructor<? extends ParentheticalSelectorParser> constructor = _selectorParserClass.getConstructor();
             SelectorParser selectorParser = context.getSelectorParser();
             selectorParser.setEntityConfigurationRegistry( _entityConfigurationRegistry );
             selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );

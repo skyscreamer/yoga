@@ -37,7 +37,7 @@ public class ModelDefinitionListener implements RenderingListener
 
         if (_entityConfigurationRegistry != null)
         {
-            YogaEntityConfiguration entityConfiguration =
+            YogaEntityConfiguration<?> entityConfiguration =
                     _entityConfigurationRegistry.getEntityConfiguration(instanceType);
             if (entityConfiguration != null)
             {
