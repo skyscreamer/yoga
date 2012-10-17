@@ -15,12 +15,12 @@ public interface EntityConfigurationRegistry
      *
      * @param entityConfigurations The entity configurations to register
      */
-    void register( YogaEntityConfiguration... entityConfigurations );
+    void register( YogaEntityConfiguration<?>... entityConfigurations );
 
     /**
      * Lookup the entity configuration for a given class.
      * @param entityClass The class of the entity configuration to retrieve
      * @return Entity configuration for a given class
      */
-    YogaEntityConfiguration getEntityConfiguration( Class<?> entityClass );
+    <T> YogaEntityConfiguration<T> getEntityConfiguration( Class<T> entityClass );
 }

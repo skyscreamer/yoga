@@ -53,8 +53,8 @@ import java.util.List;
  * </bean>
  *
  */
-public class SimpleYogaEntityConfiguration extends YogaEntityConfiguration {
-    private Class _entityClass;
+public class SimpleYogaEntityConfiguration<T> extends YogaEntityConfiguration<T> {
+    private Class<T> _entityClass;
     private List<String> _coreFields = null;
     private List<String> _selectableFields = null;
     private String _uriTemplate = null;
@@ -63,7 +63,7 @@ public class SimpleYogaEntityConfiguration extends YogaEntityConfiguration {
      * {@inheritDoc}
      */
     @Override
-    public Class getEntityClass() {
+    public Class<T> getEntityClass() {
         return _entityClass;
     }
 
@@ -88,7 +88,7 @@ public class SimpleYogaEntityConfiguration extends YogaEntityConfiguration {
      */
     @Override
     public String getURITemplate() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return _uriTemplate;
     }
 
     /**
@@ -96,7 +96,7 @@ public class SimpleYogaEntityConfiguration extends YogaEntityConfiguration {
      *
      * @param entityClass A class object representing the entity
      */
-    public void setEntityClass(Class entityClass) {
+    public void setEntityClass(Class<T> entityClass) {
         _entityClass = entityClass;
     }
 
