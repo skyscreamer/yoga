@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-demos</artifactId>
-        <version>0.9.4-SNAPSHOT</version>
+        <version>0.9.4</version>
     </parent>
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-demo-shared</artifactId>
-    <version>0.9.4-SNAPSHOT</version>
+    <version>0.9.4</version>
 
     <dependencies>
         <dependency>
