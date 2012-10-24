@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-integration</artifactId>
-        <version>0.9.4-SNAPSHOT</version>
+        <version>0.9.4</version>
     </parent>
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-springmvc</artifactId>
-    <version>0.9.4-SNAPSHOT</version>
+    <version>0.9.4</version>
     <packaging>jar</packaging>
 
     <name>Yoga Spring MVC</name>
