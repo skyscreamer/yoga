@@ -55,6 +55,7 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+	    <!-- TODO: This causes problems with releases.  Commenting out.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -68,13 +69,13 @@
                         <phase>site</phase>
                     </execution>
                 </executions>
-		<!-- TODO: This causes problems with releases.  Commenting out.
 		<configuration>
 		    <excludePackageNames>org.skyscreamer.yoga.demo</excludePackageNames>
 		</configuration>
-		-->
             </plugin>
+	    -->
         </plugins>
+	<!-- TODO: This causes problems with releases.  Commenting out.
         <extensions>
             <extension>
                 <groupId>org.apache.maven.scm</groupId>
@@ -92,6 +93,7 @@
                 <version>0.3.1</version>
             </extension>
         </extensions>
+	-->
     </build>
     <properties>
         <spring.version>3.0.3.RELEASE</spring.version>
@@ -103,12 +105,14 @@
         <module>yoga-demos</module>
     </modules>
 
+    <!-- TODO: This causes problems with releases.  Commenting out.
     <distributionManagement>
         <site>
             <id>github-project-site</id>
             <url>gitsite:git@github.com/skyscreamer/yoga.git</url>
         </site>
     </distributionManagement>
+    -->
 
     <profiles>
         <profile>
