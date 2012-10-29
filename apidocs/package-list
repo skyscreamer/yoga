@@ -1,5 +1,6 @@
 org.skyscreamer.yoga.annotations
 org.skyscreamer.yoga.classfinder
+org.skyscreamer.yoga.configuration
 org.skyscreamer.yoga.exceptions
 org.skyscreamer.yoga.jaxrs.resource
 org.skyscreamer.yoga.jaxrs.view
@@ -7,7 +8,6 @@ org.skyscreamer.yoga.listener
 org.skyscreamer.yoga.mapper
 org.skyscreamer.yoga.metadata
 org.skyscreamer.yoga.model
-org.skyscreamer.yoga.populator
 org.skyscreamer.yoga.selector
 org.skyscreamer.yoga.selector.parser
 org.skyscreamer.yoga.springmvc.controller
