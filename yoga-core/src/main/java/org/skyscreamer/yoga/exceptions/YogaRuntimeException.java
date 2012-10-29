@@ -1,5 +1,9 @@
 package org.skyscreamer.yoga.exceptions;
 
+/**
+ * This is the root of all yoga exceptions
+ *
+ */
 public class YogaRuntimeException extends RuntimeException
 {
     private static final long serialVersionUID = -4019301701247046285L;
