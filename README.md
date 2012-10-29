@@ -47,7 +47,7 @@ Right here:
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga</artifactId>
-        <version>0.9.3</version>
+        <version>0.9.4</version>
     </dependency>
     
 And pick one of the integration packages:
@@ -55,7 +55,7 @@ And pick one of the integration packages:
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-springmvc</artifactId>
-        <version>0.9.3</version>
+        <version>0.9.4</version>
     </dependency>
 
 or
@@ -63,5 +63,5 @@ or
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-jaxrs</artifactId>
-        <version>0.9.3</version>
+        <version>0.9.4</version>
     </dependency>
