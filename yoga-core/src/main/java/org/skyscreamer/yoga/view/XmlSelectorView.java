@@ -10,30 +10,32 @@ import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.XmlHierarchyModelImpl;
 import org.skyscreamer.yoga.selector.Selector;
 
-public class XmlSelectorView extends AbstractXmlYogaView
+/**
+ * This class represents an xml yoga view.  It will return an xml representation of either single objects or a list of objects
+ * 
+ * @author solomon.duskis
+ *
+ *@see AbstractYogaView
+ */
+public class XmlSelectorView extends AbstractYogaView
 {
     @Override
     public void render( Selector selector, Object value, YogaRequestContext context, OutputStream os )
             throws IOException
     {
-        HierarchicalModel<Element> model = getModel( value );
-        _resultTraverser.traverse( value, selector, model, context );
-        write( model.getUnderlyingModel(), os );
-    }
-
-    protected HierarchicalModel<Element> getModel( Object value )
-    {
+        HierarchicalModel<Element> model = null;
         if (value instanceof Iterable)
         {
             String name = getClassName( ((Iterable<?>) value).iterator().next() );
-            DOMElement root = new DOMElement( "result" );
-            return new XmlHierarchyModelImpl( root, name );
+            model = new XmlHierarchyModelImpl( new DOMElement( "result" ), name );
         }
         else
         {
-            DOMElement root = new DOMElement( getClassName( value ) );
-            return new XmlHierarchyModelImpl( root );
+            model = new XmlHierarchyModelImpl( new DOMElement( getClassName( value ) ) );
         }
+
+        _resultTraverser.traverse( value, selector, model, context );
+        XmlYogaViewUtil.write( model.getUnderlyingModel(), os );
     }
 
     @Override

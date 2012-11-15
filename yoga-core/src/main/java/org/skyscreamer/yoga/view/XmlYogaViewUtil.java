@@ -8,9 +8,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 
-public abstract class AbstractXmlYogaView extends AbstractYogaView
+public class XmlYogaViewUtil
 {
-    public void write( Element rootElement, OutputStream outputStream ) throws IOException
+    public static void write( Element rootElement, OutputStream outputStream ) throws IOException
     {
         DOMDocument domDocument = new DOMDocument();
         domDocument.setRootElement( rootElement );

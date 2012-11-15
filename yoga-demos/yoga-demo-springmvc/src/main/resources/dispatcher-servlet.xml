@@ -15,10 +15,8 @@
 
     <bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="customModelAndViewResolvers">
-            <list>
-                <bean class="org.skyscreamer.yoga.springmvc.view.YogaModelAndViewResolver"
-                      p:viewResolver-ref="viewResolver"/>
-            </list>
+             <bean class="org.skyscreamer.yoga.springmvc.view.YogaModelAndViewResolverAdapter"
+                   p:viewResolver-ref="viewResolver"/>
         </property>
     </bean>
 
@@ -29,8 +27,8 @@
           p:order="1" p:ignoreAcceptHeader="true">
         <property name="mediaTypes">
             <map>
-                <entry key="json"  value="application/json"/>
-                <entry key="xml"   value="application/xml"/>
+                <entry key="json" value="application/json"/>
+                <entry key="xml"  value="application/xml"/>
                 <entry key="yoga" value="text/html" />
             </map>
         </property>

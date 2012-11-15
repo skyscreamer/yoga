@@ -44,6 +44,7 @@ public final class TestUtil
         for ( Entry<String, String> entry : params.entrySet() )
         {
             sb.append( append ).append( entry.getKey() ).append( "=" ).append( entry.getValue() );
+            append = "&";
         }
     }
 }

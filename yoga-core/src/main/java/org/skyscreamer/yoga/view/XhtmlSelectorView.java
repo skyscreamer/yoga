@@ -10,7 +10,7 @@ import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.XhtmlHierarchyModelImpl;
 import org.skyscreamer.yoga.selector.Selector;
 
-public class XhtmlSelectorView extends AbstractXmlYogaView
+public class XhtmlSelectorView extends AbstractYogaView
 {
     @Override
     public void render( Selector selector, Object value, YogaRequestContext context, OutputStream os )
@@ -20,7 +20,7 @@ public class XhtmlSelectorView extends AbstractXmlYogaView
         initHead( rootElement );
         HierarchicalModel<Element> model = getModel( value, rootElement );
         _resultTraverser.traverse( value, selector, model, context );
-        write( rootElement, os );
+        XmlYogaViewUtil.write( rootElement, os );
     }
 
     protected HierarchicalModel<Element> getModel( Object value, Element rootElement )
