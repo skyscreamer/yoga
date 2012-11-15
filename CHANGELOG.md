@@ -1,8 +1,14 @@
 Changelog
 =========
 
-Version 0.9.3 - 2012-09-19
+Version 0.9.4 - 2012-10-29
 --------------------------
+ - Cleaned up the mucky state of the 0.9.3 version in Maven (some deps were missing)
+ - Added some additional comments
+ - Refactor field populator annotation into an abstract entity configuration class
+
+Version 0.9.3 - 2012-09-19 (deprecated)
+---------------------------------------
  - Getting awfully close to a 1.0 state
  - Fixed selector builder race condition that was causing weird UI behavior
  - More documentation including 
