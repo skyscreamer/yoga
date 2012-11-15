@@ -10,8 +10,13 @@ import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 
 /**
- * This is a 
- *
+ * This is a mechanism that will limit the number of children that are added to
+ * a response. This is a security mechanism that will prevent potential yoga
+ * induced OutOfMemoryError.
+ * 
+ * @see RenderingListener
+ * @see RenderingListenerRegistry
+ * @see YogaRequestContext
  */
 public class CountLimitRenderingListener implements RenderingListener
 {

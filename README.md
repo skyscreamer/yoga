@@ -1,7 +1,7 @@
 # Yoga #
 
 Yoga extends JAX-RS and SpringMVC RESTful servers to provide GData and LinkedIn style field selectors.
-
+ 
 * Choose which fields you want to see at call-time
 * Navigate entity relationships in a single call for complex views
 * **Much** faster speeds in high-latency (e.g. mobile) apps
