@@ -1,5 +1,11 @@
 package org.skyscreamer.yoga.util;
 
+/**
+ * Basic utilities for creating a pretty name for a class.
+ * 
+ * @author solomon.duskis
+ *
+ */
 public class NameUtil
 {
     public static String getName( Class<?> type )
