@@ -4,6 +4,7 @@ import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
+import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.MapSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
@@ -34,9 +35,9 @@ public abstract class AbstractYogaView
 
 	protected SelectorParser _selectorParser;
 
-	protected RenderingListenerRegistry _registry;
+	protected RenderingListenerRegistry _registry = new RenderingListenerRegistry();
 
-	protected MapSelector _selector;
+	protected MapSelector _selector = new CoreSelector();
 
 	public void setResultTraverser(ResultTraverser resultTraverser)
 	{
