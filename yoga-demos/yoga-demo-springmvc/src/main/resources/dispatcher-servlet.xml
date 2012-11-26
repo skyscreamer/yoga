@@ -2,24 +2,26 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+          http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
     <context:annotation-config/>
     <context:component-scan base-package="org.skyscreamer.yoga.demo.test.controller"/>
     <context:component-scan base-package="org.skyscreamer.yoga.springmvc.controller"/>
 
-
-    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
-
     <bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="customModelAndViewResolvers">
              <bean class="org.skyscreamer.yoga.springmvc.view.YogaModelAndViewResolverAdapter"
-                   p:viewResolver-ref="viewResolver"/>
+                   p:viewResolver-ref="viewResolver"
+                   p:requireResponseBodyAnnotation="true"/>
         </property>
     </bean>
 
+    <!--  <mvc:annotation-driven />  -->
     <bean name="abstract.springView" abstract="true"
         class="org.skyscreamer.yoga.springmvc.view.YogaSpringView" />
 
