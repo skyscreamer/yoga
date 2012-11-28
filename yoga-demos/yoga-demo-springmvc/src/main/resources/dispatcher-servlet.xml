@@ -13,13 +13,7 @@
     <context:component-scan base-package="org.skyscreamer.yoga.demo.test.controller"/>
     <context:component-scan base-package="org.skyscreamer.yoga.springmvc.controller"/>
 
-    <bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-        <property name="customModelAndViewResolvers">
-             <bean class="org.skyscreamer.yoga.springmvc.view.YogaModelAndViewResolverAdapter"
-                   p:viewResolver-ref="viewResolver"
-                   p:requireResponseBodyAnnotation="true"/>
-        </property>
-    </bean>
+    <bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
 
     <!--  <mvc:annotation-driven />  -->
     <bean name="abstract.springView" abstract="true"
