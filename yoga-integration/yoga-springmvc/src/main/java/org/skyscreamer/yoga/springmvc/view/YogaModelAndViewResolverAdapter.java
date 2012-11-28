@@ -68,7 +68,7 @@ public class YogaModelAndViewResolverAdapter implements ModelAndViewResolver
 
         if(requireResponseBodyAnnotation && !handlerMethod.isAnnotationPresent(ResponseBody.class))
         {
-        	return ModelAndViewResolver.UNRESOLVED;
+            return ModelAndViewResolver.UNRESOLVED;
         }
         try
         {
