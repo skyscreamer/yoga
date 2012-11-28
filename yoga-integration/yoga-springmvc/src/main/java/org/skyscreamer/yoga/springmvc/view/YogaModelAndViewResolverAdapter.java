@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.ui.ExtendedModelMap;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -34,9 +35,21 @@ public class YogaModelAndViewResolverAdapter implements ModelAndViewResolver
 {
     ViewResolver viewResolver;
 
+    boolean requireResponseBodyAnnotation = false;
+
     public void setViewResolver(ViewResolver viewResolver)
     {
         this.viewResolver = viewResolver;
+    }
+
+    /** 
+     * This is a failsafe to require the @ResponseBody annotation on the 
+     * @param requireResponseBodyAnnotation
+     */
+    public void setRequireResponseBodyAnnotation(
+            boolean requireResponseBodyAnnotation)
+    {
+        this.requireResponseBodyAnnotation = requireResponseBodyAnnotation;
     }
 
     @Override
@@ -45,6 +58,18 @@ public class YogaModelAndViewResolverAdapter implements ModelAndViewResolver
             Class handlerType, Object returnValue,
             ExtendedModelMap implicitModel, NativeWebRequest webRequest)
     {
+        // Yoga doesn't handle nulls. Also, String values are likely to be view
+        // names rather than results. The default behavior should be invoked,
+        // and not the yoga logic.
+        if(returnValue == null || returnValue instanceof String)
+        {
+            return ModelAndViewResolver.UNRESOLVED;
+        }
+
+        if(requireResponseBodyAnnotation && !handlerMethod.isAnnotationPresent(ResponseBody.class))
+        {
+        	return ModelAndViewResolver.UNRESOLVED;
+        }
         try
         {
             HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
