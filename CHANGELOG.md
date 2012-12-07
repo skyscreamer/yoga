@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.0 RC1 - 2012-12-07
+------------------------------
+ - Our first release candidate for 1.0!
+ - Add the ability to limit yoga's handling to only those Controller handler methods with @ResponseBody
+ - Add a lot more comments
+ - Clean up demos
+
 Version 0.9.4 - 2012-10-29
 --------------------------
  - Cleaned up the mucky state of the 0.9.3 version in Maven (some deps were missing)
