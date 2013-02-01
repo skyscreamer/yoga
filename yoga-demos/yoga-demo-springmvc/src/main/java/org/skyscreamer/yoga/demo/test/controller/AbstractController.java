@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page
@@ -34,6 +36,13 @@ public abstract class AbstractController<T>
     public List<T> getAll()
     {
         return _genericDao.findAll(_entityClass);
+    }
+
+    @RequestMapping("/count")
+    @ResponseBody
+    public String getCount(ModelAndView mv)
+    {
+        return String.valueOf(_genericDao.getCount(_entityClass));
     }
 
     // http://blog.xebia.com/2009/02/acessing-generic-types-at-runtime-in-java/
