@@ -63,7 +63,7 @@ public class NavigationLinksListener implements RenderingListener
     {
         Collection<Property> fieldNames = new ArrayList<Property>(
                 selector.getAllPossibleFields( instanceType ) );
-        Iterable<Property> selectedFields = selector.getSelectedFields( instanceType, instance );
+        Iterable<Property> selectedFields = selector.getSelectedFields( instanceType );
         for (Iterator<Property> iterator = fieldNames.iterator(); iterator.hasNext();)
         {
             Property property = iterator.next();

@@ -29,7 +29,7 @@ public class YogaSpringView implements View
             throws Exception
     {
         response.setContentType( getContentType() );
-        yogaView.render( request, response, model.values().iterator().next(), response.getOutputStream() );
+        yogaView.render( request, response, model.isEmpty() ? null : model.values().iterator().next(), response.getOutputStream() );
     }
 
     @Override

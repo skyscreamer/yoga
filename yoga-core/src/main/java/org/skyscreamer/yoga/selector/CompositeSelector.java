@@ -38,17 +38,17 @@ public class CompositeSelector implements Selector
     }
 
     @Override
-    public Collection<Property> getSelectedFields( Class<?> instanceType, Object instance )
+    public Collection<Property> getSelectedFields( Class<?> instanceType )
     {
         Map<String, Property> response = new TreeMap<String, Property>();
         
-        Collection<Property> selectedFields = coreSelector.getSelectedFields( instanceType, instance );
+        Collection<Property> selectedFields = coreSelector.getSelectedFields( instanceType );
         for (Property property : selectedFields)
         {
             response.put( property.name(), property );
         }
 
-        Collection<Property> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType, instance );
+        Collection<Property> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType );
 
         Collection<Property> allMapFields = coreSelector.getAllPossibleFields( instanceType );
 
