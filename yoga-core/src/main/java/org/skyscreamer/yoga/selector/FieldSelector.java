@@ -48,7 +48,7 @@ public class FieldSelector implements Selector
     }
 
     @Override
-    public Collection<Property> getSelectedFields( Class<?> instanceType, Object instance )
+    public Collection<Property> getSelectedFields( Class<?> instanceType )
     {
         Set<String> fieldNames = getFieldNames();
         removeNonSupportedFields( instanceType, fieldNames );

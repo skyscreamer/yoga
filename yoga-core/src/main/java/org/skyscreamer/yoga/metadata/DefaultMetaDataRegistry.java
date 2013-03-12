@@ -94,7 +94,7 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
         Collection<Property> allFields = _coreSelector.getAllPossibleFields( type );
         Set<String> coreFieldName = new HashSet<String>();
 
-        for (Property property : _coreSelector.getSelectedFields( type, null ))
+        for (Property property : _coreSelector.getSelectedFields( type ))
         {
             coreFieldName.add( property.name() );
         }
@@ -105,8 +105,9 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
             Class<?> propertyType = readMethod.getReturnType();
             PropertyMetaData propertyMetaData = new PropertyMetaData();
 
-            propertyMetaData.setName( property.name() );
-            propertyMetaData.setIsCore( coreFieldName.contains( property.name() ) );
+            String name = property.name();
+            propertyMetaData.setName( name );
+            propertyMetaData.setIsCore( coreFieldName.contains( name ) );
 
             if ( ObjectUtil.isPrimitive( propertyType ) )
             {

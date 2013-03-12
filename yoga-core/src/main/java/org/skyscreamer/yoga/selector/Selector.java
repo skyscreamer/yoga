@@ -5,7 +5,7 @@ import java.util.Collection;
 public interface Selector
 {
 
-    Collection<Property> getSelectedFields( Class<?> instanceType, Object instance );
+    Collection<Property> getSelectedFields( Class<?> instanceType );
 
     Collection<Property> getAllPossibleFields( Class<?> instanceType );
 
