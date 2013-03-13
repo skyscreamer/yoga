@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.ExtraField;
@@ -18,6 +19,7 @@ import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 public class CoreSelector extends MapSelector
 {
     private EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
+    protected ConcurrentHashMap<Class<?>, Collection<Property>> allCoreFields = new ConcurrentHashMap<Class<?>, Collection<Property>>();
 
     public CoreSelector( EntityConfigurationRegistry entityConfigurationRegistry )
     {
@@ -32,24 +34,35 @@ public class CoreSelector extends MapSelector
     {
         _entityConfigurationRegistry = entityConfigurationRegistry;
     }
-    
+
     @Override
-    protected Collection<Property> getFieldCollection( Class<?> instanceType )
+    protected Collection<Property> getRegisteredFieldCollection( Class<?> instanceType )
     {
-        Collection<Property> properties = descriptors.get( instanceType );
+        return getProperties(instanceType, descriptors);
+    }
+
+	private Collection<Property> getProperties(Class<?> instanceType,
+            ConcurrentHashMap<Class<?>, Collection<Property>> map)
+    {
+	    Collection<Property> properties = map.get( instanceType );
         if (properties == null)
         {
-            descriptors.put( instanceType, properties = createFields( instanceType ) );
+            properties = createCoreFieldsCollection( instanceType );
+            Collection<Property> existingProperties = map.putIfAbsent( instanceType, properties );
+            if( existingProperties != null )
+            {
+                properties = existingProperties;
+            }
         }
         return properties;
     }
 
-    private Collection<Property> createFields( Class<?> instanceType )
+    private Collection<Property> createCoreFieldsCollection( Class<?> instanceType )
     {
         List<Property> response = new ArrayList<Property>();
         List<PropertyDescriptor> readableProperties = PropertyUtil
-        		.getReadableProperties( instanceType );
-        Collection<String> allowedCoreFields = getAllowedCoreFields( instanceType );
+                .getReadableProperties( instanceType );
+        Collection<String> allowedCoreFields = getConfiguredCoreFields( instanceType );
         if (allowedCoreFields == null)
         {
             for (PropertyDescriptor property : readableProperties)
@@ -74,29 +87,41 @@ public class CoreSelector extends MapSelector
         return response;
     }
 
-    protected <T> Collection<String> getAllowedCoreFields( Class<T> instanceType )
+    protected Collection<String> getConfiguredCoreFields( Class<?> instanceType )
     {
-        YogaEntityConfiguration<T> entityConfiguration = _entityConfigurationRegistry == null ? null
-                : _entityConfigurationRegistry.getEntityConfiguration(instanceType);
-        return entityConfiguration != null ? entityConfiguration.getCoreFields() : null;
+        YogaEntityConfiguration<?> entityConfiguration = getConfig(instanceType);
+        if(entityConfiguration != null)
+        {
+            return entityConfiguration.getCoreFields();
+        }
+        return null;
+    }
+
+    private YogaEntityConfiguration<?> getConfig(Class<?> instanceType)
+    {
+        return _entityConfigurationRegistry != null 
+                ? _entityConfigurationRegistry.getEntityConfiguration(instanceType) 
+                : null;
     }
 
     @Override
     public Collection<Property> getAllPossibleFields( Class<?> instanceType )
     {
+        return createAllFieldList(instanceType);
+    }
+
+    private Collection<Property> createAllFieldList(Class<?> instanceType)
+    {
         Map<String, Property> response = new TreeMap<String, Property>();
 
         // Get the getters
-        List<PropertyDescriptor> readableProperties = PropertyUtil
-                .getReadableProperties( instanceType );
-        for (PropertyDescriptor property : readableProperties)
+        for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
         {
             response.put( property.getName(), new PojoProperty( property ) );
         }
 
         // Add @ExtraField methods from the YogaEntityConfiguration, if one exists
-        YogaEntityConfiguration<?> entityConfiguration = _entityConfigurationRegistry == null ? null
-                : _entityConfigurationRegistry.getEntityConfiguration(instanceType);
+        YogaEntityConfiguration<?> entityConfiguration = getConfig(instanceType);
         if (entityConfiguration != null)
         {
             for (Method method : entityConfiguration.getExtraFieldMethods())

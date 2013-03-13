@@ -1,19 +1,19 @@
 package org.skyscreamer.yoga.view;
 
-import org.skyscreamer.yoga.exceptions.ParseSelectorException;
-import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
-import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.MapSelector;
-import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.parser.SelectorParser;
-import org.skyscreamer.yoga.util.ClassFinderStrategy;
-import org.skyscreamer.yoga.util.NameUtil;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
+
+import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
+import org.skyscreamer.yoga.mapper.ResultTraverser;
+import org.skyscreamer.yoga.mapper.YogaRequestContext;
+import org.skyscreamer.yoga.selector.MapSelector;
+import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorResolver;
+import org.skyscreamer.yoga.selector.parser.SelectorParser;
+import org.skyscreamer.yoga.util.ClassFinderStrategy;
+import org.skyscreamer.yoga.util.NameUtil;
 
 /**
  * This class represents the entry point to yoga. It integrates with view
@@ -33,11 +33,9 @@ public abstract class AbstractYogaView
 
 	protected ClassFinderStrategy _classFinderStrategy;
 
-	protected SelectorParser _selectorParser;
-
+	protected SelectorResolver _selectorResolver = new SelectorResolver();
+	
 	protected RenderingListenerRegistry _registry = new RenderingListenerRegistry();
-
-	protected MapSelector _selector = new CoreSelector();
 
 	public void setResultTraverser(ResultTraverser resultTraverser)
 	{
@@ -46,7 +44,7 @@ public abstract class AbstractYogaView
 
 	public void setSelectorParser(SelectorParser selectorParser)
 	{
-		this._selectorParser = selectorParser;
+		this._selectorResolver.setSelectorParser(selectorParser);
 	}
 
 	public void setRegistry(RenderingListenerRegistry registry)
@@ -56,7 +54,17 @@ public abstract class AbstractYogaView
 
 	public void setSelector(MapSelector selector)
 	{
-		this._selector = selector;
+		this._selectorResolver.setBaseSelector(selector);
+	}
+
+	public void setSelectorResolver(SelectorResolver selectorResolver)
+	{
+		this._selectorResolver = selectorResolver;
+	}
+	
+	public SelectorResolver getSelectorResolver()
+	{
+		return _selectorResolver;
 	}
 
 	public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy)
@@ -66,20 +74,14 @@ public abstract class AbstractYogaView
 	}
 
 	public final void render(HttpServletRequest request,
-	        HttpServletResponse response, Object value, OutputStream os)
-	        throws Exception
+			HttpServletResponse response, Object value, OutputStream os)
+			throws Exception
 	{
-		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(), _selectorParser,
-		        request, response, _registry.getListeners());
-		Selector selector = getSelector(request);
+		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(),
+				getSelectorResolver().getSelectorParser(), request, response,
+				_registry.getListeners());
+		Selector selector = getSelectorResolver().getSelector(request);
 		render(selector, value, context, os);
-	}
-
-	protected Selector getSelector(HttpServletRequest request)
-	        throws ParseSelectorException
-	{
-		String selectorString = request.getParameter("selector");
-		return _selectorParser.parseSelector(selectorString, _selector);
 	}
 
 	protected String getClassName(Object obj)
@@ -91,7 +93,7 @@ public abstract class AbstractYogaView
 	public abstract String getContentType();
 
 	protected abstract void render(Selector selector, Object value,
-	        YogaRequestContext context, OutputStream os) throws Exception;
+			YogaRequestContext context, OutputStream os) throws Exception;
 
 	public abstract String getHrefSuffix();
 }

@@ -2,29 +2,28 @@ package org.skyscreamer.yoga.selector;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class MapSelector implements Selector
 {
-    protected Map<Class<?>, Collection<Property>> descriptors = new HashMap<Class<?>, Collection<Property>>();
+    protected ConcurrentHashMap<Class<?>, Collection<Property>> descriptors = new ConcurrentHashMap<Class<?>, Collection<Property>>();
 
     @Override
     public boolean containsField( Class<?> instanceType, String property )
     {
-        Collection<Property> fieldCollection = getFieldCollection( instanceType );
+        Collection<Property> fieldCollection = getRegisteredFieldCollection( instanceType );
         return fieldCollection != null && fieldCollection.contains( property );
     }
 
-    protected Collection<Property> getFieldCollection( Class<?> instanceType )
+    protected Collection<Property> getRegisteredFieldCollection( Class<?> instanceType )
     {
         return descriptors.get( instanceType );
     }
 
     @Override
-    public Collection<Property> getSelectedFields(Class<?> instanceType, Object instance) 
+    public Collection<Property> getSelectedFields( Class<?> instanceType ) 
     {
-        Collection<Property> fieldCollection = getFieldCollection( instanceType );
+        Collection<Property> fieldCollection = getRegisteredFieldCollection( instanceType );
         return fieldCollection == null ? Collections.<Property> emptySet() : Collections.unmodifiableCollection( fieldCollection );
     }
 
@@ -37,7 +36,7 @@ public abstract class MapSelector implements Selector
     @Override
     public Collection<Property> getAllPossibleFields( Class<?> instanceType )
     {
-        return getSelectedFields( instanceType, null );
+        return getSelectedFields( instanceType );
     }
 
     @Override

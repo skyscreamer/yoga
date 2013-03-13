@@ -8,6 +8,7 @@ import org.apache.velocity.context.Context;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -31,8 +32,9 @@ public class SelectorBuilderView extends AbstractYogaView {
 
             // Set properties
             Context velocityContext = new VelocityContext();
-            velocityContext.put("selectorJavascriptURL", _selectorParser.getSelectorJavascriptURL());
-            velocityContext.put("selectorType", _selectorParser.getSelectorType());
+            SelectorParser selectorParser = getSelectorResolver().getSelectorParser();
+            velocityContext.put("selectorJavascriptURL", selectorParser.getSelectorJavascriptURL());
+            velocityContext.put("selectorType", selectorParser.getSelectorType());
             Template velocityTemplate = engine.getTemplate("/selectorBuilder.vm.html");
 
             // Draw output

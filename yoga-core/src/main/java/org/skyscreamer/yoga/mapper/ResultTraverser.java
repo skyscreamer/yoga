@@ -72,7 +72,7 @@ public class ResultTraverser
     protected void addInstanceFields( Object instance, Class<?> instanceType,
             MapHierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext )
     {
-        Iterable<Property> properties = selector.getSelectedFields( instanceType, instance );
+        Iterable<Property> properties = selector.getSelectedFields( instanceType );
 
         for (Property property : properties)
         {
