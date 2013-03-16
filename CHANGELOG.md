@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.0 RC2 - 2013-03-16
+------------------------------
+ - Added SelectorResolver so that it can be used in the controller
+ - Performed some cleanup
+ - Hopefully last release before GA
+
 Version 1.0.0 RC1 - 2012-12-07
 ------------------------------
  - Our first release candidate for 1.0!
