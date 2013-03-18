@@ -32,7 +32,8 @@
         #header_title h1 { margin-bottom: 0px; }
 
         #top_bar { padding: 5px; height: 40px; }
-        #url_bar { padding: 4px; background-color: #ffffff; float: left; width: 694px; border: 1px solid #666666; }
+        #url_bar { padding: 4px; background-color: #ffffff; float: left; width: 694px; border: 1px solid #666666; text-decoration: underline; }
+        #url_bar:hover { cursor: pointer; }
         #json_path {}
         #generated_selector { color: #66f; }
         #load_time_bar { float: left; width: 75px; margin: 5px 0 0 5px; text-align: right; }
@@ -218,13 +219,13 @@
     <div id="container">
         <div id="header">
             <div id="header_title"><h1>Yoga Selector Builder</h1></div>
-            <p>Click on elements on the left-hand side below to add or remove them from the selector
-                in the address bar.
-                View the resulting output in the preview pane on the right.
-                Default fields are italicized and cannot be added to the selector.</p>
+            <p>This helper interface is auto-generated for your API.
+                Select elements on the left-hand side.  A preview pane is on the right.
+                The address bar shows the URL you built, and how long it takes to load.
+                <i>Default fields</i> are italicized and cannot be deselected.</p>
         </div>
         <div id="top_bar">
-            <div id="url_bar"><span id="json_path"></span><span id="generated_selector"></span></div>
+            <div id="url_bar" onclick="window.location = $('#json_path').html() + $('#generated_selector').html();"><span id="json_path"></span><span id="generated_selector"></span></div>
             <div id="load_time_bar"><span id="load_time"></span>&nbsp;ms</div>
         </div>
         <div id="selector_canvas">
