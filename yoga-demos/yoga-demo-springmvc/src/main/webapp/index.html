@@ -29,10 +29,10 @@
 <br clear="all" />
 <nav>
     <ul>
-        <li><a class="intro" href="./">Introduction</a></li>
-        <li><a class="demo" href="user/1.yoga">Demo</a></li>
+        <li><a class="intro" href="./">Home</a></li>
+        <li><a class="demo" href="user/1.yoga">Live Demo</a></li>
         <li><a class="selector" href="selector.html">Cookbook</a></li>
-        <li><a class="download" href="https://github.com/skyscreamer/yoga/downloads">Download</a></li>
+        <li><a class="download" href="https://github.com/skyscreamer/yoga/tags">Download</a></li>
         <li><a class="contrib" href="https://github.com/skyscreamer/yoga"> &nbsp; </a></li>
         <li><a class="race" href="demo.html">Race</a></li>
         <li><a class="javadoc" href="http://api.yoga.skyscreamer.org/apidocs/">API Docs</a></li>
@@ -41,23 +41,30 @@
 </nav>
 <section>
     <a name="intro"></a>
-    <h2>Introduction</h2>
 
-    <p>Yoga provides <a href="https://developers.google.com/gdata/docs/2.0/basics#PartialResponse">GData</a>- and
-        <a href="https://developer.linkedin.com/documents/field-selectors">LinkedIn</a>-style data selectors for REST APIs.</p>
-
-    <ul>
-        <li>Fire up your APIs while maintaining <b>RESTful</b> conventions</li>
-        <li>Grab a <b>data graph</b> all at once, not call-by-call</li>
-        <li><b>Reduce bandwidth</b> by returning only the fields and entities you need.</li>
-        <li><b>Fewer network calls</b> means faster apps (see a <a href="demo.html">live race</a> with conventional REST navigation)</li>
-        <li>Simplify API creation and <b>reduce code</b></li>
-        <li>Integrates OOTB with JAX-RS (<b>Jersey</b> and <b>RESTEasy</b>) and <b>SpringMVC</b></li>
-        <li>Adds <a href="http://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> browsability to your API</li>
-        <li>Highly <b>customizable</b> and extensible</li>
-    </ul>
-
-    <p><br/>The current version of Yoga is <span class="bold">1.0.0-RC2</span>.</p>
+    <div style="width: 100%;">
+        <div style="width:400px; float: left; position: relative;">
+            <h2>RESTful and Flexible APIs</h2>
+            <ul>
+                <li>REST-friendly <a href="https://developers.google.com/gdata/docs/2.0/basics#PartialResponse">GData</a>- and
+                    <a href="https://developer.linkedin.com/documents/field-selectors">LinkedIn</a>-style
+                    <b>data selectors</b></li>
+                <li>Define and retrieve an arbitrarily complex data graph subtree to your clients in one call</li>
+                <li>Return the fields you want, and no more</li>
+                <li>Faster apps because there are <b>fewer network calls</b> (see a <a href="demo.html">race</a>)</li>
+                <li><b>Less custom code</b> required</li>
+                <li>Integrates with JAX-RS (<b>Jersey</b> and <b>RESTEasy</b>) and <b>SpringMVC</b></li>
+                <li>Auto-magic <a href="http://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> in your API</li>
+                <li><b>Customizable</b> and extensible</li>
+            </ul>
+            <p><br/>The current version of Yoga is <span class="bold">1.0.0-RC2</span>.</p>
+        </div>
+        <div style="width: 400px; margin: 30px 0 0 20px; float: left; position: relative;">
+            <a href="user/1.yoga"><img src="https://github.com/skyscreamer/skyscreamer.github.com/raw/master/i/yoga-selector-builder2.png"
+                    width="440"/></a>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
 
     <h2>Supported Frameworks</h2>
     <p>Yoga can extend APIs built on:</p>
@@ -68,8 +75,14 @@
 </section>
 
 <section>
+    <a name="video"></a>
+    <h2>Video Tutorial</h2>
+    <iframe width="853" height="480" src="http://www.youtube.com/embed/EaaoWTMfThE" frameborder="0" allowfullscreen></iframe>
+</section>
+
+<section>
     <a name="pom"></a>
-    <h2>Maven</h2>
+    <h2>Maven Configuration</h2>
     <pre>
         &lt;dependency>
             &lt;groupId>org.skyscreamer&lt;/groupId>
