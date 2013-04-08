@@ -15,9 +15,10 @@
     <url>https://github.com/skyscreamer/yoga</url>
 
     <modules>
-        <module>yoga-demo-springmvc</module>
-        <module>yoga-demo-resteasy</module>
         <module>yoga-demo-shared</module>
+        <module>yoga-demo-springmvc</module>
+        <module>yoga-demo-jersey</module>
+        <module>yoga-demo-resteasy</module>
     </modules>
 </project>
 

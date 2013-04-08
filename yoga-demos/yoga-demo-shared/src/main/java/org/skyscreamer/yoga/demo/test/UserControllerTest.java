@@ -1,17 +1,16 @@
 package org.skyscreamer.yoga.demo.test;
 
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONArray;
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
+
+import java.util.Collections;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-
-import java.util.Collections;
-import java.util.Map;
-
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONArray;
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
-import static org.skyscreamer.yoga.demo.test.TestUtil.getContent;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page
@@ -47,6 +46,7 @@ public class UserControllerTest
     public void testGetUsers() throws Exception
     {
         JSONArray data = getJSONArray( "/user", null );
+        Assert.assertEquals( 1003, data.length() );
         // TODO: figure out how to do this with RESTEasy
 //        long count = Long.valueOf(getContent("/user/count", null));
 //        Assert.assertEquals( count, data.length() );
