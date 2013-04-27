@@ -3,6 +3,8 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
     <script type="text/javascript" src="${selectorJavascriptURL}"></script>
     <script type="text/javascript" src="http://static.jstree.com/v.1.0pre/jquery.jstree.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/jaz303/tipsy/master/src/javascripts/jquery.tipsy.js"></script>
+    <link rel="stylesheet" href="https://raw.github.com/jaz303/tipsy/master/src/stylesheets/tipsy.css" type="text/css" />
     <style>
         body {
             font-family: "Lucida Grande", Verdana, Tahoma, sans-serif;
@@ -15,12 +17,18 @@
             -webkit-text-size-adjust: 100%; /* Stops Mobile Safari from auto-adjusting font-sizes */
         }
 
+        #header { margin-bottom: 10px; }
         h1 {
             clear: both;
             color: #5252CC;
             font-size: 43px;
             line-height: 60px;
+            display: inline;
         }
+
+        #h1_div { display: inline; }
+        #whats_this_div { display: inline; float: right; margin-top: 35px; }
+        #whats_this {}
 
         .selectorType {
             font-weight: bold;
@@ -156,6 +164,17 @@
             return data;
         }
 
+        function initEffect() {
+            $('.jstree-closed').each(function(i, el) {
+                setTimeout(function() {
+                    $(el).addClass("jstree-hovered").delay(300).queue(function(next){
+                        $(this).removeClass("jstree-hovered");
+                        next();
+                    });
+                }, i * 300);
+            });
+        }
+
         var canSelectNodes = true;
         var selectedParentId = null;
         $(function() {
@@ -186,6 +205,9 @@
                             event.stopImmediatePropagation(); // Fix for a race condition by synchronizing folder selection
                             return false;                     // Thanks to Bojin Li via stackoverflow!
                         }
+                    })
+                .bind("loaded.jstree", function() {
+                        setTimeout(initEffect, 100);
                     })
                 .jstree({
                     "plugins" : [ "themes", "json_data", "ui" ],
@@ -222,17 +244,27 @@
             reloadPreview();
 
             $('#hide_metadata_check').change(function() { reloadPreview(); });
+
+            var helpText = function() {
+                return 'This helper interface is auto-generated for your API.  ' +
+                        '<ol><li>Select elements on the left</li> ' +
+                        '<li>A preview pane is on the right</li> ' +
+                        '<li>An address bar shows the URL</li></ol> ' +
+                        '<i>Default fields</i> are italicized and cannot be deselected.';
+            }
+            $('#whats_this').tipsy({gravity: 'ne', title: helpText, html: true});
         });
     </script>
 </head>
 <body>
     <div id="container">
         <div id="header">
-            <div id="header_title"><h1>Yoga Selector Builder</h1></div>
-            <p>This helper interface is auto-generated for your API.
-                Select elements on the left-hand side.  A preview pane is on the right.
-                The address bar shows the URL you built, and how long it takes to load.
-                <i>Default fields</i> are italicized and cannot be deselected.</p>
+            <div id="header_title">
+                <div id="h1_div"><h1>Yoga Selector Builder</h1></div>
+                <div id="whats_this_div">
+                    <a href="#" id="whats_this">What's this?</a>
+                </div>
+            </div>
         </div>
         <div id="top_bar">
             <div id="url_bar" onclick="window.location = $('#json_path').html() + $('#generated_selector').html();"><span id="json_path"></span><span id="generated_selector"></span></div>
@@ -251,7 +283,7 @@
         </div>
         <div id="footer">
             <p>Configured selector type: <span class="selectorType">${selectorType}</span></p>
-            <p><b>Note:</b> HATEOAS fields (<i>definition</i>,
+            <p><b>Note:</b> Auto-generated HATEOAS fields (<i>definition</i>,
                 <i>navigationLinks</i>, <i>selectorBuilder</i>, and <i>metadata</i>) are for discovery and navigation,
                 so they are disabled when a selector is added.  This default behavior can be reconfigured.</p>
         </div>
