@@ -1,16 +1,16 @@
 package org.skyscreamer.yoga.demo.test;
 
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONArray;
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
-
-import java.util.Collections;
-import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+
+import java.util.Collections;
+import java.util.Map;
+
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONArray;
+import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page
@@ -57,7 +57,7 @@ public class UserControllerTest
     {
         Map<String, String> params = Collections.singletonMap( "selector", "isFriend" );
         JSONObject data = getJSONObject( "/user/1", params );
-        String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:false}";
+        String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:true}";
         JSONAssert.assertEquals( expected, data, false );
     }
 
@@ -79,7 +79,7 @@ public class UserControllerTest
         JSONObject data = getJSONObject( "/user/1", params );
         System.out.println( data );
         String expected =
-                "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:false,"
+                "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:true,"
                         + "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\","
                         + "favoriteArtists:[{id:2,name:\"Prince\",albums:[{id:4,title:\"1999\","
                         + "songs:[{id:10},{id:11,title:\"Little Red Corvette\"},{id:12}]},{id:5},{id:6}]},{id:1}]}," + "{id:3}]}";
