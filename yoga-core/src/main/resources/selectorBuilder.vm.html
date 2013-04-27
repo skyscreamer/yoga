@@ -47,6 +47,7 @@
         #selector_builder .jstree-clicked { background: #77f; border: #66f; color: #fffff3; }
         #selector_builder .isCore a { color: #999; font-style: italic; }
         #selector_builder .jstree-hovered { background: #efefff; color: #000; }
+        #hide_metadata { padding-top: 15px; font-size: 11px; }
         #selector_data_preview { background-color: #fffff3; border: 2px solid #66f; float: left; width: 541px; height:400px; overflow: auto; }
         #data_preview { }
 
@@ -77,6 +78,7 @@
         }
 
         var selector = new Selector();
+        var selectorStr = '';
 
         function toggleOn(id) {
 //            alert('on: ' + id);
@@ -91,16 +93,22 @@
         }
 
         function setSelector(newSelector) {
-            var selector = (newSelector.length > 0) ? '?selector=' + newSelector : '';
-            $('#generated_selector').html(selector);
-            reloadPreview(selector);
+            selectorStr = (newSelector.length > 0) ? '?selector=' + newSelector : '';
+            $('#generated_selector').html(selectorStr);
+            reloadPreview();
         }
 
-        function reloadPreview(selector) {
+        function reloadPreview() {
             var start = new Date().getTime();
             $.ajax({
-                url: jsonPath + selector,
+                url: jsonPath + selectorStr,
                 success: function(data) {
+                    if ($('#hide_metadata_check').is(':checked')) {
+                        delete data.definition;
+                        delete data.navigationLinks;
+                        delete data.selectorBuilder;
+                        delete data.metadata;
+                    }
                     $('#data_preview').html(JSON.stringify(data, null, '    '));
                     var end = new Date().getTime();
                     var totalTime = end - start;
@@ -211,7 +219,9 @@
                         }
                     }
             });
-            reloadPreview('');
+            reloadPreview();
+
+            $('#hide_metadata_check').change(function() { reloadPreview(); });
         });
     </script>
 </head>
@@ -232,6 +242,8 @@
             <div id="selector_builder_wrapper">
                 <div id="entity_name"></div>
                 <div id="selector_builder" class="demo"></div>
+                <div id="hide_metadata"><input id="hide_metadata_check" type="checkbox" checked="checked" /> Hide
+                    <a href="http://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> fields</div>
             </div>
             <div id="selector_data_preview">
                 <pre id="data_preview"></pre>
@@ -239,9 +251,9 @@
         </div>
         <div id="footer">
             <p>Configured selector type: <span class="selectorType">${selectorType}</span></p>
-            <p><b>Note:</b> By default <i>definition</i>,
-                <i>navigationLinks</i>, <i>selectorBuilder</i>, and <i>metadata</i>
-                are disabled when a selector is added.</p>
+            <p><b>Note:</b> HATEOAS fields (<i>definition</i>,
+                <i>navigationLinks</i>, <i>selectorBuilder</i>, and <i>metadata</i>) are for discovery and navigation,
+                so they are disabled when a selector is added.  This default behavior can be reconfigured.</p>
         </div>
     </div>
 </body>
