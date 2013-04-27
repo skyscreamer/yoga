@@ -11,6 +11,14 @@ Yoga extends JAX-RS and SpringMVC RESTful servers to provide GData and LinkedIn 
 ## Wiki ##
 Most of the documentation is here: https://github.com/skyscreamer/yoga/wiki
 
+## Quickstart ##
+
+    % git clone git@github.com:skyscreamer/yoga.git
+    % cd yoga
+    % mvn install
+    % cd yoga-demos/yoga-demo-jersey
+    % mvn jetty:run
+
 ## Inspiration ##
 Yoga was initially inspired by LinkedIn’s JavaOne presentation on building flexible REST interfaces (http://blog.linkedin.com/2009/07/08/brandon-duncan-java-one-building-consistent-restful-apis-in-a-high-performance-environment/), and it continues to be influenced by GData selectors, and ongoing discussions of HATEOAS.
 
