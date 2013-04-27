@@ -1,10 +1,10 @@
 <html>
 <head><title>Yoga Selector Builder</title>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${selectorJavascriptURL}"></script>
     <script type="text/javascript" src="http://static.jstree.com/v.1.0pre/jquery.jstree.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/jaz303/tipsy/master/src/javascripts/jquery.tipsy.js"></script>
-    <link rel="stylesheet" href="https://raw.github.com/jaz303/tipsy/master/src/stylesheets/tipsy.css" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
     <style>
         body {
             font-family: "Lucida Grande", Verdana, Tahoma, sans-serif;
@@ -103,6 +103,12 @@
         function setSelector(newSelector) {
             selectorStr = (newSelector.length > 0) ? '?selector=' + newSelector : '';
             $('#generated_selector').html(selectorStr);
+            if (selectorStr.length > 0) {
+                $('#hide_metadata').hide();
+            }
+            else {
+                $('#hide_metadata').show();
+            }
             reloadPreview();
         }
 
@@ -167,11 +173,11 @@
         function initEffect() {
             $('.jstree-closed').each(function(i, el) {
                 setTimeout(function() {
-                    $(el).addClass("jstree-hovered").delay(300).queue(function(next){
+                    $(el).addClass("jstree-hovered").delay(500).queue(function(next){
                         $(this).removeClass("jstree-hovered");
                         next();
                     });
-                }, i * 300);
+                }, i * 500);
             });
         }
 
@@ -246,14 +252,19 @@
             $('#hide_metadata_check').change(function() { reloadPreview(); });
 
             var helpText = function() {
-                return 'The Yoga Selector Builder is an interface auto-generated for your API ' +
-                        'that helps client developers figure out the selector they need for a particular call.  ' +
+                return '<p>The Yoga Selector Builder is an interface auto-generated for your API ' +
+                        'that helps client developers figure out the selector they need for a particular call.</p>  ' +
                         '<ol><li>Select elements on the left</li> ' +
                         '<li>A preview pane is on the right</li> ' +
                         '<li>An address bar shows the URL</li></ol> ' +
-                        '<i>Default fields</i> are italicized and cannot be deselected.';
+                        '<p><i>Default fields</i> are italicized and cannot be deselected.</p>';
             }
-            $('#whats_this').tipsy({gravity: 'ne', title: helpText, html: true});
+            $('#whats_this').popover({placement:'bottom',trigger:'hover',content:helpText,html:true});
+
+            $('#selector_builder').popover({placement:'bottom',trigger:'manual', delay: { show: 100, hide: 500 },
+                content:'Drill down on the user properties (e.g. favoriteArtists, friends) and watch how the selector syntax changes!' });
+            setTimeout(function() { $('#selector_builder').popover('show'); }, 400);
+            $('#selector_builder').hover(function() { $('#selector_builder').popover('hide'); });
         });
     </script>
 </head>

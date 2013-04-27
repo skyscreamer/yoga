@@ -1,19 +1,13 @@
 package org.skyscreamer.yoga.demo.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page Date: 4/11/11 Time: 4:47 PM
@@ -41,7 +35,7 @@ public class User
     public boolean getIsFriend()
     {
         // To be implemented
-        return false;
+        return true;
     }
 
     public void setIsFriend( boolean isFriend )
