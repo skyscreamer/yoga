@@ -14,7 +14,9 @@ public class XmlYogaViewUtil
     {
         DOMDocument domDocument = new DOMDocument();
         domDocument.setRootElement( rootElement );
-        domDocument.write( new OutputStreamWriter( outputStream ) );
-        outputStream.flush();
+        OutputStreamWriter out = new OutputStreamWriter( outputStream );
+        domDocument.write( out );
+        out.flush();
+        out.close();
     }
 }
