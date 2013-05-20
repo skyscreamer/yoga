@@ -27,13 +27,17 @@ public abstract class YogaEntityConfiguration<T> {
     @SuppressWarnings("unchecked")
     public Class<T> getEntityClass() {
         if (_instanceClass == null) {
-            try {
-                _instanceClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-            }
-            catch (ClassCastException e) {
-                throw new YogaRuntimeException("Unable to initialize class " + getClass().getName() + " because " +
-                        "entity class could not be determined.  Either specify it in the generic type when extending " +
-                        "YogaEntityConfiguration, or explicitly override getEntityClass() with the correct value.");
+            synchronized (this) {
+                if (_instanceClass == null) {
+                    try {
+                        _instanceClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+                    }
+                    catch (ClassCastException e) {
+                        throw new YogaRuntimeException("Unable to initialize class " + getClass().getName() + " because " +
+                                "entity class could not be determined.  Either specify it in the generic type when extending " +
+                                "YogaEntityConfiguration, or explicitly override getEntityClass() with the correct value.");
+                    }
+                }
             }
         }
         return _instanceClass;
