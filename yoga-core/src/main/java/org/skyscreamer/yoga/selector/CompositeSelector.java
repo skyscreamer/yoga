@@ -38,25 +38,36 @@ public class CompositeSelector implements Selector
     }
 
     @Override
-    public Collection<Property> getSelectedFields( Class<?> instanceType )
+    public <T> Property<T> getProperty(Class<T> instanceType, String fieldName)
     {
-        Map<String, Property> response = new TreeMap<String, Property>();
+    	Property<T> property = coreSelector.getProperty(instanceType, fieldName);
+    	if(property != null)
+    	{
+    		return property;
+    	}
+        return fieldSelector.getProperty(instanceType, fieldName);
+    }
+
+    @Override
+    public <T> Collection<Property<T>> getSelectedFields( Class<T> instanceType )
+    {
+        Map<String, Property<T>> response = new TreeMap<String, Property<T>>();
         
-        Collection<Property> selectedFields = coreSelector.getSelectedFields( instanceType );
-        for (Property property : selectedFields)
+        Collection<Property<T>> selectedFields = coreSelector.getSelectedFields( instanceType );
+        for (Property<T> property : selectedFields)
         {
             response.put( property.name(), property );
         }
 
-        Collection<Property> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType );
+        Collection<Property<T>> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType );
 
-        Collection<Property> allMapFields = coreSelector.getAllPossibleFields( instanceType );
+        Collection<Property<T>> allMapFields = coreSelector.getAllPossibleFields( instanceType );
 
-        for (Property property : fieldSelectorChildren)
+        for (Property<?> property : fieldSelectorChildren)
         {
             if (!response.containsKey( property.name() ))
             {
-                for (Property mapProp : allMapFields)
+                for (Property<T> mapProp : allMapFields)
                 {
                     if (mapProp.name().equals( property.name() ))
                     {
@@ -70,7 +81,7 @@ public class CompositeSelector implements Selector
     }
 
     @Override
-    public Collection<Property> getAllPossibleFields( Class<?> instanceType )
+    public <T> Collection<Property<T>> getAllPossibleFields( Class<T> instanceType )
     {
         return coreSelector.getAllPossibleFields( instanceType );
     }

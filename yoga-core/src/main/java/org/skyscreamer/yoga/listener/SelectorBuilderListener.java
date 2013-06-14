@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.listener;
 
+import java.io.IOException;
+
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
 /**
@@ -13,19 +15,17 @@ public class SelectorBuilderListener extends HrefListener
     private String suffix = "yoga";
 
     @Override
-    public void eventOccurred( RenderingEvent event )
+    public <T> void eventOccurred( RenderingEvent<T> event ) throws IOException
     {
-        if (event.getType() != RenderingEventType.POJO_CHILD || event.getSelector().isInfluencedExternally())
+        if (event.getType() == RenderingEventType.POJO_CHILD && !event.getSelector().isInfluencedExternally())
         {
-            return;
-        }
-        String href = determineTemplate( event.getValueType() );
+            String href = determineTemplate( event.getValueType() );
 
-        if ( href != null )
-        {
-            href += "." + suffix;
-            String url = getUrl( href, event.getValue(), event.getValueType(), event.getRequestContext().getResponse() );
-            ( ( MapHierarchicalModel<?> ) event.getModel() ).addProperty( FIELD_NAME, url );
+            if ( href != null )
+            {
+                MapHierarchicalModel<?> model = ( MapHierarchicalModel<?> ) event.getModel();
+                model.addProperty( FIELD_NAME, getUrl( href, suffix, event ) );
+            }
         }
     }
 

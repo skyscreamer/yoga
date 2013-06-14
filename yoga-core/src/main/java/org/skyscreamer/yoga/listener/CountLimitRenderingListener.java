@@ -34,7 +34,7 @@ public class CountLimitRenderingListener implements RenderingListener
     }
 
     @Override
-    public void eventOccurred( RenderingEvent event )
+    public <T> void eventOccurred( RenderingEvent<T> event )
     {
         if (event.getType() != RenderingEventType.POJO_CHILD)
         {

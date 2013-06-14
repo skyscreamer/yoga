@@ -1,49 +1,32 @@
 package org.skyscreamer.yoga.listener;
 
-import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
-import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
-import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
-import org.skyscreamer.yoga.metadata.PropertyUtil;
+import org.skyscreamer.yoga.model.ListHierarchicalModel;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
+import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 public class ModelDefinitionListener implements RenderingListener
 {
-    private EntityConfigurationRegistry _entityConfigurationRegistry;
-
-    public void setEntityConfigurationRegistry(EntityConfigurationRegistry entityConfigurationRegistry)
-    {
-        _entityConfigurationRegistry = entityConfigurationRegistry;
-    }
 
     @Override
-    public void eventOccurred( RenderingEvent event )
+    public <T> void eventOccurred( RenderingEvent<T> event ) throws IOException
     {
         if (event.getType() != RenderingEventType.POJO_CHILD || event.getSelector().isInfluencedExternally())
         {
             return;
         }
 
-        List<String> definition = new ArrayList<String>();
+        MapHierarchicalModel<?> model = ( MapHierarchicalModel<?>) event.getModel();
+        ListHierarchicalModel<?> definitionModel = model.createChildList( SelectorParser.DEFINITION );
 
-        Class<?> instanceType = event.getValueType();
-        for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
+        Class<T> instanceType = event.getValueType();
+        for (Property<T> property : event.getSelector().getAllPossibleFields( instanceType ))
         {
-            definition.add( property.getName() );
+            definitionModel.addValue( property.name() );
         }
-
-        if (_entityConfigurationRegistry != null)
-        {
-            YogaEntityConfiguration<?> entityConfiguration =
-                    _entityConfigurationRegistry.getEntityConfiguration(instanceType);
-            if (entityConfiguration != null)
-            {
-                definition.addAll(entityConfiguration.getExtraFieldNames());
-            }
-        }
-        ( ( MapHierarchicalModel<?>) event.getModel()).addProperty( SelectorParser.DEFINITION, definition );
+        definitionModel.finished();
+        
     }
 }

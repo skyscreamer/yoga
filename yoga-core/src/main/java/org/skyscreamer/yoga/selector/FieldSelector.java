@@ -37,6 +37,12 @@ public class FieldSelector implements Selector
         return containsField( property );
     }
 
+    @Override
+    public <T> Property<T> getProperty(Class<T> instanceType, String fieldName)
+    {
+        return new NamedProperty<T>( fieldName );
+    }
+    
     public boolean containsField( String property )
     {
         return subSelectors.containsKey( property );
@@ -48,14 +54,14 @@ public class FieldSelector implements Selector
     }
 
     @Override
-    public Collection<Property> getSelectedFields( Class<?> instanceType )
+    public <T> Collection<Property<T>> getSelectedFields( Class<T> instanceType )
     {
         Set<String> fieldNames = getFieldNames();
         removeNonSupportedFields( instanceType, fieldNames );
-        Collection<Property> selected = new ArrayList<Property>();
+        Collection<Property<T>> selected = new ArrayList<Property<T>>();
         for (String name : fieldNames)
         {
-            selected.add( new NamedProperty( name ) );
+            selected.add( new NamedProperty<T>( name ) );
         }
         return selected;
     }
@@ -91,12 +97,12 @@ public class FieldSelector implements Selector
     }
 
     @Override
-    public Collection<Property> getAllPossibleFields( Class<?> instanceType )
+    public <T> Collection<Property<T>> getAllPossibleFields( Class<T> instanceType )
     {
-        Collection<Property> allFields = new ArrayList<Property>();
+        Collection<Property<T>> allFields = new ArrayList<Property<T>>();
         for (String name : getFieldNames())
         {
-            allFields.add( new NamedProperty( name ) );
+            allFields.add( new NamedProperty<T>( name ) );
         }
         return allFields;
     }

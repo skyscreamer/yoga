@@ -85,11 +85,6 @@
             <artifactId>resteasy-spring</artifactId>
             <version>2.3.3.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.5.5</version>
-        </dependency>
 
 
         <dependency>

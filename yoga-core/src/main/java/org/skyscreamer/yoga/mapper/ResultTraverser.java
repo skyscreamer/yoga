@@ -2,7 +2,8 @@ package org.skyscreamer.yoga.mapper;
 
 import static org.skyscreamer.yoga.util.ObjectUtil.isPrimitive;
 
-import org.skyscreamer.yoga.listener.RenderingEventType;
+import java.io.IOException;
+
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.ListHierarchicalModel;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
@@ -22,27 +23,26 @@ public class ResultTraverser
     protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
 
     public void traverse( Object instance, Selector selector, HierarchicalModel<?> model,
-            YogaRequestContext context )
+            YogaRequestContext context ) throws IOException
     {
-        if (instance == null)
+        if (instance != null)
         {
-            return;
+            // TODO: what should we do about a Map?
+            if (instance instanceof Iterable)
+            {
+                traverseIterable( (Iterable<?>) instance, selector, (ListHierarchicalModel<?>) model,
+                        context );
+            }
+            else
+            {
+                traversePojo( instance, selector, (MapHierarchicalModel<?>) model, context );
+            }
         }
 
-        // TODO: what should we do about a Map?
-        if (instance instanceof Iterable)
-        {
-            traverseIterable( (Iterable<?>) instance, selector, (ListHierarchicalModel<?>) model,
-                    context );
-        }
-        else
-        {
-            traversePojo( instance, selector, (MapHierarchicalModel<?>) model, context );
-        }
     }
 
     protected void traverseIterable( Iterable<?> iterable, Selector selector,
-            ListHierarchicalModel<?> model, YogaRequestContext context )
+            ListHierarchicalModel<?> model, YogaRequestContext context ) throws IOException
     {
         for (Object o : iterable)
         {
@@ -55,33 +55,34 @@ public class ResultTraverser
                 traverse( o, selector, model.createChildMap(), context );
             }
         }
-        context.emitEvent( RenderingEventType.LIST_CHILD, model, iterable, iterable.getClass(),
-                context, selector );
+        context.emitEvent( model, iterable, context, selector );
+        model.finished();
     }
 
-    protected void traversePojo( Object instance, Selector selector, MapHierarchicalModel<?> model,
-            YogaRequestContext context )
+    protected <T> void traversePojo( T instance, Selector selector, MapHierarchicalModel<?> model,
+            YogaRequestContext context ) throws IOException
     {
-        Class<?> instanceType = _classFinderStrategy.findClass( instance );
+        Class<T> instanceType = _classFinderStrategy.findClass( instance );
         addInstanceFields( instance, instanceType, model, selector, context );
 
-        context.emitEvent( RenderingEventType.POJO_CHILD, model, instance, instanceType, context,
-                selector );
+        context.emitEvent( model, instance, instanceType, context, selector );
+        model.finished();
     }
 
-    protected void addInstanceFields( Object instance, Class<?> instanceType,
-            MapHierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext )
+    protected <T> void addInstanceFields( T instance, Class<T> instanceType,
+            MapHierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext ) throws IOException
     {
-        Iterable<Property> properties = selector.getSelectedFields( instanceType );
+        Iterable<Property<T>> properties = selector.getSelectedFields( instanceType );
 
-        for (Property property : properties)
+        for (Property<T> property : properties)
         {
             Object value = property.getValue( instance );
-            String fieldName = property.name();
             if (value == null)
             {
                 continue;
             }
+
+            String fieldName = property.name();
             if (isPrimitive( value.getClass() ))
             {
                 model.addProperty( fieldName, value );

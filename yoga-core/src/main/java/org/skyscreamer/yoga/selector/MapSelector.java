@@ -2,29 +2,31 @@ package org.skyscreamer.yoga.selector;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class MapSelector implements Selector
 {
-    protected ConcurrentHashMap<Class<?>, Collection<Property>> descriptors = new ConcurrentHashMap<Class<?>, Collection<Property>>();
+    protected ConcurrentHashMap<Class, Map> descriptors = new ConcurrentHashMap<Class, Map>();
 
     @Override
     public boolean containsField( Class<?> instanceType, String property )
     {
-        Collection<Property> fieldCollection = getRegisteredFieldCollection( instanceType );
+        Collection fieldCollection = getRegisteredFieldCollection( instanceType );
         return fieldCollection != null && fieldCollection.contains( property );
     }
 
-    protected Collection<Property> getRegisteredFieldCollection( Class<?> instanceType )
+    protected <T> Collection<Property<T>> getRegisteredFieldCollection( Class<T> instanceType )
     {
-        return descriptors.get( instanceType );
+        return descriptors.get( instanceType ).values();
     }
 
     @Override
-    public Collection<Property> getSelectedFields( Class<?> instanceType ) 
+    public <T> Collection<Property<T>> getSelectedFields( Class<T> instanceType ) 
     {
-        Collection<Property> fieldCollection = getRegisteredFieldCollection( instanceType );
-        return fieldCollection == null ? Collections.<Property> emptySet() : Collections.unmodifiableCollection( fieldCollection );
+        Collection fieldCollection = getRegisteredFieldCollection( instanceType );
+        return fieldCollection == null ? Collections.emptySet() : Collections.unmodifiableCollection( fieldCollection );
     }
 
     @Override
@@ -34,7 +36,7 @@ public abstract class MapSelector implements Selector
     }
 
     @Override
-    public Collection<Property> getAllPossibleFields( Class<?> instanceType )
+    public <T> Collection<Property<T>> getAllPossibleFields( Class<T> instanceType )
     {
         return getSelectedFields( instanceType );
     }
