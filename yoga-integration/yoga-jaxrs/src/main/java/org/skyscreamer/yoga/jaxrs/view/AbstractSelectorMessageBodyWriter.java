@@ -16,7 +16,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.selector.MapSelector;
+import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.skyscreamer.yoga.view.AbstractYogaView;
@@ -33,7 +33,7 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     protected RenderingListenerRegistry _renderingListenerRegistry;
 
     @Autowired
-    protected MapSelector _selector;
+    protected CoreSelector _selector;
     
     @Context
     protected HttpServletRequest _request;

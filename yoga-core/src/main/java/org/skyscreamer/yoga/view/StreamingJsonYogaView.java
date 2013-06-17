@@ -3,9 +3,8 @@ package org.skyscreamer.yoga.view;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.servlet.ServletOutputStream;
-
 import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ArrayStreamingJsonHierarchicalModel;
@@ -15,40 +14,41 @@ import org.skyscreamer.yoga.selector.Selector;
 
 public class StreamingJsonYogaView extends AbstractYogaView
 {
+    JsonFactory jsonFactory = new JsonFactory();
+
+    public void setJsonFactory(JsonFactory jsonFactory)
+    {
+	    this.jsonFactory = jsonFactory;
+    }
+
     @Override
     protected void render(Selector selector, Object value,
             YogaRequestContext context, OutputStream os) throws Exception
     {
-        ServletOutputStream outputStream = context.getResponse().getOutputStream();
-        HierarchicalModel<JsonGenerator> model = createModel(outputStream, value);
+        JsonGenerator generator = createGenerator(os);
+        HierarchicalModel<JsonGenerator> model = createModel(value, generator);
         _resultTraverser.traverse( value, selector, model, context );
         model.getUnderlyingModel().close();
-        outputStream.flush();
-        outputStream.close();
     }
 
-    protected HierarchicalModel<JsonGenerator> createModel(ServletOutputStream outputStream , Object value) 
+    protected JsonGenerator createGenerator(OutputStream outputStream)
             throws IOException
+    {
+		return jsonFactory.createJsonGenerator(outputStream);
+    }
+
+    protected HierarchicalModel<JsonGenerator> createModel(Object value,
+            JsonGenerator generator) throws IOException,
+            JsonGenerationException
     {
         if (value instanceof Iterable)
         {
-            return new ArrayStreamingJsonHierarchicalModel(createGenerator(outputStream));
+            return new ArrayStreamingJsonHierarchicalModel(generator);
         } 
         else
         {
-            return new ObjectStreamingJsonHierarchicalModel(createGenerator(outputStream));
+            return new ObjectStreamingJsonHierarchicalModel(generator);
         }
-    }
-
-    protected JsonGenerator createGenerator(OutputStream outputStream) throws IOException
-    {
-		return createGenerator(outputStream);
-    }
-
-	protected JsonGenerator createGenerator(ServletOutputStream outputStream)
-            throws IOException
-    {
-	    return new JsonFactory().createJsonGenerator(outputStream);
     }
 
     @Override

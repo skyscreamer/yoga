@@ -8,10 +8,25 @@ public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalMode
 {
 
     private JsonGenerator generator;
-
-	public ArrayStreamingJsonHierarchicalModel(JsonGenerator generator) throws IOException
+    private ObjectStreamingJsonHierarchicalModel objectModel;
+    
+    public ArrayStreamingJsonHierarchicalModel(JsonGenerator generator) throws IOException
     {
         this.generator = generator;
+        objectModel = new ObjectStreamingJsonHierarchicalModel(generator, this);
+        start();
+    }
+
+    public ArrayStreamingJsonHierarchicalModel(
+            JsonGenerator generator,
+            ObjectStreamingJsonHierarchicalModel objectModel) throws IOException
+    {
+        this.generator = generator;
+        this.objectModel = objectModel;
+    }
+
+    public void start() throws IOException
+    {
         generator.writeStartArray();
     }
 
@@ -21,21 +36,22 @@ public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalMode
         generator.writeEndArray();
     }
 
-	@Override
+    @Override
     public void addValue(Object instance) throws IOException
     {
-		generator.writeObject(instance);
+        generator.writeObject(instance);
     }
 
     public MapHierarchicalModel<?> createChildMap() throws IOException
     {
-	    return new ObjectStreamingJsonHierarchicalModel(generator);
+        objectModel.start();
+        return objectModel;
     }
 
-	@Override
+    @Override
     public JsonGenerator getUnderlyingModel()
     {
-	    return generator;
+        return generator;
     }
 
 }

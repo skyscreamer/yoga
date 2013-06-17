@@ -40,19 +40,15 @@ public class CompositeSelector implements Selector
     @Override
     public <T> Property<T> getProperty(Class<T> instanceType, String fieldName)
     {
-    	Property<T> property = coreSelector.getProperty(instanceType, fieldName);
-    	if(property != null)
-    	{
-    		return property;
-    	}
-        return fieldSelector.getProperty(instanceType, fieldName);
+        Property<T> property = coreSelector.getProperty(instanceType, fieldName);
+        return property != null ? property : fieldSelector.getProperty(instanceType, fieldName);
     }
 
     @Override
     public <T> Collection<Property<T>> getSelectedFields( Class<T> instanceType )
     {
         Map<String, Property<T>> response = new TreeMap<String, Property<T>>();
-        
+
         Collection<Property<T>> selectedFields = coreSelector.getSelectedFields( instanceType );
         for (Property<T> property : selectedFields)
         {
@@ -61,18 +57,17 @@ public class CompositeSelector implements Selector
 
         Collection<Property<T>> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType );
 
-        Collection<Property<T>> allMapFields = coreSelector.getAllPossibleFields( instanceType );
+        Map<String, Property<T>> allMapFields = coreSelector.getAllPossibleFieldMap( instanceType );
 
         for (Property<?> property : fieldSelectorChildren)
         {
-            if (!response.containsKey( property.name() ))
+            String name = property.name();
+            if (!response.containsKey( name ))
             {
-                for (Property<T> mapProp : allMapFields)
+                Property<T> prop = allMapFields.get( name );
+                if( prop != null )
                 {
-                    if (mapProp.name().equals( property.name() ))
-                    {
-                        response.put( mapProp.name(), mapProp );
-                    }
+                    response.put( name, prop );
                 }
             }
         }
@@ -81,9 +76,9 @@ public class CompositeSelector implements Selector
     }
 
     @Override
-    public <T> Collection<Property<T>> getAllPossibleFields( Class<T> instanceType )
+    public <T> Map<String, Property<T>> getAllPossibleFieldMap( Class<T> instanceType )
     {
-        return coreSelector.getAllPossibleFields( instanceType );
+        return coreSelector.getAllPossibleFieldMap( instanceType );
     }
 
     @Override

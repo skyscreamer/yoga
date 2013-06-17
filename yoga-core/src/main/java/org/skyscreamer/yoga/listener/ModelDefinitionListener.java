@@ -22,7 +22,7 @@ public class ModelDefinitionListener implements RenderingListener
         ListHierarchicalModel<?> definitionModel = model.createChildList( SelectorParser.DEFINITION );
 
         Class<T> instanceType = event.getValueType();
-        for (Property<T> property : event.getSelector().getAllPossibleFields( instanceType ))
+        for (Property<T> property : event.getSelector().getAllPossibleFieldMap( instanceType ).values() )
         {
             definitionModel.addValue( property.name() );
         }

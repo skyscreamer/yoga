@@ -1,16 +1,15 @@
 package org.skyscreamer.yoga.listener;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 
 public class NavigationLinksListener implements RenderingListener
 {
@@ -63,20 +62,12 @@ public class NavigationLinksListener implements RenderingListener
     public <T> Collection<Property<T>> getNonSelectedFields( Selector selector, Class<T> instanceType,
             Object instance )
     {
-        Collection<Property<T>> fieldNames = new ArrayList<Property<T>>(
-                selector.getAllPossibleFields( instanceType ) );
-        Iterable<Property<T>> selectedFields = selector.getSelectedFields( instanceType );
-        for (Iterator<Property<T>> iterator = fieldNames.iterator(); iterator.hasNext();)
+        HashMap<String, Property<T>> fields = new HashMap<String, Property<T>>(
+                selector.getAllPossibleFieldMap( instanceType ) );
+        for (Property<T> selected : selector.getSelectedFields( instanceType ))
         {
-            Property<T> property = iterator.next();
-            for (Property<T> selected : selectedFields)
-            {
-                if (selected.name().equals( property.name() ))
-                {
-                    iterator.remove();
-                }
-            }
+            fields.remove( selected.name() );
         }
-        return fieldNames;
+        return fields.values();
     }
 }

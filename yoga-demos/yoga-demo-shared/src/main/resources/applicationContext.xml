@@ -94,12 +94,14 @@
     <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener"
         p:entityConfigurationRegistry-ref="entityConfigurationRegistry" />
 
+    <bean id="countLimiter" class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
+        <constructor-arg value="2000" />
+    </bean>
+
     <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
         <constructor-arg>
             <list>
-                <bean class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
-                    <constructor-arg value="2000" />
-                </bean>
+                <ref bean="countLimiter" />
                 <ref bean="hrefListener" />
                 <bean class="org.skyscreamer.yoga.listener.SelectorBuilderListener" />
                 <bean class="org.skyscreamer.yoga.listener.NavigationLinksListener"
@@ -135,9 +137,9 @@
 
     <bean name="xml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
     <bean name="xhtml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
-     <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
+    <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
 <!--
-     <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.StreamingJsonYogaView" />
+    <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.StreamingJsonYogaView" />
 -->
     <bean name="builder.view" parent="abstract.view" class="org.skyscreamer.yoga.view.SelectorBuilderView" />
 

@@ -90,7 +90,7 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
 
     protected <T> void addFields( Class<T> type, String suffix, TypeMetaData result )
     {
-        Collection<Property<T>> allFields = _coreSelector.getAllPossibleFields( type );
+        Map<String, Property<T>> allFields = _coreSelector.getAllPossibleFieldMap( type );
         Set<String> coreFieldName = new HashSet<String>();
 
         for (Property<T> property : _coreSelector.getSelectedFields( type ))
@@ -98,7 +98,7 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
             coreFieldName.add( property.name() );
         }
 
-        for ( Property<T> property : allFields )
+        for ( Property<T> property : allFields.values() )
         {
             Method readMethod = property.getReadMethod();
             Class<?> propertyType = readMethod.getReturnType();

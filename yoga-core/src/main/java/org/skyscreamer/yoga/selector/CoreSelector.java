@@ -17,10 +17,11 @@ import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.metadata.PropertyUtil;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class CoreSelector extends MapSelector
+public class CoreSelector implements Selector
 {
     private EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
-    protected ConcurrentHashMap allCoreFields = new ConcurrentHashMap();
+    protected ConcurrentHashMap<Class, Map> coreFields = new ConcurrentHashMap<Class, Map> ();
+    protected ConcurrentHashMap<Class, Map>  allFields = new ConcurrentHashMap<Class, Map> ();
 
     public CoreSelector( EntityConfigurationRegistry entityConfigurationRegistry )
     {
@@ -37,15 +38,9 @@ public class CoreSelector extends MapSelector
     }
 
     @Override
-    protected <T> Collection<Property<T>> getRegisteredFieldCollection( Class<T> instanceType )
-    {
-        return getProperties(instanceType, descriptors).values();
-    }
-
-    @Override
     public <T> Property<T> getProperty(Class<T> instanceType, String fieldName)
     {
-        Map<String, Property<T>> properties = getProperties(instanceType, descriptors);
+        Map<String, Property<T>> properties = getProperties(instanceType, coreFields);
         if(properties != null)
         {
             return properties.get(fieldName);
@@ -124,12 +119,18 @@ public class CoreSelector extends MapSelector
     }
 
     @Override
-    public <T> Collection<Property<T>> getAllPossibleFields( Class<T> instanceType )
+    public <T> Map<String, Property<T>> getAllPossibleFieldMap( Class<T> instanceType )
     {
-        return createAllFieldList(instanceType);
+        Map response = allFields.get( instanceType );
+        if(response == null){
+            Map existing = allFields.putIfAbsent(instanceType, response = createAllFieldMap(instanceType));
+            if(existing != null)
+                response = existing;
+        }
+        return response;
     }
 
-    private <T> Collection<Property<T>> createAllFieldList(Class<T> instanceType)
+    protected <T> Map<String, Property<T>> createAllFieldMap(Class<T> instanceType)
     {
         Map<String, Property<T>> response = new TreeMap<String, Property<T>>();
 
@@ -156,7 +157,30 @@ public class CoreSelector extends MapSelector
                 response.put(name, new ExtraFieldProperty<T>( name, config, method ) );
             }
         }
+        return response;
+    }
 
-        return response.values();
+    @Override
+    public <T> Collection<Property<T>> getSelectedFields(Class<T> instanceType)
+    {
+        return getProperties(instanceType, coreFields).values();
+    }
+
+    @Override
+    public boolean containsField(Class<?> instanceType, String fieldName)
+    {
+        return getProperties(instanceType, coreFields).containsKey(fieldName);
+    }
+
+    @Override
+    public boolean isInfluencedExternally()
+    {
+        return false;
+    }
+
+    @Override
+    public Selector getChildSelector(Class<?> instanceType, String fieldName)
+    {
+        return this;
     }
 }
