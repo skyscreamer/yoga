@@ -30,7 +30,7 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     protected SelectorParser _selectorParser;
 
     @Autowired
-    protected RenderingListenerRegistry _renderingListenerRegistry;
+    protected RenderingListenerRegistry _renderingListenerRegistry = new RenderingListenerRegistry();
 
     @Autowired
     protected CoreSelector _selector;
@@ -76,7 +76,10 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
             view.setSelector( _selector );
             view.setRegistry( _renderingListenerRegistry );
             view.render( _request, _response, t, entityStream );
-            view.setClassFinderStrategy( _classFinderStrategy );
+            if ( _classFinderStrategy != null )
+            {
+                view.setClassFinderStrategy( _classFinderStrategy );
+            }
         }
         catch (RuntimeException e)
         {
