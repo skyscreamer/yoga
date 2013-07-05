@@ -43,7 +43,7 @@ The other option is to program custom controller methods, but the point here is 
 Find a more detailed explanation of our selectors here: https://github.com/skyscreamer/yoga/wiki/REST-Selectors
 
 ## How Do I Use It? ##
-Yoga works with existing framworks.  To hook it up, you need to add some annotations and a few lines of configuration.  Check out the documentation on our wiki for a more detailed explanation.
+Yoga works with existing frameworks.  To hook it up, you need to add some annotations and a few lines of configuration.  Check out the documentation on our wiki for a more detailed explanation.
 
 For advanced users, we provide hooks to further extend Yoga's capabilities.
 
