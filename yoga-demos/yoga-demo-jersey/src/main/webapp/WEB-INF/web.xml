@@ -17,7 +17,11 @@
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
-        <init-param>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>org.skyscreamer.yoga.demo.jaxrs.resources</param-value>
+		</init-param>
+		<init-param>
             <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
             <param-value>org.skyscreamer.yoga.demo.jaxrs.config.URIExtensionsConfig</param-value>
         </init-param>
