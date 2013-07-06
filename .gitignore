@@ -1,6 +1,9 @@
 yoga-core/target/**/*
 yoga-demos/yoga-demo-resteasy/target/*
+yoga-demos/yoga-demo-jersey/target/*
 yoga-demos/yoga-demo-springmvc/target/*
 yoga-demos/yoga-demo-shared/target/*
 yoga-integration/yoga-jaxrs/target/*
 yoga-integration/yoga-springmvc/target/*
+yoga-integration/yoga-hibernate/target/*
+.idea
