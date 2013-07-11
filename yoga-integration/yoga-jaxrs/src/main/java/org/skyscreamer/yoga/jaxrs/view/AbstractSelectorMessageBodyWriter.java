@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
@@ -20,19 +21,18 @@ import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
 import org.skyscreamer.yoga.view.AbstractYogaView;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
 {
     protected ResultTraverser _resultTraverser = new ResultTraverser();
 
-    @Autowired
+    @Inject
     protected SelectorParser _selectorParser;
 
-    @Autowired
+    @Inject
     protected RenderingListenerRegistry _renderingListenerRegistry;
 
-    @Autowired
+    @Inject
     protected CoreSelector _selector;
     
     @Context
@@ -43,7 +43,7 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
 
 	protected ClassFinderStrategy _classFinderStrategy;
 
-    @Autowired
+    @javax.inject.Inject
     public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
         this._classFinderStrategy = classFinderStrategy;
