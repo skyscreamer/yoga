@@ -4,12 +4,12 @@
     <parent>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga</artifactId>
-        <version>1.0.0-RC3-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-integration</artifactId>
-    <version>1.0.0-RC3-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/skyscreamer/yoga</url>
@@ -17,6 +17,7 @@
     <modules>
         <module>yoga-springmvc</module>
         <module>yoga-jaxrs</module>
+        <module>yoga-jersey</module>
         <module>yoga-hibernate</module>
     </modules>
 

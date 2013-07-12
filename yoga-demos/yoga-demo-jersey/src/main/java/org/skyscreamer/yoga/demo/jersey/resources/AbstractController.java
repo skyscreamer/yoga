@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.jaxrs.resources;
+package org.skyscreamer.yoga.demo.jersey.resources;
 
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.springframework.beans.factory.annotation.Autowired;

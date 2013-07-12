@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.0.0 - 2013-06-22
+--------------------------
+ - Our official 1.0 release!
+ - Added a Jersey demo
+ - Updated documentation
+ - Improve usability of selector builder
+ - Fix XML output issue
+
 Version 1.0.0 RC2 - 2013-03-16
 ------------------------------
  - Added SelectorResolver so that it can be used in the controller

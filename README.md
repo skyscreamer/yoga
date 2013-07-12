@@ -43,7 +43,7 @@ The other option is to program custom controller methods, but the point here is 
 Find a more detailed explanation of our selectors here: https://github.com/skyscreamer/yoga/wiki/REST-Selectors
 
 ## How Do I Use It? ##
-Yoga works with existing framworks.  To hook it up, you need to add some annotations and a few lines of configuration.  Check out the documentation on our wiki for a more detailed explanation.
+Yoga works with existing frameworks.  To hook it up, you need to add some annotations and a few lines of configuration.  Check out the documentation on our wiki for a more detailed explanation.
 
 For advanced users, we provide hooks to further extend Yoga's capabilities.
 
@@ -55,7 +55,7 @@ Right here:
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga</artifactId>
-        <version>1.0.0-RC2</version>
+        <version>1.0.0</version>
     </dependency>
     
 And pick one of the integration packages:
@@ -63,7 +63,7 @@ And pick one of the integration packages:
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-springmvc</artifactId>
-        <version>1.0.0-RC2</version>
+        <version>1.0.0</version>
     </dependency>
 
 or
@@ -71,5 +71,5 @@ or
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-jaxrs</artifactId>
-        <version>1.0.0-RC2</version>
+        <version>1.0.0</version>
     </dependency>

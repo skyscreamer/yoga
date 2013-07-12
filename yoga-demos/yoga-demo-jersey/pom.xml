@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-demos</artifactId>
-        <version>1.0.0-RC3-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-demo-jersey</artifactId>
-    <version>1.0.0-RC3-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <build>
@@ -77,7 +77,7 @@
         </dependency>
         <dependency>
             <groupId>org.skyscreamer</groupId>
-            <artifactId>yoga-jaxrs</artifactId>
+            <artifactId>yoga-jersey</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
