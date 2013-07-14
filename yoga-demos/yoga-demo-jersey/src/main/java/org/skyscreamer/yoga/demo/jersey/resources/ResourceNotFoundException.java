@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.jaxrs.resources;
+package org.skyscreamer.yoga.demo.jersey.resources;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

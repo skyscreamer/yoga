@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.jaxrs.config;
+package org.skyscreamer.yoga.jersey.config;
 
 import java.util.HashMap;
 import java.util.Map;
