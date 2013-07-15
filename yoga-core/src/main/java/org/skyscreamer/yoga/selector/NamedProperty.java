@@ -4,24 +4,31 @@ import java.lang.reflect.Method;
 
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
-public class NamedProperty implements Property
+public class NamedProperty<T> implements Property<T>
 {
 
     private String name;
+    private boolean isPrimitive = false;
 
     public NamedProperty( String name )
     {
         this.name = name;
     }
 
-    @Override
+    public NamedProperty(String name, boolean isPrimitive)
+    {
+	    this.name = name;
+	    this.isPrimitive = isPrimitive;
+    }
+
+	@Override
     public String name()
     {
         return name;
     }
 
     @Override
-    public Object getValue( Object instance )
+    public Object getValue( T instance )
     {
         throw new YogaRuntimeException( "Named Properties don't read properties" );
     }
@@ -30,6 +37,12 @@ public class NamedProperty implements Property
     public Method getReadMethod()
     {
         throw new YogaRuntimeException( "Named Properties don't have a read method" );
+    }
+
+	@Override
+    public boolean isPrimitive()
+    {
+	    return isPrimitive;
     }
 
 }

@@ -5,7 +5,7 @@ import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.selector.CompositeSelector;
 import org.skyscreamer.yoga.selector.FieldSelector;
-import org.skyscreamer.yoga.selector.MapSelector;
+import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
 
 /**
@@ -51,7 +51,7 @@ public abstract class SelectorParser
 
         FieldSelector fieldSelector = parse( selectorExpression );
 
-        if(fieldSelector != null && !fieldSelector.getAllPossibleFields( null ).isEmpty() )
+        if(fieldSelector != null && !fieldSelector.getAllPossibleFieldMap( null ).isEmpty() )
         {
             return fieldSelector;
         }
@@ -61,17 +61,17 @@ public abstract class SelectorParser
         }
     }
 
-    public Selector parseSelector( String selectorExpression, MapSelector mapSelector ) throws ParseSelectorException
+    public Selector parseSelector( String selectorExpression, CoreSelector coreSelector ) throws ParseSelectorException
     {
         Selector fieldSelector = parseSelector( selectorExpression );
 
         if(fieldSelector != null)
         {
-            return new CompositeSelector( mapSelector, fieldSelector );
+            return new CompositeSelector( coreSelector, fieldSelector );
         }
         else
         {
-            return mapSelector;
+            return coreSelector;
         }
     }
 
