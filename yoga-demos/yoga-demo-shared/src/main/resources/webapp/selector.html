@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+    <title>Yoga - RESTful but Flexible - Selectors</title>
+    <meta name="description" content="Enable field selectors and call aggregation on Java-based REST servers." />
+    <meta name="keywords" content="yoga,yoga rest,field selector,java rest,java restful,yoga api,rest aggregate,rest open source" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-31545754-1']);
+        _gaq.push(['_setDomainName', 'skyscreamer.org']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+</head>
+<body>
+<header>
+    <h1>Yoga</h1>
+    <h2>a <a href="http://skyscreamer.org">Skyscreamer</a> open source project</h2>
+</header>
+<br clear="all" />
+<nav>
+    <ul>
+        <li><a class="intro" href="./">Home</a></li>
+        <li><a class="demo" href="user/1.yoga">Live Demo</a></li>
+        <li><a class="wiki" href="https://github.com/skyscreamer/yoga/wiki">Documentation</a></li>
+        <li><a class="race" href="demo.html">Race</a></li>
+        <li><a class="contrib" href="https://github.com/skyscreamer/yoga"> &nbsp; </a></li>
+        <li><a class="javadoc" href="http://yoga-api.skyscreamer.org/apidocs/">API Docs</a></li>
+        <li><a class="selector" href="selector.html">Cookbook</a></li>
+        <li><a class="download" href="https://github.com/skyscreamer/yoga/tags">Download</a></li>
+    </ul>
+</nav>
+<section>
+    <a name="selector"></a>
+    <h2>Cookbook</h2>
+
+    <p>First, play with the selector builder.  Access the builder by replacing the suffix for any
+        RESTful call with <span class="bold">.yoga</span>.  Try it out:</p>
+
+    <div class="example">
+        <blockquote>
+            <a href="user/1.yoga">/user/1.yoga</a>
+        </blockquote>
+    </div>
+
+    <p>Here's various examples:</p>
+
+    <div class="example">
+        <p>A traditional REST request:</p>
+        <blockquote>
+            <a href="user/2.json">/user/2.json</a>
+        </blockquote>
+    </div>
+
+    <div class="example">
+        <p>A user and his favorite artists:</p>
+        <blockquote>
+            <a href="user/2.json?selector=favoriteArtists">/user/2.json?selector=favoriteArtists</a>
+        </blockquote>
+    </div>
+
+    <div class="example">
+        <p>Same as above, but also get the artists albums:</p>
+        <blockquote>
+            <a href="user/2.json?selector=favoriteArtists(albums)">/user/2.json?selector=favoriteArtists(albums)</a>
+        </blockquote>
+    </div>
+
+    <div class="example">
+        <p>Find other people who like the same bands:</p>
+        <blockquote>
+            <a href="user/2.json?selector=favoriteArtists(fans)">/user/2.json?selector=favoriteArtists(fans)</a>
+        </blockquote>
+        <p>Note that the circular reference does not continue to loop, since a selector has not been added to "fans".</p>
+    </div>
+
+    <div class="example">
+        <p>You can also apply a selector to calls that return collections.  All artists and their albums:</p>
+        <blockquote>
+            <a href="artist.json?selector=albums">/artist.json?selector=albums</a>
+        </blockquote>
+    </div>
+
+    <div class="example">
+        <p>
+            This would take hundreds of queries with typical REST calls.  Show songs by your friends' favorite artists:
+        </p>
+        <blockquote>
+            <a href="user/1.json?selector=friends(favoriteArtists(albums(songs)))">/user/1.json?selector=friends(favoriteArtists(albums(songs)))</a>
+        </blockquote>
+    </div>
+
+    <p>Yoga creates a lot of flexibility for the client.  All of these selectors are completely dynamic.
+        <b>As long as the fields are in the object map, Yoga will find them.</b>.
+    </p>
+
+</section>
+</body>
+</html>

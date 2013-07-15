@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<head>
+    <title>Yoga - RESTful but Flexible - Race</title>
+    <meta name="description" content="Enable field selectors and call aggregation on Java-based REST servers." />
+    <meta name="keywords" content="yoga,yoga rest,field selector,java rest,java restful,yoga api,rest aggregate,rest open source" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="css/style.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript">
+        var simulatedRequestLatency = 500;
+
+        var yogaRest = function() {
+            var startTime = (new Date()).getTime();
+            $('#demo_status2').html('Running...');
+            $('#demo_status2').css('color', '#ee0000');
+            $('#demo_query2').val('user/1.json?selector=friends(favoriteArtists(albums(songs)))');
+            setTimeout(function() {
+                $.get('user/1.json?selector=friends(favoriteArtists(albums(songs)))', function(data) {
+                    $('#demo_name2').html(data.name);
+                    $(data.friends).each(function(index1) {
+                        var friendHtml = '<h4 class="demo_friends_header">' + this.name + '&apos;s Favorite Artists</h4>';
+                        $(this.favoriteArtists).each(function(index2) {
+                            friendHtml += '<p>' + this.name + '</p>'
+                                    + '<ul>';
+                            $(this.albums).each(function(index3) {
+                                friendHtml += '<li><b>' + this.title + '</b>: (';
+                                $(this.songs).each(function(index4) {
+                                    if (index4 > 0)
+                                        friendHtml += ', ';
+                                    friendHtml += this.title;
+                                });
+                                friendHtml += ')</li>';
+                            });
+                            friendHtml += '</ul>';
+                        });
+                        $('#demo_friends2').append(friendHtml);
+
+                        var endTime = (new Date()).getTime();
+                        $('#demo_status2').html('DONE!');
+                        $('#demo_status2').css('color', '#76B475');
+                        var duration = endTime - startTime;
+                        $('#demo_time2').html('(1 call - ' + duration + 'ms)');
+                    });
+                })
+            }, simulatedRequestLatency);
+        };
+
+        var traditionalRest = function() {
+            var startTime = (new Date()).getTime(),
+                    queryInput = 'user/1.json\n';
+            $('#demo_status1').html('Running...');
+            $('#demo_status1').css('color', '#ee0000');
+            $('#demo_query1').val(queryInput);
+            var callCount = 0;
+            setTimeout(function() {
+                $.get('user/1.json?selector=friends', function(data1) {
+                    ++callCount;
+                    $('#demo_name1').html(data1.name);
+                    $(data1.friends).each(function(index1) {
+                        var friendId = this.id;
+                        var friendName = this.name;
+                        queryInput += ' |- user/' + friendId + '.json\n';
+                        $('#demo_query1').val(queryInput);
+                        setTimeout(function() {
+                            $.get('user/' + friendId + '.json?selector=favoriteArtists', function(data2) {
+                                ++callCount;
+                                var friendHtml = '<div id="demo_friend1_' + friendId + '">'
+                                        + '<h4 class="demo_friends_header">' + friendName + '&apos;s Favorite Artists</h4>'
+                                        + '</div>';
+                                $('#demo_friends1').append(friendHtml);
+                                $(data2.favoriteArtists).each(function(index2) {
+                                    var artistId = this.id;
+                                    var artistHtml = '<p>' + this.name + '</p>'
+                                            + '<ul id="demo_artist_' + friendId + '_' + artistId + '"></ul>';
+                                    $('#demo_friend1_' + friendId).append(artistHtml);
+                                    queryInput += '\t |- artist/' + artistId + '.json\n';
+                                    $('#demo_query1').val(queryInput);
+                                    setTimeout(function() {
+                                        $.get('artist/' + artistId + '.json?selector=albums', function(data3) {
+                                            ++callCount;
+                                            $(data3.albums).each(function(index3) {
+                                                var albumId = this.id;
+                                                var albumHtml = '<li id="demo_album_' + friendId + '_' + artistId + '_' + albumId + '"><b>' + this.title + '</b></li>';
+                                                $('#demo_artist_' + friendId + '_' + artistId).append(albumHtml);
+                                                queryInput += '\t\t |- album/' + albumId + '.json\n';
+                                                $('#demo_query1').val(queryInput);
+                                                setTimeout(function() {
+                                                    $.get('album/' + albumId + '.json?selector=songs', function(data4) {
+                                                        ++callCount;
+                                                        var songHtml = ': (';
+                                                        $(data4.songs).each(function(index4) {
+                                                            if (index4 > 0)
+                                                                songHtml += ', ';
+                                                            songHtml += this.title;
+                                                        });
+                                                        songHtml += ')';
+                                                        $('#demo_album_' + friendId + '_' + artistId + '_' + albumId).append(songHtml);
+
+                                                        var endTime = (new Date()).getTime();
+                                                        $('#demo_status1').html('DONE!');
+                                                        $('#demo_status1').css('color', '#76B475');
+                                                        var duration = endTime - startTime;
+                                                        $('#demo_time1').html('(' + callCount + ' calls - ' + duration + 'ms)');
+                                                    })
+                                                }, simulatedRequestLatency);
+                                            });
+                                        })
+                                    }, simulatedRequestLatency);
+                                });
+                            })
+                        }, simulatedRequestLatency);
+                    });
+                })
+            }, simulatedRequestLatency);
+        };
+
+
+
+
+
+
+    </script>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-31545754-1']);
+        _gaq.push(['_setDomainName', 'skyscreamer.org']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script></head>
+<body>
+<header>
+    <h1>Yoga</h1>
+    <h2>a <a href="http://skyscreamer.org">Skyscreamer</a> open source project</h2>
+</header>
+<br clear="all" />
+<nav>
+    <ul>
+        <li><a class="intro" href="./">Home</a></li>
+        <li><a class="demo" href="user/1.yoga">Live Demo</a></li>
+        <li><a class="wiki" href="https://github.com/skyscreamer/yoga/wiki">Documentation</a></li>
+        <li><a class="race" href=".">Race</a></li>
+        <li><a class="contrib" href="https://github.com/skyscreamer/yoga"> &nbsp; </a></li>
+        <li><a class="javadoc" href="http://yoga-api.skyscreamer.org/apidocs/">API Docs</a></li>
+        <li><a class="selector" href="selector.html">Cookbook</a></li>
+        <li><a class="download" href="https://github.com/skyscreamer/yoga/tags">Download</a></li>
+    </ul>
+</nav>
+<section>
+    <a name="race"></a>
+    <h2>Race</h2>
+    <p>Yoga versus vanilla REST.  Retrieving songs by my friends' favorite artists:</p>
+
+    <div class="demo demo1">
+        <h5>Yoga - <span id="demo_status2">Standby</span> <span id="demo_time2"></span></h5>
+        <section class="wrapper">
+            <header>
+                <h2>Friends' Favs for <span id="demo_name2">&nbsp;</span></h2>
+            </header>
+            <article id="demo_friends2">
+            </article>
+            <input id="demo_query2" type="text" disabled="true"/>
+        </section>
+    </div>
+
+    <div class="demo demo2">
+        <h5>Plain REST - <span id="demo_status1">Standby</span> <span id="demo_time1"></span></h5>
+        <section class="wrapper">
+            <header>
+                <h2>Friends' Favs for <span id="demo_name1">&nbsp;</span></h2>
+            </header>
+            <article id="demo_friends1">
+            </article>
+            <textarea id="demo_query1" type="text" disabled="true"></textarea>
+        </section>
+    </div>
+
+    <div style="clear:both">
+        <input class="run" type="button" value="Race!" onclick="this.disabled = true; $('.wrapper').show(); traditionalRest(); yogaRest();"/>
+    </div>
+</section>
+
+</body>
+</html>
