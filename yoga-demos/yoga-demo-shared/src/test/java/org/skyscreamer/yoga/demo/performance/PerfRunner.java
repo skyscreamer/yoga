@@ -64,29 +64,36 @@ public class PerfRunner
 
     public static void main(String[] args) throws Exception
     {
-        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml", "classpath:/applicationContext-test.xml");
         PerfRunner perf = new PerfRunner();
-        perf.view = context.getBean("json.view", AbstractYogaView.class);
         perf.txManager = context.getBean(PlatformTransactionManager.class);
         perf.dao = context.getBean(GenericDao.class);
         context.getBean(CountLimitRenderingListener.class).setMaxCount(Integer.MAX_VALUE);
 
         perf.init();
 
-        perf.render(1);
-        perf.render(2);
-        perf.render(2);
-        perf.render(2);
-        perf.render(2);
-        perf.render(10);
-        perf.render(10);
-        perf.render(10);
-        perf.render(10);
-        perf.render(10);
-        perf.render(100);
-        perf.render(100);
-        perf.render(2);
-        perf.render(2);
+        System.out.println("\n\nTesting default json");
+        perf.view = context.getBean("json.view", AbstractYogaView.class);
+        test(perf);
+
+        System.out.println("\n\nTesting streaming json");
+        perf.view = context.getBean("json.streaming.view", AbstractYogaView.class);
+        test(perf);
+        
+        perf.end();
     }
+
+	private static void test(PerfRunner perf) throws Exception {
+		perf.render(1);
+        perf.render(2);
+        perf.render(2);
+        perf.render(2);
+        perf.render(2);
+        perf.render(10);
+        perf.render(10);
+        perf.render(10);
+        perf.render(2);
+        perf.render(2);
+	}
 
 }

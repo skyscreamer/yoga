@@ -83,10 +83,6 @@
         <constructor-arg>
             <list>
                 <bean class="org.skyscreamer.yoga.demo.dto.UserConfiguration" />
-<!-- 
-                <bean class="org.skyscreamer.yoga.demo.dto.AlbumConfiguration" />
-                <bean class="org.skyscreamer.yoga.demo.dto.SongConfiguration" />
- -->
             </list>
         </constructor-arg>
     </bean>
@@ -138,9 +134,6 @@
     <bean name="xml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
     <bean name="xhtml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
     <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
-<!--
-    <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.StreamingJsonYogaView" />
--->
     <bean name="builder.view" parent="abstract.view" class="org.skyscreamer.yoga.view.SelectorBuilderView" />
 
     <!-- YOGA CONFIG END -->
