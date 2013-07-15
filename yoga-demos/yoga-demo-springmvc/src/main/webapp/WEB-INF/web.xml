@@ -79,7 +79,13 @@
     <filter>
 		<filter-name>UrlRewriteFilter</filter-name>
 		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-	</filter>
+    <!--  TODO: make this work with the urlrewrite.xml that's in the jar
+        <init-param>
+            <param-name>confPath</param-name>
+            <param-value>webapp/WEB-INF/urlrewrite.xml</param-value>
+        </init-param>
+ --> 
+  	</filter>
 	<filter-mapping>
 		<filter-name>UrlRewriteFilter</filter-name>
 		<url-pattern>/*</url-pattern>
