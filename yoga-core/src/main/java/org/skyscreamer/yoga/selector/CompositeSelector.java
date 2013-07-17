@@ -38,36 +38,30 @@ public class CompositeSelector implements Selector
     }
 
     @Override
-    public <T> Property<T> getProperty(Class<T> instanceType, String fieldName)
+    public Collection<Property> getSelectedFields( Class<?> instanceType )
     {
-        Property<T> property = coreSelector.getProperty(instanceType, fieldName);
-        return property != null ? property : fieldSelector.getProperty(instanceType, fieldName);
-    }
-
-    @Override
-    public <T> Collection<Property<T>> getSelectedFields( Class<T> instanceType )
-    {
-        Map<String, Property<T>> response = new TreeMap<String, Property<T>>();
-
-        Collection<Property<T>> selectedFields = coreSelector.getSelectedFields( instanceType );
-        for (Property<T> property : selectedFields)
+        Map<String, Property> response = new TreeMap<String, Property>();
+        
+        Collection<Property> selectedFields = coreSelector.getSelectedFields( instanceType );
+        for (Property property : selectedFields)
         {
             response.put( property.name(), property );
         }
 
-        Collection<Property<T>> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType );
+        Collection<Property> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType );
 
-        Map<String, Property<T>> allMapFields = coreSelector.getAllPossibleFieldMap( instanceType );
+        Collection<Property> allMapFields = coreSelector.getAllPossibleFields( instanceType );
 
-        for (Property<?> property : fieldSelectorChildren)
+        for (Property property : fieldSelectorChildren)
         {
-            String name = property.name();
-            if (!response.containsKey( name ))
+            if (!response.containsKey( property.name() ))
             {
-                Property<T> prop = allMapFields.get( name );
-                if( prop != null )
+                for (Property mapProp : allMapFields)
                 {
-                    response.put( name, prop );
+                    if (mapProp.name().equals( property.name() ))
+                    {
+                        response.put( mapProp.name(), mapProp );
+                    }
                 }
             }
         }
@@ -76,9 +70,9 @@ public class CompositeSelector implements Selector
     }
 
     @Override
-    public <T> Map<String, Property<T>> getAllPossibleFieldMap( Class<T> instanceType )
+    public Collection<Property> getAllPossibleFields( Class<?> instanceType )
     {
-        return coreSelector.getAllPossibleFieldMap( instanceType );
+        return coreSelector.getAllPossibleFields( instanceType );
     }
 
     @Override

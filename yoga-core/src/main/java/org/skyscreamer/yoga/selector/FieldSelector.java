@@ -1,19 +1,19 @@
 package org.skyscreamer.yoga.selector;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 
-@SuppressWarnings("rawtypes")
 public class FieldSelector implements Selector
 {
     protected Map<String, FieldSelector> subSelectors = new HashMap<String, FieldSelector>();
     protected EntityConfigurationRegistry _entityConfigurationRegistry;
-    private HashMap<String, Property> allFields;
-
 
     public FieldSelector( EntityConfigurationRegistry entityConfigurationRegistry)
     {
@@ -37,12 +37,6 @@ public class FieldSelector implements Selector
         return containsField( property );
     }
 
-    @Override
-    public <T> Property<T> getProperty(Class<T> instanceType, String fieldName)
-    {
-        return getAllPossibleFieldMap( instanceType ).get( fieldName );
-    }
-    
     public boolean containsField( String property )
     {
         return subSelectors.containsKey( property );
@@ -53,37 +47,58 @@ public class FieldSelector implements Selector
         return subSelectors.size();
     }
 
+    @Override
+    public Collection<Property> getSelectedFields( Class<?> instanceType )
+    {
+        Set<String> fieldNames = getFieldNames();
+        removeNonSupportedFields( instanceType, fieldNames );
+        Collection<Property> selected = new ArrayList<Property>();
+        for (String name : fieldNames)
+        {
+            selected.add( new NamedProperty( name ) );
+        }
+        return selected;
+    }
+
+    public <T> void removeNonSupportedFields( Class<T> instanceType, Set<String> fieldNames )
+    {
+        YogaEntityConfiguration<T> entityConfiguration = _entityConfigurationRegistry.getEntityConfiguration( instanceType );
+        if (entityConfiguration != null && entityConfiguration.getSelectableFields() != null)
+        {
+            for (Iterator<String> iter = fieldNames.iterator(); iter.hasNext();)
+            {
+                String fieldName = iter.next();
+                if (!entityConfiguration.getSelectableFields().contains(fieldName)) {
+                    iter.remove();
+                }
+            }
+        }
+    }
+
+    public Set<String> getFieldNames()
+    {
+        return subSelectors.keySet();
+    }
+
+    public Map<String, FieldSelector> getFields()
+    {
+        return subSelectors;
+    }
+
     public void register( String fieldName, FieldSelector subSelector )
     {
         subSelectors.put( fieldName, subSelector );
     }
 
-
     @Override
-    public <T> Collection<Property<T>> getSelectedFields( Class<T> instanceType )
+    public Collection<Property> getAllPossibleFields( Class<?> instanceType )
     {
-        return getAllPossibleFieldMap( instanceType ).values();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> Map<String, Property<T>> getAllPossibleFieldMap(Class<T> instanceType)
-    {
-        if(allFields == null)
+        Collection<Property> allFields = new ArrayList<Property>();
+        for (String name : getFieldNames())
         {
-            // The assumption is that this case will only be called with 1 consistent instance type... which is why we can cache allFields
-            YogaEntityConfiguration<T> entityConfiguration = _entityConfigurationRegistry.getEntityConfiguration( instanceType );
-            Collection<String> selectableFields = entityConfiguration == null ? null : entityConfiguration.getSelectableFields();
-            allFields = new HashMap<String, Property>();
-            for (String name : subSelectors.keySet())
-            {
-                if ( selectableFields == null || selectableFields.contains(name) ) 
-                {
-                    allFields.put( name, new NamedProperty<T>( name ) );
-                }
-            }
+            allFields.add( new NamedProperty( name ) );
         }
-        return (HashMap) allFields;
+        return allFields;
     }
 
     @Override
@@ -91,5 +106,4 @@ public class FieldSelector implements Selector
     {
         return true;
     }
-
 }

@@ -4,17 +4,17 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.selector.Selector;
 
-public class RenderingEvent<T>
+public class RenderingEvent
 {
     private RenderingEventType type;
     private HierarchicalModel<?> model;
-    private T value;
-    private Class<T> valueType;
+    private Object value;
+    private Class<?> valueType;
     private YogaRequestContext requestContext;
     private Selector selector;
 
-    public RenderingEvent( RenderingEventType type, HierarchicalModel<?> model, T value,
-            Class<T> valueType, YogaRequestContext requestContext, Selector selector )
+    public RenderingEvent( RenderingEventType type, HierarchicalModel<?> model, Object value,
+            Class<?> valueType, YogaRequestContext requestContext, Selector selector )
     {
         super();
         this.type = type;
@@ -35,12 +35,12 @@ public class RenderingEvent<T>
         return model;
     }
 
-    public T getValue()
+    public Object getValue()
     {
         return value;
     }
     
-    public Class<T> getValueType()
+    public Class<?> getValueType()
     {
         return valueType;
     }

@@ -9,8 +9,7 @@ import org.skyscreamer.yoga.util.ClassFinderStrategy;
  */
 public class HibernateClassFinderStrategy implements ClassFinderStrategy
 {
-    @SuppressWarnings("unchecked")
-	public <T> Class<T> findClass( T instance )
+    public Class<?> findClass( Object instance )
     {
         return Hibernate.getClass( instance );
     }

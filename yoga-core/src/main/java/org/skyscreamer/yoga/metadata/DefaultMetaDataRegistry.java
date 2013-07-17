@@ -13,6 +13,7 @@ import java.util.Set;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.util.NameUtil;
+import org.skyscreamer.yoga.util.ObjectUtil;
 
 public class DefaultMetaDataRegistry implements MetaDataRegistry
 {
@@ -88,17 +89,17 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
         return result;
     }
 
-    protected <T> void addFields( Class<T> type, String suffix, TypeMetaData result )
+    protected void addFields( Class<?> type, String suffix, TypeMetaData result )
     {
-        Map<String, Property<T>> allFields = _coreSelector.getAllPossibleFieldMap( type );
+        Collection<Property> allFields = _coreSelector.getAllPossibleFields( type );
         Set<String> coreFieldName = new HashSet<String>();
 
-        for (Property<T> property : _coreSelector.getSelectedFields( type ))
+        for (Property property : _coreSelector.getSelectedFields( type ))
         {
             coreFieldName.add( property.name() );
         }
 
-        for ( Property<T> property : allFields.values() )
+        for ( Property property : allFields )
         {
             Method readMethod = property.getReadMethod();
             Class<?> propertyType = readMethod.getReturnType();
@@ -108,9 +109,10 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
             propertyMetaData.setName( name );
             propertyMetaData.setIsCore( coreFieldName.contains( name ) );
 
-            if ( property.isPrimitive() )
+            if ( ObjectUtil.isPrimitive( propertyType ) )
             {
-                propertyMetaData.setType( propertyType == String.class ? "String" : propertyType.getName() );
+                propertyMetaData.setType( propertyType == String.class ? "String" : propertyType
+                        .getName() );
             }
             else if ( Iterable.class.isAssignableFrom( propertyType ) || propertyType.isArray() )
             {

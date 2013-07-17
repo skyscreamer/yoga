@@ -3,22 +3,18 @@ package org.skyscreamer.yoga.selector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
-import org.skyscreamer.yoga.util.ObjectUtil;
 
-public class PojoProperty<T> implements Property<T>
+public class PojoProperty implements Property
 {
 
     private PropertyDescriptor property;
-    private Method readMethod;
-	private boolean isPrimitive;
 
 
     public PojoProperty( PropertyDescriptor property )
     {
         this.property = property;
-        readMethod = property.getReadMethod();
-        isPrimitive = ObjectUtil.isPrimitive(readMethod.getReturnType());
     }
 
     @Override
@@ -28,12 +24,11 @@ public class PojoProperty<T> implements Property<T>
     }
 
     @Override
-    public Object getValue( T instance )
+    public Object getValue( Object instance )
     {
         try
         {
-            return readMethod.invoke( instance );
-//          return PropertyUtils.getProperty( instance, property.getName() );
+            return PropertyUtils.getProperty( instance, property.getName() );
         }
         catch (Exception e)
         {
@@ -44,13 +39,7 @@ public class PojoProperty<T> implements Property<T>
     @Override
     public Method getReadMethod()
     {
-        return readMethod;
-    }
-
-	@Override
-    public boolean isPrimitive()
-    {
-	    return isPrimitive;
+        return property.getReadMethod();
     }
 
 }

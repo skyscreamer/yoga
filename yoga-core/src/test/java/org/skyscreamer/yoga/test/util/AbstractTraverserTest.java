@@ -1,6 +1,5 @@
 package org.skyscreamer.yoga.test.util;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +59,7 @@ public abstract class AbstractTraverserTest
     }
 
     private Map<String, Object> doTraverse( Object instance, ResultTraverser traverser, Selector selector,
-            YogaRequestContext context ) throws IOException
+            YogaRequestContext context )
     {
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         traverser.traverse( instance, selector, model, context );

@@ -2,8 +2,7 @@ package org.skyscreamer.yoga.mapper;
 
 import static org.skyscreamer.yoga.util.ObjectUtil.isPrimitive;
 
-import java.io.IOException;
-
+import org.skyscreamer.yoga.listener.RenderingEventType;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.ListHierarchicalModel;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
@@ -23,70 +22,67 @@ public class ResultTraverser
     protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
 
     public void traverse( Object instance, Selector selector, HierarchicalModel<?> model,
-            YogaRequestContext context ) throws IOException
+            YogaRequestContext context )
     {
-        if (instance != null)
+        if (instance == null)
         {
-            // TODO: what should we do about a Map?
-            if (instance instanceof Iterable)
+            return;
+        }
+
+        // TODO: what should we do about a Map?
+        if (instance instanceof Iterable)
+        {
+            traverseIterable( (Iterable<?>) instance, selector, (ListHierarchicalModel<?>) model,
+                    context );
+        }
+        else
+        {
+            traversePojo( instance, selector, (MapHierarchicalModel<?>) model, context );
+        }
+    }
+
+    protected void traverseIterable( Iterable<?> iterable, Selector selector,
+            ListHierarchicalModel<?> model, YogaRequestContext context )
+    {
+        for (Object o : iterable)
+        {
+            if (isPrimitive( o.getClass() ))
             {
-                traverseIterable( (Iterable<?>) instance, selector, (ListHierarchicalModel<?>) model,
-                        context );
+                model.addValue( o );
             }
             else
             {
-                traversePojo( instance, selector, (MapHierarchicalModel<?>) model, context );
+                traverse( o, selector, model.createChildMap(), context );
             }
         }
+        context.emitEvent( RenderingEventType.LIST_CHILD, model, iterable, iterable.getClass(),
+                context, selector );
     }
 
-    public void traverseIterable( Iterable<?> iterable, Selector selector,
-            ListHierarchicalModel<?> model, YogaRequestContext context ) throws IOException
+    protected void traversePojo( Object instance, Selector selector, MapHierarchicalModel<?> model,
+            YogaRequestContext context )
     {
-        if(iterable != null)
-        {
-            for (Object o : iterable)
-            {
-                if (isPrimitive( o.getClass() ))
-                {
-                    model.addValue( o );
-                }
-                else
-                {
-                    traversePojo( o, selector, model.createChildMap(), context );
-                }
-            }
-            context.emitEvent( model, iterable, context, selector );
-            model.finished();
-        }
+        Class<?> instanceType = _classFinderStrategy.findClass( instance );
+        addInstanceFields( instance, instanceType, model, selector, context );
+
+        context.emitEvent( RenderingEventType.POJO_CHILD, model, instance, instanceType, context,
+                selector );
     }
 
-    public <T> void traversePojo( T instance, Selector selector, MapHierarchicalModel<?> model,
-            YogaRequestContext context ) throws IOException
+    protected void addInstanceFields( Object instance, Class<?> instanceType,
+            MapHierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext )
     {
-        if(instance != null)
-        {
-            Class<T> instanceType = _classFinderStrategy.findClass( instance );
-            addInstanceFields( instance, instanceType, model, selector, context );
+        Iterable<Property> properties = selector.getSelectedFields( instanceType );
 
-            context.emitEvent( model, instance, instanceType, context, selector );
-            model.finished();
-        }
-    }
-
-    protected <T> void addInstanceFields( T instance, Class<T> instanceType,
-            MapHierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext ) throws IOException
-    {
-        for (Property<T> property : selector.getSelectedFields( instanceType ))
+        for (Property property : properties)
         {
             Object value = property.getValue( instance );
+            String fieldName = property.name();
             if (value == null)
             {
                 continue;
             }
-
-            String fieldName = property.name();
-            if ( property.isPrimitive() )
+            if (isPrimitive( value.getClass() ))
             {
                 model.addProperty( fieldName, value );
             }
