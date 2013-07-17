@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.selector.MapSelector;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorResolver;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
@@ -52,7 +52,7 @@ public abstract class AbstractYogaView
 		this._registry = registry;
 	}
 
-	public void setSelector(CoreSelector selector)
+	public void setSelector(MapSelector selector)
 	{
 		this._selectorResolver.setBaseSelector(selector);
 	}

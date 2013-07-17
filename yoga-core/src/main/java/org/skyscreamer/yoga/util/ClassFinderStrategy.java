@@ -7,5 +7,5 @@ package org.skyscreamer.yoga.util;
  */
 public interface ClassFinderStrategy
 {
-    <T> Class<T> findClass( T instance );
+    Class<?> findClass( Object instance );
 }

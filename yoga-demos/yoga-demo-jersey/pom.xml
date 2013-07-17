@@ -77,7 +77,7 @@
         </dependency>
         <dependency>
             <groupId>org.skyscreamer</groupId>
-            <artifactId>yoga-jersey</artifactId>
+            <artifactId>yoga-jaxrs</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -118,6 +118,13 @@
                </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.5.5</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.hibernate</groupId>

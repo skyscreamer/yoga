@@ -90,19 +90,18 @@
     <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener"
         p:entityConfigurationRegistry-ref="entityConfigurationRegistry" />
 
-    <bean id="countLimiter" class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
-        <constructor-arg value="2000" />
-    </bean>
-
     <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
         <constructor-arg>
             <list>
-                <ref bean="countLimiter" />
+                <bean class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
+                    <constructor-arg value="2000" />
+                </bean>
                 <ref bean="hrefListener" />
                 <bean class="org.skyscreamer.yoga.listener.SelectorBuilderListener" />
                 <bean class="org.skyscreamer.yoga.listener.NavigationLinksListener"
                     p:hrefListener-ref="hrefListener" />
-                <bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"/>
+                <bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"
+                    p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>
                 <bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"
                     p:metaDataRegistry-ref="metaDataService" />
             </list>

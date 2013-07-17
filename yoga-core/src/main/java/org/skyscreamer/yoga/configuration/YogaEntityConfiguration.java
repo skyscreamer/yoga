@@ -1,14 +1,13 @@
 package org.skyscreamer.yoga.configuration;
 
+import org.skyscreamer.yoga.annotations.ExtraField;
+import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.skyscreamer.yoga.annotations.ExtraField;
-import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
-import org.skyscreamer.yoga.selector.Property;
 
 /**
  * Interface for a class that configures an entity.  An implementation of this interface must return the class being
@@ -20,24 +19,23 @@ import org.skyscreamer.yoga.selector.Property;
 public abstract class YogaEntityConfiguration<T> {
     private volatile Class<T> _instanceClass = null;
 
-    @SuppressWarnings("unchecked")
-    public YogaEntityConfiguration()
-    {
-        try {
-            _instanceClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        }
-        catch (ClassCastException e) {
-            throw new YogaRuntimeException("Unable to initialize class " + getClass().getName() + " because " +
-                    "entity class could not be determined.  Either specify it in the generic type when extending " +
-                    "YogaEntityConfiguration, or explicitly override getEntityClass() with the correct value.");
-        }
-    }
     /**
      * Identifies the class supported by this configuration.
      *
      * @return A class object for the entity being configured
      */
+    @SuppressWarnings("unchecked")
     public Class<T> getEntityClass() {
+        if (_instanceClass == null) {
+            try {
+                _instanceClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            }
+            catch (ClassCastException e) {
+                throw new YogaRuntimeException("Unable to initialize class " + getClass().getName() + " because " +
+                        "entity class could not be determined.  Either specify it in the generic type when extending " +
+                        "YogaEntityConfiguration, or explicitly override getEntityClass() with the correct value.");
+            }
+        }
         return _instanceClass;
     }
 
@@ -50,17 +48,6 @@ public abstract class YogaEntityConfiguration<T> {
      * @return The collection of core field names
      */
     public Collection<String> getCoreFields() {
-        return null;
-    }
-
-    /**
-     * Returns a collection of fields that can be selected on an entity  similar to getSelectableFields().  
-     * This gives you the opportunity to use a serialization method other than reflection.
-     * 
-     * @return The collection of Property objects used for serialization
-     * @see Property
-     */
-    public Collection<Property<T>> getProperties() {
         return null;
     }
 

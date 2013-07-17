@@ -1,21 +1,18 @@
 package org.skyscreamer.yoga.mapper;
 
-import java.io.IOException;
+import org.skyscreamer.yoga.listener.RenderingEvent;
+import org.skyscreamer.yoga.listener.RenderingEventType;
+import org.skyscreamer.yoga.listener.RenderingListener;
+import org.skyscreamer.yoga.model.HierarchicalModel;
+import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.parser.SelectorParser;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.skyscreamer.yoga.listener.RenderingEvent;
-import org.skyscreamer.yoga.listener.RenderingEventType;
-import org.skyscreamer.yoga.listener.RenderingListener;
-import org.skyscreamer.yoga.model.ListHierarchicalModel;
-import org.skyscreamer.yoga.model.MapHierarchicalModel;
-import org.skyscreamer.yoga.selector.Selector;
-import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 public class YogaRequestContext
 {
@@ -71,7 +68,7 @@ public class YogaRequestContext
         return properties.get( key );
     }
 
-    public <T> void emitEvent( RenderingEvent<T> event ) throws IOException
+    public void emitEvent( RenderingEvent event )
     {
         if (listeners == null)
         {
@@ -83,19 +80,9 @@ public class YogaRequestContext
         }
     }
 
-    public <T> void emitEvent(MapHierarchicalModel<?> model, T value,
-            Class<T> type, YogaRequestContext context, Selector selector)
-            throws IOException
+    public void emitEvent( RenderingEventType eventType, HierarchicalModel<?> model, Object value,
+            Class<?> valueType, YogaRequestContext context, Selector selector )
     {
-        emitEvent(new RenderingEvent<T>(RenderingEventType.POJO_CHILD, model,
-                value, type, context, selector));
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void emitEvent(ListHierarchicalModel<?> model, Iterable<?> iterable,
-            YogaRequestContext context, Selector selector) throws IOException
-    {
-        emitEvent(new RenderingEvent(RenderingEventType.LIST_CHILD, model,
-                iterable, iterable.getClass(), context, selector));
+        emitEvent( new RenderingEvent( eventType, model, value, valueType, context, selector ) );
     }
 }

@@ -1,32 +1,49 @@
 package org.skyscreamer.yoga.listener;
 
-import java.io.IOException;
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.skyscreamer.yoga.model.ListHierarchicalModel;
+import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
+import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
+import org.skyscreamer.yoga.metadata.PropertyUtil;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
-import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 public class ModelDefinitionListener implements RenderingListener
 {
+    private EntityConfigurationRegistry _entityConfigurationRegistry;
+
+    public void setEntityConfigurationRegistry(EntityConfigurationRegistry entityConfigurationRegistry)
+    {
+        _entityConfigurationRegistry = entityConfigurationRegistry;
+    }
 
     @Override
-    public <T> void eventOccurred( RenderingEvent<T> event ) throws IOException
+    public void eventOccurred( RenderingEvent event )
     {
         if (event.getType() != RenderingEventType.POJO_CHILD || event.getSelector().isInfluencedExternally())
         {
             return;
         }
 
-        MapHierarchicalModel<?> model = ( MapHierarchicalModel<?>) event.getModel();
-        ListHierarchicalModel<?> definitionModel = model.createChildList( SelectorParser.DEFINITION );
+        List<String> definition = new ArrayList<String>();
 
-        Class<T> instanceType = event.getValueType();
-        for (Property<T> property : event.getSelector().getAllPossibleFieldMap( instanceType ).values() )
+        Class<?> instanceType = event.getValueType();
+        for (PropertyDescriptor property : PropertyUtil.getReadableProperties( instanceType ))
         {
-            definitionModel.addValue( property.name() );
+            definition.add( property.getName() );
         }
-        definitionModel.finished();
-        
+
+        if (_entityConfigurationRegistry != null)
+        {
+            YogaEntityConfiguration<?> entityConfiguration =
+                    _entityConfigurationRegistry.getEntityConfiguration(instanceType);
+            if (entityConfiguration != null)
+            {
+                definition.addAll(entityConfiguration.getExtraFieldNames());
+            }
+        }
+        ( ( MapHierarchicalModel<?>) event.getModel()).addProperty( SelectorParser.DEFINITION, definition );
     }
 }

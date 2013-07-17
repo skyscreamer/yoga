@@ -1,11 +1,9 @@
 package org.skyscreamer.yoga.model;
 
-import java.io.IOException;
-
 public interface ListHierarchicalModel<T> extends HierarchicalModel<T>
 {
-    void addValue( Object instance ) throws IOException;
+    void addValue( Object instance );
 
-    MapHierarchicalModel<?> createChildMap() throws IOException;
+    MapHierarchicalModel<?> createChildMap();
 
 }

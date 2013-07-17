@@ -1,15 +1,14 @@
 package org.skyscreamer.yoga.listener;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
-import org.skyscreamer.yoga.selector.parser.SelectorParser;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class NavigationLinksListener implements RenderingListener
 {
@@ -21,7 +20,7 @@ public class NavigationLinksListener implements RenderingListener
     }
 
     @Override
-    public <T> void eventOccurred( RenderingEvent<T> event ) throws IOException
+    public void eventOccurred( RenderingEvent event )
     {
         Selector selector = event.getSelector();
         if (event.getType() != RenderingEventType.POJO_CHILD || selector.isInfluencedExternally())
@@ -29,45 +28,53 @@ public class NavigationLinksListener implements RenderingListener
             return;
         }
 
-        Class<T> instanceType = event.getValueType();
-        T instance = event.getValue();
+        Class<?> instanceType = event.getValueType();
+        Object instance = event.getValue();
 
         String urlSuffix = event.getRequestContext().getUrlSuffix();
 
         MapHierarchicalModel<?> navigationLinks = ((MapHierarchicalModel<?>) event.getModel())
                 .createChildMap( "navigationLinks" );
-        Collection<Property<T>> fieldNames = getNonSelectedFields( selector, instanceType, instance );
+        Collection<Property> fieldNames = getNonSelectedFields( selector, instanceType, instance );
 
-        SelectorParser selectorParser = event.getRequestContext().getSelectorParser();
-        String format;
-		if (selectorParser instanceof LinkedInSelectorParser) {
-            format = "%s?selector=:(%s)";
-        }
-        else if (selectorParser instanceof GDataSelectorParser) {
-            format = "%s?selector=%s";
-        }
-        else {
-            throw new IllegalStateException("Unknown selector type: " + selectorParser.getClass().getName());
-        }
-        for (Property<?> field : fieldNames)
+        for (Property field : fieldNames)
         {
             String fieldName = field.name();
             MapHierarchicalModel<?> navModel = navigationLinks.createChildMap( fieldName );
-            navModel.addProperty( SelectorParser.HREF, _hrefListener.getUrl( event, String.format( format, urlSuffix, fieldName ) ) );
+            String format;
+            if (event.getRequestContext().getSelectorParser() instanceof LinkedInSelectorParser) {
+                format = "%s?selector=:(%s)";
+            }
+            else if (event.getRequestContext().getSelectorParser() instanceof GDataSelectorParser) {
+                format = "%s?selector=%s";
+            }
+            else {
+                throw new IllegalStateException("Unknown selector type: " + event.getRequestContext().getSelectorParser().getClass().getName());
+            }
+            String hrefSuffixAndSelector = String.format( format, urlSuffix, fieldName );
+            _hrefListener.addUrl( instance, instanceType, hrefSuffixAndSelector, navModel,
+                    event.getRequestContext() );
             navModel.addProperty( "name", fieldName );
-            navModel.finished();
         }
     }
 
-    public <T> Collection<Property<T>> getNonSelectedFields( Selector selector, Class<T> instanceType,
+    public Collection<Property> getNonSelectedFields( Selector selector, Class<?> instanceType,
             Object instance )
     {
-        HashMap<String, Property<T>> fields = new HashMap<String, Property<T>>(
-                selector.getAllPossibleFieldMap( instanceType ) );
-        for (Property<T> selected : selector.getSelectedFields( instanceType ))
+        Collection<Property> fieldNames = new ArrayList<Property>(
+                selector.getAllPossibleFields( instanceType ) );
+        Iterable<Property> selectedFields = selector.getSelectedFields( instanceType );
+        for (Iterator<Property> iterator = fieldNames.iterator(); iterator.hasNext();)
         {
-            fields.remove( selected.name() );
+            Property property = iterator.next();
+            for (Property selected : selectedFields)
+            {
+                if (selected.name().equals( property.name() ))
+                {
+                    iterator.remove();
+                }
+            }
         }
-        return fields.values();
+        return fieldNames;
     }
 }
