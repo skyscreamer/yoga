@@ -8,11 +8,11 @@
 
     <context:annotation-config/>
 
-    <context:component-scan base-package="org.skyscreamer.yoga.demo.jersey.resources" use-default-filters="false">
+    <context:component-scan base-package="org.skyscreamer.yoga.demo.jaxrs.resources" use-default-filters="false">
         <context:include-filter type="annotation" expression="javax.ws.rs.Path"/>
         <context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider"/>
     </context:component-scan>
-    <context:component-scan base-package="org.skyscreamer.yoga.jersey" use-default-filters="false">
+    <context:component-scan base-package="org.skyscreamer.yoga.jaxrs" use-default-filters="false">
         <context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider"/>
         <context:include-filter type="annotation" expression="javax.ws.rs.Path"/>
     </context:component-scan>

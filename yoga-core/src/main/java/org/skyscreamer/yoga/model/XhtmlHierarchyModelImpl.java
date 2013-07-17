@@ -68,9 +68,4 @@ public class XhtmlHierarchyModelImpl implements MapHierarchicalModel<Element>, L
     {
         return this.element;
     }
-
-    public void finished()
-    {
-    }
-
 }

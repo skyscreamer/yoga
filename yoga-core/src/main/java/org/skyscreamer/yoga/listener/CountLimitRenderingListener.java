@@ -25,11 +25,6 @@ public class CountLimitRenderingListener implements RenderingListener
 
     public CountLimitRenderingListener( int maxCount )
     {
-        setMaxCount(maxCount);
-    }
-
-    public void setMaxCount(int maxCount)
-    {
         if (maxCount <= 0)
         {
             throw new YogaRuntimeException(
@@ -37,9 +32,9 @@ public class CountLimitRenderingListener implements RenderingListener
         }
         this.maxCount = maxCount;
     }
-    
+
     @Override
-    public <T> void eventOccurred( RenderingEvent<T> event )
+    public void eventOccurred( RenderingEvent event )
     {
         if (event.getType() != RenderingEventType.POJO_CHILD)
         {

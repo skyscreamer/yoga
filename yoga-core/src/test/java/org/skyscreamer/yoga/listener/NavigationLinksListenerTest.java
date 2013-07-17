@@ -11,7 +11,6 @@ import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 
-import java.io.IOException;
 import java.util.Map;
 
 public class NavigationLinksListenerTest
@@ -20,12 +19,12 @@ public class NavigationLinksListenerTest
             new DummyHttpServletRequest(), new DummyHttpServletResponse() );
 
     @Test
-    public void testBasic() throws IOException
+    public void testBasic()
     {
         BasicTestDataLeaf leaf = new BasicTestDataLeaf();
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
-        RenderingEvent<BasicTestDataLeaf> event = new RenderingEvent<BasicTestDataLeaf>( RenderingEventType.POJO_CHILD, model, leaf,
-        		BasicTestDataLeaf.class, requestContext, new CoreSelector(
+        RenderingEvent event = new RenderingEvent( RenderingEventType.POJO_CHILD, model, leaf,
+                leaf.getClass(), requestContext, new CoreSelector(
                         new DefaultEntityConfigurationRegistry() ) );
         new NavigationLinksListener().eventOccurred( event );
 

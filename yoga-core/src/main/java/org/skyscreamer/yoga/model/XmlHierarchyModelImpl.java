@@ -76,9 +76,4 @@ public class XmlHierarchyModelImpl implements MapHierarchicalModel<Element>, Lis
     {
         return element;
     }
-
-    public void finished()
-    {
-    }
-
 }

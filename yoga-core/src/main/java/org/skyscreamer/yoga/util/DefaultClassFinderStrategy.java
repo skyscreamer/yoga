@@ -2,10 +2,9 @@ package org.skyscreamer.yoga.util;
 
 public class DefaultClassFinderStrategy implements ClassFinderStrategy
 {
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> Class<T> findClass( T instance )
+    public Class<?> findClass( Object instance )
     {
-        return (Class<T>) (instance == null ? null : instance.getClass());
+        return instance == null ? null : instance.getClass();
     }
 }

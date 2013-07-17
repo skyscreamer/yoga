@@ -1,25 +1,24 @@
 package org.skyscreamer.yoga.listener;
 
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.skyscreamer.yoga.annotations.URITemplate;
 import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
 import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
+import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
+import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
-import org.skyscreamer.yoga.selector.Property;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.uri.URICreator;
-import org.skyscreamer.yoga.uri.URIDecorator;
 import org.skyscreamer.yoga.util.ValueReader;
 
 public class HrefListener implements RenderingListener
 {
 
+    private URICreator _uriCreator = new URICreator();
     private EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
-
-    private ConcurrentHashMap<Class<?>, String> templates = new ConcurrentHashMap<Class<?>, String>();
 
     public HrefListener()
     {
@@ -36,32 +35,38 @@ public class HrefListener implements RenderingListener
     }
 
     @Override
-    public <T> void eventOccurred( RenderingEvent<T> event ) throws IOException
+    public void eventOccurred( RenderingEvent event )
     {
-        if (event.getType() == RenderingEventType.POJO_CHILD)
+        if (event.getType() != RenderingEventType.POJO_CHILD)
         {
-            String url = getUrl( event, event.getRequestContext().getUrlSuffix() );
-            if( url != null )
-            {
-                ((MapHierarchicalModel<?>) event.getModel()).addProperty( SelectorParser.HREF, url );
-            }
+            return;
         }
+        YogaRequestContext requestContext = event.getRequestContext();
+        Class<?> valueType = event.getValueType();
+        MapHierarchicalModel<?> model = (MapHierarchicalModel<?>) event.getModel();
+
+        addUrl( event.getValue(), valueType, requestContext.getUrlSuffix(), model, requestContext );
     }
 
-    public <T> String getUrl( RenderingEvent<T> event, String suffix ) throws IOException
+    public void addUrl( Object value, Class<?> valueType, String urlSuffix,
+            MapHierarchicalModel<?> model, YogaRequestContext context )
     {
-        String urlTemplate = determineTemplate( event.getValueType() );
-        return urlTemplate != null ? getUrl( urlTemplate, suffix, event ) : null;
+        String urlTemplate = determineTemplate( valueType );
+
+        if (urlTemplate != null)
+        {
+            if (urlSuffix != null)
+            {
+                urlTemplate += "." + urlSuffix;
+            }
+            String url = getUrl( urlTemplate, value, valueType, context.getResponse() );
+            model.addProperty( SelectorParser.HREF, url );
+        }
     }
 
     protected String determineTemplate( Class<?> instanceType )
     {
-        String uriTemplate = templates.get(instanceType);
-
-        if(uriTemplate != null)
-        {
-            return uriTemplate;
-        }
+        String uriTemplate = null;
 
         YogaEntityConfiguration<?> entityConfiguration = _entityConfigurationRegistry == null ? null
                 : _entityConfigurationRegistry.getEntityConfiguration( instanceType );
@@ -77,47 +82,27 @@ public class HrefListener implements RenderingListener
             uriTemplate = instanceType.getAnnotation( URITemplate.class ).value();
         }
 
-        String existing = templates.putIfAbsent(instanceType, uriTemplate);
-        if(existing != null)
-        {
-            uriTemplate = existing;
-        }
-
         return uriTemplate;
     }
 
-    public <T> String getUrl( String uriTemplate, final String suffix, final RenderingEvent<T> event )
+    public String getUrl( String uriTemplate, final Object value, final Class<?> valueType,
+            HttpServletResponse response )
     {
-        String url = getUrlVal(uriTemplate, suffix, event);
-        return event.getRequestContext().getResponse().encodeURL(url);
-    }
-
-    protected <T> String getUrlVal(String uriTemplate, final String suffix, final RenderingEvent<T> event)
-    {
-        ValueReader reader = new ValueReader()
+        return _uriCreator.getHref( uriTemplate, response, new ValueReader()
         {
             @Override
-            public Object getValue( String propertyName )
+            public Object getValue( String property )
             {
-                Property<T> property = event.getSelector().getProperty( event.getValueType(), propertyName );
-                return property == null ? null : property.getValue( event.getValue() );
-            }
-        };
-        if(suffix != null) 
-        {
-            return URICreator.getHref( uriTemplate, reader, new URIDecorator()
-            {
-                
-                @Override
-                public StringBuilder decorate(StringBuilder uri)
+                try
                 {
-                    return uri.append(".").append(suffix);
+                    return PropertyUtils.getNestedProperty( value, property );
                 }
-            } );
-        }
-        else 
-        {
-            return URICreator.getHref( uriTemplate, reader );
-        }
+                catch (Exception e)
+                {
+                    throw new YogaRuntimeException( "Could not invoke getter for property "
+                            + property + " on class " + valueType.getName(), e );
+                }
+            }
+        } );
     }
 }

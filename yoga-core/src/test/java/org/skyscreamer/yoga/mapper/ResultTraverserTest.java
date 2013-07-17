@@ -16,7 +16,6 @@ import org.skyscreamer.yoga.test.model.basic.LeafConfiguration;
 import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,7 @@ public class ResultTraverserTest
     }
 
     @Test
-    public void testBasicCoreSelector() throws IOException
+    public void testBasicCoreSelector()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
@@ -50,7 +49,7 @@ public class ResultTraverserTest
     }
 
     @Test
-    public void testBasicFieldSelector() throws IOException
+    public void testBasicFieldSelector()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         input.setOther( "someValue" );
@@ -66,7 +65,7 @@ public class ResultTraverserTest
     }
 
     @Test
-    public void testBasicListField() throws IOException
+    public void testBasicListField()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         List<String> list = Arrays.asList( "someValue", "aSecondValue" );
@@ -83,7 +82,7 @@ public class ResultTraverserTest
     }
 
     @Test
-    public void testBasicCombinedSelctor() throws IOException
+    public void testBasicCombinedSelctor()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         input.setOther( "someValue" );
@@ -102,7 +101,7 @@ public class ResultTraverserTest
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testNodeCombinedSelector() throws IOException
+    public void testNodeCombinedSelector()
     {
         BasicTestDataNode input = new BasicTestDataNode();
         input.setLeaf( new BasicTestDataLeaf() );
@@ -124,7 +123,7 @@ public class ResultTraverserTest
     }
 
     @Test
-    public void testConfiguration() throws IOException
+    public void testConfiguration()
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();

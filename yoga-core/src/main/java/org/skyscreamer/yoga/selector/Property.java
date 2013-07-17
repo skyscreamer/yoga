@@ -2,13 +2,11 @@ package org.skyscreamer.yoga.selector;
 
 import java.lang.reflect.Method;
 
-public interface Property<T>
+public interface Property
 {
     String name();
 
-    Object getValue( T instance );
-
+    Object getValue( Object instance );
+    
     Method getReadMethod();
-
-    boolean isPrimitive();
 }

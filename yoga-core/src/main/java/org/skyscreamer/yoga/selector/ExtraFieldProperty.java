@@ -5,22 +5,19 @@ import java.lang.reflect.Method;
 
 import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
-import org.skyscreamer.yoga.util.ObjectUtil;
 
-public class ExtraFieldProperty<T> implements Property<T>
+public class ExtraFieldProperty implements Property
 {
 
     private String name;
-    private YogaEntityConfiguration<T> entityConfiguration;
+    private YogaEntityConfiguration<?> entityConfiguration;
     private Method method;
-	private boolean isPrimitive;
 
-    public ExtraFieldProperty( String name, YogaEntityConfiguration<T> entityConfiguration, Method method )
+    public ExtraFieldProperty( String name, YogaEntityConfiguration<?> entityConfiguration, Method method )
     {
         this.name = name;
         this.entityConfiguration = entityConfiguration;
         this.method = method;
-        this.isPrimitive = ObjectUtil.isPrimitive(method.getReturnType());
     }
 
     @Override
@@ -36,7 +33,7 @@ public class ExtraFieldProperty<T> implements Property<T>
     }
 
     @Override
-    public Object getValue( T instance )
+    public Object getValue( Object instance )
     {
         try {
             return getEntityConfigurationValue( method, entityConfiguration, instance );
@@ -45,7 +42,7 @@ public class ExtraFieldProperty<T> implements Property<T>
         }
     }
 
-    protected Object getEntityConfigurationValue( Method method, YogaEntityConfiguration<?> entityConfiguration, T instance )
+    protected Object getEntityConfigurationValue( Method method, YogaEntityConfiguration<?> entityConfiguration, Object instance )
             throws InvocationTargetException, IllegalAccessException
     {
         switch (method.getParameterTypes().length)
@@ -62,11 +59,5 @@ public class ExtraFieldProperty<T> implements Property<T>
                                 "An @ExtraField method can only have 0 or 1 parameters.  Method %s has %d",
                                 method.toString(), method.getParameterTypes().length ) );
         }
-    }
-
-	@Override
-    public boolean isPrimitive()
-    {
-	    return isPrimitive;
     }
 }
