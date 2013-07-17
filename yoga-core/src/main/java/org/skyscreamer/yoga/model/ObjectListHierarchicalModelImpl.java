@@ -26,4 +26,9 @@ public class ObjectListHierarchicalModelImpl implements ListHierarchicalModel<Li
     {
         return _list;
     }
+
+    public void finished()
+    {
+    }
+
 }

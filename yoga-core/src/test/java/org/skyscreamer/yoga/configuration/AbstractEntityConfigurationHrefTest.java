@@ -2,7 +2,6 @@ package org.skyscreamer.yoga.configuration;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 import org.skyscreamer.yoga.uri.URICreator;
 import org.skyscreamer.yoga.util.ValueReader;
 
@@ -12,7 +11,7 @@ public class AbstractEntityConfigurationHrefTest
     @Test
     public void testSimple()
     {
-        String href = new URICreator().getHref( "/foo/{id}", new DummyHttpServletResponse(),
+        String href = URICreator.getHref( "/foo/{id}",
                 new ValueReader()
                 {
 
@@ -29,7 +28,7 @@ public class AbstractEntityConfigurationHrefTest
     @Test
     public void test3()
     {
-        String href = new URICreator().getHref( "/{a}/foo/{b}/{c}", new DummyHttpServletResponse(),
+        String href = URICreator.getHref( "/{a}/foo/{b}/{c}",
                 new ValueReader()
                 {
                     @Override
