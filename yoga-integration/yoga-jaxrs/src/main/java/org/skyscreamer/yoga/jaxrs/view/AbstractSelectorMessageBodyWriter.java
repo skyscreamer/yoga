@@ -18,21 +18,27 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.selector.CoreSelector;
+import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
+import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 import org.skyscreamer.yoga.view.AbstractYogaView;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
 {
     protected ResultTraverser _resultTraverser = new ResultTraverser();
 
-    protected SelectorParser _selectorParser;
+    protected SelectorParser _selectorParser = new GDataSelectorParser();
 
     protected RenderingListenerRegistry _renderingListenerRegistry = new RenderingListenerRegistry();
 
-    protected CoreSelector _selector;
+    protected CoreSelector _selector = new CoreSelector();
     
-	protected ClassFinderStrategy _classFinderStrategy;
+    protected ClassFinderStrategy _classFinderStrategy;
+
+    {
+    	setClassFinderStrategy( new DefaultClassFinderStrategy() );
+    }
 
     @Context
     protected HttpServletRequest _request;
@@ -40,7 +46,6 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     @Context
     protected HttpServletResponse _response;
 
-    @Inject
     public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
         this._classFinderStrategy = classFinderStrategy;
@@ -50,20 +55,20 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     @Inject
     public void setSelectorParser( SelectorParser selectorParser )
     {
-    	this._selectorParser = selectorParser;
+        this._selectorParser = selectorParser;
     }
 
     @Inject
     public void setRenderingListenerRegistry( RenderingListenerRegistry renderingListenerRegistry ) 
     {
-		this._renderingListenerRegistry = renderingListenerRegistry;
-	}
+        this._renderingListenerRegistry = renderingListenerRegistry;
+    }
 
     @Inject
     public void setSelector( CoreSelector selector ) 
     {
-		this._selector = selector;
-	}
+        this._selector = selector;
+    }
 
     @Override
     public long getSize( Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4 )
