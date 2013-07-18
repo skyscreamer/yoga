@@ -1,5 +1,6 @@
 package org.skyscreamer.yoga.demo.jersey.resources;
 
+import javax.inject.Singleton;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -7,6 +8,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.hibernate.ObjectNotFoundException;
 
+@Singleton
 @Provider
 public class ResourceNotFoundException implements ExceptionMapper<ObjectNotFoundException>
 {

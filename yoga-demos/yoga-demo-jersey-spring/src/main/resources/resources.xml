@@ -7,13 +7,13 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <context:annotation-config/>
-
-    <context:component-scan base-package="org.skyscreamer.yoga.demo.jersey.resources" use-default-filters="false">
-        <context:include-filter type="annotation" expression="javax.ws.rs.Path"/>
-        <context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider"/>
+    <context:component-scan base-package="org.skyscreamer.yoga.demo.jersey.resources">
+        <context:include-filter type="annotation" expression="javax.inject.Singleton"/>
     </context:component-scan>
-    <context:component-scan base-package="org.skyscreamer.yoga.jersey" use-default-filters="false">
-        <context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider"/>
-        <context:include-filter type="annotation" expression="javax.ws.rs.Path"/>
+    <context:component-scan base-package="org.skyscreamer.yoga.jaxrs.view">
+        <context:include-filter type="annotation" expression="javax.inject.Singleton"/>
+    </context:component-scan>
+    <context:component-scan base-package="org.skyscreamer.yoga.jaxrs.resource">
+        <context:include-filter type="annotation" expression="javax.inject.Singleton"/>
     </context:component-scan>
 </beans>

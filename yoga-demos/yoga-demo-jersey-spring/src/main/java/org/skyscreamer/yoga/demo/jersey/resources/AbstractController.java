@@ -1,20 +1,21 @@
 package org.skyscreamer.yoga.demo.jersey.resources;
 
-import org.skyscreamer.yoga.demo.dao.GenericDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.lang.reflect.ParameterizedType;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
-import java.lang.reflect.ParameterizedType;
+
+import org.skyscreamer.yoga.demo.dao.GenericDao;
 
 /**
  * Created by IntelliJ IDEA. User: corby
  */
 public abstract class AbstractController<T>
 {
-    @Autowired
+    @Inject
     GenericDao _genericDao;
 
     Class<T> _entityClass = returnedClass();

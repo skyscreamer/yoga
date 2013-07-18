@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.demo.test.jersey.resources.AbstractController;
+import org.skyscreamer.yoga.jaxrs.experimental.view.StreamingJsonSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jaxrs.resource.MetaDataController;
 import org.skyscreamer.yoga.jaxrs.view.SelectorBuilderMessageBodyWriter;
-import org.skyscreamer.yoga.jaxrs.view.StreamingJsonSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jaxrs.view.XhtmlSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jaxrs.view.XmlSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jersey.config.URIExtensionsConfig;
