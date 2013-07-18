@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <!DOCTYPE urlrewrite
+    PUBLIC "-//tuckey.org//DTD UrlRewrite 2.6//EN"
+    "http://www.tuckey.org/res/dtds/urlrewrite2.6.dtd">
+
+<urlrewrite>
+
+	<rule>
+		<from>^/user/(favoriteArtists|friends|isFriend)/([0-9]+)\.([a-z]+)</from>
+		<to>/user/$2.$3?selector=$1</to>
+	</rule>
+
+	<outbound-rule>
+		<from>^/user/([0-9]+).(json|xml|xhtml)\?selector=(favoriteArtists|friends|isFriend)$</from>
+		<to>/user/$3/$1.$2</to>
+	</outbound-rule>
+</urlrewrite>

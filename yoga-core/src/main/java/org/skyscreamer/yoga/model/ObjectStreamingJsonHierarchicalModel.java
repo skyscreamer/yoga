@@ -54,7 +54,7 @@ public class ObjectStreamingJsonHierarchicalModel implements
     public MapHierarchicalModel<JsonGenerator> createChildMap(String name) throws IOException
     {
         generator.writeFieldName(name);
-        start();
+        this.start();
         return this;
     }
 

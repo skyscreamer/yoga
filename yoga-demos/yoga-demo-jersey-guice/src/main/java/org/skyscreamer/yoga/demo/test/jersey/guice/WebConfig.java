@@ -5,10 +5,12 @@ import java.util.Map;
 
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.demo.test.jersey.resources.AbstractController;
+import org.skyscreamer.yoga.jaxrs.resource.MetaDataController;
+import org.skyscreamer.yoga.jaxrs.view.SelectorBuilderMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.StreamingJsonSelectorMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.XhtmlSelectorMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.XmlSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jersey.config.URIExtensionsConfig;
-import org.skyscreamer.yoga.jersey.view.JsonSelectorMessageBodyWriter;
-import org.skyscreamer.yoga.jersey.view.SelectorBuilderMessageBodyWriter;
-import org.skyscreamer.yoga.jersey.view.XmlSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.metadata.MetaDataRegistry;
 import org.skyscreamer.yoga.selector.CoreSelector;
@@ -33,28 +35,32 @@ public class WebConfig extends GuiceServletContextListener {
 		return Guice.createInjector(new ServletModule() {
 			@Override
 			protected void configureServlets() {
-				ApplicationContext spring = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
 				Map<String, String> params = new HashMap<String, String>();
 				params.put("javax.ws.rs.Application", URIExtensionsConfig.class.getName());
 				params.put("com.sun.jersey.config.property.packages", AbstractController.class.getPackage().getName());
 
-				bindAll(spring, GenericDao.class, 
-						XmlSelectorView.class, JsonSelectorView.class, SelectorBuilderView.class, 
-						CoreSelector.class, MetaDataRegistry.class, ClassFinderStrategy.class,
-						SelectorParser.class, RenderingListenerRegistry.class );
+				// This part is a bit hack-tastic.  We don't have full Guice configuration, so let's let Spring
+				// do its thing with the database components and other configuration.  This allows us to test 
+				// the Writer/Controller aspects that are specific to Jersey/Yoga integration.  It's probably
+				// worth while doing a full guice / hibernate integration at some point.
+				ApplicationContext spring = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+				Class<?>[] types = { GenericDao.class, XmlSelectorView.class, JsonSelectorView.class,
+						SelectorBuilderView.class, CoreSelector.class, MetaDataRegistry.class, 
+						ClassFinderStrategy.class, SelectorParser.class, 
+						RenderingListenerRegistry.class };
+
+				for(Class<?> type : types) 
+					bind(spring, type);
 				
-				bind(JsonSelectorMessageBodyWriter.class);
+				bind(StreamingJsonSelectorMessageBodyWriter.class);
 				bind(SelectorBuilderMessageBodyWriter.class);
 				bind(XmlSelectorMessageBodyWriter.class);
+				bind(XhtmlSelectorMessageBodyWriter.class);
+				bind(MetaDataController.class);
+				
 				serve("*.yoga", "*.json", "*.xml", "*.xhtml").with(GuiceContainer.class, params);
 			}
 			
-			private void bindAll(ApplicationContext spring, Class<?> ... types) 
-			{
-				for(Class<?> type : types) 
-					bind(spring, type);
-			}
-
 			private <T> void bind(ApplicationContext spring, Class<T> type)
 			{
 				bind(type).toInstance(spring.getBean(type));

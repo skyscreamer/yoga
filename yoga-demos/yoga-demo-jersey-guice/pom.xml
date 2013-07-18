@@ -62,6 +62,11 @@
         </dependency>
         <dependency>
             <groupId>org.skyscreamer</groupId>
+            <artifactId>yoga-jaxrs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
             <artifactId>yoga-demo-shared</artifactId>
             <version>${project.version}</version>
         </dependency>

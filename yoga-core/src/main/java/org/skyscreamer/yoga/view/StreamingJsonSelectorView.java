@@ -12,7 +12,7 @@ import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.ObjectStreamingJsonHierarchicalModel;
 import org.skyscreamer.yoga.selector.Selector;
 
-public class StreamingJsonYogaView extends AbstractYogaView
+public class StreamingJsonSelectorView extends AbstractYogaView
 {
     JsonFactory jsonFactory = new JsonFactory();
 

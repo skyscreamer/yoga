@@ -30,13 +30,16 @@ public class ResultTraverser
             // TODO: what should we do about a Map?
             if (instance instanceof Iterable)
             {
-                traverseIterable( (Iterable<?>) instance, selector, (ListHierarchicalModel<?>) model,
-                        context );
+                traverseIterable( (Iterable<?>) instance, selector, (ListHierarchicalModel<?>) model, context );
             }
             else
             {
                 traversePojo( instance, selector, (MapHierarchicalModel<?>) model, context );
             }
+        } 
+        else 
+        {
+        	model.finished();
         }
     }
 
@@ -57,8 +60,8 @@ public class ResultTraverser
                 }
             }
             context.emitEvent( model, iterable, context, selector );
-            model.finished();
         }
+        model.finished();
     }
 
     public <T> void traversePojo( T instance, Selector selector, MapHierarchicalModel<?> model,
@@ -68,10 +71,9 @@ public class ResultTraverser
         {
             Class<T> instanceType = _classFinderStrategy.findClass( instance );
             addInstanceFields( instance, instanceType, model, selector, context );
-
             context.emitEvent( model, instance, instanceType, context, selector );
-            model.finished();
         }
+        model.finished();
     }
 
     protected <T> void addInstanceFields( T instance, Class<T> instanceType,

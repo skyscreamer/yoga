@@ -57,6 +57,7 @@ public class NavigationLinksListener implements RenderingListener
             navModel.addProperty( "name", fieldName );
             navModel.finished();
         }
+        navigationLinks.finished();
     }
 
     public <T> Collection<Property<T>> getNonSelectedFields( Selector selector, Class<T> instanceType,

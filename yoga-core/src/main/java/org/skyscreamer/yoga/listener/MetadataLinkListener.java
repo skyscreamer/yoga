@@ -29,7 +29,10 @@ public class MetadataLinkListener implements RenderingListener
 
         if (url != null)
         {
-           ( (MapHierarchicalModel<?>) event.getModel() ).createChildMap( "metadata" ).addProperty( "href", url );
+           MapHierarchicalModel<?> mapHierarchicalModel = (MapHierarchicalModel<?>) event.getModel();
+		   MapHierarchicalModel<?> childMap = mapHierarchicalModel.createChildMap( "metadata" );
+		   childMap.addProperty( "href", url );
+		   childMap.finished();
         }
     }
 
