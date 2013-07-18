@@ -35,7 +35,7 @@ public class WebConfig extends GuiceServletContextListener {
 			protected void configureServlets() {
 				ApplicationContext spring = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("com.sun.jersey.config.property.resourceConfigClass", URIExtensionsConfig.class.getName());
+				params.put("javax.ws.rs.Application", URIExtensionsConfig.class.getName());
 				params.put("com.sun.jersey.config.property.packages", AbstractController.class.getPackage().getName());
 
 				bindAll(spring, GenericDao.class, 
@@ -46,7 +46,7 @@ public class WebConfig extends GuiceServletContextListener {
 				bind(JsonSelectorMessageBodyWriter.class);
 				bind(SelectorBuilderMessageBodyWriter.class);
 				bind(XmlSelectorMessageBodyWriter.class);
-				serve("/*").with(GuiceContainer.class, params);
+				serve("*.yoga", "*.json", "*.xml", "*.xhtml").with(GuiceContainer.class, params);
 			}
 			
 			private void bindAll(ApplicationContext spring, Class<?> ... types) 

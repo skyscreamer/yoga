@@ -77,12 +77,14 @@ public class HrefListener implements RenderingListener
             uriTemplate = instanceType.getAnnotation( URITemplate.class ).value();
         }
 
-        String existing = templates.putIfAbsent(instanceType, uriTemplate);
-        if(existing != null)
+        if(uriTemplate != null)
         {
-            uriTemplate = existing;
+	        String existing = templates.putIfAbsent(instanceType, uriTemplate);
+	        if(existing != null)
+	        {
+	            uriTemplate = existing;
+	        }
         }
-
         return uriTemplate;
     }
 

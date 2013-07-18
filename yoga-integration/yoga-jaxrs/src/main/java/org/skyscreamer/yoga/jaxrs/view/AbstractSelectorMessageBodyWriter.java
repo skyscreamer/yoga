@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import javax.inject.Inject;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
@@ -46,25 +46,26 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     @Context
     protected HttpServletResponse _response;
 
+    @Resource
     public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
         this._classFinderStrategy = classFinderStrategy;
         _resultTraverser.setClassFinderStrategy( classFinderStrategy );
     }
 
-    @Inject
+    @Resource
     public void setSelectorParser( SelectorParser selectorParser )
     {
         this._selectorParser = selectorParser;
     }
 
-    @Inject
+    @Resource
     public void setRenderingListenerRegistry( RenderingListenerRegistry renderingListenerRegistry ) 
     {
         this._renderingListenerRegistry = renderingListenerRegistry;
     }
 
-    @Inject
+    @Resource
     public void setSelector( CoreSelector selector ) 
     {
         this._selector = selector;
