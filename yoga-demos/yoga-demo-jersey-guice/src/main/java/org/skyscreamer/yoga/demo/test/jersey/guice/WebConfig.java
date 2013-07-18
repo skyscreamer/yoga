@@ -18,7 +18,7 @@ import org.skyscreamer.yoga.view.JsonSelectorView;
 import org.skyscreamer.yoga.view.SelectorBuilderView;
 import org.skyscreamer.yoga.view.XmlSelectorView;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -33,7 +33,7 @@ public class WebConfig extends GuiceServletContextListener {
 		return Guice.createInjector(new ServletModule() {
 			@Override
 			protected void configureServlets() {
-				ApplicationContext spring = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
+				ApplicationContext spring = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
 				Map<String, String> params = new HashMap<String, String>();
 				params.put("javax.ws.rs.Application", URIExtensionsConfig.class.getName());
 				params.put("com.sun.jersey.config.property.packages", AbstractController.class.getPackage().getName());
