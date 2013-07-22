@@ -97,6 +97,7 @@
     </build>
     <properties>
         <spring.version>3.0.3.RELEASE</spring.version>
+        <jackson.version>1.9.12</jackson.version>
     </properties>
  
     <modules>

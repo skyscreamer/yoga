@@ -12,29 +12,34 @@ import org.skyscreamer.yoga.selector.Selector;
 
 public class JsonSelectorView extends AbstractYogaView
 {
+    private ObjectMapper objectMapper;
+
+    public JsonSelectorView()
+    {
+        this.objectMapper = createObjectMapper();
+    }
+
     @Override
     public void render( Selector selector, Object value, YogaRequestContext requestContext,
             OutputStream outputStream ) throws IOException
     {
-        HierarchicalModel<?> model = getModel( value );
-        _resultTraverser.traverse( value, selector, model, requestContext );
-        getObjectMapper().writeValue( outputStream, model.getUnderlyingModel() );
-    }
-
-    protected HierarchicalModel<?> getModel(Object value)
-    {
+        HierarchicalModel<?> model = null;
         if (value instanceof Iterable<?>)
         {
-            return new ObjectListHierarchicalModelImpl();
+            ObjectListHierarchicalModelImpl listModel = new ObjectListHierarchicalModelImpl();
+            _resultTraverser.traverseIterable((Iterable<?>) value, selector, listModel, requestContext);
+            model = listModel;
         }
         else
         {
-            return new ObjectMapHierarchicalModelImpl();
+            ObjectMapHierarchicalModelImpl mapModel = new ObjectMapHierarchicalModelImpl();
+            _resultTraverser.traversePojo(value, selector, mapModel, requestContext);
+            model = mapModel;
         }
-
+        objectMapper.writeValue( outputStream, model.getUnderlyingModel() );
     }
 
-    protected ObjectMapper getObjectMapper()
+    protected ObjectMapper createObjectMapper()
     {
         return new ObjectMapper();
     }
