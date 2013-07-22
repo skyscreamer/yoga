@@ -9,14 +9,14 @@ public class SelectorResolver
 {
 
     protected SelectorParser _selectorParser;
-    protected MapSelector _baseSelector = new CoreSelector();
+    protected CoreSelector _baseSelector = new CoreSelector();
     protected String _selectorParameterName = "selector";
     
     public SelectorResolver()
     {
     }
 
-    public SelectorResolver(SelectorParser selectorParser, MapSelector baseSelector)
+    public SelectorResolver(SelectorParser selectorParser, CoreSelector baseSelector)
     {
         super();
         this._selectorParser = selectorParser;
@@ -33,12 +33,12 @@ public class SelectorResolver
         this._selectorParser = selectorParser;
     }
 
-    public MapSelector getBaseSelector()
+    public CoreSelector getBaseSelector()
     {
         return _baseSelector;
     }
 
-    public void setBaseSelector( MapSelector baseSelector )
+    public void setBaseSelector( CoreSelector baseSelector )
     {
         this._baseSelector = baseSelector;
     }

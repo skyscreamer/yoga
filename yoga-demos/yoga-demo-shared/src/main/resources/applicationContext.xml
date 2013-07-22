@@ -2,9 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
     xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-                        http://www.springframework.org/schema/jdbc    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+                        http://www.springframework.org/schema/jdbc    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                        http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:annotation-config />
     <context:component-scan base-package="org.skyscreamer.yoga.demo">
@@ -14,6 +16,8 @@
 
     <!-- DATABASE CONFIG START -->
     <jdbc:embedded-database id="dataSource" type="H2" />
+
+    <tx:annotation-driven />
 
     <bean id="sessionFactory"
         class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
@@ -90,18 +94,19 @@
     <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener"
         p:entityConfigurationRegistry-ref="entityConfigurationRegistry" />
 
+    <bean id="countLimiter" class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
+        <constructor-arg value="2000" />
+    </bean>
+
     <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
         <constructor-arg>
             <list>
-                <bean class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
-                    <constructor-arg value="2000" />
-                </bean>
+                <ref bean="countLimiter" />
                 <ref bean="hrefListener" />
                 <bean class="org.skyscreamer.yoga.listener.SelectorBuilderListener" />
                 <bean class="org.skyscreamer.yoga.listener.NavigationLinksListener"
                     p:hrefListener-ref="hrefListener" />
-                <bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"
-                    p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>
+                <bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"/>
                 <bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"
                     p:metaDataRegistry-ref="metaDataService" />
             </list>

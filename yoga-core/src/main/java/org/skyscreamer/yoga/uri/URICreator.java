@@ -1,19 +1,15 @@
 package org.skyscreamer.yoga.uri;
 
-import org.skyscreamer.yoga.util.ValueReader;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.skyscreamer.yoga.util.ValueReader;
 
 public class URICreator
 {
     private static Pattern _uriTemplatePattern = Pattern.compile( "\\{[a-zA-Z0-9_]+\\}" );
 
-    private List<URIDecorator> decorators;
-
-    public String getHref( String uriTemplate, HttpServletResponse response, ValueReader model )
+    public static String getHref( String uriTemplate, ValueReader model, URIDecorator... decorators )
     {
         Matcher matcher = _uriTemplatePattern.matcher( uriTemplate );
         int start = 0;
@@ -27,30 +23,11 @@ public class URICreator
             start = matcher.end();
         }
         href.append( uriTemplate.substring( start ) );
-        return response.encodeURL( decorate( href.toString() ) );
-    }
-
-    protected String decorate( String uri )
-    {
-        if ( decorators == null )
-        {
-            return uri;
-        }
-
         for ( URIDecorator uriDecorator : decorators )
         {
-            uri = uriDecorator.decorate( uri );
+            uriDecorator.decorate( href );
         }
-        return uri;
-    }
 
-    public void setDecorators( List<URIDecorator> decorators )
-    {
-        this.decorators = decorators;
-    }
-
-    public List<URIDecorator> getDecorators()
-    {
-        return decorators;
+        return href.toString();
     }
 }
