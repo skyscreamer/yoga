@@ -43,4 +43,8 @@ public class ObjectMapHierarchicalModelImpl implements MapHierarchicalModel<Map<
     {
         return _objectTree;
     }
+
+    public void finished()
+    {
+    }
 }

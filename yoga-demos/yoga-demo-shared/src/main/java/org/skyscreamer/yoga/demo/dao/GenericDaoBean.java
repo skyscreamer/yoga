@@ -2,8 +2,9 @@ package org.skyscreamer.yoga.demo.dao;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.hibernate.Hibernate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GenericDaoBean implements GenericDao
 {
 
-    @Autowired
+    @Inject
     HibernateTemplate hibernateTemplate;
 
     @Override

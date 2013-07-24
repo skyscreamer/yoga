@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.listener;
 
+import java.io.IOException;
+
 import org.skyscreamer.yoga.metadata.MetaDataRegistry;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 
@@ -13,7 +15,7 @@ public class MetadataLinkListener implements RenderingListener
     }
 
     @Override
-    public void eventOccurred( RenderingEvent event )
+    public <T> void eventOccurred( RenderingEvent<T> event ) throws IOException
     {
         if (event.getType() != RenderingEventType.POJO_CHILD || event.getSelector().isInfluencedExternally())
         {
@@ -27,7 +29,10 @@ public class MetadataLinkListener implements RenderingListener
 
         if (url != null)
         {
-           ( (MapHierarchicalModel<?>) event.getModel() ).createChildMap( "metadata" ).addProperty( "href", url );
+           MapHierarchicalModel<?> mapHierarchicalModel = (MapHierarchicalModel<?>) event.getModel();
+		   MapHierarchicalModel<?> childMap = mapHierarchicalModel.createChildMap( "metadata" );
+		   childMap.addProperty( "href", url );
+		   childMap.finished();
         }
     }
 

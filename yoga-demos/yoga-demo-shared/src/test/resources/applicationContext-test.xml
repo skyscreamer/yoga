@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                        http://www.springframework.org/schema/jdbc    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+  
+<!-- Uncomment this to test out the custom configuration for album and song
+    <bean id="entityConfigurationRegistry" class="org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry">
+        <constructor-arg>
+            <list>
+                <bean class="org.skyscreamer.yoga.demo.dto.UserConfiguration" />
+                <bean class="org.skyscreamer.yoga.demo.dto.AlbumConfiguration" />
+                <bean class="org.skyscreamer.yoga.demo.dto.SongConfiguration" />
+            </list>
+        </constructor-arg>
+    </bean>
+ -->
+
+  
+    <bean name="json.streaming.view" parent="abstract.view" class="org.skyscreamer.yoga.view.StreamingJsonYogaView" />
+</beans>
