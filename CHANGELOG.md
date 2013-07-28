@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.1 - 2013-07-28
+--------------------------
+ - Removed Spring dependencies from JAX-RS and Jersey integration libraries
+ - Moved demo resources into shared library
+ - Added some sensible configuration defaults
+
 Version 1.0.0 - 2013-06-22
 --------------------------
  - Our official 1.0 release!
