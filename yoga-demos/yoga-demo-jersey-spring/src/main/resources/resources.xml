@@ -15,5 +15,8 @@
     <context:component-scan base-package="org.skyscreamer.yoga.jaxrs.resource" >
         <context:include-filter type="annotation" expression="javax.inject.Singleton"/>
     </context:component-scan>
+    <context:component-scan base-package="org.skyscreamer.yoga.jaxrs.exceptionhandlers" >
+        <context:include-filter type="annotation" expression="javax.inject.Singleton"/>
+    </context:component-scan>
 
 </beans>

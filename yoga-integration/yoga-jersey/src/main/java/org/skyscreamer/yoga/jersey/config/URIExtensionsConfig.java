@@ -18,20 +18,20 @@ public class URIExtensionsConfig extends PackagesResourceConfig
 
     private Map<String, MediaType> mediaTypeMap;
 
-	public URIExtensionsConfig()
-	{
-		super();
-	}
+    public URIExtensionsConfig()
+    {
+        super();
+    }
 
-	public URIExtensionsConfig(Map<String, Object> props)
-	{
-		super(props);
-	}
+    public URIExtensionsConfig(Map<String, Object> props)
+    {
+        super(props);
+    }
 
-	public URIExtensionsConfig(String[] paths)
-	{
-		super(paths);
-	}
+    public URIExtensionsConfig(String[] paths)
+    {
+        super(paths);
+    }
 
     @Override
     public Map<String, MediaType> getMediaTypeMappings()

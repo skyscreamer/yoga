@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.jersey.resources;
+package org.skyscreamer.yoga.jaxrs.exceptionhandlers;
 
 import javax.inject.Singleton;
 import javax.ws.rs.core.MediaType;

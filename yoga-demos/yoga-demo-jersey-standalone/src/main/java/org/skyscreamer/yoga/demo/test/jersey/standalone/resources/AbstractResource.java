@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.test.jersey.resources;
+package org.skyscreamer.yoga.demo.test.jersey.standalone.resources;
 
 import static org.skyscreamer.yoga.demo.util.TypeUtils.returnedClass;
 
@@ -7,25 +7,24 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import org.skyscreamer.yoga.demo.dao.GenericDao;
+import org.skyscreamer.yoga.demo.test.jersey.standalone.DemoData;
 
-import com.google.inject.Inject;
-
-/**
- * Created by IntelliJ IDEA. User: corby
- */
-public abstract class AbstractController<T>
+public class AbstractResource<T>
 {
-    @Inject
-    GenericDao _genericDao;
 
+    DemoData demoData;
     Class<T> _entityClass = returnedClass( getClass() );
 
+    public AbstractResource( DemoData demoData )
+    {
+        this.demoData = demoData;
+    }
+    
     @GET
     @Path("/{id}")
     public T get( @PathParam("id") long id, @QueryParam("selector") String selectorString )
     {
-        return _genericDao.find( _entityClass, id );
+        return demoData.get( _entityClass, id );
     }
 
 }

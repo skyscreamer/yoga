@@ -10,7 +10,7 @@ import org.hibernate.ObjectNotFoundException;
 
 @Singleton
 @Provider
-public class ResourceNotFoundException implements ExceptionMapper<ObjectNotFoundException>
+public class ResourceNotFoundExceptionMapper implements ExceptionMapper<ObjectNotFoundException>
 {
     @Override
     public Response toResponse( ObjectNotFoundException exception )
