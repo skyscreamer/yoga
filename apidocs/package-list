@@ -4,6 +4,7 @@ org.skyscreamer.yoga.configuration
 org.skyscreamer.yoga.exceptions
 org.skyscreamer.yoga.jaxrs.resource
 org.skyscreamer.yoga.jaxrs.view
+org.skyscreamer.yoga.jersey.config
 org.skyscreamer.yoga.listener
 org.skyscreamer.yoga.mapper
 org.skyscreamer.yoga.metadata
