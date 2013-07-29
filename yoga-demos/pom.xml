@@ -18,6 +18,7 @@
         <module>yoga-demo-shared</module>
         <module>yoga-demo-springmvc</module>
         <module>yoga-demo-resteasy</module>
+        <module>yoga-demo-jersey-standalone</module>
         <module>yoga-demo-jersey-spring</module>
         <module>yoga-demo-jersey-guice</module>
     </modules>
