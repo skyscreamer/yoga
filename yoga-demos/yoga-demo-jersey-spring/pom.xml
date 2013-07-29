@@ -221,7 +221,7 @@
         <repository>
             <id>maven-repos</id>
             <name>Glassfish Repos</name>
-            <url>http://maven.java.net</url>
+            <url>https://maven.java.net</url>
         </repository>
     </repositories>
 
