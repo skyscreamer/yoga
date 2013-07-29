@@ -1,6 +1,7 @@
 package org.skyscreamer.yoga.jaxrs.resource;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import org.skyscreamer.yoga.metadata.MetaDataRegistry;
 import org.skyscreamer.yoga.metadata.TypeMetaData;
 
+@Singleton
 @Path("/metadata/")
 public class MetaDataController
 {

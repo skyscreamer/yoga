@@ -113,4 +113,24 @@ public class UserControllerTest
         } 
         Assert.fail( "Expected this query to fail with a 500 error caused by an EntityCountExceededException" );
     }
+    
+    @Test
+    public void testMetaData() throws Exception
+    {
+        String expected  = "{\"propertyMetaData\":[{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"favoriteArtists\"," +
+                "\"navigationLinks\":{},\"isCore\":false,\"type\":\"Artist[]\",\"href\":\"/metadata/artist.json\"}," +
+                "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"friends\",\"navigationLinks\":{}," +
+                "\"isCore\":false,\"type\":\"User[]\",\"href\":\"/metadata/user.json\"}," +
+                "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"id\",\"navigationLinks\":{},\"isCore\":true,\"type\":\"long\"}," +
+                "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"isFriend\",\"navigationLinks\":{}," +
+                "\"isCore\":false,\"type\":\"boolean\"},{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"]," +
+                "\"name\":\"name\",\"navigationLinks\":{},\"isCore\":true,\"type\":\"String\"}," +
+                "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"recommendedAlbums\",\"navigationLinks\":{}," +
+                "\"isCore\":false,\"type\":\"Album[]\",\"href\":\"/metadata/album.json\"}]," +
+                "\"definition\":[\"name\",\"propertyMetaData\"],\"name\":\"User\",\"navigationLinks\":{}}";
+        
+        JSONObject data = getJSONObject( "/metadata/user", null );
+        System.out.println( data );
+        JSONAssert.assertEquals( expected, data, false );
+    }
 }
