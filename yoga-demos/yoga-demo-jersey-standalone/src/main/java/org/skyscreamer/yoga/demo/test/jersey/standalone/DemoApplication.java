@@ -1,28 +1,26 @@
 package org.skyscreamer.yoga.demo.test.jersey.standalone;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import org.skyscreamer.yoga.annotations.ExtraField;
 import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
 import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
+import org.skyscreamer.yoga.demo.dao.inmemory.DemoData;
+import org.skyscreamer.yoga.demo.dao.inmemory.DemoDataGenericDao;
 import org.skyscreamer.yoga.demo.dto.UserConfiguration;
+import org.skyscreamer.yoga.demo.jaxrs.resources.AlbumResource;
+import org.skyscreamer.yoga.demo.jaxrs.resources.ArtistResource;
+import org.skyscreamer.yoga.demo.jaxrs.resources.SongResource;
+import org.skyscreamer.yoga.demo.jaxrs.resources.UserResource;
 import org.skyscreamer.yoga.demo.model.Album;
 import org.skyscreamer.yoga.demo.model.Artist;
 import org.skyscreamer.yoga.demo.model.Song;
 import org.skyscreamer.yoga.demo.model.User;
 import org.skyscreamer.yoga.demo.test.BeanContext;
-import org.skyscreamer.yoga.demo.test.jersey.standalone.dao.DemoData;
-import org.skyscreamer.yoga.demo.test.jersey.standalone.dao.DemoDataGenericDao;
-import org.skyscreamer.yoga.demo.test.jersey.standalone.resources.AlbumResource;
-import org.skyscreamer.yoga.demo.test.jersey.standalone.resources.ArtistResource;
-import org.skyscreamer.yoga.demo.test.jersey.standalone.resources.SongResource;
-import org.skyscreamer.yoga.demo.test.jersey.standalone.resources.UserResource;
 import org.skyscreamer.yoga.demo.util.TestUtil;
 import org.skyscreamer.yoga.jaxrs.resource.MetaDataController;
 import org.skyscreamer.yoga.jaxrs.view.AbstractSelectorMessageBodyWriter;

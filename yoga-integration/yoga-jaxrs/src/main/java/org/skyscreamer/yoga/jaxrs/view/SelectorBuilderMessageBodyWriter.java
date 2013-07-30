@@ -13,7 +13,7 @@ import org.skyscreamer.yoga.view.SelectorBuilderView;
 @Produces(MediaType.TEXT_HTML)
 public class SelectorBuilderMessageBodyWriter extends AbstractSelectorMessageBodyWriter {
     @Override
-    protected AbstractYogaView getView()
+    protected AbstractYogaView createView()
     {
         return new SelectorBuilderView();
     }

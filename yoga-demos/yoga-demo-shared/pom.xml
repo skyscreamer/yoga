@@ -109,6 +109,12 @@
             <version>1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.tuckey</groupId>
+            <artifactId>urlrewritefilter</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
         <!-- These are added so that configuration is easier in the children. -->
         <dependency>
             <groupId>org.mortbay.jetty</groupId>

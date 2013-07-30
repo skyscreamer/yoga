@@ -14,7 +14,7 @@ import org.skyscreamer.yoga.view.StreamingJsonSelectorView;
 public class StreamingJsonSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter
 {
     @Override
-    protected AbstractYogaView getView()
+    protected AbstractYogaView createView()
     {
         return new StreamingJsonSelectorView();
     }

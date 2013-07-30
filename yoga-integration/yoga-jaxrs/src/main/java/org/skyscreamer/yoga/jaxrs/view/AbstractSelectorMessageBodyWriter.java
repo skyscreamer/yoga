@@ -26,49 +26,53 @@ import org.skyscreamer.yoga.view.AbstractYogaView;
 
 public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWriter<Object>
 {
-    protected ResultTraverser _resultTraverser = new ResultTraverser();
-
-    protected SelectorParser _selectorParser = new GDataSelectorParser();
-
-    protected RenderingListenerRegistry _renderingListenerRegistry = new RenderingListenerRegistry();
-
-    protected CoreSelector _selector = new CoreSelector();
-    
-    protected ClassFinderStrategy _classFinderStrategy;
-
-    {
-    	setClassFinderStrategy( new DefaultClassFinderStrategy() );
-    }
-
     @Context
     protected HttpServletRequest _request;
 
     @Context
     protected HttpServletResponse _response;
 
+    protected AbstractYogaView view;
+
+    public AbstractSelectorMessageBodyWriter()
+    {
+        view = createView();
+        updateDefaults();
+    }
+
+
+    protected void updateDefaults()
+    {
+        view.setResultTraverser( new ResultTraverser() );
+        view.setSelectorParser( new GDataSelectorParser() );
+        view.setSelector( new CoreSelector() );
+        view.setRegistry( new RenderingListenerRegistry() );
+        view.setClassFinderStrategy( new DefaultClassFinderStrategy() );
+    }
+    
+
     @Inject
     public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
-        this._classFinderStrategy = classFinderStrategy;
-        _resultTraverser.setClassFinderStrategy( classFinderStrategy );
+        view.setClassFinderStrategy( classFinderStrategy );
     }
 
     @Inject
     public void setSelectorParser( SelectorParser selectorParser )
     {
-        this._selectorParser = selectorParser;
+        view.setSelectorParser( selectorParser );
     }
 
     @Inject
     public void setRenderingListenerRegistry( RenderingListenerRegistry renderingListenerRegistry ) 
     {
-        this._renderingListenerRegistry = renderingListenerRegistry;
+        view.setRegistry( renderingListenerRegistry );
     }
 
     @Inject
     public void setSelector( CoreSelector selector ) 
     {
-        this._selector = selector;
+        view.setSelector( selector );
     }
 
     @Override
@@ -90,20 +94,7 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
     {
         try
         {
-            AbstractYogaView view = getView();
-            view.setResultTraverser( _resultTraverser );
-            view.setSelectorParser( _selectorParser );
-            view.setSelector( _selector );
-            view.setRegistry( _renderingListenerRegistry );
             view.render( _request, _response, t, entityStream );
-            if ( _classFinderStrategy != null )
-            {
-                view.setClassFinderStrategy( _classFinderStrategy );
-            }
-        }
-        catch (RuntimeException e)
-        {
-            throw e;
         }
         catch (Exception e)
         {
@@ -111,5 +102,5 @@ public abstract class AbstractSelectorMessageBodyWriter implements MessageBodyWr
         }
     }
 
-    protected abstract AbstractYogaView getView();
+    protected abstract AbstractYogaView createView();
 }

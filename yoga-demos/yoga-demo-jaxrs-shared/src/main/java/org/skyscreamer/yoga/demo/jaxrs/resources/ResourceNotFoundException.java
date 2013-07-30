@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.test.jersey.resources;
+package org.skyscreamer.yoga.demo.jaxrs.resources;
 
 import javax.inject.Singleton;
 import javax.ws.rs.core.MediaType;
@@ -10,7 +10,7 @@ import org.hibernate.ObjectNotFoundException;
 
 @Singleton
 @Provider
-public class ResourceNotFoundExceptionMapper implements ExceptionMapper<ObjectNotFoundException>
+public class ResourceNotFoundException implements ExceptionMapper<ObjectNotFoundException>
 {
     @Override
     public Response toResponse( ObjectNotFoundException exception )

@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.demo.test.jersey.standalone.dao;
+package org.skyscreamer.yoga.demo.dao.inmemory;
 
 import java.io.BufferedReader;
 import java.io.IOException;

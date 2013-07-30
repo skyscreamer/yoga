@@ -14,7 +14,7 @@ import org.skyscreamer.yoga.view.XhtmlSelectorView;
 public class XhtmlSelectorMessageBodyWriter extends AbstractSelectorMessageBodyWriter
 {
     @Override
-    protected AbstractYogaView getView()
+    protected AbstractYogaView createView()
     {
         return new XhtmlSelectorView();
     }

@@ -8,33 +8,11 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>yoga-demo-jersey-standalone</artifactId>
-    <packaging>war</packaging>
+    <artifactId>yoga-demo-jaxrs-shared</artifactId>
+    <packaging>jar</packaging>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-                <version>6.1.10</version>
-                <configuration>
-                    <contextPath>/</contextPath>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>org.mortbay.util.FileResource.checkAliases</name>
-                            <value>false</value>
-                        </systemProperty>
-                    </systemProperties>
-                    <connectors>
-                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>8080</port>
-                            <maxIdleTime>60000</maxIdleTime>
-                        </connector>
-                    </connectors>
-
-                </configuration>
-            </plugin>
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-compiler-plugin</artifactId>
@@ -49,36 +27,26 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-servlet</artifactId>
-            <version>1.17</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.skyscreamer</groupId>
-            <artifactId>yoga-jersey</artifactId>
+            <artifactId>yoga-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.skyscreamer</groupId>
-            <artifactId>yoga-demo-jaxrs-shared</artifactId>
+            <artifactId>yoga-jaxrs</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>yoga-demo-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <repositories>
