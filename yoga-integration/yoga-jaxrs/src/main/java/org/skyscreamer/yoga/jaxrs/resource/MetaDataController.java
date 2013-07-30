@@ -14,14 +14,30 @@ import org.skyscreamer.yoga.metadata.MetaDataRegistry;
 import org.skyscreamer.yoga.metadata.TypeMetaData;
 
 @Singleton
-@Path("/metadata/")
+@Path(MetaDataController.ROOT)
 public class MetaDataController
 {
+    public static final String ROOT = "/metadata/";
+
     @Inject
     MetaDataRegistry _metaDataRegistry;
 
     @Context
     HttpServletRequest request;
+
+    public MetaDataController()
+    {
+    }
+
+    public MetaDataController( MetaDataRegistry _metaDataRegistry )
+    {
+        this._metaDataRegistry = _metaDataRegistry;
+    }
+
+    public void setMetaDataRegistry( MetaDataRegistry metaDataRegistry )
+    {
+        this._metaDataRegistry = metaDataRegistry;
+    }
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

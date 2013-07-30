@@ -5,38 +5,28 @@ import java.util.Collections;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-public class RunServer
+public class JettyServer
 {
 
-    public static RunServer instance;
+    public static JettyServer createServer( int port, boolean join ) throws Exception
+    {
+        JettyServer server = new JettyServer( port );
+        server.run( join );
+        return server;
+    }
 
     Server server;
     WebAppContext context;
 
-    public RunServer()
+    public JettyServer()
     {
         this( 8082 );
     }
 
-    public RunServer( int port )
+    public JettyServer( int port )
     {
         System.setProperty( "org.mortbay.util.FileResource.checkAliases", "false" );
         server = new Server( port );
-    }
-
-    public static void main( String[] args ) throws Exception
-    {
-        RunServer runServer = new RunServer( 8081 );
-        runServer.run();
-    }
-
-    public static void startServer() throws Exception
-    {
-        if ( instance == null )
-        {
-            instance = new RunServer( 8082 );
-            instance.run( false );
-        }
     }
 
     public void run() throws Exception

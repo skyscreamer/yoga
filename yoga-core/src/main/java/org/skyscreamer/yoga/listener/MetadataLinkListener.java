@@ -9,6 +9,15 @@ public class MetadataLinkListener implements RenderingListener
 {
     private MetaDataRegistry _metaDataRegistry;
 
+    public MetadataLinkListener()
+    {
+    }
+
+    public MetadataLinkListener( MetaDataRegistry metaDataRegistry )
+    {
+        this._metaDataRegistry = metaDataRegistry;
+    }
+
     public void setMetaDataRegistry( MetaDataRegistry metaDataRegistry )
     {
         this._metaDataRegistry = metaDataRegistry;

@@ -6,6 +6,8 @@ import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ public class Album
     @OneToMany(mappedBy = "album")
     @OrderBy("id")
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-    private List<Song> songs;
+    private List<Song> songs = new ArrayList<Song>();
 
     @Core
     public long getId()

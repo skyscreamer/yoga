@@ -7,24 +7,24 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import org.skyscreamer.yoga.demo.test.jersey.standalone.DemoData;
+import org.skyscreamer.yoga.demo.dao.GenericDao;
 
 public class AbstractResource<T>
 {
 
-    DemoData demoData;
+    GenericDao _dao;
     Class<T> _entityClass = returnedClass( getClass() );
 
-    public AbstractResource( DemoData demoData )
+    public AbstractResource( GenericDao dao )
     {
-        this.demoData = demoData;
+        this._dao = dao;
     }
     
     @GET
     @Path("/{id}")
     public T get( @PathParam("id") long id, @QueryParam("selector") String selectorString )
     {
-        return demoData.get( _entityClass, id );
+        return _dao.find( _entityClass, id );
     }
 
 }

@@ -6,6 +6,9 @@ import org.skyscreamer.yoga.annotations.Core;
 import org.skyscreamer.yoga.annotations.URITemplate;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,11 +27,11 @@ public class Artist
 
     @OneToMany(mappedBy = "artist")
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-    private List<Album> albums;
+    private List<Album> albums = new ArrayList<Album>();
 
     @ManyToMany(mappedBy = "favoriteArtists")
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-    private Set<User> fans;
+    private Set<User> fans = new HashSet<User>();
 
     @Core
     public long getId()

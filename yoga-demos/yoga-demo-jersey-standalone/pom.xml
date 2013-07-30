@@ -8,9 +8,7 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-demo-jersey-standalone</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <build>
@@ -51,6 +49,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-servlet</artifactId>
+            <version>1.17</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.skyscreamer</groupId>
             <artifactId>yoga-core</artifactId>
             <version>${project.version}</version>
@@ -67,13 +71,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>1.17</version>         
-        </dependency>
-
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.5.8</version>
@@ -84,6 +81,11 @@
             <version>20090211</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.tuckey</groupId>
+            <artifactId>urlrewritefilter</artifactId>
+            <version>3.2.0</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
