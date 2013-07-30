@@ -16,7 +16,7 @@ import org.skyscreamer.yoga.util.NameUtil;
 
 public class DefaultMetaDataRegistry implements MetaDataRegistry
 {
-    private Map<String, Class<?>> _typeMappings;
+    private Map<String, Class<?>> _typeMappings = new HashMap<String, Class<?>>();
     private Map<Class<?>, String> _typeToStringMap = new HashMap<Class<?>, String>();
 
     private String rootMetaDataUrl;
@@ -41,7 +41,23 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
             _typeToStringMap.put( entry.getValue(), entry.getKey() );
         }
     }
+    
 
+    public void registerTypeMapping( String name, Class<?> type )
+    {
+        _typeMappings.put( name, type );
+        _typeToStringMap.put( type, name );
+    }
+
+    public void registerTypeMappings( Class<?> ... types )
+    {
+        for( Class<?> type : types )
+        {
+            registerTypeMapping( NameUtil.getName( type ), type );
+        }
+    }
+    
+    
     @Override
     public Collection<String> getTypes()
     {

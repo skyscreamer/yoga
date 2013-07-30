@@ -13,6 +13,7 @@ import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorResolver;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
+import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 import org.skyscreamer.yoga.util.NameUtil;
 
 /**
@@ -31,7 +32,7 @@ public abstract class AbstractYogaView
 {
 	protected ResultTraverser _resultTraverser = new ResultTraverser();
 
-	protected ClassFinderStrategy _classFinderStrategy;
+	protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
 
 	protected SelectorResolver _selectorResolver = new SelectorResolver();
 	
@@ -73,7 +74,22 @@ public abstract class AbstractYogaView
 		_resultTraverser.setClassFinderStrategy(classFinderStrategy);
 	}
 
-	public final void render(HttpServletRequest request,
+	public ResultTraverser getResultTraverser()
+    {
+        return _resultTraverser;
+    }
+
+    public ClassFinderStrategy getClassFinderStrategy()
+    {
+        return _classFinderStrategy;
+    }
+
+    public RenderingListenerRegistry getRegistry()
+    {
+        return _registry;
+    }
+
+    public final void render(HttpServletRequest request,
 			HttpServletResponse response, Object value, OutputStream os)
 			throws Exception
 	{
