@@ -47,6 +47,7 @@ public class StaticContentServletFilter implements Filter
                 {
                     outputStream.write(buff, 0, read);
                 }
+                outputStream.flush();
             }
             else
             {

@@ -16,6 +16,15 @@ public class UserConfiguration extends YogaEntityConfiguration<User>
     @Autowired
     GenericDao _genericDao;
 
+    public UserConfiguration()
+    {
+    }
+
+    public UserConfiguration( GenericDao _genericDao )
+    {
+        this._genericDao = _genericDao;
+    }
+
     @ExtraField("recommendedAlbums")
     public List<Album> getRecommendedAlbums(User user)
     {
