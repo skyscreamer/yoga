@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                        http://www.springframework.org/schema/jdbc    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                        http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean name="genericDaoBean" class="org.skyscreamer.yoga.demo.dao.GenericDaoBean" />
+
+    <!-- DATABASE CONFIG START -->
+    <jdbc:embedded-database id="dataSource" type="H2" />
+
+    <tx:annotation-driven />
+
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+        p:dataSource-ref="dataSource" p:packagesToScan="org.skyscreamer.yoga.demo.model">
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect = org.hibernate.dialect.H2Dialect
+                hibernate.cache.provider_class = org.hibernate.cache.HashtableCacheProvider
+                hibernate.hbm2ddl.auto = update
+                hibernate.show_sql = true
+                hibernate.cache.use_second_level_cache = true
+                hibernate.cache.use_query_cache = true
+                hibernate.cache.region.factory_class = net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory
+            </value>
+        </property>
+    </bean>
+
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate"
+        p:cacheQueries="true" p:sessionFactory-ref="sessionFactory" />
+
+    <!-- This can normally be done via jdbc:init, but we wanted to let hibernate 
+        initialize the database -->
+    <bean id="dbInit"
+        class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
+        p:dataSource-ref="dataSource" p:databasePopulator-ref="dbPopulator" />
+
+    <bean id="dbPopulator"
+        class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
+        p:scripts="classpath:sampledb.sql" depends-on="sessionFactory" />
+
+    <!-- This is for loading large quantities of data for testing data scaling. 
+        Disabled by default. -->
+    <bean id="extendedDbInit"
+        class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
+        p:dataSource-ref="dataSource" p:databasePopulator-ref="extendedDbPopulator"
+        depends-on="sessionFactory" />
+
+    <bean id="extendedDbResource" class="org.skyscreamer.yoga.demo.util.GzippedResource">
+      <constructor-arg
+          value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz" />
+    </bean>
+
+    <bean id="extendedDbPopulator"
+        class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
+        p:scripts-ref="extendedDbResource" />
+
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+        p:dataSource-ref="dataSource" />
+
+    <!-- DATABSE CONFIG END -->
+</beans>
