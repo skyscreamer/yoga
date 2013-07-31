@@ -9,76 +9,10 @@
                         http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:annotation-config />
-    <context:component-scan base-package="org.skyscreamer.yoga.demo">
-        <context:exclude-filter type="annotation"
-            expression="org.springframework.stereotype.Controller" />
-    </context:component-scan>
-
-    <!-- DATABASE CONFIG START -->
-    <jdbc:embedded-database id="dataSource" type="H2" />
-
-    <tx:annotation-driven />
-
-    <bean id="sessionFactory"
-        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
-        p:dataSource-ref="dataSource" p:packagesToScan="org.skyscreamer.yoga.demo.model">
-        <property name="hibernateProperties">
-            <value>
-                hibernate.dialect = org.hibernate.dialect.H2Dialect
-                hibernate.cache.provider_class = org.hibernate.cache.HashtableCacheProvider
-                hibernate.hbm2ddl.auto = update
-                hibernate.show_sql = true
-                hibernate.cache.use_second_level_cache = true
-                hibernate.cache.use_query_cache = true
-                hibernate.cache.region.factory_class = net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory
-            </value>
-        </property>
-    </bean>
-
-    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate"
-        p:cacheQueries="true" p:sessionFactory-ref="sessionFactory" />
-
-    <!-- This can normally be done via jdbc:init, but we wanted to let hibernate 
-        initialize the database -->
-    <bean id="dbInit"
-        class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
-        p:dataSource-ref="dataSource" p:databasePopulator-ref="dbPopulator" />
-
-    <bean id="dbPopulator"
-        class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
-        p:scripts="classpath:sampledb.sql" depends-on="sessionFactory" />
-
-    <!-- This is for loading large quantities of data for testing data scaling. 
-        Disabled by default. -->
-    <bean id="extendedDbInit"
-        class="org.springframework.jdbc.datasource.init.DataSourceInitializer"
-        p:dataSource-ref="dataSource" p:databasePopulator-ref="extendedDbPopulator"
-        depends-on="sessionFactory" />
-
-    <bean id="extendedDbResource" class="org.skyscreamer.yoga.demo.util.GzippedResource">
-      <constructor-arg
-          value="https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz" />
-    </bean>
-
-    <bean id="extendedDbPopulator"
-        class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator"
-        p:scripts-ref="extendedDbResource" />
-
-    <bean id="transactionManager"
-        class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-        p:dataSource-ref="dataSource" />
-
-    <!-- DATABSE CONFIG END -->
-
+    <import resource="daoContext.xml"/>
 
     <!-- YOGA CONFIG BEGIN -->
     <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.classfinder.HibernateClassFinderStrategy" />
-
-    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.GDataSelectorParser">
-        <property name="entityConfigurationRegistry" ref="entityConfigurationRegistry"/>
-        <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
-        <property name="disableExplicitSelectors" value="false"/>
-    </bean>
 
     <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"
         p:propertyFile="classpath:selectorAlias.properties" />
@@ -89,6 +23,12 @@
                 <bean class="org.skyscreamer.yoga.demo.dto.UserConfiguration" />
             </list>
         </constructor-arg>
+    </bean>
+
+    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.GDataSelectorParser">
+        <property name="entityConfigurationRegistry" ref="entityConfigurationRegistry"/>
+        <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
+        <property name="disableExplicitSelectors" value="false"/>
     </bean>
 
     <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener"
@@ -113,6 +53,9 @@
         </constructor-arg>
     </bean>
 
+    <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector"
+        p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>
+
     <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry"
           p:coreSelector-ref="coreSelector">
         <property name="rootMetaDataUrl" value="/metadata/" />
@@ -125,9 +68,6 @@
             </map>
         </property>
     </bean>
-
-    <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector"
-        p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>
 
     <bean name="abstract.view" abstract="true"
         p:registry-ref="renderingListenerRegistry"
