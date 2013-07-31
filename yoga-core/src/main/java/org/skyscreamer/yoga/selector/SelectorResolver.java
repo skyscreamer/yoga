@@ -11,12 +11,13 @@ public class SelectorResolver
     protected SelectorParser _selectorParser;
     protected CoreSelector _baseSelector = new CoreSelector();
     protected String _selectorParameterName = "selector";
-    
+
     public SelectorResolver()
     {
     }
 
-    public SelectorResolver(SelectorParser selectorParser, CoreSelector baseSelector)
+    public SelectorResolver( SelectorParser selectorParser,
+            CoreSelector baseSelector )
     {
         super();
         this._selectorParser = selectorParser;
@@ -42,15 +43,13 @@ public class SelectorResolver
     {
         this._baseSelector = baseSelector;
     }
-    
-    
 
     public String getSelectorParameterName()
     {
         return _selectorParameterName;
     }
 
-    public void setSelectorParameterName(String selectorParameterName)
+    public void setSelectorParameterName( String selectorParameterName )
     {
         this._selectorParameterName = selectorParameterName;
     }
@@ -58,7 +57,7 @@ public class SelectorResolver
     public Selector getSelector( HttpServletRequest request )
             throws ParseSelectorException
     {
-        String selectorString = request.getParameter(_selectorParameterName);
-        return _selectorParser.parseSelector(selectorString, _baseSelector);
+        String selectorString = request.getParameter( _selectorParameterName );
+        return _selectorParser.parseSelector( selectorString, _baseSelector );
     }
 }

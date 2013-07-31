@@ -7,7 +7,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import java.util.Collections;
 import java.util.Map;
 
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
+import static org.skyscreamer.yoga.demo.util.TestUtil.getJSONObject;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page Date: 4/19/11 Time: 6:17 PM

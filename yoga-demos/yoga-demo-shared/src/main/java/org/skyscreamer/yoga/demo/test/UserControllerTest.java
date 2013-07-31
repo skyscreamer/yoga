@@ -1,16 +1,19 @@
 package org.skyscreamer.yoga.demo.test;
 
+import static org.skyscreamer.yoga.demo.util.TestUtil.getBean;
+import static org.skyscreamer.yoga.demo.util.TestUtil.getJSONArray;
+import static org.skyscreamer.yoga.demo.util.TestUtil.getJSONObject;
+
+import java.util.Collections;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-
-import java.util.Collections;
-import java.util.Map;
-
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONArray;
-import static org.skyscreamer.yoga.demo.test.TestUtil.getJSONObject;
+import org.skyscreamer.yoga.demo.dao.GenericDao;
+import org.skyscreamer.yoga.demo.model.User;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page
@@ -46,10 +49,7 @@ public class UserControllerTest
     public void testGetUsers() throws Exception
     {
         JSONArray data = getJSONArray( "/user", null );
-        Assert.assertEquals( 1003, data.length() );
-        // TODO: figure out how to do this with RESTEasy
-//        long count = Long.valueOf(getContent("/user/count", null));
-//        Assert.assertEquals( count, data.length() );
+        Assert.assertEquals( getBean( GenericDao.class ).getCount( User.class ).intValue(), data.length() );
     }
 
     @Test
@@ -68,7 +68,6 @@ public class UserControllerTest
         JSONObject data = getJSONObject( "/user/1", params );
         String expected = "{id:1,name:\"Carter Page\",href:\"/user/1.json\"," + "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\"},"
                 + "{id:3,name:\"Solomon Duskis\",href:\"/user/3.json\"}]}";
-        System.out.println( data );
         JSONAssert.assertEquals( expected, data, false );
     }
 
@@ -77,7 +76,6 @@ public class UserControllerTest
     {
         Map<String, String> params = Collections.singletonMap( "selector", "isFriend,friends(favoriteArtists(albums(songs)))" );
         JSONObject data = getJSONObject( "/user/1", params );
-        System.out.println( data );
         String expected =
                 "{id:1,name:\"Carter Page\",href:\"/user/1.json\",isFriend:true,"
                         + "friends:[{id:2,name:\"Corby Page\",href:\"/user/2.json\","
@@ -112,5 +110,24 @@ public class UserControllerTest
             return;
         } 
         Assert.fail( "Expected this query to fail with a 500 error caused by an EntityCountExceededException" );
+    }
+    
+    @Test
+    public void testMetaData() throws Exception
+    {
+        String expected  = "{\"propertyMetaData\":[{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"favoriteArtists\"," +
+                "\"navigationLinks\":{},\"isCore\":false,\"type\":\"Artist[]\",\"href\":\"/metadata/artist.json\"}," +
+                "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"friends\",\"navigationLinks\":{}," +
+                "\"isCore\":false,\"type\":\"User[]\",\"href\":\"/metadata/user.json\"}," +
+                "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"id\",\"navigationLinks\":{},\"isCore\":true,\"type\":\"long\"}," +
+                "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"isFriend\",\"navigationLinks\":{}," +
+                "\"isCore\":false,\"type\":\"boolean\"},{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"]," +
+                "\"name\":\"name\",\"navigationLinks\":{},\"isCore\":true,\"type\":\"String\"}," +
+                "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"recommendedAlbums\",\"navigationLinks\":{}," +
+                "\"isCore\":false,\"type\":\"Album[]\",\"href\":\"/metadata/album.json\"}]," +
+                "\"definition\":[\"name\",\"propertyMetaData\"],\"name\":\"User\",\"navigationLinks\":{}}";
+        
+        JSONObject data = getJSONObject( "/metadata/user", null );
+        JSONAssert.assertEquals( expected, data, false );
     }
 }

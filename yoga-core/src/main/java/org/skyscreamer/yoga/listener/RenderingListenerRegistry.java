@@ -1,6 +1,7 @@
 package org.skyscreamer.yoga.listener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -19,11 +20,13 @@ public class RenderingListenerRegistry
     protected Collection<RenderingListener> listeners;
 
     /**
-     * Default constructor creates a registry with no RenderingListeners
+     * Constructor to initialize the registry with a set of 0 or more listeners
+     *
+     * @param listeners The ordered collection of rendering listeners
      */
-    public RenderingListenerRegistry()
+    public RenderingListenerRegistry( RenderingListener... listeners )
     {
-        this( new ArrayList<RenderingListener>() );
+        this.listeners = new ArrayList<RenderingListener>( Arrays.asList( listeners ) );
     }
 
     /**

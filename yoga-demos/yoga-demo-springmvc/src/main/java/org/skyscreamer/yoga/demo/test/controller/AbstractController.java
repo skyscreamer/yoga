@@ -1,6 +1,7 @@
 package org.skyscreamer.yoga.demo.test.controller;
 
-import java.lang.reflect.ParameterizedType;
+import static org.skyscreamer.yoga.demo.util.TypeUtils.returnedClass;
+
 import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
@@ -10,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by IntelliJ IDEA. User: Carter Page
@@ -22,7 +21,7 @@ public abstract class AbstractController<T>
     @Autowired
     GenericDao _genericDao;
 
-    Class<T> _entityClass = returnedClass();
+    Class<T> _entityClass = returnedClass( getClass() );
 
     @RequestMapping("/{id}")
 //    @ResponseBody
@@ -36,21 +35,6 @@ public abstract class AbstractController<T>
     public List<T> getAll()
     {
         return _genericDao.findAll(_entityClass);
-    }
-
-    @RequestMapping("/count")
-    @ResponseBody
-    public String getCount(ModelAndView mv)
-    {
-        return String.valueOf(_genericDao.getCount(_entityClass));
-    }
-
-    // http://blog.xebia.com/2009/02/acessing-generic-types-at-runtime-in-java/
-    @SuppressWarnings("unchecked")
-    private Class<T> returnedClass()
-    {
-        ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
-        return (Class<T>) parameterizedType.getActualTypeArguments()[0];
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)

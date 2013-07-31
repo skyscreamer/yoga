@@ -15,6 +15,17 @@ public class NavigationLinksListener implements RenderingListener
 {
     private HrefListener _hrefListener = new HrefListener();
 
+    
+    public NavigationLinksListener()
+    {
+        super();
+    }
+
+    public NavigationLinksListener( HrefListener hrefListener )
+    {
+        this._hrefListener = hrefListener;
+    }
+
     public void setHrefListener( HrefListener hrefListener )
     {
         this._hrefListener = hrefListener;

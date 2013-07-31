@@ -11,11 +11,12 @@ import org.skyscreamer.yoga.model.XmlHierarchyModelImpl;
 import org.skyscreamer.yoga.selector.Selector;
 
 /**
- * This class represents an xml yoga view.  It will return an xml representation of either single objects or a list of objects
+ * This class represents an xml yoga view. It will return an xml representation
+ * of either single objects or a list of objects
  * 
  * @author solomon.duskis
- *
- *@see AbstractYogaView
+ * 
+ * @see AbstractYogaView
  */
 public class XmlSelectorView extends AbstractYogaView
 {
@@ -26,7 +27,7 @@ public class XmlSelectorView extends AbstractYogaView
         HierarchicalModel<Element> model = null;
         if (value instanceof Iterable)
         {
-            String name = getClassName( ((Iterable<?>) value).iterator().next() );
+            String name = getClassName( ( ( Iterable<?> ) value ).iterator().next() );
             model = new XmlHierarchyModelImpl( new DOMElement( "result" ), name );
         }
         else
