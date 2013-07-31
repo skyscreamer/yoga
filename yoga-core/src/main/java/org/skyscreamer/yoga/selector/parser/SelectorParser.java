@@ -1,12 +1,9 @@
 package org.skyscreamer.yoga.selector.parser;
 
 import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
-import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
-import org.skyscreamer.yoga.selector.CompositeSelector;
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.selector.FieldSelector;
-import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.Selector;
 
 /**
  * A SelectorParser takes a string selector argument and translates it into a
@@ -58,20 +55,6 @@ public abstract class SelectorParser
         else
         {
             return null;
-        }
-    }
-
-    public Selector parseSelector( String selectorExpression, CoreSelector coreSelector ) throws ParseSelectorException
-    {
-        Selector fieldSelector = parseSelector( selectorExpression );
-
-        if(fieldSelector != null)
-        {
-            return new CompositeSelector( coreSelector, fieldSelector );
-        }
-        else
-        {
-            return coreSelector;
         }
     }
 

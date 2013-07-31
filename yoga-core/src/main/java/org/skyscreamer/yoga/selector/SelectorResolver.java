@@ -58,6 +58,20 @@ public class SelectorResolver
             throws ParseSelectorException
     {
         String selectorString = request.getParameter( _selectorParameterName );
-        return _selectorParser.parseSelector( selectorString, _baseSelector );
+        return resolveSelector( selectorString, _baseSelector );
+    }
+
+    public Selector resolveSelector( String selectorExpression, CoreSelector coreSelector ) throws ParseSelectorException
+    {
+        Selector fieldSelector = _selectorParser.parseSelector( selectorExpression );
+
+        if (fieldSelector != null)
+        {
+            return new CompositeSelector( coreSelector, fieldSelector );
+        }
+        else
+        {
+            return coreSelector;
+        }
     }
 }

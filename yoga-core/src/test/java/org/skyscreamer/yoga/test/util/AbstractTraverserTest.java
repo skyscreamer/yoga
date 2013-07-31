@@ -13,6 +13,7 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorResolver;
 import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
 import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
@@ -44,7 +45,9 @@ public abstract class AbstractTraverserTest
             SelectorParser selectorParser = context.getSelectorParser();
             selectorParser.setEntityConfigurationRegistry( _entityConfigurationRegistry );
             selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );
-            Selector selector = selectorParser.parseSelector( selectorString, coreSelector );
+            SelectorResolver resolver = new SelectorResolver();
+            resolver.setSelectorParser( selectorParser );
+            Selector selector = resolver.resolveSelector( selectorString, coreSelector );
 
             return doTraverse( instance, traverser, selector, context );
         }

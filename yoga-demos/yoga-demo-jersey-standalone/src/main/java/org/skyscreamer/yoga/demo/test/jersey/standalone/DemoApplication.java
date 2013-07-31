@@ -84,7 +84,7 @@ public class DemoApplication extends DefaultResourceConfig
         configureView( new StreamingJsonSelectorMessageBodyWriter(), renderingListenerRegistry, selector, selectorParser );
         configureView( new XmlSelectorMessageBodyWriter(), renderingListenerRegistry, selector, selectorParser );
         configureView( new SelectorBuilderMessageBodyWriter(), renderingListenerRegistry, selector, selectorParser );
-        
+
         TestUtil.setContext( new BeanContext()
         {
             @SuppressWarnings( "unchecked" )

@@ -30,51 +30,51 @@ import org.skyscreamer.yoga.util.NameUtil;
  */
 public abstract class AbstractYogaView
 {
-	protected ResultTraverser _resultTraverser = new ResultTraverser();
+    protected ResultTraverser _resultTraverser = new ResultTraverser();
 
-	protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
+    protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
 
-	protected SelectorResolver _selectorResolver = new SelectorResolver();
-	
-	protected RenderingListenerRegistry _registry = new RenderingListenerRegistry();
+    protected SelectorResolver _selectorResolver = new SelectorResolver();
+    
+    protected RenderingListenerRegistry _registry = new RenderingListenerRegistry();
 
-	public void setResultTraverser(ResultTraverser resultTraverser)
-	{
-		this._resultTraverser = resultTraverser;
-	}
+    public void setResultTraverser(ResultTraverser resultTraverser)
+    {
+        this._resultTraverser = resultTraverser;
+    }
 
-	public void setSelectorParser(SelectorParser selectorParser)
-	{
-		this._selectorResolver.setSelectorParser(selectorParser);
-	}
+    public void setSelectorParser(SelectorParser selectorParser)
+    {
+        this._selectorResolver.setSelectorParser(selectorParser);
+    }
 
-	public void setRegistry(RenderingListenerRegistry registry)
-	{
-		this._registry = registry;
-	}
+    public void setRegistry(RenderingListenerRegistry registry)
+    {
+        this._registry = registry;
+    }
 
-	public void setSelector(CoreSelector selector)
-	{
-		this._selectorResolver.setBaseSelector(selector);
-	}
+    public void setSelector(CoreSelector selector)
+    {
+        this._selectorResolver.setBaseSelector(selector);
+    }
 
-	public void setSelectorResolver(SelectorResolver selectorResolver)
-	{
-		this._selectorResolver = selectorResolver;
-	}
-	
-	public SelectorResolver getSelectorResolver()
-	{
-		return _selectorResolver;
-	}
+    public void setSelectorResolver(SelectorResolver selectorResolver)
+    {
+        this._selectorResolver = selectorResolver;
+    }
+    
+    public SelectorResolver getSelectorResolver()
+    {
+        return _selectorResolver;
+    }
 
-	public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy)
-	{
-		this._classFinderStrategy = classFinderStrategy;
-		_resultTraverser.setClassFinderStrategy(classFinderStrategy);
-	}
+    public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy)
+    {
+        this._classFinderStrategy = classFinderStrategy;
+        _resultTraverser.setClassFinderStrategy(classFinderStrategy);
+    }
 
-	public ResultTraverser getResultTraverser()
+    public ResultTraverser getResultTraverser()
     {
         return _resultTraverser;
     }
@@ -90,26 +90,26 @@ public abstract class AbstractYogaView
     }
 
     public final void render(HttpServletRequest request,
-			HttpServletResponse response, Object value, OutputStream os)
-			throws Exception
-	{
-		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(),
-				getSelectorResolver().getSelectorParser(), request, response,
-				_registry.getListeners());
-		Selector selector = getSelectorResolver().getSelector(request);
-		render(selector, value, context, os);
-	}
+            HttpServletResponse response, Object value, OutputStream os)
+            throws Exception
+    {
+        YogaRequestContext context = new YogaRequestContext(getHrefSuffix(),
+                getSelectorResolver().getSelectorParser(), request, response,
+                _registry.getListeners());
+        Selector selector = getSelectorResolver().getSelector( request );
+        render(selector, value, context, os);
+    }
 
-	protected String getClassName(Object obj)
-	{
-		Class<?> type = _classFinderStrategy.findClass(obj);
-		return NameUtil.getName(type);
-	}
+    protected String getClassName(Object obj)
+    {
+        Class<?> type = _classFinderStrategy.findClass(obj);
+        return NameUtil.getName(type);
+    }
 
-	public abstract String getContentType();
+    public abstract String getContentType();
 
-	protected abstract void render(Selector selector, Object value,
-			YogaRequestContext context, OutputStream os) throws Exception;
+    protected abstract void render(Selector selector, Object value,
+            YogaRequestContext context, OutputStream os) throws Exception;
 
-	public abstract String getHrefSuffix();
+    public abstract String getHrefSuffix();
 }
