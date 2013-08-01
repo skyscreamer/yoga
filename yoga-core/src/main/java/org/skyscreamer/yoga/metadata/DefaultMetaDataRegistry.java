@@ -49,7 +49,17 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
         _typeToStringMap.put( type, name );
     }
 
-    public void registerTypeMappings( Class<?> ... types )
+    public void registerClasses( Class<?> ... types )
+    {
+        setRegisteredClasses( types );
+    }
+
+    public void registerClasses( Collection<Class<?>> types )
+    {
+        setRegisteredClasses( types.toArray( new Class<?>[types.size()] ) );
+    }
+    
+    public void setRegisteredClasses( Class<?> ... types )
     {
         for( Class<?> type : types )
         {

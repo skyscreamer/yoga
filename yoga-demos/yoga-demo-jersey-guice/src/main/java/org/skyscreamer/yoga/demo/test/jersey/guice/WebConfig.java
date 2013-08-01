@@ -3,23 +3,18 @@ package org.skyscreamer.yoga.demo.test.jersey.guice;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.skyscreamer.yoga.builder.YogaBuilder;
+import org.skyscreamer.yoga.builder.YogaBuilderViewFactory;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.demo.jaxrs.resources.AbstractResource;
 import org.skyscreamer.yoga.jaxrs.exceptionhandlers.EntityCountExceededExceptionExceptionMapper;
 import org.skyscreamer.yoga.jaxrs.resource.MetaDataController;
-import org.skyscreamer.yoga.jaxrs.view.SelectorBuilderMessageBodyWriter;
-import org.skyscreamer.yoga.jaxrs.view.StreamingJsonSelectorMessageBodyWriter;
-import org.skyscreamer.yoga.jaxrs.view.XhtmlSelectorMessageBodyWriter;
-import org.skyscreamer.yoga.jaxrs.view.XmlSelectorMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.builder.SelectorBuilderMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.builder.StreamingJsonSelectorMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.builder.XhtmlSelectorMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.builder.XmlSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jersey.config.URIExtensionsConfig;
-import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.metadata.MetaDataRegistry;
-import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.parser.SelectorParser;
-import org.skyscreamer.yoga.util.ClassFinderStrategy;
-import org.skyscreamer.yoga.view.JsonSelectorView;
-import org.skyscreamer.yoga.view.SelectorBuilderView;
-import org.skyscreamer.yoga.view.XmlSelectorView;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -54,9 +49,7 @@ public class WebConfig extends GuiceServletContextListener
                 // some point.
                 ApplicationContext spring = WebApplicationContextUtils
                         .getRequiredWebApplicationContext( getServletContext() );
-                Class<?>[] types = { GenericDao.class, XmlSelectorView.class, JsonSelectorView.class,
-                        SelectorBuilderView.class, CoreSelector.class, MetaDataRegistry.class,
-                        ClassFinderStrategy.class, SelectorParser.class, RenderingListenerRegistry.class };
+                Class<?>[] types = { GenericDao.class, MetaDataRegistry.class, YogaBuilder.class, YogaBuilderViewFactory.class };
 
                 for ( Class<?> type : types )
                     bind( spring, type );

@@ -42,7 +42,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        _entityConfigurationRegistry.register(new AlbumEntityConfiguration());
+        getEntityConfigurationRegistry().register(new AlbumEntityConfiguration());
         Map<String, Object> objectTree = doTraverse( funeral, null, traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
@@ -59,7 +59,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        _entityConfigurationRegistry.register( new AlbumEntityConfiguration() );
+        getEntityConfigurationRegistry().register( new AlbumEntityConfiguration() );
         Map<String, Object> objectTree = doTraverse( funeral, ":", traverser );
         Assert.assertEquals( 2, objectTree.size() );
         Assert.assertEquals( funeral.getId(), objectTree.get( "id" ) );
@@ -78,7 +78,7 @@ public class CoreFieldsTest extends AbstractTraverserTest
         carter.getFavoriteArtists().add( DataGenerator.neutralMilkHotel() );
         carter.getFavoriteArtists().add( DataGenerator.arcadeFire() );
         ResultTraverser traverser = new ResultTraverser();
-        _entityConfigurationRegistry.register( new UserEntityConfigurationWithArtistCoreField() );
+        getEntityConfigurationRegistry().register( new UserEntityConfigurationWithArtistCoreField() );
 
         Map<String, Object> objectTree = doTraverse( carter, ":", traverser );
         Assert.assertEquals( 2, objectTree.size() );

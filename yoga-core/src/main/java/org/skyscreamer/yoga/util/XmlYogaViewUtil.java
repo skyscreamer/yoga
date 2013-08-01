@@ -1,4 +1,4 @@
-package org.skyscreamer.yoga.view;
+package org.skyscreamer.yoga.util;
 
 import org.dom4j.Element;
 import org.dom4j.dom.DOMDocument;

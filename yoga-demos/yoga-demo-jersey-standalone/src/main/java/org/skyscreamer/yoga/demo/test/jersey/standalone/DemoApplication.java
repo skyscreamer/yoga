@@ -5,9 +5,9 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
-import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
-import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
+import org.skyscreamer.yoga.builder.YogaBuilder;
+import org.skyscreamer.yoga.builder.YogaBuilderViewFactory;
+import org.skyscreamer.yoga.classfinder.HibernateClassFinderStrategy;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
 import org.skyscreamer.yoga.demo.dao.inmemory.DemoData;
 import org.skyscreamer.yoga.demo.dao.inmemory.DemoDataGenericDao;
@@ -23,22 +23,10 @@ import org.skyscreamer.yoga.demo.model.User;
 import org.skyscreamer.yoga.demo.test.BeanContext;
 import org.skyscreamer.yoga.demo.util.TestUtil;
 import org.skyscreamer.yoga.jaxrs.resource.MetaDataController;
-import org.skyscreamer.yoga.jaxrs.view.AbstractSelectorMessageBodyWriter;
-import org.skyscreamer.yoga.jaxrs.view.SelectorBuilderMessageBodyWriter;
-import org.skyscreamer.yoga.jaxrs.view.StreamingJsonSelectorMessageBodyWriter;
-import org.skyscreamer.yoga.jaxrs.view.XmlSelectorMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.builder.SelectorBuilderMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.builder.StreamingJsonSelectorMessageBodyWriter;
+import org.skyscreamer.yoga.jaxrs.view.builder.XmlSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jersey.config.YogaMediaTypes;
-import org.skyscreamer.yoga.listener.CountLimitRenderingListener;
-import org.skyscreamer.yoga.listener.HrefListener;
-import org.skyscreamer.yoga.listener.MetadataLinkListener;
-import org.skyscreamer.yoga.listener.ModelDefinitionListener;
-import org.skyscreamer.yoga.listener.NavigationLinksListener;
-import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
-import org.skyscreamer.yoga.listener.SelectorBuilderListener;
-import org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry;
-import org.skyscreamer.yoga.metadata.MetaDataRegistry;
-import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 
 import com.sun.jersey.api.core.DefaultResourceConfig;
 
@@ -58,32 +46,25 @@ public class DemoApplication extends DefaultResourceConfig
             e.printStackTrace();
         }
         final GenericDao dao = new DemoDataGenericDao(  data );
-        YogaEntityConfiguration<User> userConfig = new UserConfiguration( dao );
-        EntityConfigurationRegistry configurationRegistry = new DefaultEntityConfigurationRegistry( userConfig );
-        CoreSelector selector = new CoreSelector( configurationRegistry );
-        MetaDataRegistry metaDataRegistry = createMetaDataRegistry( selector );
-        HrefListener hrefListener = new HrefListener( configurationRegistry );
-
-        RenderingListenerRegistry renderingListenerRegistry = new RenderingListenerRegistry( 
-                new CountLimitRenderingListener( 2000 ),
-                hrefListener,
-                new SelectorBuilderListener(),
-                new NavigationLinksListener( hrefListener ),
-                new ModelDefinitionListener(),
-                new MetadataLinkListener( metaDataRegistry )
-        );
-
-        GDataSelectorParser selectorParser = new GDataSelectorParser();
+        
+        YogaBuilder builder = new YogaBuilder()
+            .withClassFinderStrategy( new HibernateClassFinderStrategy() )
+            .withAliasProperties( this.getClass().getClassLoader().getResourceAsStream( "selectorAlias.properties" ) )
+            .withOutputCountLimit( 2000 )
+            .enableYogaLinks()
+            .registerYogaMetaDataClasses( User.class, Album.class, Artist.class, Song.class )
+            .registerEntityConfigurations( new UserConfiguration( dao ) );
 
         getSingletons().add( new AlbumResource( dao ) );
         getSingletons().add( new ArtistResource( dao ) );
         getSingletons().add( new SongResource( dao ) );
         getSingletons().add( new UserResource( dao ) );
-        getSingletons().add( new MetaDataController(metaDataRegistry) );
+        getSingletons().add( new MetaDataController( builder.getMetaDataRegistry() ) );
 
-        configureView( new StreamingJsonSelectorMessageBodyWriter(), renderingListenerRegistry, selector, selectorParser );
-        configureView( new XmlSelectorMessageBodyWriter(), renderingListenerRegistry, selector, selectorParser );
-        configureView( new SelectorBuilderMessageBodyWriter(), renderingListenerRegistry, selector, selectorParser );
+        YogaBuilderViewFactory util = new YogaBuilderViewFactory( builder );
+        getSingletons().add( new StreamingJsonSelectorMessageBodyWriter( util ) );
+        getSingletons().add( new XmlSelectorMessageBodyWriter( util ) );
+        getSingletons().add( new SelectorBuilderMessageBodyWriter( util ) );
 
         TestUtil.setContext( new BeanContext()
         {
@@ -98,26 +79,6 @@ public class DemoApplication extends DefaultResourceConfig
                 return null;
             }
         } );
-    }
-
-    private void configureView(
-            AbstractSelectorMessageBodyWriter writer,
-            RenderingListenerRegistry renderingListenerRegistry,
-            CoreSelector selector, GDataSelectorParser selectorParser )
-    {
-        writer.setRenderingListenerRegistry( renderingListenerRegistry );
-        writer.setSelector( selector );
-        writer.setSelectorParser( selectorParser );
-        getSingletons().add( writer );
-    }
-
-    private DefaultMetaDataRegistry createMetaDataRegistry( CoreSelector selector )
-    {
-        DefaultMetaDataRegistry metaDataRegistry = new DefaultMetaDataRegistry();
-        metaDataRegistry.setCoreSelector( selector );
-        metaDataRegistry.setRootMetaDataUrl( MetaDataController.ROOT );
-        metaDataRegistry.registerTypeMappings( Album.class, Artist.class, Song.class, User.class );
-        return metaDataRegistry;
     }
 
     @Override

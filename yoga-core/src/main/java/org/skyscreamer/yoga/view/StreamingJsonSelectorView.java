@@ -10,7 +10,6 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ArrayStreamingJsonHierarchicalModel;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.ObjectStreamingJsonHierarchicalModel;
-import org.skyscreamer.yoga.selector.Selector;
 
 public class StreamingJsonSelectorView extends AbstractYogaView
 {
@@ -22,12 +21,12 @@ public class StreamingJsonSelectorView extends AbstractYogaView
     }
 
     @Override
-    protected void render(Selector selector, Object value,
-            YogaRequestContext context, OutputStream os) throws Exception
+    protected void render(Object value, YogaRequestContext context,
+            OutputStream os) throws Exception
     {
-        JsonGenerator generator = createGenerator(os);
-        HierarchicalModel<JsonGenerator> model = createModel(value, generator);
-        _resultTraverser.traverse( value, selector, model, context );
+        JsonGenerator generator = createGenerator( os );
+        HierarchicalModel<JsonGenerator> model = createModel( value, generator );
+        _resultTraverser.traverse( value, context.getSelector(), model, context );
         model.getUnderlyingModel().close();
     }
 
