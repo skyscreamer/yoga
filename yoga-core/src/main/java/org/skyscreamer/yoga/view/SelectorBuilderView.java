@@ -7,7 +7,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 import java.io.OutputStream;
@@ -46,7 +45,7 @@ public class SelectorBuilderView extends AbstractYogaView {
     }
 
     @Override
-    protected void render(Selector selector, Object value, YogaRequestContext context, OutputStream out)
+    protected void render(Object value, YogaRequestContext context, OutputStream out)
             throws Exception
     {
         OutputStreamWriter pageWriter = new OutputStreamWriter(out);

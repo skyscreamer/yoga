@@ -18,6 +18,15 @@ public class DynamicPropertyResolver implements AliasSelectorResolver
     private Properties _properties = new Properties();
     private InputStream _propertyFile;
 
+    public DynamicPropertyResolver()
+    {
+    }
+
+    public DynamicPropertyResolver( InputStream propertyFile )
+    {
+        setPropertyFile( propertyFile );
+    }
+
     public String resolveSelector( String aliasSelectorExpression ) throws ParseSelectorException
     {
         if ( _nextReloadTime == 0 || _reloadIntervalSeconds > 0 )

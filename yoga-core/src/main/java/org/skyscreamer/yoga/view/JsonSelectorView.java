@@ -8,7 +8,6 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.ObjectListHierarchicalModelImpl;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
-import org.skyscreamer.yoga.selector.Selector;
 
 public class JsonSelectorView extends AbstractYogaView
 {
@@ -20,20 +19,19 @@ public class JsonSelectorView extends AbstractYogaView
     }
 
     @Override
-    public void render( Selector selector, Object value, YogaRequestContext requestContext,
-            OutputStream outputStream ) throws IOException
+    public void render( Object value, YogaRequestContext requestContext, OutputStream outputStream ) throws IOException
     {
         HierarchicalModel<?> model = null;
         if (value instanceof Iterable<?>)
         {
             ObjectListHierarchicalModelImpl listModel = new ObjectListHierarchicalModelImpl();
-            _resultTraverser.traverseIterable((Iterable<?>) value, selector, listModel, requestContext);
+            _resultTraverser.traverseIterable( (Iterable<?>) value, requestContext.getSelector(), listModel, requestContext );
             model = listModel;
         }
         else
         {
             ObjectMapHierarchicalModelImpl mapModel = new ObjectMapHierarchicalModelImpl();
-            _resultTraverser.traversePojo(value, selector, mapModel, requestContext);
+            _resultTraverser.traversePojo( value, requestContext.getSelector(), mapModel, requestContext );
             model = mapModel;
         }
         objectMapper.writeValue( outputStream, model.getUnderlyingModel() );

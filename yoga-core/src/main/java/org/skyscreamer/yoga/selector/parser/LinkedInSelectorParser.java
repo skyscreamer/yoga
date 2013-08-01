@@ -40,7 +40,7 @@ public class LinkedInSelectorParser extends ParentheticalSelectorParser
     {
         if (selectorExpression.equals( ":" ))
         {
-            return new FieldSelector(_entityConfigurationRegistry);
+            return new FieldSelector();
         }
 
         if (!selectorExpression.startsWith( EXPLICIT_SELECTOR_PREFIX ))

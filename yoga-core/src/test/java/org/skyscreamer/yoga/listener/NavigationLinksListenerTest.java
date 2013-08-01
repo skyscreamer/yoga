@@ -1,22 +1,23 @@
 package org.skyscreamer.yoga.listener;
 
+import java.io.IOException;
+import java.util.Map;
+
 import junit.framework.Assert;
+
 import org.junit.Test;
 import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
+import org.skyscreamer.yoga.selector.SelectorResolver;
 import org.skyscreamer.yoga.test.model.basic.BasicTestDataLeaf;
 import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
 import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 
-import java.io.IOException;
-import java.util.Map;
-
 public class NavigationLinksListenerTest
 {
-    static YogaRequestContext requestContext = new YogaRequestContext( "map", new GDataSelectorParser(),
+    static YogaRequestContext requestContext = new YogaRequestContext( "map", new SelectorResolver(),
             new DummyHttpServletRequest(), new DummyHttpServletResponse() );
 
     @Test

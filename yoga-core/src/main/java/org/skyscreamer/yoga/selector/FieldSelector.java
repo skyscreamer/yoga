@@ -4,21 +4,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
-import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
-
 @SuppressWarnings("rawtypes")
 public class FieldSelector implements Selector
 {
     protected Map<String, FieldSelector> subSelectors = new HashMap<String, FieldSelector>();
-    protected EntityConfigurationRegistry _entityConfigurationRegistry;
     private HashMap<String, Property> allFields;
-
-
-    public FieldSelector( EntityConfigurationRegistry entityConfigurationRegistry)
-    {
-        _entityConfigurationRegistry = entityConfigurationRegistry;
-    }
 
     @Override
     public FieldSelector getChildSelector( Class<?> instanceType, String fieldName )
@@ -72,15 +62,10 @@ public class FieldSelector implements Selector
         if(allFields == null)
         {
             // The assumption is that this case will only be called with 1 consistent instance type... which is why we can cache allFields
-            YogaEntityConfiguration<T> entityConfiguration = _entityConfigurationRegistry.getEntityConfiguration( instanceType );
-            Collection<String> selectableFields = entityConfiguration == null ? null : entityConfiguration.getSelectableFields();
             allFields = new HashMap<String, Property>();
             for (String name : subSelectors.keySet())
             {
-                if ( selectableFields == null || selectableFields.contains(name) ) 
-                {
-                    allFields.put( name, new NamedProperty<T>( name ) );
-                }
+               allFields.put( name, new NamedProperty<T>( name ) );
             }
         }
         return (HashMap) allFields;

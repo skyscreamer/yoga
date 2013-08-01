@@ -2,83 +2,45 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
     xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:tx="http://www.springframework.org/schema/tx"  
     xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
-                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-                        http://www.springframework.org/schema/jdbc    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
-                        http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd">
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <context:annotation-config />
     <import resource="daoContext.xml"/>
 
     <!-- YOGA CONFIG BEGIN -->
-    <bean id="hibernateClassFinder" class="org.skyscreamer.yoga.classfinder.HibernateClassFinderStrategy" />
-
-    <bean id="aliasSelectorResolver" class="org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver"
-        p:propertyFile="classpath:selectorAlias.properties" />
-
-    <bean id="entityConfigurationRegistry" class="org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry">
-        <constructor-arg>
+    <bean id="yogaBuilder" class="org.skyscreamer.yoga.builder.YogaBuilder"
+        p:classFinderStrategy="#{new org.skyscreamer.yoga.classfinder.HibernateClassFinderStrategy()}"
+        p:aliasProperties="classpath:selectorAlias.properties"
+        p:outputCountLimit="2000"
+        p:createYogaLinks="true"
+        >
+        <property name="entityConfigurations">
             <list>
                 <bean class="org.skyscreamer.yoga.demo.dto.UserConfiguration" />
             </list>
-        </constructor-arg>
-    </bean>
-
-    <bean id="selectorParser" class="org.skyscreamer.yoga.selector.parser.GDataSelectorParser">
-        <property name="entityConfigurationRegistry" ref="entityConfigurationRegistry"/>
-        <property name="aliasSelectorResolver" ref="aliasSelectorResolver"/>
-        <property name="disableExplicitSelectors" value="false"/>
-    </bean>
-
-    <bean id="hrefListener" class="org.skyscreamer.yoga.listener.HrefListener"
-        p:entityConfigurationRegistry-ref="entityConfigurationRegistry" />
-
-    <bean id="countLimiter" class="org.skyscreamer.yoga.listener.CountLimitRenderingListener">
-        <constructor-arg value="2000" />
-    </bean>
-
-    <bean id="renderingListenerRegistry" class="org.skyscreamer.yoga.listener.RenderingListenerRegistry">
-        <constructor-arg>
+        </property>
+        <property name="yogaMetaDataRegisteredClasses">
             <list>
-                <ref bean="countLimiter" />
-                <ref bean="hrefListener" />
-                <bean class="org.skyscreamer.yoga.listener.SelectorBuilderListener" />
-                <bean class="org.skyscreamer.yoga.listener.NavigationLinksListener"
-                    p:hrefListener-ref="hrefListener" />
-                <bean class="org.skyscreamer.yoga.listener.ModelDefinitionListener"/>
-                <bean class="org.skyscreamer.yoga.listener.MetadataLinkListener"
-                    p:metaDataRegistry-ref="metaDataService" />
+                <value>org.skyscreamer.yoga.demo.model.Album</value>
+                <value>org.skyscreamer.yoga.demo.model.Artist</value>
+                <value>org.skyscreamer.yoga.demo.model.Song</value>
+                <value>org.skyscreamer.yoga.demo.model.User</value>
             </list>
-        </constructor-arg>
-    </bean>
-
-    <bean id="coreSelector" class="org.skyscreamer.yoga.selector.CoreSelector"
-        p:entityConfigurationRegistry-ref="entityConfigurationRegistry"/>
-
-    <bean id="metaDataService" class="org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry"
-          p:coreSelector-ref="coreSelector">
-        <property name="rootMetaDataUrl" value="/metadata/" />
-        <property name="typeMappings">
-            <map>
-                <entry key="album" value="org.skyscreamer.yoga.demo.model.Album" />
-                <entry key="artist" value="org.skyscreamer.yoga.demo.model.Artist" />
-                <entry key="song" value="org.skyscreamer.yoga.demo.model.Song" />
-                <entry key="user" value="org.skyscreamer.yoga.demo.model.User" />
-            </map>
         </property>
     </bean>
 
-    <bean name="abstract.view" abstract="true"
-        p:registry-ref="renderingListenerRegistry"
-        p:classFinderStrategy-ref="hibernateClassFinder"
-        p:selector-ref="coreSelector"
-        p:selectorParser-ref="selectorParser" />
+    <!-- this is needed for the meta controller.  This will ensure backwards compatibility -->
+    <bean name="metaDataRegistry" factory-bean="yogaBuilder" factory-method="getMetaDataRegistry" />
 
-    <bean name="xml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XmlSelectorView" />
-    <bean name="xhtml.view" parent="abstract.view" class="org.skyscreamer.yoga.view.XhtmlSelectorView" />
-    <bean name="json.view" parent="abstract.view" class="org.skyscreamer.yoga.view.JsonSelectorView" />
-    <bean name="builder.view" parent="abstract.view" class="org.skyscreamer.yoga.view.SelectorBuilderView" />
+    <bean name="yogaViewFactory" class="org.skyscreamer.yoga.builder.YogaBuilderViewFactory"
+        p:builder-ref="yogaBuilder" />
+
+    <bean name="xml.view" factory-bean="yogaViewFactory" factory-method="createXmlSelectorView" />
+    <bean name="xhtml.view" factory-bean="yogaViewFactory" factory-method="createXhtmlSelectorView" />
+    <bean name="json.view" factory-bean="yogaViewFactory" factory-method="createStreamingJsonSelectorView" />
+    <bean name="builder.view" factory-bean="yogaViewFactory" factory-method="createSelectorBuilderView" />
 
     <!-- YOGA CONFIG END -->
 </beans>

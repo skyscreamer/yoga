@@ -1,6 +1,5 @@
 package org.skyscreamer.yoga.test.util;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -8,45 +7,37 @@ import org.junit.Assert;
 import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
 import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
 import org.skyscreamer.yoga.exceptions.ParseSelectorException;
+import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
 import org.skyscreamer.yoga.selector.CoreSelector;
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorResolver;
 import org.skyscreamer.yoga.selector.parser.AliasSelectorResolver;
-import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
-import org.skyscreamer.yoga.selector.parser.LinkedInSelectorParser;
-import org.skyscreamer.yoga.selector.parser.ParentheticalSelectorParser;
-import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 /**
  * User: corby Date: 5/7/12
  */
 public abstract class AbstractTraverserTest
 {
-    protected Class<? extends ParentheticalSelectorParser> _selectorParserClass = LinkedInSelectorParser.class;
-    protected AliasSelectorResolver _aliasSelectorResolver;
-    protected EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
-    protected CoreSelector coreSelector = new CoreSelector( _entityConfigurationRegistry );
+    private final SelectorResolver resolver  = new SelectorResolver();
 
-    protected Map<String, Object> doTraverse( Object instance, String selectorString, ResultTraverser traverser )
     {
-        YogaRequestContext context = new YogaRequestContext( "test", new GDataSelectorParser(),
-                new DummyHttpServletRequest(), new DummyHttpServletResponse() );
-        return doTraverse( instance, selectorString, traverser, context );
+        resolver.setEntityConfigurationRegistry( new DefaultEntityConfigurationRegistry() );
     }
 
-    protected Map<String, Object> doTraverse( Object instance, String selectorString, ResultTraverser traverser,
-            YogaRequestContext context )
+    protected Map<String, Object> doTraverse( Object instance, String selectorString, ResultTraverser traverser, RenderingListener ... listeners )
     {
         try
         {
-            SelectorParser selectorParser = context.getSelectorParser();
-            selectorParser.setEntityConfigurationRegistry( _entityConfigurationRegistry );
-            selectorParser.setAliasSelectorResolver( _aliasSelectorResolver );
-            Selector selector = selectorParser.parseSelector( selectorString, coreSelector );
+            YogaRequestContext context = new YogaRequestContext( "test", resolver,
+                    new DummyHttpServletRequest(), new DummyHttpServletResponse(), listeners );
 
-            return doTraverse( instance, traverser, selector, context );
+            Selector selector = resolver.resolveSelector( selectorString );
+            ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
+            traverser.traverse( instance, selector, model, context );
+            return model.getUnderlyingModel();
         }
         catch (ParseSelectorException e)
         {
@@ -54,17 +45,10 @@ public abstract class AbstractTraverserTest
         }
         catch (Exception e)
         {
-            Assert.fail( "Could not instantiate " + _selectorParserClass );
+            e.printStackTrace();
+            Assert.fail( "exception occurred" );
         }
         return null;
-    }
-
-    private Map<String, Object> doTraverse( Object instance, ResultTraverser traverser, Selector selector,
-            YogaRequestContext context ) throws IOException
-    {
-        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
-        traverser.traverse( instance, selector, model, context );
-        return model.getUnderlyingModel();
     }
 
     @SuppressWarnings("unchecked")
@@ -85,13 +69,19 @@ public abstract class AbstractTraverserTest
         return null;
     }
 
-    public void setSelectorParserClass( Class<? extends ParentheticalSelectorParser> selectorParserClass )
-    {
-        _selectorParserClass = selectorParserClass;
-    }
 
     public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )
     {
-        _aliasSelectorResolver = aliasSelectorResolver;
+        resolver.getSelectorParser().setAliasSelectorResolver( aliasSelectorResolver );
+    }
+
+    public EntityConfigurationRegistry getEntityConfigurationRegistry()
+    {
+        return getCoreSelector().getEntityConfigurationRegistry();
+    }
+    
+    public CoreSelector getCoreSelector()
+    {
+        return resolver.getBaseSelector();
     }
 }

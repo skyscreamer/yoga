@@ -15,28 +15,29 @@ import org.skyscreamer.yoga.listener.RenderingListener;
 import org.skyscreamer.yoga.model.ListHierarchicalModel;
 import org.skyscreamer.yoga.model.MapHierarchicalModel;
 import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.selector.SelectorResolver;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 
 public class YogaRequestContext
 {
     private final String urlSuffix;
-    private final SelectorParser selectorParser;
+    private final SelectorResolver selectorResolver;
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final Map<String, Object> properties = new HashMap<String, Object>();
     private final Collection<RenderingListener> listeners;
 
-    public YogaRequestContext( String urlSuffix, SelectorParser parser, HttpServletRequest request,
+    public YogaRequestContext( String urlSuffix, SelectorResolver resolver, HttpServletRequest request,
             HttpServletResponse response, RenderingListener... listeners )
     {
-        this( urlSuffix, parser, request, response, Arrays.asList( listeners ) );
+        this( urlSuffix, resolver, request, response, Arrays.asList( listeners ) );
     }
 
-    public YogaRequestContext( String urlSuffix, SelectorParser parser, HttpServletRequest request,
+    public YogaRequestContext( String urlSuffix, SelectorResolver resolver, HttpServletRequest request,
             HttpServletResponse response, Collection<RenderingListener> listeners )
     {
         this.urlSuffix = urlSuffix;
-        this.selectorParser = parser;
+        this.selectorResolver = resolver;
         this.request = request;
         this.response = response;
         this.listeners = listeners;
@@ -47,8 +48,9 @@ public class YogaRequestContext
         return urlSuffix;
     }
 
-    public SelectorParser getSelectorParser() {
-        return selectorParser;
+    public SelectorParser getSelectorParser() 
+    {
+        return this.selectorResolver.getSelectorParser();
     }
 
     public HttpServletRequest getRequest()
@@ -97,5 +99,10 @@ public class YogaRequestContext
     {
         emitEvent(new RenderingEvent(RenderingEventType.LIST_CHILD, model,
                 iterable, iterable.getClass(), context, selector));
+    }
+    
+    public Selector getSelector()
+    {
+        return this.selectorResolver.getSelector( request );
     }
 }

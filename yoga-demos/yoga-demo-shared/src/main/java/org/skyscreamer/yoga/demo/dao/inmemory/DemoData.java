@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 import org.skyscreamer.yoga.demo.model.Album;
 import org.skyscreamer.yoga.demo.model.Artist;
@@ -21,9 +23,32 @@ public class DemoData
     private Map<Long, Album> albums = Maps.newHashMap();
     private Map<Long, Song> songs = Maps.newHashMap();
 
-    public void init() throws IOException
+    public static final String remoteData = "https://raw.github.com/skyscreamer/skyscreamer.github.com/master/yoga/loaddb.sql.gz";
+    public static final String localData = "sampledb.sql";
+
+    public void init()
     {
-        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream( "sampledb.sql" );
+        try
+        {
+            init( Thread.currentThread().getContextClassLoader().getResourceAsStream( "sampledb.sql" ) );
+        }
+        catch ( Exception e )
+        {
+            throw new RuntimeException( e );
+        }
+        // this doesn't seem to work yet. It reads a partial line and throws up
+//        try
+//        {
+//            init( new GZIPInputStream( new URL( remoteData ).openStream() ) );
+//        }
+//        catch ( Exception e )
+//        {
+//            e.printStackTrace();
+//        }
+    }
+
+    private void init( InputStream is ) throws IOException
+    {
         BufferedReader reader = new BufferedReader( new InputStreamReader( is ) );
         String line = null;
         while ( ( line = reader.readLine() ) != null )
@@ -48,7 +73,8 @@ public class DemoData
             }
             else if ("Album".equalsIgnoreCase( type ))
             {
-                newAlbum( toLong( values[ 0 ] ), toStr( values[ 1 ] ), toLong( values[ 2 ] ), new Integer( values[ 3 ].trim() ) );
+                newAlbum( toLong( values[ 0 ] ), toStr( values[ 1 ] ), toLong( values[ 2 ] ),
+                        new Integer( values[ 3 ].trim() ) );
             }
             else if ("Song".equalsIgnoreCase( type ))
             {
@@ -57,7 +83,6 @@ public class DemoData
         }
 
         is.close();
-
     }
 
     private long toLong( String string )
