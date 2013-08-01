@@ -54,7 +54,7 @@ Right here:
 
     <dependency>
         <groupId>org.skyscreamer</groupId>
-        <artifactId>yoga</artifactId>
+        <artifactId>yoga-core</artifactId>
         <version>1.0.1</version>
     </dependency>
     
