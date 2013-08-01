@@ -41,7 +41,7 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
             _typeToStringMap.put( entry.getValue(), entry.getKey() );
         }
     }
-    
+
 
     public void registerTypeMapping( String name, Class<?> type )
     {
@@ -58,7 +58,7 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
     {
         setRegisteredClasses( types.toArray( new Class<?>[types.size()] ) );
     }
-    
+
     public void setRegisteredClasses( Class<?> ... types )
     {
         for( Class<?> type : types )
@@ -66,8 +66,8 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
             registerTypeMapping( NameUtil.getName( type ), type );
         }
     }
-    
-    
+
+
     @Override
     public Collection<String> getTypes()
     {

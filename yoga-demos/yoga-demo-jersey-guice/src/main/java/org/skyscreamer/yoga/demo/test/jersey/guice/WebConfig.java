@@ -5,8 +5,18 @@ import java.util.Map;
 
 import org.skyscreamer.yoga.builder.YogaBuilder;
 import org.skyscreamer.yoga.builder.YogaBuilderViewFactory;
+import org.skyscreamer.yoga.classfinder.HibernateClassFinderStrategy;
 import org.skyscreamer.yoga.demo.dao.GenericDao;
+import org.skyscreamer.yoga.demo.dao.inmemory.DemoData;
+import org.skyscreamer.yoga.demo.dao.inmemory.DemoDataGenericDao;
+import org.skyscreamer.yoga.demo.dto.UserConfiguration;
 import org.skyscreamer.yoga.demo.jaxrs.resources.AbstractResource;
+import org.skyscreamer.yoga.demo.model.Album;
+import org.skyscreamer.yoga.demo.model.Artist;
+import org.skyscreamer.yoga.demo.model.Song;
+import org.skyscreamer.yoga.demo.model.User;
+import org.skyscreamer.yoga.demo.test.MapBeanConext;
+import org.skyscreamer.yoga.demo.util.TestUtil;
 import org.skyscreamer.yoga.jaxrs.exceptionhandlers.EntityCountExceededExceptionExceptionMapper;
 import org.skyscreamer.yoga.jaxrs.resource.MetaDataController;
 import org.skyscreamer.yoga.jaxrs.view.builder.SelectorBuilderMessageBodyWriter;
@@ -15,8 +25,6 @@ import org.skyscreamer.yoga.jaxrs.view.builder.XhtmlSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jaxrs.view.builder.XmlSelectorMessageBodyWriter;
 import org.skyscreamer.yoga.jersey.config.URIExtensionsConfig;
 import org.skyscreamer.yoga.metadata.MetaDataRegistry;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -39,21 +47,22 @@ public class WebConfig extends GuiceServletContextListener
                 params.put( "javax.ws.rs.Application", URIExtensionsConfig.class.getName() );
                 params.put( "com.sun.jersey.config.property.packages", AbstractResource.class.getPackage().getName() );
 
-                // This part is a bit hack-tastic. We don't have full Guice
-                // configuration, so let's let Spring
-                // do its thing with the database components and other
-                // configuration. This allows us to test
-                // the Writer/Resource aspects that are specific to
-                // Jersey/Yoga integration. It's probably
-                // worth while doing a full guice / hibernate integration at
-                // some point.
-                ApplicationContext spring = WebApplicationContextUtils
-                        .getRequiredWebApplicationContext( getServletContext() );
-                Class<?>[] types = { GenericDao.class, MetaDataRegistry.class, YogaBuilder.class, YogaBuilderViewFactory.class };
+                DemoData data = new DemoData();
+                data.init();
 
-                for ( Class<?> type : types )
-                    bind( spring, type );
+                GenericDao dao = new DemoDataGenericDao(  data );
 
+                YogaBuilder builder = new YogaBuilder()
+                    .withClassFinderStrategy( new HibernateClassFinderStrategy() )
+                    .withAliasProperties( this.getClass().getClassLoader().getResourceAsStream( "selectorAlias.properties" ) )
+                    .withOutputCountLimit( 2000 )
+                    .enableYogaLinks()
+                    .registerYogaMetaDataClasses( User.class, Album.class, Artist.class, Song.class )
+                    .registerEntityConfigurations( new UserConfiguration( dao ) );
+
+                bind( GenericDao.class ).toInstance( dao );
+                bind( YogaBuilderViewFactory.class ).toInstance( new YogaBuilderViewFactory( builder ));
+                bind( MetaDataRegistry.class ).toInstance( builder.getMetaDataRegistry() );
                 bind( StreamingJsonSelectorMessageBodyWriter.class );
                 bind( SelectorBuilderMessageBodyWriter.class );
                 bind( XmlSelectorMessageBodyWriter.class );
@@ -62,13 +71,13 @@ public class WebConfig extends GuiceServletContextListener
                 bind( EntityCountExceededExceptionExceptionMapper.class );
 
                 serve( "*.yoga", "*.json", "*.xml", "*.xhtml" ).with( GuiceContainer.class, params );
+
+                MapBeanConext context = new MapBeanConext();
+                context.register( GenericDao.class, dao );
+                TestUtil.setContext( context );
+
             }
 
-            private <T> void bind( ApplicationContext spring, Class<T> type )
-            {
-                T bean = spring.getBean( type );
-                bind( type ).toInstance( bean );
-            }
         } );
     }
 

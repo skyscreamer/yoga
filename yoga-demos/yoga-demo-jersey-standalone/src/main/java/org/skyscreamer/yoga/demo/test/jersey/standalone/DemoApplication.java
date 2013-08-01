@@ -1,6 +1,5 @@
 package org.skyscreamer.yoga.demo.test.jersey.standalone;
 
-import java.io.IOException;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
@@ -20,7 +19,7 @@ import org.skyscreamer.yoga.demo.model.Album;
 import org.skyscreamer.yoga.demo.model.Artist;
 import org.skyscreamer.yoga.demo.model.Song;
 import org.skyscreamer.yoga.demo.model.User;
-import org.skyscreamer.yoga.demo.test.BeanContext;
+import org.skyscreamer.yoga.demo.test.MapBeanConext;
 import org.skyscreamer.yoga.demo.util.TestUtil;
 import org.skyscreamer.yoga.jaxrs.resource.MetaDataController;
 import org.skyscreamer.yoga.jaxrs.view.builder.SelectorBuilderMessageBodyWriter;
@@ -37,15 +36,9 @@ public class DemoApplication extends DefaultResourceConfig
     {
 
         DemoData data = new DemoData();
-        try
-        {
-            data.init();
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-        }
-        final GenericDao dao = new DemoDataGenericDao(  data );
+        data.init();
+
+        GenericDao dao = new DemoDataGenericDao(  data );
         
         YogaBuilder builder = new YogaBuilder()
             .withClassFinderStrategy( new HibernateClassFinderStrategy() )
@@ -66,19 +59,9 @@ public class DemoApplication extends DefaultResourceConfig
         getSingletons().add( new XmlSelectorMessageBodyWriter( util ) );
         getSingletons().add( new SelectorBuilderMessageBodyWriter( util ) );
 
-        TestUtil.setContext( new BeanContext()
-        {
-            @SuppressWarnings( "unchecked" )
-            @Override
-            public <T> T getBean( Class<T> type )
-            {
-                if( GenericDao.class == type )
-                {
-                    return (T) dao;
-                }
-                return null;
-            }
-        } );
+        MapBeanConext context = new MapBeanConext();
+        context.register( GenericDao.class, dao );
+        TestUtil.setContext( context );
     }
 
     @Override
