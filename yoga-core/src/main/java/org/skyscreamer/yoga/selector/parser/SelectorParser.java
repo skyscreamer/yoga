@@ -1,12 +1,8 @@
 package org.skyscreamer.yoga.selector.parser;
 
-import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
-import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
-import org.skyscreamer.yoga.selector.CompositeSelector;
+import org.skyscreamer.yoga.exceptions.ParseSelectorException;
 import org.skyscreamer.yoga.selector.FieldSelector;
-import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.Selector;
 
 /**
  * A SelectorParser takes a string selector argument and translates it into a
@@ -21,8 +17,6 @@ public abstract class SelectorParser
     public static final String ALIAS_SELECTOR_PREFIX = "$";
     public static final String HREF = "href";
     public static final String DEFINITION = "definition";
-
-    protected EntityConfigurationRegistry _entityConfigurationRegistry = new DefaultEntityConfigurationRegistry();
 
     protected AliasSelectorResolver _aliasSelectorResolver;
     protected boolean _disableExplicitSelectors = false;
@@ -61,20 +55,6 @@ public abstract class SelectorParser
         }
     }
 
-    public Selector parseSelector( String selectorExpression, CoreSelector coreSelector ) throws ParseSelectorException
-    {
-        Selector fieldSelector = parseSelector( selectorExpression );
-
-        if(fieldSelector != null)
-        {
-            return new CompositeSelector( coreSelector, fieldSelector );
-        }
-        else
-        {
-            return coreSelector;
-        }
-    }
-
     public void setAliasSelectorResolver( AliasSelectorResolver aliasSelectorResolver )
     {
         _aliasSelectorResolver = aliasSelectorResolver;
@@ -85,9 +65,11 @@ public abstract class SelectorParser
         _disableExplicitSelectors = disableExplicitSelectors;
     }
 
+    @Deprecated
+    /** this method wasn't all that useful.  This registry really only helped the Core selector, not the url parsed fields */
     public void setEntityConfigurationRegistry( EntityConfigurationRegistry entityConfigurationRegistry)
     {
-        _entityConfigurationRegistry = entityConfigurationRegistry;
     }
+
 }
 

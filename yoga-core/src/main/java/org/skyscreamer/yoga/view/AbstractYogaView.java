@@ -9,11 +9,9 @@ import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.selector.CoreSelector;
-import org.skyscreamer.yoga.selector.Selector;
 import org.skyscreamer.yoga.selector.SelectorResolver;
 import org.skyscreamer.yoga.selector.parser.SelectorParser;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
-import org.skyscreamer.yoga.util.DefaultClassFinderStrategy;
 import org.skyscreamer.yoga.util.NameUtil;
 
 /**
@@ -30,58 +28,60 @@ import org.skyscreamer.yoga.util.NameUtil;
  */
 public abstract class AbstractYogaView
 {
-	protected ResultTraverser _resultTraverser = new ResultTraverser();
+    protected ResultTraverser _resultTraverser = new ResultTraverser();
 
-	protected ClassFinderStrategy _classFinderStrategy = new DefaultClassFinderStrategy();
+    protected SelectorResolver _selectorResolver = new SelectorResolver();
 
-	protected SelectorResolver _selectorResolver = new SelectorResolver();
-	
-	protected RenderingListenerRegistry _registry = new RenderingListenerRegistry();
+    protected RenderingListenerRegistry _registry = new RenderingListenerRegistry();
 
-	public void setResultTraverser(ResultTraverser resultTraverser)
-	{
-		this._resultTraverser = resultTraverser;
-	}
+    public void setResultTraverser( ResultTraverser resultTraverser )
+    {
+        this._resultTraverser = resultTraverser;
+    }
 
-	public void setSelectorParser(SelectorParser selectorParser)
-	{
-		this._selectorResolver.setSelectorParser(selectorParser);
-	}
+    @Deprecated
+    /** use setSelectorResolver instead */
+    public void setSelectorParser( SelectorParser selectorParser )
+    {
+        this._selectorResolver.setSelectorParser( selectorParser );
+    }
 
-	public void setRegistry(RenderingListenerRegistry registry)
-	{
-		this._registry = registry;
-	}
+    @Deprecated
+    /** use setSelectorResolver instead */
+    public void setSelector( CoreSelector selector )
+    {
+        this._selectorResolver.setBaseSelector( selector );
+    }
 
-	public void setSelector(CoreSelector selector)
-	{
-		this._selectorResolver.setBaseSelector(selector);
-	}
 
-	public void setSelectorResolver(SelectorResolver selectorResolver)
-	{
-		this._selectorResolver = selectorResolver;
-	}
-	
-	public SelectorResolver getSelectorResolver()
-	{
-		return _selectorResolver;
-	}
+    public void setRegistry( RenderingListenerRegistry registry )
+    {
+        this._registry = registry;
+    }
 
-	public void setClassFinderStrategy(ClassFinderStrategy classFinderStrategy)
-	{
-		this._classFinderStrategy = classFinderStrategy;
-		_resultTraverser.setClassFinderStrategy(classFinderStrategy);
-	}
+    public void setSelectorResolver( SelectorResolver selectorResolver )
+    {
+        this._selectorResolver = selectorResolver;
+    }
 
-	public ResultTraverser getResultTraverser()
+    public SelectorResolver getSelectorResolver()
+    {
+        return _selectorResolver;
+    }
+
+    public ResultTraverser getResultTraverser()
     {
         return _resultTraverser;
     }
 
     public ClassFinderStrategy getClassFinderStrategy()
     {
-        return _classFinderStrategy;
+        return _resultTraverser.getClassFinderStrategy();
+    }
+    
+    public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
+    {
+        _resultTraverser.setClassFinderStrategy( classFinderStrategy );
     }
 
     public RenderingListenerRegistry getRegistry()
@@ -89,27 +89,23 @@ public abstract class AbstractYogaView
         return _registry;
     }
 
-    public final void render(HttpServletRequest request,
-			HttpServletResponse response, Object value, OutputStream os)
-			throws Exception
-	{
-		YogaRequestContext context = new YogaRequestContext(getHrefSuffix(),
-				getSelectorResolver().getSelectorParser(), request, response,
-				_registry.getListeners());
-		Selector selector = getSelectorResolver().getSelector(request);
-		render(selector, value, context, os);
-	}
+    public final void render( HttpServletRequest request, HttpServletResponse response, Object value, OutputStream os )
+            throws Exception
+    {
+        YogaRequestContext context = new YogaRequestContext( getHrefSuffix(), getSelectorResolver(), request, response,
+                _registry.getListeners() );
+        render( value, context, os );
+    }
 
-	protected String getClassName(Object obj)
-	{
-		Class<?> type = _classFinderStrategy.findClass(obj);
-		return NameUtil.getName(type);
-	}
+    protected String getClassName( Object obj )
+    {
+        Class<?> type = getClassFinderStrategy().findClass( obj );
+        return NameUtil.getName( type );
+    }
 
-	public abstract String getContentType();
+    public abstract String getContentType();
 
-	protected abstract void render(Selector selector, Object value,
-			YogaRequestContext context, OutputStream os) throws Exception;
+    protected abstract void render( Object value, YogaRequestContext context, OutputStream os ) throws Exception;
 
-	public abstract String getHrefSuffix();
+    public abstract String getHrefSuffix();
 }

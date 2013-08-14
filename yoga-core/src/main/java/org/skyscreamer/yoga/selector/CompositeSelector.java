@@ -1,8 +1,8 @@
 package org.skyscreamer.yoga.selector;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class CompositeSelector implements Selector
 {
@@ -47,32 +47,17 @@ public class CompositeSelector implements Selector
     @Override
     public <T> Collection<Property<T>> getSelectedFields( Class<T> instanceType )
     {
-        Map<String, Property<T>> response = new TreeMap<String, Property<T>>();
-
-        Collection<Property<T>> selectedFields = coreSelector.getSelectedFields( instanceType );
-        for (Property<T> property : selectedFields)
+        ArrayList<Property<T>> list = new ArrayList<Property<T>>();
+        for( Property<T> p : fieldSelector.getSelectedFields( instanceType ) )
         {
-            response.put( property.name(), property );
-        }
-
-        Collection<Property<T>> fieldSelectorChildren = fieldSelector.getSelectedFields( instanceType );
-
-        Map<String, Property<T>> allMapFields = coreSelector.getAllPossibleFieldMap( instanceType );
-
-        for (Property<?> property : fieldSelectorChildren)
-        {
-            String name = property.name();
-            if (!response.containsKey( name ))
+            Property<T> property = coreSelector.getProperty( instanceType, p.name() );
+            if(property != null)
             {
-                Property<T> prop = allMapFields.get( name );
-                if( prop != null )
-                {
-                    response.put( name, prop );
-                }
+                list.add( property);
             }
         }
-
-        return response.values();
+        list.addAll( coreSelector.getSelectedFields( instanceType ) );
+        return list;
     }
 
     @Override

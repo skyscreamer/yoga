@@ -8,7 +8,7 @@ import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.XmlHierarchyModelImpl;
-import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.util.XmlYogaViewUtil;
 
 /**
  * This class represents an xml yoga view. It will return an xml representation
@@ -21,7 +21,7 @@ import org.skyscreamer.yoga.selector.Selector;
 public class XmlSelectorView extends AbstractYogaView
 {
     @Override
-    public void render( Selector selector, Object value, YogaRequestContext context, OutputStream os )
+    public void render( Object value, YogaRequestContext context, OutputStream os )
             throws IOException
     {
         HierarchicalModel<Element> model = null;
@@ -35,7 +35,7 @@ public class XmlSelectorView extends AbstractYogaView
             model = new XmlHierarchyModelImpl( new DOMElement( getClassName( value ) ) );
         }
 
-        _resultTraverser.traverse( value, selector, model, context );
+        _resultTraverser.traverse( value, context.getSelector(), model, context );
         XmlYogaViewUtil.write( model.getUnderlyingModel(), os );
     }
 

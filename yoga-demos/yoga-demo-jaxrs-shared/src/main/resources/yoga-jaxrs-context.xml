@@ -11,7 +11,7 @@
     <context:component-scan base-package="org.skyscreamer.yoga.demo.jaxrs.resources" use-default-filters="false">
         <context:include-filter type="annotation" expression="javax.inject.Singleton"/>
     </context:component-scan>
-    <context:component-scan base-package="org.skyscreamer.yoga.jaxrs.view" use-default-filters="false">
+    <context:component-scan base-package="org.skyscreamer.yoga.jaxrs.view.builder" use-default-filters="false">
         <context:include-filter type="annotation" expression="javax.inject.Singleton"/>
     </context:component-scan>
     <context:component-scan base-package="org.skyscreamer.yoga.jaxrs.resource" use-default-filters="false">

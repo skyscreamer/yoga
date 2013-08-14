@@ -114,4 +114,10 @@ public class ResultTraverser
     {
         this._classFinderStrategy = classFinderStrategy;
     }
+
+    public ClassFinderStrategy getClassFinderStrategy()
+    {
+        return _classFinderStrategy;
+    }
 }
+

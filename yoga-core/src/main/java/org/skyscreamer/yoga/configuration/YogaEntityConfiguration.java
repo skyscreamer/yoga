@@ -96,8 +96,12 @@ public abstract class YogaEntityConfiguration<T> {
      */
     public List<Method> getExtraFieldMethods()
     {
-        List<Method> result = new ArrayList<Method>();
-        for ( Method method : getClass().getDeclaredMethods() )
+        return getExtraFieldMethods( new ArrayList<Method>(), getClass() );
+    }
+
+    private List<Method> getExtraFieldMethods(List<Method> result, Class<?> current)
+    {
+        for ( Method method : current.getDeclaredMethods() )
         {
             Class<?>[] parameterTypes = method.getParameterTypes();
             if ( method.isAnnotationPresent( ExtraField.class )
@@ -107,6 +111,10 @@ public abstract class YogaEntityConfiguration<T> {
             {
                 result.add( method );
             }
+        }
+        if(current.getSuperclass() != null)
+        {
+            getExtraFieldMethods( result, current.getSuperclass() );
         }
         return result;
     }

@@ -44,5 +44,11 @@ public class NamedProperty<T> implements Property<T>
     {
 	    return isPrimitive;
     }
+	
+	@Override
+	public String toString()
+	{
+	    return "NamedProperty(" + name + ")";
+	}
 
 }

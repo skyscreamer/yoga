@@ -16,9 +16,6 @@
     <bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
 
     <!--  <mvc:annotation-driven />  -->
-    <bean name="abstract.springView" abstract="true"
-        class="org.skyscreamer.yoga.springmvc.view.YogaSpringView" />
-
     <bean name="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
           p:order="1" p:ignoreAcceptHeader="true">
         <property name="mediaTypes">
@@ -30,9 +27,9 @@
         </property>
         <property name="defaultViews">
             <list>
-                <bean parent="abstract.springView" p:yogaView-ref="json.view"/>
-                <bean parent="abstract.springView" p:yogaView-ref="xml.view"/>
-                <bean parent="abstract.springView" p:yogaView-ref="builder.view"/>
+                <bean class="org.skyscreamer.yoga.springmvc.view.YogaSpringView" p:yogaView-ref="json.view"/>
+                <bean class="org.skyscreamer.yoga.springmvc.view.YogaSpringView" p:yogaView-ref="xml.view"/>
+                <bean class="org.skyscreamer.yoga.springmvc.view.YogaSpringView" p:yogaView-ref="builder.view"/>
             </list>
         </property>
     </bean>

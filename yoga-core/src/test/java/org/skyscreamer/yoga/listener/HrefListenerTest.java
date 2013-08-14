@@ -1,19 +1,16 @@
 package org.skyscreamer.yoga.listener;
 
+import java.util.Map;
+
 import junit.framework.Assert;
+
 import org.junit.Test;
 import org.skyscreamer.yoga.mapper.ResultTraverser;
-import org.skyscreamer.yoga.mapper.YogaRequestContext;
-import org.skyscreamer.yoga.selector.parser.GDataSelectorParser;
 import org.skyscreamer.yoga.test.model.basic.DataGenerator;
 import org.skyscreamer.yoga.test.model.extended.Album;
 import org.skyscreamer.yoga.test.model.extended.AlbumEntityConfiguration;
 import org.skyscreamer.yoga.test.model.extended.User;
 import org.skyscreamer.yoga.test.util.AbstractTraverserTest;
-import org.skyscreamer.yoga.test.util.DummyHttpServletRequest;
-import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
-
-import java.util.Map;
 
 /**
  * User: corby Date: 5/14/12
@@ -29,9 +26,7 @@ public class HrefListenerTest extends AbstractTraverserTest
         User solomon = DataGenerator.solomon();
         ResultTraverser traverser = new ResultTraverser();
 
-        YogaRequestContext requestContext = new YogaRequestContext( "test", new GDataSelectorParser(),
-                new DummyHttpServletRequest(), new DummyHttpServletResponse(), new HrefListener() );
-        Map<String, Object> objectTree = doTraverse( solomon, ":", traverser, requestContext );
+        Map<String, Object> objectTree = doTraverse( solomon, ":", traverser, new HrefListener() );
 
         Assert.assertEquals( "/user/" + solomon.getId() + ".test", objectTree.get( "href" ) );
     }
@@ -45,12 +40,10 @@ public class HrefListenerTest extends AbstractTraverserTest
     {
         Album funeral = DataGenerator.funeral();
         ResultTraverser traverser = new ResultTraverser();
-        _entityConfigurationRegistry.register( new AlbumEntityConfiguration() );
+        getEntityConfigurationRegistry().register( new AlbumEntityConfiguration() );
 
-        YogaRequestContext requestContext = new YogaRequestContext( "test", new GDataSelectorParser(),
-                new DummyHttpServletRequest(), new DummyHttpServletResponse(),
-                    new HrefListener( _entityConfigurationRegistry ) );
-        Map<String, Object> objectTree = doTraverse( funeral, ":", traverser, requestContext );
+        HrefListener listener = new HrefListener( getEntityConfigurationRegistry() );
+        Map<String, Object> objectTree = doTraverse( funeral, ":", traverser, listener );
 
         Assert.assertEquals( "/album/" + funeral.getId() + ".test", objectTree.get( "href" ) );
     }

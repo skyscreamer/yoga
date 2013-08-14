@@ -8,18 +8,18 @@ import org.dom4j.dom.DOMElement;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.XhtmlHierarchyModelImpl;
-import org.skyscreamer.yoga.selector.Selector;
+import org.skyscreamer.yoga.util.XmlYogaViewUtil;
 
 public class XhtmlSelectorView extends AbstractYogaView
 {
     @Override
-    public void render( Selector selector, Object value, YogaRequestContext context, OutputStream os )
+    public void render( Object value, YogaRequestContext context, OutputStream os )
             throws IOException
     {
         Element rootElement = new DOMElement( "html" );
         initHead( rootElement );
         HierarchicalModel<Element> model = getModel( value, rootElement );
-        _resultTraverser.traverse( value, selector, model, context );
+        _resultTraverser.traverse( value, context.getSelector(), model, context );
         XmlYogaViewUtil.write( rootElement, os );
     }
 
