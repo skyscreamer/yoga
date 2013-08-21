@@ -116,15 +116,15 @@ public class UserControllerTest
     public void testMetaData() throws Exception
     {
         String expected  = "{\"propertyMetaData\":[{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"favoriteArtists\"," +
-                "\"navigationLinks\":{},\"isCore\":false,\"type\":\"Artist[]\",\"href\":\"/metadata/artist.json\"}," +
+                "\"navigationLinks\":{},\"isCore\":false,\"type\":\"Collection<Artist>\",\"href\":\"/metadata/artist.json\"}," +
                 "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"friends\",\"navigationLinks\":{}," +
-                "\"isCore\":false,\"type\":\"User[]\",\"href\":\"/metadata/user.json\"}," +
+                "\"isCore\":false,\"type\":\"Collection<User>\",\"href\":\"/metadata/user.json\"}," +
                 "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"id\",\"navigationLinks\":{},\"isCore\":true,\"type\":\"long\"}," +
                 "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"isFriend\",\"navigationLinks\":{}," +
                 "\"isCore\":false,\"type\":\"boolean\"},{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"]," +
                 "\"name\":\"name\",\"navigationLinks\":{},\"isCore\":true,\"type\":\"String\"}," +
                 "{\"definition\":[\"href\",\"isCore\",\"name\",\"type\"],\"name\":\"recommendedAlbums\",\"navigationLinks\":{}," +
-                "\"isCore\":false,\"type\":\"Album[]\",\"href\":\"/metadata/album.json\"}]," +
+                "\"isCore\":false,\"type\":\"Collection<Album>\",\"href\":\"/metadata/album.json\"}]," +
                 "\"definition\":[\"name\",\"propertyMetaData\"],\"name\":\"User\",\"navigationLinks\":{}}";
         
         JSONObject data = getJSONObject( "/metadata/user", null );
