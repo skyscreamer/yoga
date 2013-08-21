@@ -141,12 +141,12 @@ public class DefaultMetaDataRegistry implements MetaDataRegistry
             else if ( Iterable.class.isAssignableFrom( propertyType ) || propertyType.isArray() )
             {
                 Class<?> collectionValueType = getCollectionType( readMethod, propertyType );
-				if ( collectionValueType != null )
-				{
-					String typeName = NameUtil.getFormalName( collectionValueType ) + "[]";
-					propertyMetaData.setType( typeName );
-					addHref( propertyMetaData, collectionValueType, suffix );
-				}
+				if ( collectionValueType == null )
+					continue;
+
+				String typeName = NameUtil.getFormalName( collectionValueType ) + "[]";
+				propertyMetaData.setType( typeName );
+				addHref( propertyMetaData, collectionValueType, suffix );
             }
             else
             {
