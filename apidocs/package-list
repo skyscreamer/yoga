@@ -1,9 +1,12 @@
 org.skyscreamer.yoga.annotations
+org.skyscreamer.yoga.builder
 org.skyscreamer.yoga.classfinder
 org.skyscreamer.yoga.configuration
 org.skyscreamer.yoga.exceptions
+org.skyscreamer.yoga.jaxrs.exceptionhandlers
 org.skyscreamer.yoga.jaxrs.resource
 org.skyscreamer.yoga.jaxrs.view
+org.skyscreamer.yoga.jaxrs.view.builder
 org.skyscreamer.yoga.jersey.config
 org.skyscreamer.yoga.listener
 org.skyscreamer.yoga.mapper
@@ -11,6 +14,7 @@ org.skyscreamer.yoga.metadata
 org.skyscreamer.yoga.model
 org.skyscreamer.yoga.selector
 org.skyscreamer.yoga.selector.parser
+org.skyscreamer.yoga.springmvc.builder
 org.skyscreamer.yoga.springmvc.controller
 org.skyscreamer.yoga.springmvc.view
 org.skyscreamer.yoga.uri
