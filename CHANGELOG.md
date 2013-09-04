@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.0.2 - 2013-08-25
+--------------------------
+ - Various refactors including improvements to Jersey demo projects
+ - Add null check to MetaDataRegistry
+
 Version 1.0.1 - 2013-07-28
 --------------------------
  - Removed Spring dependencies from JAX-RS and Jersey integration libraries
