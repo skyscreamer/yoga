@@ -13,6 +13,7 @@ import org.skyscreamer.yoga.listener.RenderingListenerRegistry;
 import org.skyscreamer.yoga.listener.SelectorBuilderListener;
 import org.skyscreamer.yoga.listener.UriGenerator;
 import org.skyscreamer.yoga.metadata.DefaultMetaDataRegistry;
+import org.skyscreamer.yoga.metadata.MetaDataRegistry;
 import org.skyscreamer.yoga.selector.SelectorResolver;
 import org.skyscreamer.yoga.selector.parser.DynamicPropertyResolver;
 import org.skyscreamer.yoga.util.ClassFinderStrategy;
@@ -27,28 +28,41 @@ public class YogaBuilder
 
     protected RenderingListenerRegistry _registry = new RenderingListenerRegistry();
 
-    protected SelectorResolver _selectorResolver = new SelectorResolver();
+    protected  SelectorResolver _selectorResolver;
 
     protected InputStream _aliasProperties = null;
 
     protected boolean _createAllLinks = false;
 
-    private DefaultMetaDataRegistry _metaDataRegistry = new DefaultMetaDataRegistry();
+    private MetaDataRegistry _metaDataRegistry;
 
+    public YogaBuilder()
     {
+    	init();
+    }
+
+	/**
+	 * there are cases where a user might want to override meta data registry,
+	 * selector resolver and/or CoreSelector implementations. This would be the
+	 * place to do it, since we have complex dependencies for those objects, and
+	 * we need those objects set up before other setters are called.
+	 */
+	protected void init() {
+		_metaDataRegistry = new DefaultMetaDataRegistry();
+    	_selectorResolver = new SelectorResolver();
         _selectorResolver.getBaseSelector().setEntityConfigurationRegistry( new DefaultEntityConfigurationRegistry() );
         _metaDataRegistry.setCoreSelector( this._selectorResolver.getBaseSelector() );
         _metaDataRegistry.setRootMetaDataUrl( "/metadata/" );
-    }
+	}
 
     // -------------- helpers ---------
-    
+
     protected void checkFinalized()
     {
         if(_finalized)
             throw new IllegalStateException( "You cannot update builder information after it's been used to generate artifacts" );
     }
-    
+
     // -------------- getters ---------
 
     public ClassFinderStrategy getClassFinderStrategy()
@@ -80,8 +94,8 @@ public class YogaBuilder
     {
         return !_metaDataRegistry.getTypes().isEmpty();
     }
-    
-    public DefaultMetaDataRegistry getMetaDataRegistry()
+
+    public MetaDataRegistry getMetaDataRegistry()
     {
         return _metaDataRegistry;
     }
@@ -155,7 +169,7 @@ public class YogaBuilder
         setAliasProperties( propertyFile );
         return this;
     }
-    
+
     public YogaBuilder withOutputCountLimit( int countLimit )
     {
         setOutputCountLimit( countLimit );
@@ -179,9 +193,9 @@ public class YogaBuilder
         setYogaMetaDataRegisteredClasses( classes );
         return this;
     }
-    
+
     // finalize!
-    
+
     public void finalize()
     {
         if( _finalized )
