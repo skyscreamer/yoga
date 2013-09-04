@@ -25,7 +25,7 @@ public class DefaultEntityConfigurationRegistry implements EntityConfigurationRe
      * Constructs a registry and initializes it with an array of initial configurations.
      * @param entityConfigurations Initial configurations to register
      */
-    public DefaultEntityConfigurationRegistry(YogaEntityConfiguration<?>... entityConfigurations)
+    public DefaultEntityConfigurationRegistry( YogaEntityConfiguration<?>... entityConfigurations )
     {
         register( entityConfigurations );
     }
@@ -34,7 +34,7 @@ public class DefaultEntityConfigurationRegistry implements EntityConfigurationRe
      * Constructs a registry and initializes it with an list of initial configurations.
      * @param entityConfigurations Initial configurations to register
      */
-    public DefaultEntityConfigurationRegistry(List<YogaEntityConfiguration<?>> entityConfigurations)
+    public DefaultEntityConfigurationRegistry( List<YogaEntityConfiguration<?>> entityConfigurations )
     {
         register( entityConfigurations.toArray(new YogaEntityConfiguration[0]) );
     }
