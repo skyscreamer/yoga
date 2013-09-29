@@ -73,3 +73,6 @@ or
         <artifactId>yoga-jaxrs</artifactId>
         <version>1.0.3</version>
     </dependency>
+
+If this version was recently released, it may take a couple of days for it to propagate to all repositories.  The previous version was 1.0.2.
+
