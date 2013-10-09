@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 1.0.3 - 2013-09-07
+Version 1.0.4 - 2013-10-07
 --------------------------
  - Updating maven compiler plugin to 3.1 for build performance.
  - Adding some additional configuration options for YogaBuilder based on user requests.  

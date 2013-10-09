@@ -55,7 +55,7 @@ Right here:
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-core</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </dependency>
     
 And pick one of the integration packages:
@@ -63,7 +63,7 @@ And pick one of the integration packages:
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-springmvc</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </dependency>
 
 or
@@ -71,7 +71,7 @@ or
     <dependency>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-jaxrs</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </dependency>
 
 If this version was recently released, it may take a couple of days for it to propagate to all repositories.  The previous version was 1.0.2.
