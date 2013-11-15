@@ -80,6 +80,22 @@ public class ResultTraverserTest
     }
 
     @Test
+    public void testNullValuesInList() throws IOException {
+        BasicTestDataLeaf input = new BasicTestDataLeaf();
+        List<String> list = Arrays.asList( "someValue", null, "aThirdValue" );
+        input.setRandomStrings( list );
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
+
+        FieldSelector selector = new FieldSelector();
+        selector.register( "randomStrings", new FieldSelector() );
+
+        resultTraverser.traverse( input, new CompositeSelector( resolver.getBaseSelector(), selector ), model, requestContext );
+
+        Map<String, Object> objectTree = model.getUnderlyingModel();
+        Assert.assertEquals( list, objectTree.get( "randomStrings" ) );
+    }
+
+    @Test
     public void testBasicCombinedSelctor() throws IOException
     {
         BasicTestDataLeaf input = new BasicTestDataLeaf();
