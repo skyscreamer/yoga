@@ -50,7 +50,7 @@ public class ResultTraverser
         {
             for (Object o : iterable)
             {
-                if (isPrimitive( o.getClass() ))
+                if (o == null || isPrimitive( o.getClass() ))
                 {
                     model.addValue( o );
                 }
