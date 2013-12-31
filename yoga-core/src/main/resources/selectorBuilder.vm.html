@@ -262,7 +262,7 @@
             $('#whats_this').popover({placement:'bottom',trigger:'hover',content:helpText,html:true});
 
             $('#selector_builder').popover({placement:'bottom',trigger:'manual', delay: { show: 100, hide: 500 },
-                content:'Drill down on the user properties (e.g. favoriteArtists, friends) and watch how the selector syntax changes!' });
+                content:'Select different properties to update the selector.' });
             setTimeout(function() { $('#selector_builder').popover('show'); }, 800);
             setTimeout(function() { $('#selector_builder').popover('hide'); }, 4000);
             $('#selector_builder').hover(function() { $('#selector_builder').popover('hide'); });
