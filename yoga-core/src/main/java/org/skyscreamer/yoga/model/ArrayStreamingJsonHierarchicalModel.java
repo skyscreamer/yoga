@@ -1,16 +1,17 @@
 package org.skyscreamer.yoga.model;
 
+import org.skyscreamer.yoga.view.json.generator.GeneratorAdapter;
+import org.skyscreamer.yoga.view.json.generator.JacksonJsonGeneratorAdapter;
+
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonGenerator;
-
-public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalModel<JsonGenerator>
+public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalModel<GeneratorAdapter>
 {
 
-    private JsonGenerator generator;
+    private GeneratorAdapter generator;
     private ObjectStreamingJsonHierarchicalModel objectModel;
-    
-    public ArrayStreamingJsonHierarchicalModel(JsonGenerator generator) throws IOException
+
+    public ArrayStreamingJsonHierarchicalModel(GeneratorAdapter generator) throws IOException
     {
         this.generator = generator;
         objectModel = new ObjectStreamingJsonHierarchicalModel(generator, this);
@@ -18,7 +19,7 @@ public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalMode
     }
 
     public ArrayStreamingJsonHierarchicalModel(
-            JsonGenerator generator,
+            GeneratorAdapter generator,
             ObjectStreamingJsonHierarchicalModel objectModel) throws IOException
     {
         this.generator = generator;
@@ -49,7 +50,7 @@ public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalMode
     }
 
     @Override
-    public JsonGenerator getUnderlyingModel()
+    public GeneratorAdapter getUnderlyingModel()
     {
         return generator;
     }

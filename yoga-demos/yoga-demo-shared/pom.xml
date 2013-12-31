@@ -110,6 +110,22 @@
             <version>1</version>
         </dependency>
 
+       <!--
+            Jackson is no longer a transient dependency.
+            You must explicitly declare it in your pom.xml file.
+            Either Jackson or Jackson 2 is fine.
+       -->
+       <!--<dependency>-->
+          <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+          <!--<artifactId>jackson-databind</artifactId>-->
+          <!--<version>${jackson2.version}</version>-->
+       <!--</dependency>-->
+       <dependency>
+          <groupId>org.codehaus.jackson</groupId>
+          <artifactId>jackson-mapper-asl</artifactId>
+          <version>${jackson.version}</version>
+       </dependency>
+
         <dependency>
             <groupId>org.tuckey</groupId>
             <artifactId>urlrewritefilter</artifactId>
