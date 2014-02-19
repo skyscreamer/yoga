@@ -2,6 +2,7 @@ package org.skyscreamer.yoga.mapper;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +78,40 @@ public class ResultTraverserTest
 
         Map<String, Object> objectTree = model.getUnderlyingModel();
         Assert.assertEquals( list, objectTree.get( "randomStrings" ) );
+    }
+
+    @Test
+    public void testBasicMapField() throws IOException
+    {
+        HashMap<Object,Object> map = new HashMap<Object, Object>();
+        map.put("someKey", "someValue");
+        map.put("anotherKey", "anotherValue");
+        BasicTestDataLeaf input = new BasicTestDataLeaf();
+        input.setId(10);
+        input.setName("name");
+        input.setOther("other");
+        map.put("aThirdKey", input);
+        
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
+
+        FieldSelector selector = new FieldSelector();
+        selector.register( "anotherKey", new FieldSelector() );
+        selector.register( "aThirdKey", new FieldSelector() );
+
+        resultTraverser.traverse( map, new CompositeSelector( resolver.getBaseSelector(), selector ), model, requestContext );
+        Map<String, Object> objectTree = model.getUnderlyingModel();
+        
+        // "someKey" should not be selected from map
+        Assert.assertEquals( null, objectTree.get( "someKey" ) );
+        
+        // "anotherKey" should be selected from map and has primitive value
+        Assert.assertEquals( "anotherValue", objectTree.get( "anotherKey" ) );
+        
+        // "aThirdKey" should be selected but only @Core fields of pojo
+        Map<?,?> actualPojo = (Map<?,?>) objectTree.get("aThirdKey");
+        Assert.assertEquals( input.getId(), actualPojo.get("id"));
+        Assert.assertEquals( input.getName(), actualPojo.get("name"));
+        Assert.assertEquals(null, actualPojo.get("other"));
     }
 
     @Test
