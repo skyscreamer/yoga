@@ -101,6 +101,14 @@ public class YogaRequestContext
                 iterable, iterable.getClass(), context, selector));
     }
     
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public void emitEvent(MapHierarchicalModel<?> model, Map<?,?> value,
+        YogaRequestContext context, Selector selector) throws IOException
+    {
+        emitEvent(new RenderingEvent(RenderingEventType.MAP_CHILD, model,
+                value, Map.class, context, selector));
+    }
+    
     public Selector getSelector()
     {
         return this.selectorResolver.getSelector( request );
