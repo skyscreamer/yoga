@@ -13,6 +13,7 @@ public class SelectorResolver
     protected SelectorParser _selectorParser;
     protected CoreSelector _baseSelector;
     protected String _selectorParameterName = "selector";
+    protected boolean _starResolvesToAll = false;
 
     public SelectorResolver()
     {
@@ -30,12 +31,15 @@ public class SelectorResolver
         this._baseSelector = baseSelector;
     }
 
-
     public SelectorParser getSelectorParser()
     {
         return _selectorParser;
     }
 
+    public void setStarResolvesToAll(boolean _starResolvesToAll)
+    {
+        this._starResolvesToAll = _starResolvesToAll;
+    }
     public void setSelectorParser( SelectorParser selectorParser )
     {
         this._selectorParser = selectorParser;
@@ -75,11 +79,18 @@ public class SelectorResolver
 
     public Selector resolveSelector( String selectorExpression ) throws ParseSelectorException
     {
-        Selector fieldSelector = _selectorParser.parseSelector( selectorExpression );
+        FieldSelector fieldSelector = _selectorParser.parseSelector( selectorExpression );
 
         if (fieldSelector != null)
         {
-            return new CompositeSelector( _baseSelector, fieldSelector );
+            if ( _starResolvesToAll ) 
+            {
+                return new CompositeStarSelector( _baseSelector, fieldSelector );
+            }
+            else 
+            {
+                return new CompositeSelector( _baseSelector, fieldSelector );
+            }
         }
         else
         {

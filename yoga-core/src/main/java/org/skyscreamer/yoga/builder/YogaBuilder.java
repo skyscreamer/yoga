@@ -102,17 +102,40 @@ public class YogaBuilder
 
     // -------------- setters ---------
 
+    /**
+     * Hibernate and other ORMs do some funky things to your pojo classes.  A ClassFinderStrategy
+     * will convert the funky class object into the original version of the pojo's class. 
+     * 
+     * @param classFinderStrategy - a ClassFinderStrategy that knows how to introspect pojos. 
+     * 
+     * @see ClassFinderStrategy
+     */
     public void setClassFinderStrategy( ClassFinderStrategy classFinderStrategy )
     {
         checkFinalized();
         this._classFinderStrategy = classFinderStrategy;
     }
 
+    /**
+     * Set hand coded yoga configuration objects.  This allows for either a non-annotated pojos and/or some interesting
+     * customization of outputs.
+     * 
+     * @param entityConfigurations
+     */
     public void setEntityConfigurations( YogaEntityConfiguration<?>... entityConfigurations )
     {
         checkFinalized();
         this._selectorResolver.getBaseSelector().getEntityConfigurationRegistry().register( entityConfigurations );
     }
+    
+    /**
+     * Allows you to create a RenderingListenerRegistry that contains custom event handlers
+     * for yoga events that relate to different sets of data being added to JSon/XML outputs.
+     * 
+     * @param registry a fully formed RenderingListenerRegistry object with custom listeners
+     * 
+     * @see RenderingListenerRegistry
+     */
 
     public void setRegistry( RenderingListenerRegistry registry )
     {
@@ -120,34 +143,65 @@ public class YogaBuilder
         this._registry = registry;
     }
 
+    /**
+     * This is a mechanism of allowing small aliases to be converted into pre-configured set of aliases
+     * for complicated or common selectors.
+     * 
+     * @param aliasProperties an Inputstream that contains key/value pairs to be injected into the Propterties 
+     */
     public void setAliasProperties( InputStream aliasProperties )
     {
         checkFinalized();
         this._aliasProperties = aliasProperties;
     }
 
+    /**
+     * Set the maximum number of values that yoga should emit.  This is a sanity check to make sure that 
+     * a user can't take down your server by reading all of your data through recursive calls.  A limit
+     * of 10,000 is reasonable.
+     */
     public void setOutputCountLimit( int countLimit )
     {
         checkFinalized();
         this._registry.addListener( new CountLimitRenderingListener( countLimit ) );
     }
 
+    /** 
+     * Should yoga create metadata links as part of client requests?
+     */
     public void setCreateYogaLinks( boolean createAllLinks )
     {
         checkFinalized();
         this._createAllLinks = createAllLinks;
     }
 
+    /**
+     * Register the classes that Yoga should know about for the purposes of metadata creation.
+     * Yoga can do some interesting things if you register the list of pojos that are the
+     * return values of your REST endpoints.
+     */
     public void setYogaMetaDataRegisteredClasses( Class<?> ... classes )
     {
         checkFinalized();
         this._metaDataRegistry.registerClasses( classes );
     }
 
+    /**
+     * Set the root url to use for metadata requests.
+     */
     public void setRootMetaDataUrl( String rootMetaDataUrl )
     {
         checkFinalized();
         this._metaDataRegistry.setRootMetaDataUrl( rootMetaDataUrl );
+    }
+    
+    /**
+     * Should field selectors with * be considered as a shortcut for all child fields?
+     */
+    public void setEnableStarAsAllFields( boolean starAsAll )
+    {
+        checkFinalized();
+        this._selectorResolver.setStarResolvesToAll( starAsAll );
     }
 
     // fluent interface
@@ -191,6 +245,12 @@ public class YogaBuilder
     public YogaBuilder registerYogaMetaDataClasses( Class<?> ... classes )
     {
         setYogaMetaDataRegisteredClasses( classes );
+        return this;
+    }
+    
+    public YogaBuilder enableStarAsAllFields()
+    {
+        setEnableStarAsAllFields( true );
         return this;
     }
 

@@ -15,6 +15,7 @@
         p:aliasProperties="classpath:selectorAlias.properties"
         p:outputCountLimit="2000"
         p:createYogaLinks="true"
+        p:enableStarAsAllFields="true"
         >
         <property name="entityConfigurations">
             <list>

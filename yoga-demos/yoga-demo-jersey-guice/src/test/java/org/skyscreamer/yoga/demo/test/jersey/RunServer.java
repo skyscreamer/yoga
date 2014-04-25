@@ -1,7 +1,6 @@
 package org.skyscreamer.yoga.demo.test.jersey;
 
 import org.skyscreamer.yoga.demo.util.JettyServer;
-import org.skyscreamer.yoga.demo.util.RunSpringServer;
 
 public class RunServer
 {
