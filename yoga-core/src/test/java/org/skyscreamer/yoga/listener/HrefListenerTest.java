@@ -42,7 +42,7 @@ public class HrefListenerTest extends AbstractTraverserTest
         ResultTraverser traverser = new ResultTraverser();
         getEntityConfigurationRegistry().register( new AlbumEntityConfiguration() );
 
-        HrefListener listener = new HrefListener( getEntityConfigurationRegistry() );
+        HrefListener listener = new HrefListener( new UriGenerator( getEntityConfigurationRegistry() ) );
         Map<String, Object> objectTree = doTraverse( funeral, ":", traverser, listener );
 
         Assert.assertEquals( "/album/" + funeral.getId() + ".test", objectTree.get( "href" ) );

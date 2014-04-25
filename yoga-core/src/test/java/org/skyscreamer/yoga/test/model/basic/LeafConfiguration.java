@@ -5,9 +5,9 @@ import org.skyscreamer.yoga.configuration.YogaEntityConfiguration;
 
 public class LeafConfiguration extends YogaEntityConfiguration<BasicTestDataLeaf>
 {
-    @ExtraField("someValue")
-    public String getSomeValue()
+    @ExtraField("someField")
+    public String getSomeField()
     {
-        return "someValue";
+        return "customValue";
     }
 }

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.skyscreamer.yoga.configuration.DefaultEntityConfigurationRegistry;
 import org.skyscreamer.yoga.configuration.EntityConfigurationRegistry;
@@ -24,13 +24,13 @@ import org.skyscreamer.yoga.test.util.DummyHttpServletResponse;
 
 public class ResultTraverserTest
 {
-    static ResultTraverser resultTraverser = new ResultTraverser();
-    static EntityConfigurationRegistry registry = new DefaultEntityConfigurationRegistry();
-    static YogaRequestContext requestContext;
-    static SelectorResolver resolver = new SelectorResolver();
+    ResultTraverser resultTraverser = new ResultTraverser();
+    EntityConfigurationRegistry registry = new DefaultEntityConfigurationRegistry();
+    YogaRequestContext requestContext;
+    SelectorResolver resolver = new SelectorResolver();
 
-    @BeforeClass
-    public static void setup()
+    @Before
+    public void setup()
     {
         registry.register( new LeafConfiguration() );
         resolver.setEntityConfigurationRegistry( registry );
@@ -63,6 +63,23 @@ public class ResultTraverserTest
         Assert.assertEquals( "someValue", objectTree.get( "other" ) );
     }
 
+    @Test
+    public void testStarFieldSelector() throws IOException
+    {
+        resolver.setStarResolvesToAll( true );
+        BasicTestDataLeaf input = new BasicTestDataLeaf();
+        input.setOther( "someValue" );
+        ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
+
+        resultTraverser.traverse( input, resolver.resolveSelector( "*" ), model, requestContext );
+
+        Map<String, Object> objectTree = model.getUnderlyingModel();
+        Assert.assertEquals( "someValue", objectTree.get( "other" ) );
+        Assert.assertEquals( 0, objectTree.get( "id" ) );
+        Assert.assertEquals( "customValue", objectTree.get( "someField" ) );
+    }
+    
+    
     @Test
     public void testBasicListField() throws IOException
     {
@@ -177,9 +194,9 @@ public class ResultTraverserTest
         BasicTestDataLeaf input = new BasicTestDataLeaf();
         ObjectMapHierarchicalModelImpl model = new ObjectMapHierarchicalModelImpl();
         FieldSelector fieldSelector = new FieldSelector();
-        fieldSelector.register( "someValue", new FieldSelector() );
+        fieldSelector.register( "someField", new FieldSelector() );
         resultTraverser.traverse( input, new CompositeSelector( resolver.getBaseSelector(), fieldSelector ), model, requestContext );
         Map<String, Object> objectTree = model.getUnderlyingModel();
-        Assert.assertEquals( "someValue", objectTree.get( "someValue" ) );
+        Assert.assertEquals( "customValue", objectTree.get( "someField" ) );
     }
 }

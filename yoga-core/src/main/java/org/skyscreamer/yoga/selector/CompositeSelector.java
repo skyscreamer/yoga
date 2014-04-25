@@ -6,10 +6,10 @@ import java.util.Map;
 
 public class CompositeSelector implements Selector
 {
-    private Selector coreSelector;
-    private Selector fieldSelector;
+    protected final CoreSelector coreSelector;
+    protected final FieldSelector fieldSelector;
 
-    public CompositeSelector( Selector coreSelector, Selector fieldSelector )
+    public CompositeSelector( CoreSelector coreSelector, FieldSelector fieldSelector )
     {
         this.coreSelector = coreSelector;
         this.fieldSelector = fieldSelector;
@@ -18,16 +18,21 @@ public class CompositeSelector implements Selector
     @Override
     public Selector getChildSelector( Class<?> instanceType, String fieldName )
     {
-        Selector fieldSelectorChild = fieldSelector.getChildSelector( instanceType, fieldName );
-        Selector coreSelectorChild = coreSelector.getChildSelector( instanceType, fieldName );
+        FieldSelector fieldSelectorChild = fieldSelector.getChildSelector( instanceType, fieldName );
         if (fieldSelectorChild == null)
         {
-            return coreSelectorChild;
+            return coreSelector;
         }
         else
         {
-            return new CompositeSelector( coreSelectorChild, fieldSelectorChild );
+            return createChildSelector( coreSelector, fieldSelectorChild );
         }
+    }
+
+    protected CompositeSelector createChildSelector(CoreSelector coreSelector,
+            FieldSelector fieldSelector)
+    {
+        return new CompositeSelector( coreSelector, fieldSelector );
     }
 
     @Override
