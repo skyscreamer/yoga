@@ -8,4 +8,5 @@ public interface ListHierarchicalModel<T> extends HierarchicalModel<T>
 
     MapHierarchicalModel<?> createChildMap() throws IOException;
 
+    ListHierarchicalModel<?> createChildList() throws IOException;
 }

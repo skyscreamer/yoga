@@ -1,5 +1,6 @@
 package org.skyscreamer.yoga.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,14 @@ public class ObjectListHierarchicalModelImpl implements ListHierarchicalModel<Li
     public MapHierarchicalModel<?> createChildMap()
     {
         ObjectMapHierarchicalModelImpl child = new ObjectMapHierarchicalModelImpl();
+        addValue( child.getUnderlyingModel() );
+        return child;
+    }
+
+    @Override
+    public ListHierarchicalModel<?> createChildList() throws IOException
+    {
+        ObjectListHierarchicalModelImpl child = new ObjectListHierarchicalModelImpl();
         addValue( child.getUnderlyingModel() );
         return child;
     }
@@ -30,5 +39,4 @@ public class ObjectListHierarchicalModelImpl implements ListHierarchicalModel<Li
     public void finished()
     {
     }
-
 }

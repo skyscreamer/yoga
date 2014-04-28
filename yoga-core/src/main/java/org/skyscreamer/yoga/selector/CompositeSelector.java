@@ -25,14 +25,8 @@ public class CompositeSelector implements Selector
         }
         else
         {
-            return createChildSelector( coreSelector, fieldSelectorChild );
+            return new CompositeSelector( coreSelector, fieldSelectorChild );
         }
-    }
-
-    protected CompositeSelector createChildSelector(CoreSelector coreSelector,
-            FieldSelector fieldSelector)
-    {
-        return new CompositeSelector( coreSelector, fieldSelector );
     }
 
     @Override
@@ -58,10 +52,14 @@ public class CompositeSelector implements Selector
             Property<T> property = coreSelector.getProperty( instanceType, p.name() );
             if(property != null)
             {
-                list.add( property);
+                list.add( property );
             }
         }
-        list.addAll( coreSelector.getSelectedFields( instanceType ) );
+        Collection<Property<T>> coreFields = coreSelector.getSelectedFields( instanceType );
+        if ( coreFields != null )
+        {
+            list.addAll( coreFields );
+        }
         return list;
     }
 
