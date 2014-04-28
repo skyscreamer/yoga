@@ -1,7 +1,5 @@
 package org.skyscreamer.yoga.model;
 
-import java.io.IOException;
-
 import org.dom4j.Element;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
@@ -58,12 +56,6 @@ public class XmlHierarchyModelImpl implements MapHierarchicalModel<Element>, Lis
     public ListHierarchicalModel<Element> createChildList( String name )
     {
         return new XmlHierarchyModelImpl( element, name );
-    }
-
-    @Override
-    public ListHierarchicalModel<?> createChildList() throws IOException
-    {
-        return new XmlHierarchyModelImpl( element );
     }
 
     @Override

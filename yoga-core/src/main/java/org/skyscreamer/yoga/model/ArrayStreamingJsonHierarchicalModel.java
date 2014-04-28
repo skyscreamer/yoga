@@ -53,10 +53,4 @@ public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalMode
     {
         return generator;
     }
-
-    @Override
-    public ListHierarchicalModel<?> createChildList() throws IOException
-    {
-        return new ArrayStreamingJsonHierarchicalModel( generator );
-    }
 }
