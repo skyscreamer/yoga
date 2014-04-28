@@ -47,11 +47,7 @@ public class CoreSelector implements Selector
     public <T> Property<T> getProperty( Class<T> instanceType, String fieldName )
     {
         Map<String, Property<T>> properties = getAllPossibleFieldMap( instanceType );
-        if (properties != null)
-        {
-            return properties.get( fieldName );
-        }
-        return null;
+        return properties != null ? properties.get( fieldName ) : null;
     }
 
     private <T> Map<String, Property<T>> getProperties( Class<T> instanceType, ConcurrentHashMap map )

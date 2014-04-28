@@ -23,9 +23,25 @@ public class CompositeStarSelector extends CompositeSelector
 	}
 
 	@Override
-    protected CompositeSelector createChildSelector(CoreSelector coreSelector,
-            FieldSelector fieldSelector)
-	{
-	    return new CompositeStarSelector( coreSelector, fieldSelector );
-	}
+    public Selector getChildSelector( Class<?> instanceType, String fieldName )
+    {
+        FieldSelector childSelector = fieldSelector.getChildSelector( instanceType, fieldName );
+	    if ( childSelector == null && fieldSelector.containsField( "*" ) ) 
+	    {
+	        childSelector = fieldSelector.getChildSelector( instanceType, "*" );
+	    }
+        return getChildSelector( childSelector );
+    }
+
+    private Selector getChildSelector(FieldSelector fieldSelectorChild)
+    {
+        if ( fieldSelectorChild == null )
+        {
+            return coreSelector;
+        }
+        else
+        {
+            return new CompositeStarSelector( coreSelector, fieldSelectorChild );
+        }
+    }
 }

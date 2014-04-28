@@ -1,5 +1,7 @@
 package org.skyscreamer.yoga.model;
 
+import java.io.IOException;
+
 import org.dom4j.Element;
 import org.skyscreamer.yoga.exceptions.YogaRuntimeException;
 
@@ -40,7 +42,7 @@ public class XhtmlHierarchyModelImpl implements MapHierarchicalModel<Element>, L
         return new XhtmlHierarchyModelImpl( element.addElement( "div" )
                 .addAttribute( "class", property ) );
     }
-
+    
     @Override
     public MapHierarchicalModel<Element> createChildMap()
     {
@@ -54,6 +56,12 @@ public class XhtmlHierarchyModelImpl implements MapHierarchicalModel<Element>, L
         return new XhtmlHierarchyModelImpl( div );
     }
 
+    @Override
+    public ListHierarchicalModel<?> createChildList() throws IOException
+    {
+        Element div = element.addElement( "div" ).addAttribute( "class", "list" );
+        return new XhtmlHierarchyModelImpl( div );
+    }
     @Override
     public void addValue( Object instance )
     {
