@@ -10,7 +10,7 @@ public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalMode
     private JsonGenerator generator;
     private ObjectStreamingJsonHierarchicalModel objectModel;
     
-    public ArrayStreamingJsonHierarchicalModel(JsonGenerator generator) throws IOException
+    public ArrayStreamingJsonHierarchicalModel( JsonGenerator generator ) throws IOException
     {
         this.generator = generator;
         objectModel = new ObjectStreamingJsonHierarchicalModel(generator, this);
@@ -53,5 +53,4 @@ public class ArrayStreamingJsonHierarchicalModel implements ListHierarchicalMode
     {
         return generator;
     }
-
 }

@@ -56,6 +56,7 @@ public class WebConfig extends GuiceServletContextListener
                     .withClassFinderStrategy( new HibernateClassFinderStrategy() )
                     .withAliasProperties( this.getClass().getClassLoader().getResourceAsStream( "selectorAlias.properties" ) )
                     .withOutputCountLimit( 2000 )
+                    .enableStarAsAllFields()
                     .enableYogaLinks()
                     .registerYogaMetaDataClasses( User.class, Album.class, Artist.class, Song.class )
                     .registerEntityConfigurations( new UserConfiguration( dao ) );

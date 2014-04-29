@@ -30,5 +30,4 @@ public class ObjectListHierarchicalModelImpl implements ListHierarchicalModel<Li
     public void finished()
     {
     }
-
 }

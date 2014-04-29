@@ -40,7 +40,7 @@ public class XhtmlHierarchyModelImpl implements MapHierarchicalModel<Element>, L
         return new XhtmlHierarchyModelImpl( element.addElement( "div" )
                 .addAttribute( "class", property ) );
     }
-
+    
     @Override
     public MapHierarchicalModel<Element> createChildMap()
     {

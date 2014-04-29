@@ -19,9 +19,9 @@ import org.skyscreamer.yoga.metadata.PropertyUtil;
 @SuppressWarnings( { "rawtypes", "unchecked" } )
 public class CoreSelector implements Selector
 {
-    private EntityConfigurationRegistry _entityConfigurationRegistry = new NullEntityConfigurationRegistry();
-    protected ConcurrentHashMap<Class, Map> coreFields = new ConcurrentHashMap<Class, Map>();
-    protected ConcurrentHashMap<Class, Map> allFields = new ConcurrentHashMap<Class, Map>();
+    private EntityConfigurationRegistry _entityConfigurationRegistry;
+    protected final ConcurrentHashMap<Class, Map> _coreFields = new ConcurrentHashMap<Class, Map>();
+    protected final ConcurrentHashMap<Class, Map> _allFields = new ConcurrentHashMap<Class, Map>();
 
     public CoreSelector( EntityConfigurationRegistry entityConfigurationRegistry )
     {
@@ -30,6 +30,7 @@ public class CoreSelector implements Selector
 
     public CoreSelector()
     {
+    	_entityConfigurationRegistry = new NullEntityConfigurationRegistry();
     }
 
     public void setEntityConfigurationRegistry( EntityConfigurationRegistry entityConfigurationRegistry )
@@ -46,11 +47,7 @@ public class CoreSelector implements Selector
     public <T> Property<T> getProperty( Class<T> instanceType, String fieldName )
     {
         Map<String, Property<T>> properties = getAllPossibleFieldMap( instanceType );
-        if (properties != null)
-        {
-            return properties.get( fieldName );
-        }
-        return null;
+        return properties != null ? properties.get( fieldName ) : null;
     }
 
     private <T> Map<String, Property<T>> getProperties( Class<T> instanceType, ConcurrentHashMap map )
@@ -126,10 +123,10 @@ public class CoreSelector implements Selector
     @Override
     public <T> Map<String, Property<T>> getAllPossibleFieldMap( Class<T> instanceType )
     {
-        Map response = allFields.get( instanceType );
+        Map response = _allFields.get( instanceType );
         if (response == null)
         {
-            Map existing = allFields.putIfAbsent( instanceType, response = createAllFieldMap( instanceType ) );
+            Map existing = _allFields.putIfAbsent( instanceType, response = createAllFieldMap( instanceType ) );
             if (existing != null)
                 response = existing;
         }
@@ -157,7 +154,7 @@ public class CoreSelector implements Selector
         // exists
         if (config != null)
         {
-            response.putAll( getProperties( instanceType, coreFields ) );
+            response.putAll( getProperties( instanceType, _coreFields ) );
 
             Collection<String> selectableFields = config == null ? null : config.getSelectableFields();
             if( selectableFields != null )
@@ -188,7 +185,7 @@ public class CoreSelector implements Selector
     @Override
     public <T> Collection<Property<T>> getSelectedFields( Class<T> instanceType )
     {
-        return getProperties( instanceType, coreFields ).values();
+        return getProperties( instanceType, _coreFields ).values();
     }
 
     @Override

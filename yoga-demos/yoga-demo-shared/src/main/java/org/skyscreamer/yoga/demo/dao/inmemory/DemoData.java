@@ -4,10 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 import org.skyscreamer.yoga.demo.model.Album;
 import org.skyscreamer.yoga.demo.model.Artist;

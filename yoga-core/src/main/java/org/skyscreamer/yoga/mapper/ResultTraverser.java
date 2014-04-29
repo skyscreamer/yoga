@@ -46,21 +46,55 @@ public class ResultTraverser
         	model.finished();
         }
     }
+    
+    private <T> void addField(Selector selector, MapHierarchicalModel<?> model,
+            YogaRequestContext context, Class<T> instanceType,
+            boolean isPrimitive, Object value, String fieldName)
+            throws IOException
+    {
+        if ( isPrimitive )
+        {
+            model.addProperty( fieldName, value );
+            return;
+        }
+        
+        Selector childSelector = selector.getChildSelector( instanceType, fieldName );
+        if ( value instanceof Iterable )
+        {
+            traverseIterable( ( Iterable<?> ) value, childSelector,
+                    model.createChildList( fieldName ), context );
+        }
+        else if ( value instanceof Map )
+        {
+            traverseMap( ( Map<?, ?> ) value, childSelector,
+                    model.createChildMap( fieldName ), context );
+        }
+        else
+        {
+            traversePojo( value, childSelector,
+                    model.createChildMap( fieldName ), context );
+        }
+    }
+
 
     public void traverseIterable( Iterable<?> iterable, Selector selector,
             ListHierarchicalModel<?> model, YogaRequestContext context ) throws IOException
     {
-        if(iterable != null)
+        if ( iterable != null )
         {
-            for (Object o : iterable)
+            for ( Object child : iterable )
             {
-                if (o == null || isPrimitive( o.getClass() ))
+                if (child == null || isPrimitive( child.getClass() ))
                 {
-                    model.addValue( o );
+                    model.addValue( child );
+                }
+                else if ( child instanceof Map )
+                {
+                    traverseMap( ( Map<?, ?> ) child, selector, model.createChildMap(), context );
                 }
                 else
                 {
-                    traversePojo( o, selector, model.createChildMap(), context );
+                    traversePojo( child, selector, model.createChildMap(), context );
                 }
             }
             context.emitEvent( model, iterable, context, selector );
@@ -71,19 +105,19 @@ public class ResultTraverser
     private void traverseMap(Map<?, ?> map, Selector selector, MapHierarchicalModel<?> model,
         YogaRequestContext context) throws IOException
     {
-        if (map != null)
+        if ( map != null )
         {
-            for(Object key : map.keySet())
+            for ( Map.Entry<?, ?> entry : map.entrySet() )
             {
-                String fieldName = key.toString();
-                if (selector.containsField(Map.class, fieldName)) {
-                    Object value = map.get(key);
-                    if (value == null || isPrimitive( value.getClass() )) {
-                        model.addProperty( fieldName, value );
-                    }
-                    else
+                String fieldName = entry.getKey().toString();
+                if ( selector.containsField( Map.class, fieldName ) )
+                {
+                    Object value = entry.getValue();
+                    if ( value != null )
                     {
-                        recurse(Map.class, model, selector, context, value, fieldName);
+                        addField( selector, model, context, Map.class,
+                                isPrimitive( value.getClass() ), value,
+                                fieldName );
                     }
                 }
             }
@@ -95,56 +129,21 @@ public class ResultTraverser
     public <T> void traversePojo( T instance, Selector selector, MapHierarchicalModel<?> model,
             YogaRequestContext context ) throws IOException
     {
-        if(instance != null)
+        if ( instance != null )
         {
             Class<T> instanceType = _classFinderStrategy.findClass( instance );
-            addInstanceFields( instance, instanceType, model, selector, context );
+            for (Property<T> property : selector.getSelectedFields( instanceType ))
+            {
+                Object value = property.getValue( instance );
+                if ( value != null )
+                {
+                    addField( selector, model, context, instanceType,
+                            property.isPrimitive(), value, property.name() );
+                }
+            }
             context.emitEvent( model, instance, instanceType, context, selector );
         }
         model.finished();
-    }
-
-    protected <T> void addInstanceFields( T instance, Class<T> instanceType,
-            MapHierarchicalModel<?> model, Selector selector, YogaRequestContext requestContext ) throws IOException
-    {
-        for (Property<T> property : selector.getSelectedFields( instanceType ))
-        {
-            Object value = property.getValue( instance );
-            if (value == null)
-            {
-                continue;
-            }
-
-            String fieldName = property.name();
-            if ( property.isPrimitive() )
-            {
-                model.addProperty( fieldName, value );
-            }
-            else
-            {
-                recurse(instanceType, model, selector, requestContext, value, fieldName);
-            }
-        }
-    }
-
-    protected <T> void recurse(Class<T> instanceType, MapHierarchicalModel<?> model, Selector selector,
-        YogaRequestContext requestContext, Object value, String fieldName) throws IOException {
-      
-      Selector childSelector = selector.getChildSelector( instanceType, fieldName );
-      if (Iterable.class.isAssignableFrom( value.getClass() ))
-      {
-          traverseIterable( (Iterable<?>) value, childSelector,
-                  model.createChildList( fieldName ), requestContext );
-      }
-      else if (Map.class.isAssignableFrom( value.getClass() ))
-      {
-          traverseMap( (Map<?,?>) value, childSelector,
-                  model.createChildMap( fieldName ), requestContext );
-      }
-      else {
-          traversePojo( value, childSelector,
-                  model.createChildMap( fieldName ), requestContext );
-      }
     }
 
     // GETTERS / SETTERS
