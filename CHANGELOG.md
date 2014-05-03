@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.5 - 2014-05-03
+--------------------------
+ - Added the ability to use * in selectors
+ - Added Map support to ResultTraverser
+ - Fixed null handling in iterables
+ - Handle Date primitive
+
 Version 1.0.4 - 2013-10-07
 --------------------------
  - Updating maven compiler plugin to 3.1 for build performance.
