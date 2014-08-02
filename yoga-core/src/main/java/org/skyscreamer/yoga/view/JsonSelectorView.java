@@ -3,25 +3,41 @@ package org.skyscreamer.yoga.view;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.ObjectListHierarchicalModelImpl;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
+import org.skyscreamer.yoga.util.ClassUtil;
+import org.skyscreamer.yoga.view.json.Jackson2Serializer;
+import org.skyscreamer.yoga.view.json.JacksonSerializer;
+import org.skyscreamer.yoga.view.json.JsonSerializer;
 
 public class JsonSelectorView extends AbstractYogaView
 {
-    private ObjectMapper objectMapper;
+    private JsonSerializer jsonSerializer;
 
     public JsonSelectorView()
     {
-        this.objectMapper = createObjectMapper();
+        if ( ClassUtil.jacksonPresent )
+		{
+			jsonSerializer = new JacksonSerializer();
+		}
+		else if ( ClassUtil.jackson2Present )
+		{
+			jsonSerializer = new Jackson2Serializer();
+		}
+		else throw new IllegalStateException( "Jackson library not in classpath" );
     }
 
-    @Override
+	public JsonSelectorView(JsonSerializer jsonSerializer)
+	{
+		this.jsonSerializer = jsonSerializer;
+	}
+
+	@Override
     public void render( Object value, YogaRequestContext requestContext, OutputStream outputStream ) throws IOException
     {
-        HierarchicalModel<?> model = null;
+        HierarchicalModel<?> model;
         if (value instanceof Iterable<?>)
         {
             ObjectListHierarchicalModelImpl listModel = new ObjectListHierarchicalModelImpl();
@@ -34,12 +50,7 @@ public class JsonSelectorView extends AbstractYogaView
             _resultTraverser.traversePojo( value, requestContext.getSelector(), mapModel, requestContext );
             model = mapModel;
         }
-        objectMapper.writeValue( outputStream, model.getUnderlyingModel() );
-    }
-
-    protected ObjectMapper createObjectMapper()
-    {
-        return new ObjectMapper();
+		jsonSerializer.serialize(outputStream, model.getUnderlyingModel());
     }
 
     @Override
@@ -53,4 +64,9 @@ public class JsonSelectorView extends AbstractYogaView
     {
         return "json";
     }
+
+	public void setSerializer(JsonSerializer jsonSerializer)
+	{
+		this.jsonSerializer = jsonSerializer;
+	}
 }
