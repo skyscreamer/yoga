@@ -1,18 +1,16 @@
 package org.skyscreamer.yoga.model;
 
+import org.skyscreamer.yoga.view.json.GeneratorAdapter;
+
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonGenerator;
-
 public class ObjectStreamingJsonHierarchicalModel implements
-        MapHierarchicalModel<JsonGenerator>
+        MapHierarchicalModel<GeneratorAdapter>
 {
-    
-
-    protected JsonGenerator generator;
+    protected GeneratorAdapter generator;
 	private ArrayStreamingJsonHierarchicalModel arrayModel;
 
-    public ObjectStreamingJsonHierarchicalModel(JsonGenerator generator)
+    public ObjectStreamingJsonHierarchicalModel(GeneratorAdapter generator)
             throws IOException
     {
         this.generator = generator;
@@ -21,7 +19,7 @@ public class ObjectStreamingJsonHierarchicalModel implements
     }
 
     public ObjectStreamingJsonHierarchicalModel(
-            JsonGenerator generator,
+			GeneratorAdapter generator,
             ArrayStreamingJsonHierarchicalModel arrayModel) throws IOException
     {
         this.generator = generator;
@@ -34,7 +32,7 @@ public class ObjectStreamingJsonHierarchicalModel implements
     }
 
 	@Override
-    public JsonGenerator getUnderlyingModel()
+    public GeneratorAdapter getUnderlyingModel()
     {
         return generator;
     }
@@ -51,14 +49,14 @@ public class ObjectStreamingJsonHierarchicalModel implements
         generator.writeObjectField(name, result);
     }
 
-    public MapHierarchicalModel<JsonGenerator> createChildMap(String name) throws IOException
+    public MapHierarchicalModel<GeneratorAdapter> createChildMap(String name) throws IOException
     {
         generator.writeFieldName(name);
         this.start();
         return this;
     }
 
-    public ListHierarchicalModel<JsonGenerator> createChildList(String name) throws IOException
+    public ListHierarchicalModel<GeneratorAdapter> createChildList(String name) throws IOException
     {
         generator.writeFieldName(name);
         arrayModel.start();
