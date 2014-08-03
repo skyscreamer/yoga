@@ -8,15 +8,17 @@ import org.skyscreamer.yoga.demo.test.AlbumControllerTest;
 import org.skyscreamer.yoga.demo.test.ArtistControllerTest;
 import org.skyscreamer.yoga.demo.test.SongControllerTest;
 import org.skyscreamer.yoga.demo.test.UserControllerTest;
+import org.skyscreamer.yoga.util.JacksonLibraryUtil;
 
 @RunWith(Suite.class)
 @SuiteClasses({ AlbumControllerTest.class, ArtistControllerTest.class, SongControllerTest.class,
         UserControllerTest.class })
-public class SpringMVCTest
+public class SpringMVCTestJackson
 {
     @BeforeClass
     public static void startServer() throws Exception
     {
+		System.setProperty(JacksonLibraryUtil.SYSTEM_PROPERTY, JacksonLibraryUtil.JACKSON);
         RunServer.startServer();
     }
 }
