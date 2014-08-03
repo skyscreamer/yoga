@@ -7,9 +7,7 @@ import org.skyscreamer.yoga.mapper.YogaRequestContext;
 import org.skyscreamer.yoga.model.HierarchicalModel;
 import org.skyscreamer.yoga.model.ObjectListHierarchicalModelImpl;
 import org.skyscreamer.yoga.model.ObjectMapHierarchicalModelImpl;
-import org.skyscreamer.yoga.util.ClassUtil;
-import org.skyscreamer.yoga.view.json.Jackson2Serializer;
-import org.skyscreamer.yoga.view.json.JacksonSerializer;
+import org.skyscreamer.yoga.util.JacksonLibraryUtil;
 import org.skyscreamer.yoga.view.json.JsonSerializer;
 
 public class JsonSelectorView extends AbstractYogaView
@@ -18,16 +16,8 @@ public class JsonSelectorView extends AbstractYogaView
 
     public JsonSelectorView()
     {
-        if ( ClassUtil.jacksonPresent )
-		{
-			jsonSerializer = new JacksonSerializer();
-		}
-		else if ( ClassUtil.jackson2Present )
-		{
-			jsonSerializer = new Jackson2Serializer();
-		}
-		else throw new IllegalStateException( "Jackson library not in classpath" );
-    }
+		jsonSerializer = JacksonLibraryUtil.selectJacksonSerializer();
+	}
 
 	public JsonSelectorView(JsonSerializer jsonSerializer)
 	{
