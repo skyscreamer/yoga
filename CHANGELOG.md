@@ -1,6 +1,10 @@
 Changelog
 =========
 
+Version 1.0.6 - 2014-08-13
+--------------------------
+ - Added support for Jackson v2
+
 Version 1.0.5 - 2014-05-03
 --------------------------
  - Added the ability to use * in selectors
