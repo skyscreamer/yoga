@@ -20,3 +20,4 @@ org.skyscreamer.yoga.springmvc.view
 org.skyscreamer.yoga.uri
 org.skyscreamer.yoga.util
 org.skyscreamer.yoga.view
+org.skyscreamer.yoga.view.json
