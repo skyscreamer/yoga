@@ -1,0 +1,15 @@
+{
+	"@variable": [
+		"test", 
+		"test2"
+	],
+	"$variable2": [
+		"testvar",
+		{
+			"childvar": [
+				"child",
+				"@variable2"
+			]
+		}
+	]
+}
