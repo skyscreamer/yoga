@@ -1,0 +1,48 @@
+{
+	"$simple": [
+		"test"
+	],
+	"$child": [
+		"test",
+		{
+			"child": ["value"]
+		}
+	],
+	"$children": [
+		"test",
+		{
+			"child" : [
+				"value", 
+				"value2"
+			]
+		},
+		{
+			"child2": [
+				"value3", 
+				{
+					"child3": ["*"]
+				}
+			]
+		}
+	],
+	"$variable": [
+		"@variable"
+	],
+	"@variable2": [
+		"test",
+		{
+			"child" : [
+				"value", 
+				"value2"
+			]
+		},
+		{
+			"child2": [
+				"value3", 
+				{
+					"child3": ["*"]
+				}
+			]
+		}
+	]
+}
