@@ -1,6 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-<!-- change --> 
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
@@ -9,7 +8,7 @@
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/skyscreamer/yoga</url>
@@ -55,50 +54,11 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-	    <!-- TODO: This causes problems with releases.  Commenting out.
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
-                <executions>
-                    <execution>
-                        <id>aggregate</id>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                        <phase>site</phase>
-                    </execution>
-                </executions>
-		<configuration>
-		    <excludePackageNames>org.skyscreamer.yoga.demo</excludePackageNames>
-		</configuration>
-            </plugin>
-	    -->
         </plugins>
-	<!-- TODO: This causes problems with releases.  Commenting out.
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.scm</groupId>
-                <artifactId>maven-scm-provider-gitexe</artifactId>
-                <version>1.3</version>
-            </extension>
-            <extension>
-                <groupId>org.apache.maven.scm</groupId>
-                <artifactId>maven-scm-manager-plexus</artifactId>
-                <version>1.3</version>
-            </extension>
-            <extension>
-                <groupId>org.kathrynhuxtable.maven.wagon</groupId>
-                <artifactId>wagon-gitsite</artifactId>
-                <version>0.3.1</version>
-            </extension>
-        </extensions>
-	-->
     </build>
     <properties>
         <spring.version>3.0.3.RELEASE</spring.version>
-        <jackson.version>1.9.12</jackson.version>
-        <jackson2.version>2.4.1.3</jackson2.version>
+        <jackson2.version>2.12.4</jackson2.version>
     </properties>
  
     <modules>
@@ -106,15 +66,6 @@
         <module>yoga-integration</module>
         <module>yoga-demos</module>
     </modules>
-
-    <!-- TODO: This causes problems with releases.  Commenting out.
-    <distributionManagement>
-        <site>
-            <id>github-project-site</id>
-            <url>gitsite:git@github.com/skyscreamer/yoga.git</url>
-        </site>
-    </distributionManagement>
-    -->
 
     <profiles>
         <profile>

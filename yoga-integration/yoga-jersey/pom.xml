@@ -5,16 +5,16 @@
     <parent>
         <groupId>org.skyscreamer</groupId>
         <artifactId>yoga-integration</artifactId>
-        <version>1.0.7-SNAPSHOT</version>
+        <version>1.1.0</version>
     </parent>
 
     <groupId>org.skyscreamer</groupId>
     <artifactId>yoga-jersey</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.1.0</version>
 
     <packaging>jar</packaging>
 
-    <name>Yoga JAX-RS</name>
+    <name>Yoga Jersey</name>
     <description>Extension to Yoga for simplified JAX-RS integration</description>
     <url>http://github.com/skyscreamer/yoga</url>
 

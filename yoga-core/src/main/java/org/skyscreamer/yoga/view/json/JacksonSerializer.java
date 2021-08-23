@@ -1,6 +1,6 @@
 package org.skyscreamer.yoga.view.json;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.OutputStream;

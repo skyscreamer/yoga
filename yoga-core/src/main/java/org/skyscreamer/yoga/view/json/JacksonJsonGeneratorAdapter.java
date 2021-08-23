@@ -1,7 +1,7 @@
 package org.skyscreamer.yoga.view.json;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,7 +23,7 @@ public class JacksonJsonGeneratorAdapter implements GeneratorAdapter {
 
 	protected JsonGenerator createGenerator(OutputStream outputStream)
 			throws IOException {
-		return jsonFactory.createJsonGenerator(outputStream);
+		return jsonFactory.createGenerator(outputStream);
 	}
 
 	@Override
